@@ -25,19 +25,40 @@ export class LoginComponent implements AfterViewInit {
     });
   }
 
+  private readonly _router = inject(Router);
+  private readonly _loginService = inject(LoginService);
+
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
     senha: new FormControl('')
   });
 
-  private readonly _router = inject(Router);
-  private readonly _loginService = inject(LoginService);
+  primeiroAcessoForm: FormGroup = new FormGroup({
+    email: new FormControl(''),
+    senha: new FormControl('')
+  });
 
-  onLogin() {
+  login() {
     this._loginService.login(this.loginForm.value.email, this.loginForm.value.senha)
       .subscribe({
         next: () => {
           this._router.navigate(['home']);
+        },
+        error: (error) => {
+          if (error.status === 401) {
+            this.loginForm.setErrors({ 'crediciaisInvalidas': true });
+          } else {
+            this.loginForm.setErrors({ 'erroInesperado': true });
+          }
+        }
+      });
+  }
+
+  primeiroAcesso() {
+    this._loginService.login(this.primeiroAcessoForm.value.email, this.primeiroAcessoForm.value.senha)
+      .subscribe({
+        next: () => {
+          this._router.navigate(['atualizar-conta']);
         },
         error: (error) => {
           if (error.status === 401) {
