@@ -10,7 +10,7 @@ export class LoginService {
   private readonly _httpClient = inject(HttpClient);
 
   login(email: string, senha: string): Observable<{ token: string }> {
-    return this._httpClient.post<{ token: string }>('http://localhost:3000/same-engenharia/login', {
+    return this._httpClient.post<{ token: string }>('http://localhost:3000/same-engenharia/api/colaborador/logar', {
       email,
       senha
     }).pipe(map((tokenResponse) => {

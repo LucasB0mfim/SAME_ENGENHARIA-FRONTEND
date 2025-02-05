@@ -1,49 +1,51 @@
-<div class="container" id="container" #container>
+<div class="body">
+  <div class="container" id="container" #container>
 
-  <div class="sign-up">
-    <form [formGroup]="primeiroAcessoForm" (ngSubmit)="primeiroAcesso()">
-      <h1>Primeiro acesso</h1>
-      <input type="text" placeholder="Email" formControlName="email" />
-      <input type="password" placeholder="Senha" formControlName="senha" />
-      <button>acessar</button>
-    </form>
-  </div>
+    <div class="sign-up">
+      <form [formGroup]="primeiroAcessoForm" (ngSubmit)="primeiroAcesso()">
+        <h1>Primeiro acesso</h1>
+        <input type="text" placeholder="Email" formControlName="email" />
+        <input type="password" placeholder="Senha" formControlName="senha" />
+        <button>acessar</button>
+      </form>
+    </div>
 
-  <div class="sign-in">
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
-      <h1>Entrar</h1>
-      <input type="text" placeholder="Email" formControlName="email" />
-      <input type="password" placeholder="senha" formControlName="senha" />
-      <a href="#">Esqueci a Senha</a>
-      <button>Entrar</button>
-      @if (loginForm.invalid) {
+    <div class="sign-in">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <h1>Entrar</h1>
+        <input type="text" placeholder="Email" formControlName="email" />
+        <input type="password" placeholder="senha" formControlName="senha" />
+        <a href="#">Esqueci a Senha</a>
+        <button>Entrar</button>
+        @if (loginForm.invalid) {
 
         @if (loginForm.hasError('crediciaisInvalidas')) {
-          <p>Credenciais Inválidas</p>
+        <p>Credenciais Inválidas</p>
         }
 
         @if (loginForm.hasError('erroInesperado')) {
-          <p>Ocorreu um erro inesperado, tente novamente outra hora</p>
+        <p>Ocorreu um erro inesperado, tente novamente outra hora</p>
         }
-      }
-    </form>
-  </div>
+        }
+      </form>
+    </div>
 
-  <div class="toogle-container">
-    <div class="toogle">
+    <div class="toogle-container">
+      <div class="toogle">
 
-      <div class="toogle-panel toogle-left">
-        <h1>Bem Vindo! Colaborador</h1>
-        <p>Se você já tem uma conta</p>
-        <button class="hidden" id="login" #loginbtn>Entrar</button>
+        <div class="toogle-panel toogle-left">
+          <h1>Bem Vindo! Colaborador</h1>
+          <p>Se você já tem uma conta</p>
+          <button class="hidden" id="login" #loginbtn>Entrar</button>
+        </div>
+
+        <div class="toogle-panel toogle-right">
+          <h1>Olá, Colaborador!</h1>
+          <p>Se você não tem uma conta</p>
+          <button class="hidden" id="register" #registerbtn>Criar</button>
+        </div>
+
       </div>
-
-      <div class="toogle-panel toogle-right">
-        <h1>Olá, Colaborador!</h1>
-        <p>Se você não tem uma conta</p>
-        <button class="hidden" id="register" #registerbtn>Criar</button>
-      </div>
-
     </div>
   </div>
 </div>
