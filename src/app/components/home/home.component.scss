@@ -61,16 +61,11 @@
 }
 
 .menu__link-button {
-  color: #fff;
+  color: #ff6e27;
+  border: 1px solid #ff6e27;
   padding: 12px 24px;
   border-radius: 10px;
-  background-color: #ff6e27;
   transition: background-color 0.3s ease;
-}
-
-.menu__link-button:hover {
-  background-color: #e85d1a;
-  color: #fff;
 }
 
 .banner {

@@ -1,11 +1,9 @@
 <div class="container">
   <header class="header">
-    <!-- Separar logo do menu -->
     <div class="header__brand">
-      <img [src]="logo" alt="Same Engenharia - Página inicial" class="menu__logo">
+      <img [src]="logo" alt="Same Engenharia - Página inicial" class="menu__logo" loading="lazy">
     </div>
 
-    <!-- Nav é mais semântico para navegação -->
     <nav class="nav">
       <ul class="menu" role="menubar">
         <li class="menu__item" role="none">
@@ -35,15 +33,17 @@
       Escolha <span class="banner__highlight">Same.</span>
     </h1>
 
-    <video
-      [src]="video"
-      autoplay
-      loop
-      muted
-      playsinline
-      class="video"
-      aria-hidden="true"
-      poster="caminho-para-imagem-fallback.jpg">
-    </video>
+    <ng-container *ngIf="isVideoLoaded">
+      <video
+        [src]="video"
+        autoplay
+        loop
+        muted
+        playsinline
+        class="video"
+        aria-hidden="true"
+        preload="metadata">
+      </video>
+    </ng-container>
   </section>
 </div>
