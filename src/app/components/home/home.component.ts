@@ -10,6 +10,5 @@ import { CarouselComponent } from "../carousel/carousel/carousel.component";
 })
 export class HomeComponent {
   logo: string = 'assets/images/logo.png';
-  poster: string = 'assets/images/poster.jpg';
   video: string = 'assets/video/banner.mp4';
 }
