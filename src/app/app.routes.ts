@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { PrimeiroAcessoComponent } from './components/primeiro-acesso/primeiro-acesso.component';
 import { HomeComponent } from './components/home/home.component';
-import { CarouselComponent } from './components/carousel/carousel/carousel.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 export const routes: Routes = [
   {

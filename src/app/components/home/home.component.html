@@ -1,33 +1,9 @@
 <div class="container">
-  <header class="header">
-    <div class="header__brand">
-      <img [src]="logo" alt="Same Engenharia - Página inicial" class="menu__logo" loading="lazy">
-    </div>
 
-    <nav class="nav">
-      <ul class="menu" role="menubar">
-        <li class="menu__item" role="none">
-          <a href="#empreendimentos" class="menu__link" role="menuitem">Novidades</a>
-        </li>
-        <li class="menu__item" role="none">
-          <a href="#sobre" class="menu__link" role="menuitem">Quem somos</a>
-        </li>
-        <li class="menu__item" role="none">
-          <a href="#contato" class="menu__link" role="menuitem">Contatos</a>
-        </li>
-        <li class="menu__item" role="none">
-          <a href="#carreiras" class="menu__link" role="menuitem">Trabalhe conosco</a>
-        </li>
-        <li class="menu__item" role="none">
-          <a href="/acessar-conta" class="menu__link menu__link-button" role="menuitem">
-            Sou Colaborador
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </header>
+  <app-header></app-header>
 
   <section class="banner">
+
     <div class="banner__title">
       <h1>
         Escolha inteligente.<br />
@@ -38,6 +14,7 @@
     <video autoplay loop muted playsinline class="video" preload="auto">
       <source [src]="video" type="video/mp4">
     </video>
+
   </section>
 
   <section id="novidades">
@@ -48,8 +25,6 @@
     <app-carousel></app-carousel>
   </section>
 
-  <section id="teste">
-
-  </section>
-
+  <app-footer></app-footer>
+  <app-whatsapp-botao></app-whatsapp-botao>
 </div>
