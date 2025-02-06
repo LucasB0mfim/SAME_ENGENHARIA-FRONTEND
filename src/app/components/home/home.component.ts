@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent {
   logo: string = 'logo.png';
-  video: string = 'Video.webm';
+  video: string = 'banner.mp4';
 }
