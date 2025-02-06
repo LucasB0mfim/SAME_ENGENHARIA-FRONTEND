@@ -10,44 +10,6 @@
   position: relative;
 }
 
-/* Banner */
-.banner {
-  width: 100%;
-  height: 100vh;
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.banner__content {
-  position: absolute;
-  bottom: 20%;
-  z-index: 2;
-  max-width: 1024px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.banner__content h1 {
-  color: #fff;
-  font-size: 5rem;
-  font-weight: 500;
-  letter-spacing: -2px;
-  line-height: 1.2;
-}
-
-.banner__content span {
-  color: #f93f03;
-  font-weight: 600;
-}
-
-.banner__video {
-  width: 100%;
-  height: 100vh;
-  object-fit: cover;
-  filter: brightness(0.7);
-}
-
 /* Seção Novidades */
 #novidade {
   max-width: 1024px;
@@ -69,25 +31,69 @@
   color: #f93f03;
 }
 
-#quemSomos {
-  height: 80vh;
-  margin-top: 5rem;
+#suporte {
+  height: 50vh;
+  margin-top: 10rem;
   background: #1a1a1a;
 }
 
-.quemSomos__container {
+.suporte__container {
+  position: relative;
   max-width: 1024px;
   width: 100%;
   margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
-#trabalheConosco {
-  height: 80vh;
-  margin-top: 5rem;
+.suporte__main {
+  width: 50%;
 }
 
-.trabalheConosco__container {
+.suporte__main h1 {
+  color: #f93f03;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+.suporte__main p {
+  color: #fff;
+}
+
+.suporte__aside {
+  width: 50%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.suporte__aside > img {
+  width: 100%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+/* Seção Lançamento */
+#lancamento {
   max-width: 1024px;
   width: 100%;
   margin: 0 auto;
+  padding-top: 5rem;
+}
+
+#lancamento h1 {
+  color: #5e5e5e;
+  font-size: 3rem;
+  line-height: 1.2;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+#lancamento span {
+  font-weight: 600;
+  color: #f93f03;
 }

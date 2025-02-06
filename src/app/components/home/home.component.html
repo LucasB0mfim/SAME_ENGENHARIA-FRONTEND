@@ -1,36 +1,38 @@
 <div class="container">
   <app-header></app-header>
 
-  <div class="banner">
-    <div class="banner__content">
-      <h1>
-        Escolha inteligente.<br />
-        <span>Escolha Same.</span>
-      </h1>
-    </div>
-
-    <video autoplay loop muted playsinline class="banner__video" preload="auto">
-      <source [src]="video" type="video/mp4">
-    </video>
-  </div>
+  <app-banner></app-banner>
 
   <section id="novidade">
     <h1>
       Onde a elegância encontra<br />
       <span>o conforto.</span>
     </h1>
-    <app-carousel></app-carousel>
+    <app-novidade-carousel></app-novidade-carousel>
   </section>
 
-  <section id="quemSomos">
-    <div class="quemSomes__container"></div>
-  </section>
+  <section id="suporte">
+    <div class="suporte__container">
+      <main class="suporte__main">
+        <h1>Conte com os melhores profissionais</h1>
+        <p>Quer você esteja buscando um lar ou uma oportunidade de investimento, nossos especialistas estão prontos para ajudar a encontrar o que você precisa, de forma simples e com a atenção que você merece.</p>
+      </main>
 
-  <section id="trabalheConosco">
-    <div class="trabalheConosco__container">
+      <aside class="suporte__aside">
+        <img [src]="especialistas">
+      </aside>
     </div>
   </section>
 
+  <section id="lancamento">
+    <h1>
+      Inovação e estilo, unidos para criar<br />
+      <span>o paraíso.</span>
+    </h1>
+    <app-hotel-carousel></app-hotel-carousel>
+  </section>
+
   <app-whatsapp-botao></app-whatsapp-botao>
+
   <app-footer></app-footer>
 </div>

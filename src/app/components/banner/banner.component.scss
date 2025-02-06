@@ -1,0 +1,44 @@
+/* Reset Básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Banner */
+.container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.banner {
+  position: absolute;
+  bottom: 20%;
+  z-index: 2;
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.banner h1 {
+  color: #fff;
+  font-size: 5rem;
+  font-weight: 500;
+  letter-spacing: -2px;
+  line-height: 1.2;
+}
+
+.banner span {
+  color: #f93f03;
+  font-weight: 600;
+}
+
+.video {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  filter: brightness(0.7);
+}

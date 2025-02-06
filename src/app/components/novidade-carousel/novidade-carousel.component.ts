@@ -3,12 +3,12 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
-  selector: 'app-carousel',
+  selector: 'app-novidade-carousel',
   imports: [CarouselModule],
-  templateUrl: './carousel.component.html',
-  styleUrl: './carousel.component.scss'
+  templateUrl: './novidade-carousel.component.html',
+  styleUrl: './novidade-carousel.component.scss'
 })
-export class CarouselComponent {
+export class NovidadeCarouselComponent {
   frente: string = 'assets/images/frente.webp';
   sala: string = 'assets/images/sala.webp';
   quarto: string = 'assets/images/quarto.webp';
