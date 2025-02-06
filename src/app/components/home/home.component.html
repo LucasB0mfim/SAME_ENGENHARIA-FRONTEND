@@ -33,17 +33,16 @@
       Escolha <span class="banner__highlight">Same.</span>
     </h1>
 
-    <ng-container *ngIf="isVideoLoaded">
-      <video
-        [src]="video"
-        autoplay
-        loop
-        muted
-        playsinline
-        class="video"
-        aria-hidden="true"
-        preload="metadata">
-      </video>
-    </ng-container>
+    <video
+      [src]="videoUrl"
+      (loadeddata)="onVideoLoad()"
+      [class.loading]="!isVideoLoaded"
+      class="video"
+      autoplay
+      loop
+      muted
+      playsinline
+      aria-hidden="true">
+    </video>
   </section>
 </div>
