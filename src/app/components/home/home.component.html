@@ -1,23 +1,20 @@
 <div class="container">
-
   <app-header></app-header>
 
-  <section class="banner">
-
-    <div class="banner__title">
+  <div class="banner">
+    <div class="banner__content">
       <h1>
         Escolha inteligente.<br />
         <span>Escolha Same.</span>
       </h1>
     </div>
 
-    <video autoplay loop muted playsinline class="video" preload="auto">
+    <video autoplay loop muted playsinline class="banner__video" preload="auto">
       <source [src]="video" type="video/mp4">
     </video>
+  </div>
 
-  </section>
-
-  <section id="novidades">
+  <section id="novidade">
     <h1>
       Onde a elegância encontra<br />
       <span>o conforto.</span>
@@ -25,6 +22,15 @@
     <app-carousel></app-carousel>
   </section>
 
-  <app-footer></app-footer>
+  <section id="quemSomos">
+    <div class="quemSomes__container"></div>
+  </section>
+
+  <section id="trabalheConosco">
+    <div class="trabalheConosco__container">
+    </div>
+  </section>
+
   <app-whatsapp-botao></app-whatsapp-botao>
+  <app-footer></app-footer>
 </div>

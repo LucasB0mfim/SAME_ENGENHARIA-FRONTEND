@@ -8,7 +8,8 @@
 .footer {
   background-color: #1a1a1a;
   color: #ffffff;
-  padding: 4vw 2vw 2vw 2vw;
+  padding-top: 4rem;
+  padding-bottom: 1rem;
 }
 
 .footer h2 {
@@ -30,11 +31,12 @@
 }
 
 .footer__brand {
-  text-align: center;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.footer__brand img {
+.footer__brand > img {
   width: 12rem;
   margin-bottom: 1rem;
 }
@@ -44,6 +46,7 @@
   border-radius: 0.5rem;
   background: #fff;
   width: 8rem;
+  margin-top: 1rem;
 }
 
 .footer__social {
@@ -61,12 +64,6 @@
   transform: scale(1.1);
 }
 
-.footer__address,
-.footer__contact {
-  flex: 1;
-  min-width: 250px;
-}
-
 .footer__contact a {
   color: #ffffff;
   text-decoration: none;
@@ -78,7 +75,7 @@
 
 .footer__copyright {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
   font-size: 0.9rem;
   border-top: 1px solid #333;
   padding-top: 1rem;
