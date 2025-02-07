@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './whatsapp-botao.component.scss'
 })
 export class WhatsappBotaoComponent {
-  whatsapp: string = 'assets/images/whatsapp.png';
+  whatsapp: string = 'images/whatsapp.png';
   whatsappUrl: string = 'https://contate.me/sameengenharia/';
 }

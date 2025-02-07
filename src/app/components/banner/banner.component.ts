@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+// banner.component.ts
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-banner',
-  imports: [],
   templateUrl: './banner.component.html',
-  styleUrl: './banner.component.scss'
+  styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent {
-  video: string = 'assets/videos/banner.mp4';
+  @ViewChild('videoRef') videoRef!: ElementRef<HTMLVideoElement>;
+  video: string = 'videos/banner.mp4?t=${new Date().getTime()}';
+
+  ngAfterViewInit() {
+    if (this.videoRef.nativeElement) {
+      this.videoRef.nativeElement.play().catch(err => {
+        console.warn('Autoplay bloqueado pelo navegador:', err);
+      });
+    }
+  }
 }

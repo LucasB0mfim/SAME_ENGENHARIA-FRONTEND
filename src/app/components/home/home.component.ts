@@ -14,5 +14,5 @@ import { NovidadeCarouselComponent } from "../novidade-carousel/novidade-carouse
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  especialistas: string = 'assets/images/especialistas.webp';
+  especialistas: string = 'images/especialistas.webp';
 }

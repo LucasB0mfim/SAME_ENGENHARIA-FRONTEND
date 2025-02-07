@@ -7,11 +7,11 @@ import { Component } from '@angular/core';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-  logo: string = 'assets/images/logo.png';
-  instagram: string = 'assets/images/instagram.png';
-  linkedin: string = 'assets/images/linkedin.png';
-  whatsapp: string = 'assets/images/whatsapp.png';
-  whatsappQrCode: string = 'assets/images/qrcode.png';
+  logo: string = 'images/logo.png';
+  instagram: string = 'images/instagram.png';
+  linkedin: string = 'images/linkedin.png';
+  whatsapp: string = 'images/whatsapp.png';
+  whatsappQrCode: string = 'images/qrcode.png';
 
   linkedinUrl: string = 'https://www.linkedin.com/company/same-engenharia/';
   instagramUrl: string = 'https://www.instagram.com/sameengenharia/';
