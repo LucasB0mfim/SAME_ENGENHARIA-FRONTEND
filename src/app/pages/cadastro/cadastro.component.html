@@ -1,0 +1,19 @@
+<div class="body">
+  <div class="container">
+    <div class="informativo">
+      <h1>Primeiro acesso?</h1>
+      <p>Crie seu nome de usuário e sua nova senha!</p>
+    </div>
+
+    <div class="cadastro">
+      <form [formGroup]="cadastroForm" (ngSubmit)="cadastro()">
+        <h1>Atualizar conta</h1>
+        <input type="text" placeholder="Usuário" formControlName="usuario" />
+        <input type="text" placeholder="Email" formControlName="email" />
+        <input type="password" placeholder="Senha" formControlName="senha" />
+        <input type="password" placeholder="Confirme a senha" />
+        <button>Atualizar</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 import { LoginService } from '../../services/login.service';
+import { PrimeiroAcessoService } from '../../services/primeiro-acesso.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginComponent implements AfterViewInit {
 
   private readonly _router = inject(Router);
   private readonly _loginService = inject(LoginService);
+  private readonly _primeiroAcessoService = inject(PrimeiroAcessoService);
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
@@ -42,7 +44,7 @@ export class LoginComponent implements AfterViewInit {
     this._loginService.login(this.loginForm.value.email, this.loginForm.value.senha)
       .subscribe({
         next: () => {
-          this._router.navigate(['home']);
+          this._router.navigate(['']);
         },
         error: (error) => {
           if (error.status === 401) {
@@ -55,7 +57,7 @@ export class LoginComponent implements AfterViewInit {
   }
 
   primeiroAcesso() {
-    this._loginService.login(this.primeiroAcessoForm.value.email, this.primeiroAcessoForm.value.senha)
+    this._primeiroAcessoService.primeiroAcesso(this.primeiroAcessoForm.value.email, this.primeiroAcessoForm.value.senha)
       .subscribe({
         next: () => {
           this._router.navigate(['atualizar-conta']);

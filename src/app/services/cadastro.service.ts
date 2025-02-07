@@ -5,13 +5,16 @@ import { map, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PrimeiroAcessoService {
+export class CadastroService {
+
   private readonly _httpClient = inject(HttpClient);
 
-  primeiroAcesso(email: string, senha: string): Observable<{ token: string }> {
+  cadastro(usuario: string, email: string, senhaAtual: string, senhaNova: string): Observable<{ token: string }> {
     return this._httpClient.post<{ token: string }>('http://localhost:3000/same-engenharia/api/colaborador/primeiro-acesso', {
+      usuario,
       email,
-      senha
+      senhaAtual,
+      senhaNova
     }).pipe(map((tokenResponse) => {
       localStorage.setItem('token', tokenResponse.token);
       return tokenResponse;
