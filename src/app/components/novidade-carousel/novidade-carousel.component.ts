@@ -9,10 +9,10 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
   styleUrl: './novidade-carousel.component.scss'
 })
 export class NovidadeCarouselComponent {
-  frente: string = 'images/frente.webp';
-  sala: string = 'images/sala.webp';
-  quarto: string = 'images/quarto.webp';
-  varanda: string = 'images/varanda.webp';
+  frente: string = '/assets/images/frente.webp';
+  sala: string = '/assets/images/sala.webp';
+  quarto: string = '/assets/images/quarto.webp';
+  varanda: string = '/assets/images/varanda.webp';
 
   customOptions: OwlOptions = {
     loop: true,
