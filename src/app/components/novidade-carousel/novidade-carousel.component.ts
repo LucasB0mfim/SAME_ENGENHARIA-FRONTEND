@@ -21,7 +21,7 @@ export class NovidadeCarouselComponent {
     pullDrag: false,
     dots: true,
     navSpeed: 700,
-    navText: ['＜', '＞'],
+    navText: ['〈', '〉'],
     responsive: {
       0: {
         items: 1
@@ -36,6 +36,6 @@ export class NovidadeCarouselComponent {
         items: 1
       }
     },
-    nav: false
+    nav: true
   }
 }

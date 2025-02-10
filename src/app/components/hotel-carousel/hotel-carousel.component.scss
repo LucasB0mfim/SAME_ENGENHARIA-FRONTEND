@@ -1,8 +1,54 @@
-.carousel {
-  width: 100%;
-  cursor: pointer;
+::ng-deep .custom-carousel {
+  position: relative;
 
-  img {
-    border-radius: 10px;
+  .owl-theme .owl-nav [class*=owl-] {
+    height: 6rem;
+    width: 6rem;
+    background: transparent;
+    font-size: 10rem;
+    color: #ff6e27;
+    transition: all ease-in-out 0.2s;
+  }
+
+  .owl-theme .owl-nav [class*=owl-]:hover {
+    color: #ff9a67;
+  }
+
+  .owl-nav {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .owl-prev {
+    position: absolute;
+    left: -15.5rem;
+  }
+
+  .owl-next {
+    position: absolute;
+    right: -15rem;
+  }
+
+  .owl-theme .owl-dots, .owl-theme .owl-nav {
+    margin-top: 2rem;
+  }
+
+  .owl-theme .owl-dots .owl-dot span {
+    background: #ffae86;
+  }
+
+  .owl-theme .owl-dots .owl-dot.active span {
+    background: #E94F0F;
+  }
+
+  .owl-carousel .owl-item {
+    padding: 20px;
+  }
+
+  .owl-carousel .owl-item img {
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.5);
   }
 }

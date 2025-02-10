@@ -1,8 +1,38 @@
-.carousel {
-  width: 100%;
-  cursor: pointer;
+::ng-deep .custom-carousel {
+  position: relative;
 
-  img {
-    border-radius: 10px;
+  .owl-theme .owl-nav [class*=owl-] {
+    height: 6rem;
+    width: 6rem;
+    background: transparent;
+    font-size: 10rem;
+    color: #e8e8e8;
+    transition: all ease-in-out 0.2s;
+  }
+
+  .owl-theme .owl-nav [class*=owl-]:hover {
+    color: #d7d7d7;
+  }
+
+  .owl-nav {
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .owl-prev {
+    position: absolute;
+    left: -15.5rem;
+  }
+
+  .owl-next {
+    position: absolute;
+    right: -15rem;
+  }
+
+  .owl-theme .owl-dots, .owl-theme .owl-nav {
+    margin-top: 2rem;
   }
 }
