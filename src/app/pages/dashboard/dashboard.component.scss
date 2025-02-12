@@ -1,0 +1,65 @@
+.dashboard__container {
+  display: flex;
+  justify-content: space-between;
+  min-height: 100vh;
+  background-color: #191E22;
+  padding: 2rem;
+}
+
+.sidebar {
+  width: 20%;
+  border-radius: 10px;
+  padding: 20px;
+  background: #262B2F;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+}
+
+.user__info {
+  padding: 15px;
+  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 20px;
+}
+
+.username {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff6e27;
+}
+
+.nav__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav__links li {
+  margin-bottom: 10px;
+}
+
+.nav__links a {
+  color: #f1f1f1;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all ease-in 0.2s;
+}
+
+.nav__links a:hover {
+  color: #ff6e27;
+  background: #3a3f43;
+  transition: all ease-in 0.2s;
+}
+
+.main__content {
+  color: white;
+  width: 78%;
+  border-radius: 10px;
+  padding: 20px;
+  background: #262B2F;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+}
+
