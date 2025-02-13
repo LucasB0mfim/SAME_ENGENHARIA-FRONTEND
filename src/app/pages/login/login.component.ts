@@ -34,12 +34,19 @@ export class LoginComponent implements AfterViewInit {
   });
 
   login() {
-    this._loginService.login(this.loginForm.value.email, this.loginForm.value.senha)
+    this._loginService.login(this.loginForm.value.email, this.loginForm.value.password)
       .subscribe({
-        next: () => {
-          this._router.navigate(['']);
+        next: (response) => {
+          if (response.success) {
+            console.log('Login bem-sucedido, redirecionando para /dashboard');
+            this._router.navigate(['dashboard']);
+          } else {
+            console.log('Login falhou:', response.message);
+            this.loginForm.setErrors({ 'erroInesperado': true });
+          }
         },
         error: (error) => {
+          console.error('Erro no login:', error);
           if (error.status === 401) {
             this.loginForm.setErrors({ 'crediciaisInvalidas': true });
           } else {
