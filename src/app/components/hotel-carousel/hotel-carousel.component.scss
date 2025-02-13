@@ -24,12 +24,12 @@
 
   .owl-prev {
     position: absolute;
-    left: -15.5rem;
+    left: -13%;
   }
 
   .owl-next {
     position: absolute;
-    right: -15rem;
+    right: -13%;
   }
 
   .owl-theme .owl-dots, .owl-theme .owl-nav {
@@ -49,6 +49,7 @@
   }
 
   .owl-carousel .owl-item img {
+    cursor: pointer;
     box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.5);
   }
 }

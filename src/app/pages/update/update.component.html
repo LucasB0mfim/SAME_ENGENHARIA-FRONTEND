@@ -5,13 +5,12 @@
       <p>Crie seu nome de usuário e sua nova senha!</p>
     </div>
 
-    <div class="cadastro">
-      <form [formGroup]="cadastroForm" (ngSubmit)="cadastro()">
+    <div class="update">
+      <form [formGroup]="updateForm" (ngSubmit)="update()">
         <h1>Atualizar conta</h1>
-        <input type="text" placeholder="Usuário" formControlName="usuario" />
+        <input type="text" placeholder="Usuário" formControlName="username" />
         <input type="text" placeholder="Email" formControlName="email" />
-        <input type="password" placeholder="Senha" formControlName="senha" />
-        <input type="password" placeholder="Confirme a senha" />
+        <input type="password" placeholder="Senha" formControlName="password" />
         <button>Atualizar</button>
       </form>
     </div>

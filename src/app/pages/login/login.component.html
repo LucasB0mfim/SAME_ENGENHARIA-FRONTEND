@@ -2,10 +2,10 @@
   <div class="container" id="container" #container>
 
     <div class="sign-up">
-      <form [formGroup]="primeiroAcessoForm" (ngSubmit)="primeiroAcesso()">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
         <h1>Primeiro acesso</h1>
         <input type="text" placeholder="Email" formControlName="email" />
-        <input type="password" placeholder="Senha" formControlName="senha" />
+        <input type="password" placeholder="Senha" formControlName="password" />
         <button>acessar</button>
       </form>
     </div>
@@ -14,19 +14,9 @@
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <h1>Entrar</h1>
         <input type="text" placeholder="Email" formControlName="email" />
-        <input type="password" placeholder="senha" formControlName="senha" />
+        <input type="password" placeholder="senha" formControlName="password" />
         <a href="#">Esqueci a Senha</a>
         <button>Entrar</button>
-        @if (loginForm.invalid) {
-
-        @if (loginForm.hasError('crediciaisInvalidas')) {
-        <p>Credenciais Inválidas</p>
-        }
-
-        @if (loginForm.hasError('erroInesperado')) {
-        <p>Ocorreu um erro inesperado, tente novamente outra hora</p>
-        }
-        }
       </form>
     </div>
 
@@ -47,5 +37,6 @@
 
       </div>
     </div>
+
   </div>
 </div>

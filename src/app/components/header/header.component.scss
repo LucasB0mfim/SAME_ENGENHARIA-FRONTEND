@@ -46,12 +46,10 @@
   padding: 0.5rem;
 }
 
-.menu__link:hover,
-.menu__link:focus {
+.menu__link:hover {
   color: #ff6e27;
 }
 
-/* Botão para colaboradores */
 .menu__link-button {
   color: #ff6e27;
   border: 1px solid #ff6e27;
@@ -60,8 +58,7 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.menu__link-button:hover,
-.menu__link-button:focus {
+.menu__link-button:hover {
   background-color: #ff6e27;
   color: #fff;
 }
