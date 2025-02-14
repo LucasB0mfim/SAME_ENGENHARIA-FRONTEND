@@ -2,20 +2,22 @@
   <!-- Sidebar -->
   <nav class="sidebar">
     <div class="user__info">
-      <span class="username">{{ usuario }}</span>
-      <span class="username">{{ funcao }}</span>
+      <span class="user__info-username">{{ username }}</span>
+      <span class="user__info-function">{{ function }}</span>
     </div>
     <ul class="nav__links">
-      <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
-      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
-      <li><a routerLink="/settings" routerLinkActive="active">Settings</a></li>
-      <li><a routerLink="/reports" routerLinkActive="active">Reports</a></li>
-      <li><button (click)="logout()">Logout</button></li>
+      <li><a>Acompanhamento</a></li>
+      <li><a>Agendamento</a></li>
+      <li><a>Indicadores</a></li>
+      <li><a>Pagamento</a></li>
+      <li><a>Relatório</a></li>
+      <li><a>Perfil</a></li>
+      <li><button (click)="logout()">Sair</button></li>
     </ul>
   </nav>
 
   <!-- Main content -->
   <main class="main__content">
-    .
+
   </main>
 </div>
