@@ -1,23 +1,130 @@
-<div class="dashboard__container">
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <div class="user__info">
-      <span class="user__info-username">{{ username }}</span>
-      <span class="user__info-function">{{ function }}</span>
+<div class="dashboard">
+  <!-- Sidebar Navigation -->
+  <nav class="dashboard__sidebar">
+
+    <!-- Dashboard Company -->
+    <div class="dashboard__company">
+      <img class="dashboard__company-icon" [src]="logo" alt="Same Engenharia">
+      <h1 class="dashboard__company-name">
+        Same Engenharia
+      </h1>
     </div>
-    <ul class="nav__links">
-      <li><a>Acompanhamento</a></li>
-      <li><a>Agendamento</a></li>
-      <li><a>Indicadores</a></li>
-      <li><a>Pagamento</a></li>
-      <li><a>Relatório</a></li>
-      <li><a>Perfil</a></li>
-      <li><button (click)="logout()">Sair</button></li>
+
+    <!-- Main Navigation -->
+    <ul class="dashboard__nav-links">
+      <li class="dashboard__nav-item">
+        <a href="/dashboard" class="dashboard__nav-link dashboard__nav-link--active">
+          <i class="dashboard__nav-icon icon-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <!-- Monitoring Section -->
+      <li class="dashboard__nav-item">
+        <a href="/monitoring" class="dashboard__nav-link">
+          <i class="dashboard__nav-icon icon-monitoring"></i>
+          <span>Acompanhamento</span>
+          <span class="dashboard__nav-badge">3</span>
+        </a>
+      </li>
+
+      <!-- Schedule Section -->
+      <li class="dashboard__nav-item">
+        <a href="/schedule" class="dashboard__nav-link">
+          <i class="dashboard__nav-icon icon-calendar"></i>
+          <span>Agendamento</span>
+        </a>
+      </li>
+
+      <!-- KPIs Section -->
+      <li class="dashboard__nav-item">
+        <a href="/indicators" class="dashboard__nav-link">
+          <i class="dashboard__nav-icon icon-chart"></i>
+          <span>Indicadores</span>
+        </a>
+      </li>
+
+      <!-- Financial Section -->
+      <li class="dashboard__nav-item">
+        <a href="/payments" class="dashboard__nav-link">
+          <i class="dashboard__nav-icon icon-payment"></i>
+          <span>Pagamento</span>
+        </a>
+      </li>
+
+      <!-- Reports Section -->
+      <li class="dashboard__nav-item">
+        <a href="/reports" class="dashboard__nav-link">
+          <i class="dashboard__nav-icon icon-report"></i>
+          <span>Relatório</span>
+        </a>
+      </li>
+
+      <!-- Profile Section -->
+      <li class="dashboard__nav-item">
+        <a href="/profile" class="dashboard__nav-link">
+          <i class="dashboard__nav-icon icon-profile"></i>
+          <span>Perfil</span>
+        </a>
+      </li>
     </ul>
   </nav>
 
-  <!-- Main content -->
-  <main class="main__content">
+  <!-- Área do Main Content-->
+  <main class="dashboard__main-content">
+    <!-- Header com Bem vindo e Search -->
+    <section class="dashboard__header-content">
+      <div class="dashboard__welcome-section">
+        <h1 class="dashboard__welcome">Bem vindo, {{ username }}</h1>
+      </div>
 
+      <div class="dashboard__search">
+        <input
+          class="dashboard__search-input"
+          placeholder="Buscar..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+        >
+      </div>
+
+      <!-- User Profile Section -->
+      <div class="dashboard__user-info">
+        <div class="dashboard__user-avatar">
+          <img [src]="avatarPath" alt="User avatar" class="dashboard__avatar-img">
+        </div>
+        <div class="dashboard__user-details" (click)="toggleUserMenu()" [class.dashboard__user-details--active]="isUserMenuOpen">
+          <span class="dashboard__user-name">
+            {{ username }}
+            <i class="dashboard__user-arrow" [class.dashboard__user-arrow--open]="isUserMenuOpen"></i>
+          </span>
+          <!-- Dropdown Menu -->
+          <div class="dashboard__user-menu" *ngIf="isUserMenuOpen">
+            <button class="dashboard__menu-item" (click)="toggleTheme()">
+              <i [class]="isDarkTheme ? 'icon-sun' : 'icon-moon'"></i>
+              <span>{{ isDarkTheme ? 'Tema Claro' : 'Tema Escuro' }}</span>
+            </button>
+            <button class="dashboard__menu-item dashboard__menu-item--danger" (click)="logout()">
+              <i class="icon-logout"></i>
+              <span>Sair</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard__content">
+      <!-- Quick Stats -->
+      <div class="dashboard__stats-grid">
+        <div class="dashboard__stat-card">
+          <!-- Add stat content -->
+        </div>
+      </div>
+
+      <!-- Main Dashboard Area -->
+      <div class="dashboard__main-grid">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
   </main>
 </div>
