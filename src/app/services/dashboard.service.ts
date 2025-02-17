@@ -9,7 +9,7 @@ import { map, Observable } from 'rxjs';
 export class DashboardService {
   private readonly _httpClient = inject(HttpClient);
 
-  getEmployeeData(): Observable<{ name: string, username: string, function: string }> {
+  getEmployeeData(): Observable<{ name: string, username: string, function: string, avatar: string }> {
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Token não encontrado');
@@ -19,7 +19,7 @@ export class DashboardService {
       Authorization: `Bearer ${token}`
     });
 
-    return this._httpClient.get<{ success: boolean, message: string, data: { name: string, username: string, function: string } }>(
+    return this._httpClient.get<{ success: boolean, message: string, data: { name: string, username: string, function: string, avatar: string } }>(
       'http://localhost:3000/same-engenharia/api/employee/info',
       { headers }
     ).pipe(

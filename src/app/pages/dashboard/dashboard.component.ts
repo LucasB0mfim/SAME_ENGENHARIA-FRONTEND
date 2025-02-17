@@ -9,6 +9,7 @@ interface EmployeeData {
   name: string;
   username: string;
   function: string;
+  avatar: string;
 }
 
 @Component({
@@ -20,16 +21,29 @@ interface EmployeeData {
 })
 export class DashboardComponent implements OnInit {
   // Properties
-  logo: string = '/assets/images/logo.png';
-  avatarPath: string = '/assets/images/frente.webp';
+  dashboardIconDark: string = 'assets/images/dashboardDark.png';
+  dashboardIconLight: string = 'assets/images/dashboardLight.png';
+
+  indicatorIconDark: string = 'assets/images/indicatorDark.png';
+  indicatorIconLight: string = 'assets/images/indicatorLight.png';
+
+  sheetsIconDark: string = 'assets/images/sheetsDark.png';
+  sheetsIconLight: string = 'assets/images/sheetsLight.png';
+
+  sheetsIcon: string = '';
+  indicatorIcon: string = '';
+  dashboardIcon: string = '';
+
+  isDarkTheme: boolean = false;
+
   searchQuery: string = '';
   isUserMenuOpen: boolean = false;
-  isDarkTheme: boolean = false;
 
   // User data
   name: string = 'Carregando';
   username: string = 'Carregando...';
   function: string = 'Carregando...';
+  avatar: string = '...'
 
   // Services
   private readonly _dashboardService = inject(DashboardService);
@@ -39,6 +53,7 @@ export class DashboardComponent implements OnInit {
     // Inicializa o tema baseado na preferência salva
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
     this.applyTheme();
+    this.updateDashboardIcon(); // Atualiza os ícones ao inicializar o componente
   }
 
   ngOnInit() {
@@ -52,12 +67,14 @@ export class DashboardComponent implements OnInit {
         this.name = response.name;
         this.username = response.username;
         this.function = response.function;
+        this.avatar = response.avatar;
       },
       error: (error) => {
         console.error('Erro ao carregar informações do colaborador:', error);
         this.name = 'Indefinido';
         this.username = 'Indefinido';
         this.function = 'Indefinido';
+        this.avatar = 'Indefinido';
       }
     });
   }
@@ -76,11 +93,18 @@ export class DashboardComponent implements OnInit {
     this.isDarkTheme = !this.isDarkTheme;
     localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
     this.applyTheme();
+    this.updateDashboardIcon(); // Atualiza os ícones ao mudar o tema
     this.isUserMenuOpen = false;
   }
 
   private applyTheme(): void {
     document.documentElement.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
+  }
+
+  private updateDashboardIcon(): void {
+    this.dashboardIcon = this.isDarkTheme ? this.dashboardIconLight : this.dashboardIconDark;
+    this.indicatorIcon = this.isDarkTheme ? this.indicatorIconLight : this.indicatorIconDark;
+    this.sheetsIcon = this.isDarkTheme ? this.sheetsIconLight : this.sheetsIconDark;
   }
 
   logout(): void {

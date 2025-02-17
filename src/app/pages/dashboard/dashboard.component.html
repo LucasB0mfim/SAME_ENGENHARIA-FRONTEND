@@ -4,9 +4,8 @@
 
     <!-- Dashboard Company -->
     <div class="dashboard__company">
-      <img class="dashboard__company-icon" [src]="logo" alt="Same Engenharia">
       <h1 class="dashboard__company-name">
-        Same Engenharia
+        SAME ENGENHARIA
       </h1>
     </div>
 
@@ -14,7 +13,7 @@
     <ul class="dashboard__nav-links">
       <li class="dashboard__nav-item">
         <a href="/dashboard" class="dashboard__nav-link dashboard__nav-link--active">
-          <i class="dashboard__nav-icon icon-dashboard"></i>
+          <img [src]="dashboardIcon" class="dashboard__nav-icon" />
           <span>Dashboard</span>
         </a>
       </li>
@@ -22,49 +21,16 @@
       <!-- Monitoring Section -->
       <li class="dashboard__nav-item">
         <a href="/monitoring" class="dashboard__nav-link">
-          <i class="dashboard__nav-icon icon-monitoring"></i>
-          <span>Acompanhamento</span>
-          <span class="dashboard__nav-badge">3</span>
+          <img [src]="indicatorIcon" class="dashboard__nav-icon" />
+          <span>Indicadores</span>
         </a>
       </li>
 
       <!-- Schedule Section -->
       <li class="dashboard__nav-item">
-        <a href="/schedule" class="dashboard__nav-link">
-          <i class="dashboard__nav-icon icon-calendar"></i>
-          <span>Agendamento</span>
-        </a>
-      </li>
-
-      <!-- KPIs Section -->
-      <li class="dashboard__nav-item">
-        <a href="/indicators" class="dashboard__nav-link">
-          <i class="dashboard__nav-icon icon-chart"></i>
-          <span>Indicadores</span>
-        </a>
-      </li>
-
-      <!-- Financial Section -->
-      <li class="dashboard__nav-item">
-        <a href="/payments" class="dashboard__nav-link">
-          <i class="dashboard__nav-icon icon-payment"></i>
-          <span>Pagamento</span>
-        </a>
-      </li>
-
-      <!-- Reports Section -->
-      <li class="dashboard__nav-item">
-        <a href="/reports" class="dashboard__nav-link">
-          <i class="dashboard__nav-icon icon-report"></i>
-          <span>Relatório</span>
-        </a>
-      </li>
-
-      <!-- Profile Section -->
-      <li class="dashboard__nav-item">
-        <a href="/profile" class="dashboard__nav-link">
-          <i class="dashboard__nav-icon icon-profile"></i>
-          <span>Perfil</span>
+        <a href="/monitoring" class="dashboard__nav-link">
+          <img [src]="sheetsIcon" class="dashboard__nav-icon" />
+          <span>Relatórios</span>
         </a>
       </li>
     </ul>
@@ -75,7 +41,7 @@
     <!-- Header com Bem vindo e Search -->
     <section class="dashboard__header-content">
       <div class="dashboard__welcome-section">
-        <h1 class="dashboard__welcome">Bem vindo, {{ username }}</h1>
+        <h1 class="dashboard__welcome">Analytics</h1>
       </div>
 
       <div class="dashboard__search">
@@ -90,7 +56,7 @@
       <!-- User Profile Section -->
       <div class="dashboard__user-info">
         <div class="dashboard__user-avatar">
-          <img [src]="avatarPath" alt="User avatar" class="dashboard__avatar-img">
+          <img [src]="avatar" alt="User avatar" class="dashboard__avatar-img">
         </div>
         <div class="dashboard__user-details" (click)="toggleUserMenu()" [class.dashboard__user-details--active]="isUserMenuOpen">
           <span class="dashboard__user-name">
@@ -113,18 +79,7 @@
     </section>
 
     <!-- Dashboard Content -->
-    <section class="dashboard__content">
-      <!-- Quick Stats -->
-      <div class="dashboard__stats-grid">
-        <div class="dashboard__stat-card">
-          <!-- Add stat content -->
-        </div>
-      </div>
 
-      <!-- Main Dashboard Area -->
-      <div class="dashboard__main-grid">
-        <router-outlet></router-outlet>
-      </div>
-    </section>
+
   </main>
 </div>

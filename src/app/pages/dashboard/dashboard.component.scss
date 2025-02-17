@@ -2,30 +2,27 @@
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
-  background-color: var(--background-color);
 
   // Sidebar
   &__sidebar {
     width: 16%;
-    background-color: var(--primary-color);
+    padding: 2rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    background-color: var(--secondary-color);
+    z-index: 1;
   }
 
   &__company {
-    width: 100%;
-    height: 100px;
+    height: 5rem;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
 
     &-name {
-      color: #FFF;
-      text-align: center;
-    }
-
-    &-icon {
-      width: 100px;
-      margin-bottom: 5px;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      font-weight: 300;
     }
   }
 
@@ -36,19 +33,15 @@
   }
 
   &__nav-link {
+    padding: 10px 15px;
     display: flex;
     align-items: center;
-    color: var(--link-color);
     text-decoration: none;
-    padding: 10px 15px;
+    color: var(--text-color);
     transition: background-color 0.2s ease-in, color 0.2s ease-in;
 
     &:hover {
       color: var(--text-color);
-      background: var(--hover-color);
-    }
-
-    &:active {
       background: var(--hover-color);
     }
 
@@ -60,16 +53,7 @@
 
   &__nav-icon {
     margin-right: 12px;
-    font-size: 1.2rem;
-  }
-
-  &__nav-badge {
-    margin-left: auto;
-    background: var(--primary-color);
-    color: var(--background-color);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
+    width: 22px;
   }
 
   // Logout Button
@@ -104,19 +88,17 @@
   // Main Content
   &__main-content {
     width: 84%;
-    background: var(--secondary-color);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    padding: 2rem 6rem;
+    background: var(--primary-color);
   }
 
   // Header Content
   &__header-content {
+    height: 5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    background: var(--card-background);
-    padding: 1rem 4rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &__welcome-section {
@@ -125,11 +107,7 @@
 
   &__welcome {
     color: var(--text-color);
-    font-size: 1.5rem;
-  }
-
-  &__description {
-    color: var(--phase-color);
+    font-size: 2rem;
   }
 
   // Search
@@ -158,6 +136,7 @@
 
   // User Info Section
   &__user-info {
+    height: 100%;
     display: flex;
     align-items: center;
     margin-left: 20px;
@@ -165,8 +144,8 @@
   }
 
   &__user-avatar {
-    width: 40px;
-    height: 40px;
+    width: 30%;
+    height: 60%;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid var(--border-color);
@@ -182,7 +161,6 @@
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    padding: 8px;
     margin-left: 10px;
     border-radius: 4px;
     transition: background-color 0.2s ease;
@@ -259,16 +237,5 @@
         background-color: rgba(220, 53, 69, 0.1);
       }
     }
-  }
-
-  &__notification-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: var(--primary-color);
-    color: var(--background-color);
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 0.7rem;
   }
 }
