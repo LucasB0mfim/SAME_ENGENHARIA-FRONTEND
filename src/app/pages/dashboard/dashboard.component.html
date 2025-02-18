@@ -1,85 +1,66 @@
 <div class="dashboard">
-  <!-- Sidebar Navigation -->
-  <nav class="dashboard__sidebar">
+  <nav class="menu">
+    <h1 class="menu__company">
+      SAME ENGENHARIA
+    </h1>
 
-    <!-- Dashboard Company -->
-    <div class="dashboard__company">
-      <h1 class="dashboard__company-name">
-        SAME ENGENHARIA
-      </h1>
-    </div>
-
-    <!-- Main Navigation -->
-    <ul class="dashboard__nav-links">
-      <li class="dashboard__nav-item">
-        <a href="/dashboard" class="dashboard__nav-link dashboard__nav-link--active">
-          <img [src]="dashboardIcon" class="dashboard__nav-icon" />
+    <ul class="menu__nav-links">
+      <li class="menu__nav-item">
+        <a href="#" class="menu__nav-link menu__nav-link--active">
+          <mat-icon>dashboard</mat-icon>
           <span>Dashboard</span>
         </a>
       </li>
 
-      <!-- Monitoring Section -->
-      <li class="dashboard__nav-item">
-        <a href="/monitoring" class="dashboard__nav-link">
-          <img [src]="indicatorIcon" class="dashboard__nav-icon" />
+      <li class="menu__nav-item">
+        <a href="#" class="menu__nav-link">
+          <mat-icon>analytics</mat-icon>
           <span>Indicadores</span>
         </a>
       </li>
 
-      <!-- Schedule Section -->
-      <li class="dashboard__nav-item">
-        <a href="/monitoring" class="dashboard__nav-link">
-          <img [src]="sheetsIcon" class="dashboard__nav-icon" />
+      <li class="menu__nav-item">
+        <a href="#" class="menu__nav-link">
+          <mat-icon>description</mat-icon>
           <span>Relatórios</span>
         </a>
       </li>
     </ul>
   </nav>
 
-  <!-- Área do Main Content-->
-  <main class="dashboard__main-content">
-    <!-- Header com Bem vindo e Search -->
-    <section class="dashboard__header-content">
-      <div class="dashboard__welcome-section">
-        <h1 class="dashboard__welcome">Analytics</h1>
+  <main class="workspace">
+    <section class="workspace__header">
+      <h1 class="workspace__section">Analytics</h1>
+
+      <div class="workspace__search">
+        <input class="workspace__search-input" placeholder="Buscar..." [(ngModel)]="searchQuery" (input)="onSearch()">
       </div>
 
-      <div class="dashboard__search">
-        <input
-          class="dashboard__search-input"
-          placeholder="Buscar..."
-          [(ngModel)]="searchQuery"
-          (input)="onSearch()"
-        >
-      </div>
-
-      <!-- User Profile Section -->
-      <div class="dashboard__user-info">
-        <div class="dashboard__user-avatar">
-          <img [src]="avatar" alt="User avatar" class="dashboard__avatar-img">
+      <div class="workspace__employee">
+        <div class="workspace__employee-avatar">
+          <img [src]="avatar" alt="avatar">
         </div>
-        <div class="dashboard__user-details" (click)="toggleUserMenu()" [class.dashboard__user-details--active]="isUserMenuOpen">
-          <span class="dashboard__user-name">
+
+        <div class="workspace__employee-options" (click)="toggleMenu()">
+          <span class="workspace__employee-username">
             {{ username }}
-            <i class="dashboard__user-arrow" [class.dashboard__user-arrow--open]="isUserMenuOpen"></i>
+            <mat-icon class="workspace__employee-arrow">arrow_drop_down</mat-icon>
           </span>
-          <!-- Dropdown Menu -->
-          <div class="dashboard__user-menu" *ngIf="isUserMenuOpen">
-            <button class="dashboard__menu-item" (click)="toggleTheme()">
-              <i [class]="isDarkTheme ? 'icon-sun' : 'icon-moon'"></i>
+
+          <div class="workspace__employee-menu" *ngIf="isMenuOpen">
+            <button class="workspace__employee-menu--item" (click)="toggleTheme()">
+              <mat-icon *ngIf="isDarkTheme">wb_sunny</mat-icon>
+              <mat-icon *ngIf="!isDarkTheme">dark_mode</mat-icon>
               <span>{{ isDarkTheme ? 'Tema Claro' : 'Tema Escuro' }}</span>
             </button>
-            <button class="dashboard__menu-item dashboard__menu-item--danger" (click)="logout()">
-              <i class="icon-logout"></i>
+
+            <button class="workspace__employee-menu--item workspace__employee-menu--item__danger" (click)="logout()">
+              <mat-icon>logout</mat-icon>
               <span>Sair</span>
             </button>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Dashboard Content -->
-
-
   </main>
 </div>

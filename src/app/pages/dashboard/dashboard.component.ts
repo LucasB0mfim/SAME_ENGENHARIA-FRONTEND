@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { DashboardService } from '../../services/dashboard.service';
+import { MatIconModule } from '@angular/material/icon';
 
 interface EmployeeData {
   name: string;
@@ -15,12 +16,11 @@ interface EmployeeData {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, MatIconModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  // Properties
   dashboardIconDark: string = 'assets/images/dashboardDark.png';
   dashboardIconLight: string = 'assets/images/dashboardLight.png';
 
@@ -37,30 +37,25 @@ export class DashboardComponent implements OnInit {
   isDarkTheme: boolean = false;
 
   searchQuery: string = '';
-  isUserMenuOpen: boolean = false;
+  isMenuOpen: boolean = false;
 
-  // User data
   name: string = 'Carregando';
   username: string = 'Carregando...';
   function: string = 'Carregando...';
-  avatar: string = '...'
+  avatar: string = 'assets/images/avatarIcon.png';
 
-  // Services
   private readonly _dashboardService = inject(DashboardService);
   private readonly _loginService = inject(LoginService);
 
   constructor() {
-    // Inicializa o tema baseado na preferência salva
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
     this.applyTheme();
-    this.updateDashboardIcon(); // Atualiza os ícones ao inicializar o componente
   }
 
   ngOnInit() {
     this.loadEmployeeData();
   }
 
-  // Methods
   loadEmployeeData(): void {
     this._dashboardService.getEmployeeData().subscribe({
       next: (response: EmployeeData) => {
@@ -85,30 +80,31 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  toggleUserMenu(): void {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+    const menu = document.querySelectorAll('.workspace__employee-arrow');
+    menu.forEach(item => {
+      if (this.isMenuOpen) {
+        item.classList.add('workspace__employee-arrow--open');
+      } else {
+        item.classList.remove('workspace__employee-arrow--open');
+      }
+    });
   }
 
   toggleTheme(): void {
     this.isDarkTheme = !this.isDarkTheme;
     localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
     this.applyTheme();
-    this.updateDashboardIcon(); // Atualiza os ícones ao mudar o tema
-    this.isUserMenuOpen = false;
+    this.isMenuOpen = false;
   }
 
   private applyTheme(): void {
     document.documentElement.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
   }
 
-  private updateDashboardIcon(): void {
-    this.dashboardIcon = this.isDarkTheme ? this.dashboardIconLight : this.dashboardIconDark;
-    this.indicatorIcon = this.isDarkTheme ? this.indicatorIconLight : this.indicatorIconDark;
-    this.sheetsIcon = this.isDarkTheme ? this.sheetsIconLight : this.sheetsIconDark;
-  }
-
   logout(): void {
-    this.isUserMenuOpen = false;
+    this.isMenuOpen = false;
     this._loginService.logout();
   }
 }

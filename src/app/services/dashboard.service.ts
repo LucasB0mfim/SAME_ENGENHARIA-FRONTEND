@@ -11,6 +11,7 @@ export class DashboardService {
 
   getEmployeeData(): Observable<{ name: string, username: string, function: string, avatar: string }> {
     const token = localStorage.getItem('token');
+
     if (!token) {
       throw new Error('Token não encontrado');
     }
