@@ -1,0 +1,9 @@
+<div class="welcome" [ngStyle]="{ 'background': backgroundStyle, 'color': textColor }">
+  <div class="welcome__text">
+    <h1 class="welcome__text-title">{{ getGreeting() }}, {{ getFirstName() }}!</h1>
+    <span class="welcome__text-phase">Espero que você tenha um ótimo dia.</span>
+  </div>
+  <div class="welcome__ilustration">
+    <img [src]="ilustration" alt="Ilustration">
+  </div>
+</div>

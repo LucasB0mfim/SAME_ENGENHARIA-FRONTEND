@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MenuDashboardComponent } from '../../components/menu-dashboard/menu-dashboard.component';
+import { HeaderDashboardComponent } from '../../components/header-dashboard/header-dashboard.component';
 
 interface EmployeeData {
   name: string;
@@ -16,27 +18,19 @@ interface EmployeeData {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, MatIconModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    MatIconModule,
+    MenuDashboardComponent,
+    HeaderDashboardComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  dashboardIconDark: string = 'assets/images/dashboardDark.png';
-  dashboardIconLight: string = 'assets/images/dashboardLight.png';
-
-  indicatorIconDark: string = 'assets/images/indicatorDark.png';
-  indicatorIconLight: string = 'assets/images/indicatorLight.png';
-
-  sheetsIconDark: string = 'assets/images/sheetsDark.png';
-  sheetsIconLight: string = 'assets/images/sheetsLight.png';
-
-  sheetsIcon: string = '';
-  indicatorIcon: string = '';
-  dashboardIcon: string = '';
-
-  isDarkTheme: boolean = false;
-
-  searchQuery: string = '';
+  isDarkTheme: boolean = false
   isMenuOpen: boolean = false;
 
   name: string = 'Carregando';
@@ -74,22 +68,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onSearch(): void {
-    if (this.searchQuery.length >= 3) {
-      console.log('Searching for:', this.searchQuery);
-    }
-  }
-
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
-    const menu = document.querySelectorAll('.workspace__employee-arrow');
-    menu.forEach(item => {
-      if (this.isMenuOpen) {
-        item.classList.add('workspace__employee-arrow--open');
-      } else {
-        item.classList.remove('workspace__employee-arrow--open');
-      }
-    });
   }
 
   toggleTheme(): void {

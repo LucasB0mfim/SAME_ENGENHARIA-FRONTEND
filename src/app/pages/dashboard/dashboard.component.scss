@@ -1,188 +1,22 @@
 .dashboard {
+  height: 100vh;
   display: flex;
   justify-content: space-between;
-  min-height: 100vh;
+  background: var(--primary-color);
 
-  .menu {
-    width: 16%;
-    padding: 2rem 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    background-color: var(--secondary-color);
-    z-index: 1;
-
-    &-name {
-      color: var(--text-color);
-      font-size: 20px;
-      font-weight: 300;
-    }
-
-    &__nav-links {
-      list-style: none;
-      padding: 0;
-    }
-
-    &__nav-link {
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: var(--text-color);
-      transition: background-color 0.2s ease-in, color 0.2s ease-in;
-
-      &:hover {
-        color: var(--text-color);
-        background: var(--hover-color);
-      }
-
-      &--active {
-        background: var(--hover-color);
-        color: var(--text-color);
-      }
-    }
-
-    &__nav-icon {
-      margin-right: 12px;
-      width: 22px;
-    }
-
+  &__menu {
+    width: 18%;
+    z-index: 1000;
   }
 
   .workspace {
-    width: 84%;
-    padding: 2rem 6rem;
+    width: 82%;
+    padding: 0 4rem;
     background: var(--primary-color);
 
-    &__header {
-      height: 5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    &__section {
-      color: var(--text-color);
-      font-size: 2rem;
-    }
-
-    &__search {
-      display: flex;
-      align-items: center;
-      border-radius: 10px;
-      border: 2px solid var(--border-color);
-      width: 30%;
-    }
-
-    &__search-input {
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem;
-      outline: none;
-      font-size: 0.9rem;
-      background: var(--card-background);
-      color: var(--text-color);
+    &__content {
       width: 100%;
-
-      &::placeholder {
-        color: var(--phase-color);
-      }
-    }
-
-    &__employee {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      margin-left: 20px;
-      position: relative;
-
-      &-avatar {
-        width: 30%;
-        height: 60%;
-        border-radius: 50%;
-        overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-
-      &-options {
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-        margin-left: 10px;
-        border-radius: 4px;
-        transition: background-color 0.2s ease;
-
-        &:hover {
-          background: var(--hover-color);
-        }
-      }
-
-      &-username {
-        display: flex;
-        align-items: center;
-        font-size: 1rem;
-        font-weight: bold;
-        color: var(--text-color);
-      }
-
-      &-arrow {
-        display: inline-block;
-        margin-left: 8px;
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid var(--text-color);
-        transition: transform 0.2s ease;
-
-        &--open {
-          transform: rotate(180deg);
-        }
-      }
-
-      &-menu {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        min-width: 200px;
-        background: var(--card-background);
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        padding: 8px;
-        z-index: 1000;
-        border: 1px solid var(--border-color);
-
-        &--item {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          padding: 10px 16px;
-          border: none;
-          background: none;
-          color: var(--text-color);
-          font-size: 0.9rem;
-          text-decoration: none;
-          cursor: pointer;
-          border-radius: 4px;
-          transition: background-color 0.2s ease;
-
-          &:hover {
-            background-color: var(--hover-color);
-          }
-
-          &__danger {
-            color: #dc3545;
-
-            &:hover {
-              background-color: rgba(220, 53, 69, 0.1);
-            }
-          }
-        }
-      }
+      height: 80vh;
     }
   }
 }

@@ -1,0 +1,29 @@
+<section class="workspace__header">
+  <h1 class="workspace__section">Analytics</h1>
+
+  <div class="workspace__employee">
+    <div class="workspace__employee-avatar">
+      <img [src]="avatar" alt="avatar">
+    </div>
+
+    <div class="workspace__employee-options" (click)="onToggleMenu()">
+      <span class="workspace__employee-username">
+        {{ username }}
+        <mat-icon class="workspace__employee-arrow" [ngClass]="{'workspace__employee-arrow--open': isMenuOpen}">arrow_drop_down</mat-icon>
+      </span>
+
+      <div class="workspace__employee-menu" *ngIf="isMenuOpen">
+        <button class="workspace__employee-menu--item" (click)="onToggleTheme()">
+          <mat-icon *ngIf="isDarkTheme">wb_sunny</mat-icon>
+          <mat-icon *ngIf="!isDarkTheme">dark_mode</mat-icon>
+          <span>{{ isDarkTheme ? 'Tema Claro' : 'Tema Escuro' }}</span>
+        </button>
+
+        <button class="workspace__employee-menu--item workspace__employee-menu--item__danger" (click)="onLogout()">
+          <mat-icon>logout</mat-icon>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

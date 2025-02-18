@@ -1,66 +1,23 @@
 <div class="dashboard">
-  <nav class="menu">
-    <h1 class="menu__company">
-      SAME ENGENHARIA
-    </h1>
 
-    <ul class="menu__nav-links">
-      <li class="menu__nav-item">
-        <a href="#" class="menu__nav-link menu__nav-link--active">
-          <mat-icon>dashboard</mat-icon>
-          <span>Dashboard</span>
-        </a>
-      </li>
-
-      <li class="menu__nav-item">
-        <a href="#" class="menu__nav-link">
-          <mat-icon>analytics</mat-icon>
-          <span>Indicadores</span>
-        </a>
-      </li>
-
-      <li class="menu__nav-item">
-        <a href="#" class="menu__nav-link">
-          <mat-icon>description</mat-icon>
-          <span>Relatórios</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <div class="dashboard__menu">
+    <app-menu-dashboard></app-menu-dashboard>
+  </div>
 
   <main class="workspace">
-    <section class="workspace__header">
-      <h1 class="workspace__section">Analytics</h1>
+    <app-header-dashboard
+      [username]="username"
+      [avatar]="avatar"
+      [isDarkTheme]="isDarkTheme"
+      [isMenuOpen]="isMenuOpen"
+      (toggleMenu)="toggleMenu()"
+      (toggleTheme)="toggleTheme()"
+      (logout)="logout()">
+    </app-header-dashboard>
 
-      <div class="workspace__search">
-        <input class="workspace__search-input" placeholder="Buscar..." [(ngModel)]="searchQuery" (input)="onSearch()">
-      </div>
-
-      <div class="workspace__employee">
-        <div class="workspace__employee-avatar">
-          <img [src]="avatar" alt="avatar">
-        </div>
-
-        <div class="workspace__employee-options" (click)="toggleMenu()">
-          <span class="workspace__employee-username">
-            {{ username }}
-            <mat-icon class="workspace__employee-arrow">arrow_drop_down</mat-icon>
-          </span>
-
-          <div class="workspace__employee-menu" *ngIf="isMenuOpen">
-            <button class="workspace__employee-menu--item" (click)="toggleTheme()">
-              <mat-icon *ngIf="isDarkTheme">wb_sunny</mat-icon>
-              <mat-icon *ngIf="!isDarkTheme">dark_mode</mat-icon>
-              <span>{{ isDarkTheme ? 'Tema Claro' : 'Tema Escuro' }}</span>
-            </button>
-
-            <button class="workspace__employee-menu--item workspace__employee-menu--item__danger" (click)="logout()">
-              <mat-icon>logout</mat-icon>
-              <span>Sair</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    <section class="workspace__content">
+      <router-outlet></router-outlet>
     </section>
+
   </main>
 </div>
