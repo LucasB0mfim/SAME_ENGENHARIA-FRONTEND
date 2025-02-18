@@ -1,9 +1,67 @@
-<div class="welcome" [ngStyle]="{ 'background': backgroundStyle, 'color': textColor }">
-  <div class="welcome__text">
-    <h1 class="welcome__text-title">{{ getGreeting() }}, {{ getFirstName() }}!</h1>
-    <span class="welcome__text-phase">Espero que você tenha um ótimo dia.</span>
+<div class="dashboard">
+  <div class="dashboard__top-section">
+    <div class="welcome-card" [ngStyle]="{ 'background': backgroundStyle, 'color': textColor }">
+      <div class="welcome-card__text">
+        <h1 class="welcome-card__title">{{ getGreeting() }}, {{ getFirstName() }}!</h1>
+        <span class="welcome-card__subtitle">Espero que você tenha um ótimo dia.</span>
+      </div>
+      <div class="welcome-card__illustration">
+        <img [src]="ilustration" alt="Ilustração">
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h2 class="summary-card__title">Resumo de Projetos</h2>
+      <div class="summary-card__content">
+        <div class="summary-card__metric">
+          <span class="summary-card__label">Projetos Ativos</span>
+          <span class="summary-card__value">12</span>
+        </div>
+        <div class="summary-card__metric">
+          <span class="summary-card__label">Orçamento Total</span>
+          <span class="summary-card__value">R$ 2.450.000,00</span>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="welcome__ilustration">
-    <img [src]="ilustration" alt="Ilustration">
+
+  <div class="dashboard__main-section">
+    <div class="portfolio">
+      <h2 class="portfolio__title">Portfólio de Imóveis</h2>
+      <div class="portfolio__chart">
+        <!-- Área para o gráfico de portfólio -->
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard__bottom-section">
+    <div class="progress-report">
+      <h2 class="progress-report__title">Progresso das Obras</h2>
+      <div class="progress-report__list">
+        <div class="progress-report__item">
+          <span class="progress-report__name">Edifício Aurora</span>
+          <div class="progress-report__bar">
+            <div class="progress-report__fill" style="width: 75%"></div>
+          </div>
+          <span class="progress-report__percentage">75%</span>
+        </div>
+        <div class="progress-report__item">
+          <span class="progress-report__name">Residencial Parque Verde</span>
+          <div class="progress-report__bar">
+            <div class="progress-report__fill" style="width: 45%"></div>
+          </div>
+          <span class="progress-report__percentage">45%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="financial-overview">
+      <h2 class="financial-overview__title">Visão Financeira</h2>
+      <div class="financial-overview__content">
+        <div class="financial-overview__chart">
+          <!-- Área para o gráfico financeiro -->
+        </div>
+      </div>
+    </div>
   </div>
 </div>

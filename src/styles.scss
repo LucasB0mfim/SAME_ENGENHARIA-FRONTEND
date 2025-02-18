@@ -27,7 +27,6 @@ body {
   --default--text-color: #525252;
   --hover-active: #f5f5f5;
   --gray-color: #686868;
-  --box-shadow: rgba(0, 0, 0, 0.3);
 }
 
 // Tema escuro
@@ -36,7 +35,7 @@ body {
   --secondary-color: #1E1E2A;
   --default--text-color: #FFFFFF;
   --hover-active: #3A3A3A;
-  --gray-color: #C1C1C1;
+  --gray-color: #F2F1EF;
 
 }
 
@@ -44,4 +43,5 @@ body {
 :root {
   --white-color: #FFFFFF;
   --orange-color: #FF6F00;
+  --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
