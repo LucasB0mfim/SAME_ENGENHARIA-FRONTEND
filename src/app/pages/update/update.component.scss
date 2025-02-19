@@ -64,12 +64,26 @@ input {
 }
 
 button {
-  background-color: #ff741e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
-  padding: 10px 45px;
-  border: 1px solid transparent;
+  width: 120px;
+  height: 40px;
+  border: none;
   border-radius: 8px;
   font-weight: 600;
   margin-top: 10px;
   cursor: pointer;
+  background-color: var(--orange-color);
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--white-color);
+  stroke-width: 8%;
 }

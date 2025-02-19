@@ -9,9 +9,15 @@
       <form [formGroup]="updateForm" (ngSubmit)="update()">
         <h1>Atualizar conta</h1>
         <input type="text" placeholder="Usuário" formControlName="username" />
-        <input type="text" placeholder="Email" formControlName="email" />
-        <input type="password" placeholder="Senha" formControlName="password" />
-        <button>Atualizar</button>
+        <input type="email" placeholder="Email" formControlName="email" />
+        <input type="text" placeholder="Senha atual" formControlName="currentPassword" />
+        <input type="text" placeholder="Senha nova" formControlName="newPassword" />
+        <button>
+          <span *ngIf="!loading">Atualizar</span>
+          <span *ngIf="loading">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+          </span>
+        </button>
       </form>
     </div>
   </div>

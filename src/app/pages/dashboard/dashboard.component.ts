@@ -56,14 +56,14 @@ export class DashboardComponent implements OnInit {
         this.name = response.name;
         this.username = response.username;
         this.function = response.function;
-        this.avatar = response.avatar;
+        this.avatar = response.avatar ?? 'assets/images/avatarIcon.png';
       },
       error: (error) => {
         console.error('Erro ao carregar informações do colaborador:', error);
-        this.name = 'Indefinido';
-        this.username = 'Indefinido';
-        this.function = 'Indefinido';
-        this.avatar = 'Indefinido';
+        this.name = 'error';
+        this.username = 'error';
+        this.function = 'error';
+        this.avatar = 'assets/images/avatarIcon.png';
       }
     });
   }
