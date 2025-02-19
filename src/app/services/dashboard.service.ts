@@ -21,7 +21,7 @@ export class DashboardService {
     });
 
     return this._httpClient.get<{ success: boolean, message: string, data: { name: string, username: string, function: string, avatar: string } }>(
-      'http://localhost:3000/same-engenharia/api/employee/info',
+      'https://sameengenharia-backend-production.up.railway.app/same-engenharia/api/employee/info',
       { headers }
     ).pipe(
       map(response => response.data) // Extrai os dados do colaborador da resposta

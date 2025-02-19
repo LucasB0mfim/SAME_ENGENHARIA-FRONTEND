@@ -13,7 +13,7 @@ export class LoginService {
 
   login(email: string, password: string): Observable<{ success: boolean, message: string, token: string }> {
     return this._httpClient.post<{ success: boolean, message: string, token: string }>(
-      'http://localhost:3000/same-engenharia/api/employee/login',
+      'https://sameengenharia-backend-production.up.railway.app/same-engenharia/api/employee/login',
       { email, password }
     ).pipe(
       map((response) => {

@@ -33,7 +33,7 @@ export class UpdateService {
     };
 
     return this._httpClient.put<{ success: boolean, message: string, token: string }>(
-      'http://localhost:3000/same-engenharia/api/employee/update',
+      'https://sameengenharia-backend-production.up.railway.app/same-engenharia/api/employee/update',
       body,
       { headers }
     ).pipe(
