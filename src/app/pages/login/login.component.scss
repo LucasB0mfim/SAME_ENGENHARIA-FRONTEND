@@ -38,7 +38,8 @@
 .container button {
   background-color: #ff741e;
   color: #fff;
-  padding: 10px 45px;
+  width: 120px;
+  height: 40px;
   border: 1px solid transparent;
   border-radius: 8px;
   font-weight: 600;
@@ -189,4 +190,14 @@
 
 .container.active .toogle-right {
   transform: translateX(200%);
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--white-color);
+  stroke-width: 8%;
 }

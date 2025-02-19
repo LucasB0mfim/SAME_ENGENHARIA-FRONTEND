@@ -25,7 +25,8 @@ export const routes: Routes = [
   },
   {
     path: 'update',
-    component: UpdateComponent
+    component: UpdateComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'dashboard',

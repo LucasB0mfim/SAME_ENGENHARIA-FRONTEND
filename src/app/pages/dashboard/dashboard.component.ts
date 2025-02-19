@@ -30,19 +30,24 @@ interface EmployeeData {
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  isDarkTheme: boolean = false
+  isDarkTheme: boolean = false;
   isMenuOpen: boolean = false;
+
+  avatarIcon: string = '';
+  avatarIconDark: string = 'assets/images/avatarIconDark.png';
+  avatarIconLight: string = 'assets/images/avatarIconLight.png';
 
   name: string = 'Carregando';
   username: string = 'Carregando...';
   function: string = 'Carregando...';
-  avatar: string = 'assets/images/avatarIcon.png';
+  avatar: string = '';
 
   private readonly _dashboardService = inject(DashboardService);
   private readonly _loginService = inject(LoginService);
 
   constructor() {
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
+    this.toggleIconTheme();
     this.applyTheme();
   }
 
@@ -56,14 +61,14 @@ export class DashboardComponent implements OnInit {
         this.name = response.name;
         this.username = response.username;
         this.function = response.function;
-        this.avatar = response.avatar ?? 'assets/images/avatarIcon.png';
+        this.avatar = response.avatar || this.avatarIcon; // Usa avatarIcon se response.avatar for vazio
       },
       error: (error) => {
         console.error('Erro ao carregar informações do colaborador:', error);
         this.name = 'error';
         this.username = 'error';
         this.function = 'error';
-        this.avatar = 'assets/images/avatarIcon.png';
+        this.avatar = this.avatarIcon; // Usa avatarIcon em caso de erro
       }
     });
   }
@@ -76,7 +81,13 @@ export class DashboardComponent implements OnInit {
     this.isDarkTheme = !this.isDarkTheme;
     localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
     this.applyTheme();
+    this.toggleIconTheme();
     this.isMenuOpen = false;
+    this.avatar = this.avatarIcon;
+  }
+
+  private toggleIconTheme(): void {
+    this.avatarIcon = this.isDarkTheme ? this.avatarIconLight : this.avatarIconDark;
   }
 
   private applyTheme(): void {

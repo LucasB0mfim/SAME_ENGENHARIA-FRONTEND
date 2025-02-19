@@ -1,12 +1,15 @@
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 import { LoginService } from '../../services/login.service'
+import { FirstLoginService } from '../../services/fisrt-login.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [MatProgressSpinnerModule, CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -25,8 +28,11 @@ export class LoginComponent implements AfterViewInit {
     });
   }
 
+  loading: boolean = false;
+
   private readonly _router = inject(Router);
   private readonly _loginService = inject(LoginService);
+  private readonly _firstLoginService = inject(FirstLoginService)
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
@@ -34,47 +40,31 @@ export class LoginComponent implements AfterViewInit {
   });
 
   login() {
+    this.loading = true;
     this._loginService.login(this.loginForm.value.email, this.loginForm.value.password)
       .subscribe({
-        next: (response) => {
-          if (response.success) {
-            console.log('Login bem-sucedido, redirecionando para /dashboard');
-            this._router.navigate(['dashboard']);
-          } else {
-            console.log('Login falhou:', response.message);
-            this.loginForm.setErrors({ 'erroInesperado': true });
-          }
+        next: () => {
+          this.loading = false;
+          this._router.navigate(['dashboard']);
+
         },
         error: (error) => {
-          console.error('Erro no login:', error);
-          if (error.status === 401) {
-            this.loginForm.setErrors({ 'crediciaisInvalidas': true });
-          } else {
-            this.loginForm.setErrors({ 'erroInesperado': true });
-          }
+          this.loading = false;
+          console.error('Erro ao logar: ', error);
         }
       });
   }
 
-  firstAccess() {
-    this._loginService.login(this.loginForm.value.email, this.loginForm.value.password)
+  firstLogin() {
+    this._firstLoginService.login(this.loginForm.value.email, this.loginForm.value.password)
       .subscribe({
-        next: (response) => {
-          if (response.success) {
-            console.log('Login bem-sucedido, redirecionando para /update');
-            this._router.navigate(['update']);
-          } else {
-            console.log('Login falhou:', response.message);
-            this.loginForm.setErrors({ 'erroInesperado': true });
-          }
+        next: () => {
+          this.loading = false;
+          this._router.navigate(['update']);
         },
         error: (error) => {
-          console.error('Erro no login:', error);
-          if (error.status === 401) {
-            this.loginForm.setErrors({ 'crediciaisInvalidas': true });
-          } else {
-            this.loginForm.setErrors({ 'erroInesperado': true });
-          }
+          this.loading = false;
+          console.error('Erro ao realizar o primeiro login: ', error);
         }
       });
   }
