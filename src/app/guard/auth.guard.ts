@@ -24,7 +24,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   console.log('Fazendo requisição para validar o token...'); // Log da requisição
 
   return _httpClient.post<{ email: string, message: string }>(
-    'http://localhost:3000/same-engenharia/api/validateToken',
+    'https://sameengenharia-backend-production.up.railway.app/same-engenharia/api/validateToken',
     {},
     { headers }
   ).pipe(
