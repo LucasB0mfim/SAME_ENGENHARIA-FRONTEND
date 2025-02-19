@@ -36,7 +36,9 @@
 }
 
 .container button {
-  background-color: #ff741e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
   width: 120px;
   height: 40px;
@@ -47,6 +49,7 @@
   text-transform: uppercase;
   margin-top: 10px;
   cursor: pointer;
+  background-color: #ff741e;
 }
 
 .container button.hidden {
