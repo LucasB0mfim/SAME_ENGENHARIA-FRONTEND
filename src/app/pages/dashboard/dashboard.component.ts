@@ -42,6 +42,8 @@ export class DashboardComponent implements OnInit {
   function: string = 'Carregando...';
   avatar: string = '';
 
+  private hasCustomAvatar: boolean = false;
+
   private readonly _dashboardService = inject(DashboardService);
   private readonly _loginService = inject(LoginService);
 
@@ -61,20 +63,18 @@ export class DashboardComponent implements OnInit {
         this.name = response.name;
         this.username = response.username;
         this.function = response.function;
-        this.avatar = response.avatar || this.avatarIcon; // Usa avatarIcon se response.avatar for vazio
+        this.hasCustomAvatar = !!response.avatar;
+        this.avatar = response.avatar || this.avatarIcon;
       },
       error: (error) => {
         console.error('Erro ao carregar informações do colaborador:', error);
         this.name = 'error';
         this.username = 'error';
         this.function = 'error';
-        this.avatar = this.avatarIcon; // Usa avatarIcon em caso de erro
+        this.hasCustomAvatar = false;
+        this.avatar = this.avatarIcon;
       }
     });
-  }
-
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
   }
 
   toggleTheme(): void {
@@ -83,7 +83,14 @@ export class DashboardComponent implements OnInit {
     this.applyTheme();
     this.toggleIconTheme();
     this.isMenuOpen = false;
-    this.avatar = this.avatarIcon;
+
+    if (!this.hasCustomAvatar) {
+      this.avatar = this.avatarIcon;
+    }
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   private toggleIconTheme(): void {
