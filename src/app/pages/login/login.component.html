@@ -19,7 +19,7 @@
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <h1>Entrar</h1>
         <input type="text" placeholder="Email" formControlName="email" />
-        <input type="password" placeholder="senha" formControlName="password" />
+        <input type="text" placeholder="senha" formControlName="password" />
         <a href="#">Esqueci a Senha</a>
         <button>
           <span *ngIf="!loading">Entrar</span>

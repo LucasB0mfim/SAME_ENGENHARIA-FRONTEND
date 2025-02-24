@@ -13,7 +13,7 @@ export class FirstLoginService {
 
   login(email: string, password: string): Observable<{ success: boolean, message: string, token: string }> {
     return this._httpClient.post<{ success: boolean, message: string, token: string }>(
-      'https://sameengenharia-backend-production.up.railway.app/same-engenharia/api/employee/firstLogin',
+      'http://localhost:3000/same-engenharia/api/employee/firstLogin',
       { email, password }
     ).pipe(
       map((response) => {

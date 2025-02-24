@@ -9,10 +9,16 @@ import { MenuDashboardComponent } from '../../components/menu-dashboard/menu-das
 import { HeaderDashboardComponent } from '../../components/header-dashboard/header-dashboard.component';
 
 interface EmployeeData {
+  id: number;
   name: string;
-  username: string;
+  username: string | null;
   function: string;
-  avatar: string;
+  role: string;
+  email: string;
+  password: string;
+  created_at: string;
+  updated_at: string;
+  avatar: string | null;
 }
 
 @Component({
@@ -61,7 +67,7 @@ export class DashboardComponent implements OnInit {
     this._dashboardService.getEmployeeData().subscribe({
       next: (response: EmployeeData) => {
         this.name = response.name;
-        this.username = response.username;
+        this.username = response.username || 'N/A';
         this.function = response.function;
         this.hasCustomAvatar = !!response.avatar;
         this.avatar = response.avatar || this.avatarIcon;

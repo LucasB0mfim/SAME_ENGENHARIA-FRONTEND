@@ -1,4 +1,3 @@
-// src/app/guards/auth.guard.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
@@ -9,38 +8,35 @@ export const authGuard: CanActivateFn = (route, state) => {
   const _router = inject(Router);
   const token = localStorage.getItem('token');
 
-  console.log('Token no authGuard:', token); // Log do token
+  console.log('Token no authGuard:', token);
 
   if (!token) {
-    console.log('Token não encontrado, redirecionando para /login'); // Log de redirecionamento
+    console.log('Token não encontrado.');
     _router.navigate(['/login']);
     return false;
   }
+
+  const body = '';
 
   const headers = new HttpHeaders({
     Authorization: `Bearer ${token}`
   });
 
-  console.log('Fazendo requisição para validar o token...'); // Log da requisição
-
-  return _httpClient.post<{ email: string, message: string }>(
-    'https://sameengenharia-backend-production.up.railway.app/same-engenharia/api/validateToken',
-    {},
-    { headers }
+  return _httpClient.post<any>(
+    'http://localhost:3000/same-engenharia/api/auth/validate-token', {body}, {headers}
   ).pipe(
     map(response => {
-      console.log('Resposta do backend:', response); // Log da resposta
-      if (response.message === 'Token válido') {
-        console.log('Token válido, permitindo acesso à dashboard'); // Log de sucesso
+      if (response.message === 'Token Válido.') {
+        console.log('Token válido. Acesso liberado!');
         return true;
       } else {
-        console.log('Token inválido, redirecionando para /login'); // Log de falha
+        console.log('Token inválido. Acesso negado!');
         _router.navigate(['/login']);
         return false;
       }
     }),
     catchError((error) => {
-      console.error('Erro na requisição:', error); // Log de erro
+      console.error('Erro na requisição:', error);
       _router.navigate(['/login']);
       return of(false);
     })

@@ -1,0 +1,28 @@
+<div *ngIf="records.length > 0; else noRecords">
+  <table>
+    <thead>
+      <tr>
+        <th>PERÍODO</th>
+        <th>CHAPA</th>
+        <th>NOME</th>
+        <th>JORNADA REALIZADA</th>
+        <th>FALTA</th>
+        <th>EVENTO ABONO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of records">
+        <td>{{ record.PERIODO }}</td>
+        <td>{{ record.CHAPA }}</td>
+        <td>{{ record.NOME }}</td>
+        <td>{{ record["JORNADA REALIZADA"] }}</td>
+        <td>{{ record.FALTA }}</td>
+        <td>{{ record["EVENTO ABONO"] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noRecords>
+  <p>Nenhum registro encontrado.</p>
+</ng-template>

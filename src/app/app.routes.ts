@@ -6,8 +6,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UpdateComponent } from './pages/update/update.component';
 import { authGuard } from './guard/auth.guard';
 import { IndicatorsComponent } from './components/indicators/indicators.component';
-import { SheetsComponent } from './components/sheets/sheets.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { TimeSheetComponent } from './components/time-sheet/time-sheet.component';
 
 export const routes: Routes = [
   {
@@ -36,7 +36,7 @@ export const routes: Routes = [
       { path: '', component: WelcomeComponent },
       { path: 'welcome', component: WelcomeComponent },
       { path: 'indicators', component: IndicatorsComponent },
-      { path: 'sheets', component: SheetsComponent }
+      { path: 'time-sheet', component: TimeSheetComponent }
     ]
   },
   {
