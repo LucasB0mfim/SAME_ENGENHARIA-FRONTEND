@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { IUpdateResponse } from '../interfaces/update-response.interface';
+import { IUpdateRequest } from '../interfaces/update-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -8,40 +10,16 @@ import { map, Observable } from 'rxjs';
 export class UpdateService {
 
   private readonly _httpClient = inject(HttpClient);
+  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/employee';
 
-  update(
-    username: string,
-    email: string,
-    currentPassword: string,
-    newPassword: string
-  ): Observable<{ success: boolean, message: string, token: string }> {
-
+  private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
+    if (!token) throw new Error('Token não encontrado.')
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
 
-    if (!token) {
-      throw new Error('Token não encontrado');
-    }
-
-    const headers = new HttpHeaders()
-      .set('Authorization', `Bearer ${token}`);
-
-    const body = {
-      username,
-      email,
-      currentPassword,
-      newPassword
-    };
-
-    return this._httpClient.put<{ success: boolean, message: string, token: string }>(
-      'http://localhost:3000/same-engenharia/api/employee',
-      body,
-      { headers }
-    ).pipe(
-      map((response) => {
-        console.log('Token recebido:', response.token);
-        localStorage.setItem('token', response.token);
-        return response;
-      })
-    );
-  };
-};
+  update(request: IUpdateRequest): Observable<IUpdateResponse> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<IUpdateResponse>(this._apiUrl, request, {headers});
+  }
+}

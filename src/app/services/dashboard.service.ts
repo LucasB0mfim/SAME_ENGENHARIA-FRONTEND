@@ -1,29 +1,23 @@
-// src/app/services/dashboard.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { IEmployeeResponse } from '../interfaces/employee-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
   private readonly _httpClient = inject(HttpClient);
+  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/employee';
 
-  getEmployeeData(): Observable<any> {
+  private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
+    if (!token) throw new Error('Token não encontrado.');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
 
-    if (!token) {
-      throw new Error('Token não encontrado');
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this._httpClient.get<any>(
-      'http://localhost:3000/same-engenharia/api/employee', {headers}
-    ).pipe(
-      map(response => response.employee)
-    );
+  findAll(): Observable<IEmployeeResponse> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<IEmployeeResponse>(this._apiUrl, {headers});
   }
 }

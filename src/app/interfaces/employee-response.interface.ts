@@ -1,5 +1,5 @@
-export interface IDashboardReponse {
-  success: Boolean,
+export interface IEmployeeResponse {
+  success: boolean,
   message: string,
   employee: {
     id: number,
@@ -11,6 +11,6 @@ export interface IDashboardReponse {
     password: string,
     created_at: string,
     updated_at: string,
-    avatar: string
+    avatar: string,
   }
 }

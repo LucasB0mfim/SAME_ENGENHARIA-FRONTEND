@@ -6,6 +6,7 @@ import { Component, inject, AfterViewInit, ElementRef, ViewChild } from '@angula
 
 import { LoginService } from '../../services/login.service'
 import { FirstLoginService } from '../../services/fisrt-login.service';
+import { ILoginRequest } from '../../interfaces/login-request.interface';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,6 @@ export class LoginComponent implements AfterViewInit {
   }
 
   loading: boolean = false;
-
   private readonly _router = inject(Router);
   private readonly _loginService = inject(LoginService);
   private readonly _firstLoginService = inject(FirstLoginService)
@@ -40,32 +40,38 @@ export class LoginComponent implements AfterViewInit {
   });
 
   login() {
-    this.loading = true;
-    this._loginService.login(this.loginForm.value.email, this.loginForm.value.password)
-      .subscribe({
-        next: () => {
-          this.loading = false;
-          this._router.navigate(['dashboard']);
+    const request: ILoginRequest = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password,
+    }
 
-        },
-        error: (error) => {
-          this.loading = false;
-          console.error('Erro ao logar: ', error);
-        }
-      });
+    this._loginService.login(request).subscribe({
+      next: () => {
+        this.loading = false;
+        this._router.navigate(['dashboard']);
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error(error)
+      }
+    })
   }
 
   firstLogin() {
-    this._firstLoginService.login(this.loginForm.value.email, this.loginForm.value.password)
-      .subscribe({
-        next: () => {
-          this.loading = false;
-          this._router.navigate(['update']);
-        },
-        error: (error) => {
-          this.loading = false;
-          console.error('Erro ao realizar o primeiro login: ', error);
-        }
-      });
+    const request: ILoginRequest = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password,
+    }
+
+    this._firstLoginService.login(request).subscribe({
+      next: () => {
+        this.loading = false;
+        this._router.navigate(['login']);
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error(error);
+      }
+    })
   }
 }

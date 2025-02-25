@@ -1,3 +1,81 @@
-* {
-  text-align: center;
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+
+  &__top-section {
+    display: flex;
+    width: 100%;
+    height: 20vh;
+    gap: 16px;
+  }
+
+  &__bottom-section {}
+}
+
+.peoples-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 33.33%;
+  height: 100%;
+  background: var(--secondary-color);
+  border-radius: 8px;
+  padding: 16px * 1.5;
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &__title {
+    font-size: 1.25rem;
+    margin: 0 0 16px 0;
+    color: var(--default--text-color);
+    font-weight: 500;
+  }
+}
+
+.grafics-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 33.33%;
+  height: 100%;
+  background: var(--secondary-color);
+  border-radius: 8px;
+  padding: 16px * 1.5;
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &__title {
+    font-size: 1.25rem;
+    margin: 0 0 16px 0;
+    color: var(--default--text-color);
+    font-weight: 500;
+  }
+}
+
+.miss-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 33.33%;
+  height: 100%;
+  background: var(--secondary-color);
+  border-radius: 8px;
+  padding: 16px * 1.5;
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &__title {
+    font-size: 1.25rem;
+    margin: 0 0 16px 0;
+    color: var(--default--text-color);
+    font-weight: 500;
+  }
 }

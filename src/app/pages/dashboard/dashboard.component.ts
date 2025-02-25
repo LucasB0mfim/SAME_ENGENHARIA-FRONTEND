@@ -7,19 +7,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuDashboardComponent } from '../../components/menu-dashboard/menu-dashboard.component';
 import { HeaderDashboardComponent } from '../../components/header-dashboard/header-dashboard.component';
-
-interface EmployeeData {
-  id: number;
-  name: string;
-  username: string | null;
-  function: string;
-  role: string;
-  email: string;
-  password: string;
-  created_at: string;
-  updated_at: string;
-  avatar: string | null;
-}
+import { IEmployeeResponse } from '../../interfaces/employee-response.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,8 +24,9 @@ interface EmployeeData {
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  isDarkTheme: boolean = false;
   isMenuOpen: boolean = false;
+  isDarkTheme: boolean = false;
+  hasCustomAvatar: boolean = false;
 
   avatarIcon: string = '';
   avatarIconDark: string = 'assets/images/avatarIconDark.png';
@@ -45,10 +34,7 @@ export class DashboardComponent implements OnInit {
 
   name: string = 'Carregando';
   username: string = 'Carregando...';
-  function: string = 'Carregando...';
   avatar: string = '';
-
-  private hasCustomAvatar: boolean = false;
 
   private readonly _dashboardService = inject(DashboardService);
   private readonly _loginService = inject(LoginService);
@@ -64,19 +50,18 @@ export class DashboardComponent implements OnInit {
   }
 
   loadEmployeeData(): void {
-    this._dashboardService.getEmployeeData().subscribe({
-      next: (response: EmployeeData) => {
-        this.name = response.name;
-        this.username = response.username || 'N/A';
-        this.function = response.function;
-        this.hasCustomAvatar = !!response.avatar;
-        this.avatar = response.avatar || this.avatarIcon;
+    this._dashboardService.findAll().subscribe({
+      next: (response: IEmployeeResponse) => {
+        const employee = response.employee;
+        this.name = employee.name;
+        this.username = employee.username || employee.name;
+        this.hasCustomAvatar = !!employee.avatar;
+        this.avatar = employee.avatar || this.avatarIcon;
       },
       error: (error) => {
         console.error('Erro ao carregar informações do colaborador:', error);
         this.name = 'error';
         this.username = 'error';
-        this.function = 'error';
         this.hasCustomAvatar = false;
         this.avatar = this.avatarIcon;
       }

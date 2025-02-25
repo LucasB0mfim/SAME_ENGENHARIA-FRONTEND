@@ -29,9 +29,9 @@ export class WelcomeComponent implements OnInit {
   }
 
   loadEmployeeData(): void {
-    this._dashboardService.getEmployeeData().subscribe({
+    this._dashboardService.findAll().subscribe({
       next: (response) => {
-        this.name = response.name; // Atualiza o nome do colaborador
+        this.name = response.employee.name; // Atualiza o nome do colaborador
       },
       error: (error) => {
         console.error('Erro ao carregar informações do colaborador:', error);

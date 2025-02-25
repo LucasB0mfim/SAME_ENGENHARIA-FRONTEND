@@ -2,11 +2,13 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Component, inject } from '@angular/core';
 import { UpdateService } from '../../services/update.service';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { IUpdateRequest } from '../../interfaces/update-request.interface';
 
 @Component({
   selector: 'app-update',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatProgressSpinnerModule],
   templateUrl: './update.component.html',
   styleUrl: './update.component.scss'
@@ -27,26 +29,23 @@ export class UpdateComponent {
 
   update() {
     this.loading = true;
-    this._updateService.update(
-      this.updateForm.value.username,
-      this.updateForm.value.email,
-      this.updateForm.value.currentPassword,
-      this.updateForm.value.newPassword
-    ).subscribe({
-      next: (response) => {
+
+    const request: IUpdateRequest = {
+      username: this.updateForm.value.username,
+      email: this.updateForm.value.email,
+      currentPassword: this.updateForm.value.currentPassword,
+      newPassword: this.updateForm.value.newPassword
+    };
+
+    this._updateService.update(request).subscribe({
+      next: () => {
         this.loading = false;
-        if (response.success) {
-          console.log('Colaborador atualizado com sucesso.');
-          this._router.navigate(['login']);
-        } else {
-          console.log('Não foi possível atualizar:', response.message);
-        }
+        this._router.navigate(['/login']);
       },
       error: (error) => {
         this.loading = false;
-        console.log('Erro ao atualizar colaborador:', error);
+        console.log(error);
       }
     });
-  };
-};
-
+  }
+}
