@@ -1,21 +1,52 @@
 <div class="container">
   <div class="container__top-section">
-    <div class="peoples-card">
-
-      <h2 class="peoples-card__title">Colaboradores</h2>
-
-    </div>
 
     <div class="grafics-card">
-      <h2 class="grafics-card__title">50% de faltas em março</h2>
+      <div class="grafics-card__text">
+        <h2 class="grafics-card__title">Média de ausências por mês</h2>
+      </div>
+      <div class="grafics-card__chart">
+        <div class="grafics-card__chart-grafic"></div>
+      </div>
+    </div>
 
+    <div class="peoples-card">
+      <div class="peoples-card__text">
+        <h2 class="peoples-card__title">Colaboradores mais ausêntes</h2>
+      </div>
     </div>
 
     <div class="miss-card">
-      <h2 class="miss-card__title">Maiores faltas</h2>
-
+      <div class="miss-card__text">
+        <h2 class="miss-card__title">Colaboradores mais frequentes</h2>
+      </div>
     </div>
   </div>
 
-  <div class="container__bottom-section"></div>
+  <div class="container__bottom-section">
+    <div class="table__wrapper">
+      <table class="table">
+        <thead class="table__header">
+          <tr class="table__row">
+            <th class="table__head table__head-period">Período</th>
+            <th class="table__head table__head-chapa">Chapa</th>
+            <th class="table__head table__head-name">Nome</th>
+            <th class="table__head table__head-time">Jornada Realizada</th>
+            <th class="table__head table__head-miss">Falta</th>
+            <th class="table__head table__head-justification">Justificativa</th>
+          </tr>
+        </thead>
+        <tbody class="table__body">
+          <tr *ngFor="let timeSheet of timeSheets" class="table__row">
+            <td class="table__data table__data-period">{{ timeSheet.PERIODO }}</td>
+            <td class="table__data table__data-chapa">{{ timeSheet.CHAPA }}</td>
+            <td class="table__data table__data-name">{{ timeSheet.NOME }}</td>
+            <td class="table__data table__data-time">{{ timeSheet['JORNADA REALIZADA'] }}</td>
+            <td class="table__data table__data-miss">{{ timeSheet.FALTA }}</td>
+            <td class="table__data table__data-justification">{{ timeSheet['EVENTO ABONO'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

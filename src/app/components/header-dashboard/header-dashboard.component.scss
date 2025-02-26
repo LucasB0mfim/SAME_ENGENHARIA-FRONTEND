@@ -6,7 +6,7 @@
 }
 
 .workspace__section {
-  color: var(--default--text-color);
+  color: var(--text-color);
   font-size: 2rem;
 }
 
@@ -44,7 +44,7 @@
     align-items: center;
     font-size: 1rem;
     font-weight: bold;
-    color: var(--default--text-color);
+    color: var(--text-color);
   }
 
   &-arrow {
@@ -54,7 +54,7 @@
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid var(--default--text-color);
+    border-top: 5px solid var(--text-color);
     transition: transform 0.2s ease;
 
     &--open {
@@ -79,7 +79,7 @@
       padding: 10px 16px;
       border: none;
       background: none;
-      color: var(--default--text-color);
+      color: var(--text-color);
       font-size: 0.9rem;
       cursor: pointer;
       border-radius: 4px;

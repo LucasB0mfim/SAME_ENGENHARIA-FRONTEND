@@ -76,7 +76,7 @@
   &__title {
     font-size: 1.25rem;
     margin: 0 0 16px 0;
-    color: var(--default--text-color);
+    color: var(--text-color);
     font-weight: 500;
   }
 
@@ -97,7 +97,7 @@
 
   &__label {
     font-size: 0.875rem;
-    color: var(--default--text-color);
+    color: var(--text-color);
     margin-bottom: 16px/2;
   }
 
@@ -121,7 +121,7 @@
   &__title {
     font-size: 1.25rem;
     margin: 0 0 16px 0;
-    color: var(--default--text-color);
+    color: var(--text-color);
     font-weight: 500;
   }
 
@@ -136,7 +136,7 @@
 
     &:after {
       content: 'Gráfico de Portfólio de Imóveis';
-      color: var(--default--text-color);
+      color: var(--text-color);
       font-style: italic;
     }
   }
@@ -154,7 +154,7 @@
   &__title {
     font-size: 1.25rem;
     margin: 0 0 16px 0;
-    color: var(--default--text-color);
+    color: var(--text-color);
     font-weight: 500;
   }
 
@@ -186,7 +186,7 @@
 
   &__name {
     font-size: 0.875rem;
-    color: var(--default--text-color);
+    color: var(--text-color);
   }
 
   &__bar {
@@ -204,7 +204,7 @@
 
   &__percentage {
     font-size: 0.75rem;
-    color: var(--default--text-color);
+    color: var(--text-color);
     align-self: flex-end;
   }
 }
@@ -221,7 +221,7 @@
   &__title {
     font-size: 1.25rem;
     margin: 0 0 16px 0;
-    color: var(--default--text-color);
+    color: var(--text-color);
     font-weight: 500;
   }
 
@@ -243,7 +243,7 @@
 
     &:after {
       content: 'Gráfico de Visão Financeira';
-      color: var(--default--text-color);
+      color: var(--text-color);
       font-style: italic;
     }
   }
