@@ -1,28 +1,23 @@
 <nav class="menu">
-  <div class="menu__company">
-    <img [src]="logo" alt="logo">
-    <h1 class="menu__company-title">SAME ENGENHARIA</h1>
-  </div>
-
   <ul class="menu__nav-links">
     <li class="menu__nav-item">
       <a routerLink="/dashboard" routerLinkActive="menu__nav-link--active" [routerLinkActiveOptions]="{exact: true}" class="menu__nav-link">
         <mat-icon>dashboard</mat-icon>
-        <span>Dashboard</span>
+        <span class="menu__nav-text">Dashboard</span>
       </a>
     </li>
 
     <li class="menu__nav-item">
       <a routerLink="/dashboard/indicators" routerLinkActive="menu__nav-link--active" class="menu__nav-link">
         <mat-icon>analytics</mat-icon>
-        <span>Indicadores</span>
+        <span class="menu__nav-text">Indicadores</span>
       </a>
     </li>
 
     <li class="menu__nav-item">
       <a routerLink="/dashboard/time-sheet" routerLinkActive="menu__nav-link--active" class="menu__nav-link">
         <mat-icon>description</mat-icon>
-        <span>Controle de Ponto</span>
+        <span class="menu__nav-text">Controle de Ponto</span>
       </a>
     </li>
   </ul>

@@ -1,16 +1,16 @@
 .dashboard {
+  width: 100%;
   height: 100vh;
   display: flex;
   justify-content: space-between;
   background: var(--primary-color);
 
-  &__menu {
-    width: 18%;
-    z-index: 1000;
+  app-menu-dashboard {
+    width: 4%;
   }
 
   .workspace {
-    width: 82%;
+    width: 96%;
     padding: 0 4rem;
     background: var(--primary-color);
 

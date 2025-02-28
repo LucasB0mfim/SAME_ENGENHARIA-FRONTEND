@@ -1,56 +1,85 @@
 .menu {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   box-shadow: var(--box-shadow);
   background-color: var(--secondary-color);
 
-  &__company {
-    width: 100%;
-    height: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    &-title {
-      font-size: 20px;
-      font-weight: 300;
-      color: var(--gray-color);
-    }
-
-    img {
-      width: 100px;
-      margin-bottom: 5px;
-    }
-  }
-
   &__nav-links {
     list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
-  &__nav_item {
+  &__nav-item {
+    position: relative;
+    display: flex;
+    justify-content: center;
   }
 
   &__nav-link {
-    padding: 10px 15px;
     display: flex;
     align-items: center;
     text-decoration: none;
     cursor: pointer;
-    color: var(--text-color);
-    transition: background-color 0.1s ease-in, color 0.1s ease-in;
-
-    &:hover {
-      color: var(--orange-color);
-    }
+    color: var(--sidebar-color);
+    transition: color 0.3s ease;
+    padding: 10px;
+    position: relative;
 
     mat-icon {
-      margin-right: 5px;
+      position: relative;
+      z-index: 2;
+    }
+
+    &:hover {
+      .menu__nav-text {
+        width: auto;
+        max-width: 200px;
+        opacity: 1;
+        padding-left: 40px;
+        padding-right: 10px;
+        background-color: var(--third-color);
+        color: var(--sidebar-color);
+      }
     }
 
     &--active {
-      background: var(--hover-active);
-      color: var(--orange-color);
+
+      mat-icon {
+        color: var(--orange-color);
+      }
+
+      &:hover {
+        color: var(--sidebar-color);
+
+        mat-icon {
+          color: var(--orange-color);
+        }
+
+        .menu__nav-text {
+          color: var(--sidebar-color);
+        }
+      }
     }
+  }
+
+  &__nav-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    transition: width 0.3s ease, max-width 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    z-index: 1;
   }
 }

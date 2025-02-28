@@ -166,16 +166,6 @@
     height: calc(100% - 40px);
     overflow-y: auto;
     padding-right: 10px;
-
-    &::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 20px;
-      background-color: var(--orange-color);
-      cursor: pointer;
-    }
   }
 
   &__item {
