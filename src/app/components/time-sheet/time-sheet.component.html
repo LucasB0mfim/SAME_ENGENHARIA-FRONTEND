@@ -1,52 +1,32 @@
 <div class="container">
   <div class="container__top-section">
-
-    <div class="grafics-card">
-      <div class="grafics-card__text">
-        <h2 class="grafics-card__title">Média de ausências por mês</h2>
-      </div>
-      <div class="grafics-card__chart">
-        <div class="grafics-card__chart-grafic"></div>
-      </div>
-    </div>
-
-    <div class="peoples-card">
-      <div class="peoples-card__text">
-        <h2 class="peoples-card__title">Colaboradores mais ausêntes</h2>
-      </div>
-    </div>
-
-    <div class="miss-card">
-      <div class="miss-card__text">
-        <h2 class="miss-card__title">Colaboradores mais frequentes</h2>
-      </div>
+    <div class="filter">
+      <button type="button" class="button__filter">Colaboradores</button>
+      <input type="text" class="input__employee" placeholder="Nome do funcionário">
+      <input type="date" class="input" placeholder="Data inicial">
+      <input type="date" class="input" placeholder="Data final">
+      <button type="button" class="button__filter">Pesquisar</button>
     </div>
   </div>
 
   <div class="container__bottom-section">
-    <div class="table__wrapper">
-      <table class="table">
-        <thead class="table__header">
-          <tr class="table__row">
-            <th class="table__head table__head-period">Período</th>
-            <th class="table__head table__head-chapa">Chapa</th>
-            <th class="table__head table__head-name">Nome</th>
-            <th class="table__head table__head-time">Jornada Realizada</th>
-            <th class="table__head table__head-miss">Falta</th>
-            <th class="table__head table__head-justification">Justificativa</th>
-          </tr>
-        </thead>
-        <tbody class="table__body">
-          <tr *ngFor="let timeSheet of timeSheets" class="table__row">
-            <td class="table__data table__data-period">{{ timeSheet.PERIODO }}</td>
-            <td class="table__data table__data-chapa">{{ timeSheet.CHAPA }}</td>
-            <td class="table__data table__data-name">{{ timeSheet.NOME }}</td>
-            <td class="table__data table__data-time">{{ timeSheet['JORNADA REALIZADA'] }}</td>
-            <td class="table__data table__data-miss">{{ timeSheet.FALTA }}</td>
-            <td class="table__data table__data-justification">{{ timeSheet['EVENTO ABONO'] }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="employee-table">
+      <tbody class="employee-table__body">
+        <tr *ngFor="let employee of employees" class="employee-table__row">
+          <td class="employee-table__stripe"></td>
+          <td class="employee-table__cell employee-table__cell--avatar">
+            <img [src]="employee.avatar" alt="Avatar do colaborador" class="employee-table__avatar-img">
+          </td>
+          <td class="employee-table__cell employee-table__cell--info">
+            <div class="employee-table__name">{{ employee.name }}</div>
+            <div class="employee-table__role">{{ employee.role }}</div>
+          </td>
+          <td class="employee-table__cell employee-table__cell--email">{{ employee.email }}</td>
+          <td class="employee-table__cell">
+            <button type="button" class="employee-table__button">Detalhes</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

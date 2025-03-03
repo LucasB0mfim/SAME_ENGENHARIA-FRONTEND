@@ -5,204 +5,166 @@
   height: 100%;
 
   &__top-section {
+    height: auto;
     display: flex;
-    height: 30vh;
-    gap: 16px;
+    align-items: center;
   }
 
   &__bottom-section {
+    height: 70vh;
     display: flex;
-    height: 40vh;
-  }
-}
+    overflow-y: scroll;
 
-.grafics-card {
-  width: 40%;
-  height: 100%;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  background: var(--secondary-color);
-
-  &__text {
-    display: flex;
-    align-items: center;
-    height: 20%;
-    padding: 0 1rem;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-
-  &__title {
-    font-size: 1vw;
-    color: var(--text-color);
-    font-weight: 500;
-  }
-
-  &__chart {
-    height: 80%;
-    padding: 1rem;
-
-    &-grafic {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-      background-color: var(--primary-color);
-
-      &:after {
-        font-style: italic;
-        color: var(--text-color);
-        content: 'Gráfico de Portfólio de Imóveis';
-      }
+    &::-webkit-scrollbar {
+      display: none;
     }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
-.peoples-card {
-  width: 30%;
-  height: 100%;
+.filter {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button__filter {
+  color: var(--text-color);
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  box-shadow: var(--box-shadow);
   background: var(--secondary-color);
+  transition: all linear 0.3s;
+  cursor: pointer;
+
+  &--active {
+    color: var(--white-color);
+    background: var(--orange-color);
+    box-shadow: 0px 2px 12px var(--orange-color);
+  }
+
+  &:hover {
+    color: var(--white-color);
+    background: var(--orange-color);
+    box-shadow: 0px 2px 12px var(--orange-color);
+  }
+}
+
+.input__employee {
+  width: auto;
+  min-width: 300px;
+  padding: 12px;
+  outline: none;
+  color: var(--text-color);
+  padding-left: 10px;
+  border: none;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
+  background: var(--secondary-color);
 
-  &__text {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 20%;
-    padding: 0 1rem;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-
-  &__title {
-    width: 100%;
-    font-size: 1vw;
+  &::placeholder {
     color: var(--text-color);
-    font-weight: 500;
   }
 }
 
-.miss-card {
-  width: 30%;
-  height: 100%;
-  background: var(--secondary-color);
+.input {
+  padding: 12px;
+  outline: none;
+  color: var(--text-color);
+  padding-left: 10px;
+  border: none;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
-
-  &__text {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 20%;
-    padding: 0 1rem;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-
-  &__title {
-    width: 100%;
-    font-size: 1vw;
-    color: var(--text-color);
-    font-weight: 500;
-  }
+  background: var(--secondary-color);
 }
 
-.table__wrapper {
+.employee-table {
   width: 100%;
-  overflow-y: auto;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  box-shadow: var(--box-shadow);
-  background: #000000;
+  height: 100%;
+  border-collapse: separate;
 
-  &::-webkit-scrollbar {
-    width: 10px;
+  &__body {
+    width: 100%;
   }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 20px;
-    background-color: var(--orange-color);
-    cursor: pointer;
-  }
-}
-
-.table {
-  width: 100%;
 
   &__row {
-    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    background: var(--secondary-color);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 12px;
+  }
 
-    &:nth-child(odd) {
-      background-color: #c1c1c1;
+  &__stripe {
+    width: 5px;
+    height: 100%;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-color: var(--orange-color);
+  }
+
+  &__cell {
+    padding: 0 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    &--avatar {
+      padding: 0 12px;
+      width: auto;
     }
 
-    &:nth-child(even) {
-      background-color: rgb(219, 219, 219);
+    &--info {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      flex: 1;
+      padding-left: 0;
+    }
+
+    &--email {
+      flex: 2;
+      text-align: start;
+      color: var(--gray-color);
     }
   }
 
-  &__head {
-    font-weight: 600;
-    padding: 0.75rem;
-    text-align: center;
+  &__avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__name {
     color: var(--text-color);
-    background-color: #000000;
-
-    &-period {
-      width: 10%;
-    }
-
-    &-chapa {
-      width: 10%;
-    }
-
-    &-name {
-      width: 30%;
-    }
-
-    &-time {
-      width: 20%;
-    }
-
-    &-miss {
-      width: 10%;
-    }
-
-    &-justification {
-      width: 20%;
-    }
+    font-weight: 600;
   }
 
-  &__data {
-    font-weight: 500;
-    padding: 0.75rem;
-    text-align: center;
+  &__role {
+    color: var(--gray-color);
+    font-size: 0.9em;
+  }
 
-    &-period {
-      width: 10%;
-    }
+  &__button {
+    padding: 12px;
+    font-size: 12px;
+    color: var(--text-color);
+    border: 1px solid transparent;
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all ease-in 0.2s;
 
-    &-chapa {
-      width: 10%;
-    }
-
-    &-name {
-      width: 30%;
-    }
-
-    &-time {
-      width: 20%;
-    }
-
-    &-miss {
-      width: 10%;
-    }
-
-    &-justification {
-      width: 20%;
+    &:hover {
+      color: var(--orange-color);
+      border: 1px solid var(--orange-color);
+      background: transparent;
     }
   }
 }

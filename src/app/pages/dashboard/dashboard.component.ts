@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { DashboardService } from '../../services/dashboard.service';
+import { ThemeService } from '../../services/theme.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuDashboardComponent } from '../../components/menu-dashboard/menu-dashboard.component';
 import { HeaderDashboardComponent } from '../../components/header-dashboard/header-dashboard.component';
@@ -38,8 +39,10 @@ export class DashboardComponent implements OnInit {
 
   private readonly _dashboardService = inject(DashboardService);
   private readonly _loginService = inject(LoginService);
+  private readonly _themeService = inject(ThemeService);
 
   constructor() {
+    // Obter o tema inicial do localStorage
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
     this.toggleIconTheme();
     this.applyTheme();
@@ -70,7 +73,10 @@ export class DashboardComponent implements OnInit {
 
   toggleTheme(): void {
     this.isDarkTheme = !this.isDarkTheme;
-    localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
+
+    // Atualizar o tema via serviço (isso também atualiza o localStorage)
+    this._themeService.setThemeState(this.isDarkTheme);
+
     this.applyTheme();
     this.toggleIconTheme();
     this.isMenuOpen = false;
