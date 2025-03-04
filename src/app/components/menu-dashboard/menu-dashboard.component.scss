@@ -83,3 +83,19 @@
     z-index: 1;
   }
 }
+
+.logout {
+  color: red;
+
+  &:hover {
+    .menu__nav-text {
+      width: auto;
+      max-width: 200px;
+      opacity: 1;
+      padding-left: 40px;
+      padding-right: 10px;
+      background-color: rgb(255, 119, 119);
+      color: var(--white-color);
+    }
+  }
+}

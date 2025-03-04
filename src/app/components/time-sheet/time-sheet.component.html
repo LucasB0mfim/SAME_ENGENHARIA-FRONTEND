@@ -1,7 +1,13 @@
 <div class="container">
   <div class="container__top-section">
     <div class="filter">
-      <button type="button" class="button__filter">Colaboradores</button>
+      <button
+        type="button"
+        class="button__filter"
+        [class.button__filter--active]="isEmployeesActive"
+        (click)="toggleEmployees()">
+        Colaboradores
+      </button>
       <input type="text" class="input__employee" placeholder="Nome do funcionário">
       <input type="date" class="input" placeholder="Data inicial">
       <input type="date" class="input" placeholder="Data final">
@@ -9,7 +15,7 @@
     </div>
   </div>
 
-  <div class="container__bottom-section">
+  <div class="container__bottom-section" *ngIf="isEmployeesActive">
     <table class="employee-table">
       <tbody class="employee-table__body">
         <tr *ngFor="let employee of employees" class="employee-table__row">

@@ -1,16 +1,12 @@
 <div class="dashboard">
 
-  <app-menu-dashboard></app-menu-dashboard>
+  <app-menu-dashboard (logout)="logout()">
+
+  </app-menu-dashboard>
 
   <main class="workspace">
-    <app-header-dashboard
-      [username]="username"
-      [avatar]="avatar"
-      [isDarkTheme]="isDarkTheme"
-      [isMenuOpen]="isMenuOpen"
-      (toggleMenu)="toggleMenu()"
-      (toggleTheme)="toggleTheme()"
-      (logout)="logout()">
+    <app-header-dashboard [username]="username" [avatar]="avatar" [isDarkTheme]="isDarkTheme"
+      (toggleMenu)="toggleMenu()" (toggleTheme)="toggleTheme()">
     </app-header-dashboard>
 
     <section class="workspace__content">

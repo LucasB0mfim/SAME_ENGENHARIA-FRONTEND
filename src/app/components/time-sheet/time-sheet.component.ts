@@ -17,7 +17,6 @@ import { Subscription } from 'rxjs';
 export class TimeSheetComponent implements OnInit, OnDestroy {
   private readonly _findEmployees = inject(FindEmployeesService);
   private readonly _themeService = inject(ThemeService);
-
   private themeSubscription: Subscription | null = null;
 
   isDarkTheme: boolean = false;
@@ -27,6 +26,8 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
 
   timeSheets: ITimeSheetRecord[] = [];
   employees: IEmployeesRecord[] = [];
+
+  isEmployeesActive: boolean = false;
 
   ngOnInit(): void {
     // Inicializa o tema de acordo com o localStorage
@@ -39,8 +40,15 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       this.updateDefaultAvatar();
       this.updateEmployeeAvatars();
     });
+  }
 
-    this.findEmployees();
+  toggleEmployees() {
+    this.isEmployeesActive = !this.isEmployeesActive;
+    if (this.isEmployeesActive) {
+      this.findEmployees();
+    } else {
+      this.employees = []; // Clear employees when deactivated
+    }
   }
 
   ngOnDestroy(): void {

@@ -2,28 +2,39 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   box-sizing: border-box;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   &__top-section {
     display: flex;
     width: 100%;
-    height: 25vh;
+    height: 184px;
     gap: 16px;
+    flex-shrink: 0; // Impede que o elemento encolha
   }
 
   &__main-section {
     width: 100%;
-    height: calc(33.333vh);
+    height: 250px;
     margin-top: 16px;
+    flex-shrink: 0; // Impede que o elemento encolha
   }
 
   &__bottom-section {
     display: flex;
     width: 100%;
-    height: calc(41.666vh);
+    height: 200px;
     margin-top: 16px;
     gap: 16px;
+    flex-shrink: 0; // Impede que o elemento encolha
   }
 }
 

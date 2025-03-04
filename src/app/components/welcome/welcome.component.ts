@@ -15,8 +15,7 @@ interface EmployeeData {
 })
 export class WelcomeComponent implements OnInit {
   ilustration: string = 'assets/images/peoples.png';
-
-  name: string = 'Carregando...'; // Valor inicial enquanto os dados são carregados
+  username: string = 'Carregando...';
 
   private readonly _dashboardService = inject(DashboardService);
 
@@ -25,23 +24,19 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.applyDayPeriodStyle();
-    this.loadEmployeeData(); // Carrega os dados do colaborador ao inicializar o componente
+    this.loadEmployeeData();
   }
 
   loadEmployeeData(): void {
     this._dashboardService.findAll().subscribe({
       next: (response) => {
-        this.name = response.employee.name; // Atualiza o nome do colaborador
+        this.username = response.employee.username;
       },
       error: (error) => {
-        console.error('Erro ao carregar informações do colaborador:', error);
-        this.name = 'Indefinido'; // Define um valor padrão em caso de erro
+        console.error(error);
+        this.username = 'Colaborador';
       }
     });
-  }
-
-  getFirstName(): string {
-    return this.name.split(' ')[0]; // Retorna o primeiro nome
   }
 
   getGreeting(): string {

@@ -13,21 +13,10 @@ export class HeaderDashboardComponent {
   @Input() username: string = '';
   @Input() avatar: string = '';
   @Input() isDarkTheme: boolean = false;
-  @Input() isMenuOpen: boolean = false;
 
-  @Output() toggleMenu = new EventEmitter<void>();
   @Output() toggleTheme = new EventEmitter<void>();
-  @Output() logout = new EventEmitter<void>();
-
-  onToggleMenu(): void {
-    this.toggleMenu.emit();
-  }
 
   onToggleTheme(): void {
     this.toggleTheme.emit();
-  }
-
-  onLogout(): void {
-    this.logout.emit();
   }
 }
