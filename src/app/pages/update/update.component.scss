@@ -28,11 +28,39 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  gap: 20px;
+
+  h1 {
+    color: #ff741e;
+  }
+
+  p {
+    width: 80%;
+  }
+
+  p:last-child {
+    font-size: 0.7rem;
+  }
 }
 
 .update {
   width: 50%;
   padding: 20px;
+
+  &__message {
+    position: absolute;
+    right: 0;
+    bottom: 8%;
+    width: 50%;
+
+    &-error {
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: rgb(200, 72, 72);
+    }
+  }
 }
 
 .update form {
@@ -41,15 +69,6 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-}
-
-h1 {
-  color: #ff741e;
-  margin-bottom: 20px;
-}
-
-p {
-  width: 80%;
 }
 
 input {

@@ -3,6 +3,7 @@
     <div class="informativo">
       <h1>Primeiro acesso?</h1>
       <p>Crie seu nome de usuário e sua nova senha!</p>
+      <p>A nova senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial.</p>
     </div>
 
     <div class="update">
@@ -18,6 +19,9 @@
             <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
           </span>
         </button>
+        <div class="update__message" *ngIf="updateError">
+          <p class="update__message-error">{{ updateError }}</p>
+        </div>
       </form>
     </div>
   </div>

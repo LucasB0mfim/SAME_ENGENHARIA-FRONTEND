@@ -1,9 +1,11 @@
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Component, inject } from '@angular/core';
-import { UpdateService } from '../../services/update.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { UpdateService } from '../../services/update.service';
 import { IUpdateRequest } from '../../interfaces/update-request.interface';
 
 @Component({
@@ -16,6 +18,7 @@ import { IUpdateRequest } from '../../interfaces/update-request.interface';
 export class UpdateComponent {
 
   loading: boolean = false;
+  updateError: string = '';
 
   private readonly _router = inject(Router);
   private readonly _updateService = inject(UpdateService);
@@ -29,6 +32,12 @@ export class UpdateComponent {
 
   update() {
     this.loading = true;
+    this.updateError = '';
+
+    if (this.updateForm.invalid) {
+      this.updateForm.markAllAsTouched();
+      return;
+    }
 
     const request: IUpdateRequest = {
       username: this.updateForm.value.username,
@@ -44,6 +53,23 @@ export class UpdateComponent {
       },
       error: (error) => {
         this.loading = false;
+
+        if (error.status === 400) {
+          this.updateError = 'Preencha todos os campos';
+        } else if (error.status === 401) {
+          this.updateError = 'Email ou senha atual incorreto(s)';
+        } else if (error.status === 404) {
+          this.updateError = 'Email ou senha atual incorreto(s)';
+        } else if (error.status === 422) {
+          this.updateError = 'A nova senha não atende aos requisitos';
+        } else {
+          this.updateError = 'Erro interno. Tente novamente outra hora'
+        }
+
+        setTimeout(() => {
+          this.updateError = '';
+        }, 3000);
+
         console.log(error);
       }
     });
