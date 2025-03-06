@@ -29,7 +29,7 @@
           </td>
           <td class="employee-table__cell employee-table__cell--email">{{ employee.email }}</td>
           <td class="employee-table__cell">
-            <button type="button" class="employee-table__button">Detalhes</button>
+            <button type="button" class="employee-table__button" (click)="openTimesheetDetails(employee)">Detalhes</button>
           </td>
         </tr>
       </tbody>

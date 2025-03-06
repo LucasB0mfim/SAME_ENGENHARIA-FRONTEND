@@ -1,0 +1,49 @@
+<div class="timesheet-modal">
+  <div class="timesheet-modal__header">
+    <h2 class="timesheet-modal__title">Registros de Ponto - {{ employeeName }}</h2>
+    <button type="button" class="timesheet-modal__close-button" (click)="closeModal()">×</button>
+  </div>
+
+  <div class="timesheet-modal__content">
+    <div *ngIf="isLoading" class="timesheet-modal__loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Carregando registros...</p>
+    </div>
+
+    <div *ngIf="error" class="timesheet-modal__error">
+      <p>{{ error }}</p>
+      <button type="button" class="timesheet-modal__retry-button" (click)="loadTimesheetData()">Tentar novamente</button>
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="timesheet-modal__table-container">
+      <table class="timesheet-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Chapa</th>
+            <th>Jornada Realizada</th>
+            <th>Falta</th>
+            <th>Evento Abono</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of timesheetRecords" [class.timesheet-table__row--absent]="record.FALTA === 'SIM'">
+            <td>{{ record.PERIODO }}</td>
+            <td>{{ record.CHAPA }}</td>
+            <td>{{ record['JORNADA REALIZADA'] }}</td>
+            <td>{{ record.FALTA }}</td>
+            <td>{{ record['EVENTO ABONO'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="timesheetRecords.length === 0" class="timesheet-modal__no-records">
+        <p>Nenhum registro de ponto encontrado para este colaborador.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="timesheet-modal__footer">
+    <button type="button" class="timesheet-modal__button" (click)="closeModal()">Fechar</button>
+  </div>
+</div>

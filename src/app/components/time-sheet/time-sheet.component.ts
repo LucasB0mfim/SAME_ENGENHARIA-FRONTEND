@@ -1,22 +1,25 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TimeSheetService } from '../../services/time-sheet.service';
 import { ThemeService } from '../../services/theme.service';
 import { ITimeSheetResponse, ITimeSheetRecord } from '../../interfaces/time-sheet.interface';
 import { IEmployeesRecord, IEmployeesResponse } from '../../interfaces/employees-response.interface';
 import { FindEmployeesService } from '../../services/find-employees.service';
+import { TimesheetModalComponent } from '../timesheet-modal/timesheet-modal.component';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-time-sheet',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './time-sheet.component.html',
   styleUrl: './time-sheet.component.scss'
 })
 export class TimeSheetComponent implements OnInit, OnDestroy {
   private readonly _findEmployees = inject(FindEmployeesService);
   private readonly _themeService = inject(ThemeService);
+  private readonly _dialog = inject(MatDialog);
   private themeSubscription: Subscription | null = null;
 
   isDarkTheme: boolean = false;
@@ -69,6 +72,13 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error(error);
       }
+    });
+  }
+
+  openTimesheetDetails(employee: IEmployeesRecord): void {
+    this._dialog.open(TimesheetModalComponent, {
+      width: '800px',
+      data: { employeeName: employee.name }
     });
   }
 
