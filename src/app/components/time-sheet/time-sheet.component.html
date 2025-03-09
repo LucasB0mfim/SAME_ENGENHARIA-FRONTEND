@@ -8,7 +8,12 @@
         (click)="toggleEmployees()">
         Colaboradores
       </button>
-      <input type="text" class="input__employee" placeholder="Nome do funcionário">
+      <input
+        type="text"
+        class="input__employee"
+        placeholder="Nome do funcionário"
+        [(ngModel)]="employeeNameFilter"
+        (input)="filterEmployees()">
       <input type="date" class="input" placeholder="Data inicial">
       <input type="date" class="input" placeholder="Data final">
       <button type="button" class="button__filter">Pesquisar</button>
@@ -18,7 +23,7 @@
   <div class="container__bottom-section" *ngIf="isEmployeesActive">
     <table class="employee-table">
       <tbody class="employee-table__body">
-        <tr *ngFor="let employee of employees" class="employee-table__row">
+        <tr *ngFor="let employee of filteredEmployees" class="employee-table__row">
           <td class="employee-table__stripe"></td>
           <td class="employee-table__cell employee-table__cell--avatar">
             <img [src]="employee.avatar" alt="Avatar do colaborador" class="employee-table__avatar-img">

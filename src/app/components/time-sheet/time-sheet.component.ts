@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TimeSheetService } from '../../services/time-sheet.service';
 import { ThemeService } from '../../services/theme.service';
@@ -12,7 +13,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-time-sheet',
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, FormsModule],
   templateUrl: './time-sheet.component.html',
   styleUrl: './time-sheet.component.scss'
 })
@@ -29,6 +30,8 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
 
   timeSheets: ITimeSheetRecord[] = [];
   employees: IEmployeesRecord[] = [];
+  filteredEmployees: IEmployeesRecord[] = [];
+  employeeNameFilter: string = '';
 
   isEmployeesActive: boolean = false;
 
@@ -51,6 +54,7 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       this.findEmployees();
     } else {
       this.employees = []; // Clear employees when deactivated
+      this.filteredEmployees = []; // Clear filtered employees also
     }
   }
 
@@ -68,11 +72,25 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
         this.employees = response.employees.map(employee => ({
           ...employee, avatar: employee.avatar || this.defaultAvatar
         }));
+        this.filterEmployees(); // Aplica o filtro atual
       },
       error: (error) => {
         console.error(error);
       }
     });
+  }
+
+  filterEmployees(): void {
+    if (!this.employeeNameFilter) {
+      // Se o filtro estiver vazio, mostra todos os colaboradores
+      this.filteredEmployees = [...this.employees];
+    } else {
+      // Filtra os colaboradores pelo nome
+      const filterText = this.employeeNameFilter.toLowerCase();
+      this.filteredEmployees = this.employees.filter(employee =>
+        employee.name.toLowerCase().includes(filterText)
+      );
+    }
   }
 
   openTimesheetDetails(employee: IEmployeesRecord): void {
@@ -102,6 +120,9 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
           avatar: isDefaultAvatar ? this.defaultAvatar : employee.avatar
         };
       });
+
+      // Atualiza também os avatares na lista filtrada
+      this.filterEmployees();
     }
   }
 }
