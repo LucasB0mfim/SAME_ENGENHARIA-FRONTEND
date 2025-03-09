@@ -1,26 +1,16 @@
 <div class="container">
   <div class="container__top-section">
     <div class="filter">
-      <button
-        type="button"
-        class="button__filter"
-        [class.button__filter--active]="isEmployeesActive"
-        (click)="toggleEmployees()">
-        Colaboradores
-      </button>
-      <input
-        type="text"
-        class="input__employee"
-        placeholder="Nome do funcionário"
-        [(ngModel)]="employeeNameFilter"
+      <input type="text" class="input__employee" placeholder="Nome do funcionário" [(ngModel)]="employeeNameFilter"
         (input)="filterEmployees()">
-      <input type="date" class="input" placeholder="Data inicial">
-      <input type="date" class="input" placeholder="Data final">
-      <button type="button" class="button__filter">Pesquisar</button>
+      <div class="search">
+        <input type="date" class="input">
+        <button type="button" class="button__filter">Pesquisar</button>
+      </div>
     </div>
   </div>
 
-  <div class="container__bottom-section" *ngIf="isEmployeesActive">
+  <div class="container__bottom-section">
     <table class="employee-table">
       <tbody class="employee-table__body">
         <tr *ngFor="let employee of filteredEmployees" class="employee-table__row">
@@ -34,7 +24,8 @@
           </td>
           <td class="employee-table__cell employee-table__cell--email">{{ employee.email }}</td>
           <td class="employee-table__cell">
-            <button type="button" class="employee-table__button" (click)="openTimesheetDetails(employee)">Detalhes</button>
+            <button type="button" class="employee-table__button"
+              (click)="openTimesheetDetails(employee)">Detalhes</button>
           </td>
         </tr>
       </tbody>

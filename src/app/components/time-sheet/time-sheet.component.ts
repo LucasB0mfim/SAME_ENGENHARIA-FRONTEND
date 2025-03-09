@@ -1,10 +1,9 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { TimeSheetService } from '../../services/time-sheet.service';
 import { ThemeService } from '../../services/theme.service';
-import { ITimeSheetResponse, ITimeSheetRecord } from '../../interfaces/time-sheet.interface';
+import { ITimeSheetRecord } from '../../interfaces/time-sheet.interface';
 import { IEmployeesRecord, IEmployeesResponse } from '../../interfaces/employees-response.interface';
 import { FindEmployeesService } from '../../services/find-employees.service';
 import { TimesheetModalComponent } from '../timesheet-modal/timesheet-modal.component';
@@ -17,28 +16,27 @@ import { Subscription } from 'rxjs';
   templateUrl: './time-sheet.component.html',
   styleUrl: './time-sheet.component.scss'
 })
-export class TimeSheetComponent implements OnInit, OnDestroy {
+export class TimeSheetComponent implements OnInit {
   private readonly _findEmployees = inject(FindEmployeesService);
   private readonly _themeService = inject(ThemeService);
   private readonly _dialog = inject(MatDialog);
   private themeSubscription: Subscription | null = null;
 
+  defaultAvatar: string = '';
   isDarkTheme: boolean = false;
   avatarIconDark: string = 'assets/images/avatarIconDark.png';
   avatarIconLight: string = 'assets/images/avatarIconLight.png';
-  defaultAvatar: string = '';
 
   timeSheets: ITimeSheetRecord[] = [];
   employees: IEmployeesRecord[] = [];
   filteredEmployees: IEmployeesRecord[] = [];
   employeeNameFilter: string = '';
 
-  isEmployeesActive: boolean = false;
-
   ngOnInit(): void {
     // Inicializa o tema de acordo com o localStorage
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
     this.updateDefaultAvatar();
+    this.findEmployees();
 
     // Se inscreve para mudanças de tema
     this.themeSubscription = this._themeService.getThemeState().subscribe(isDark => {
@@ -46,24 +44,6 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       this.updateDefaultAvatar();
       this.updateEmployeeAvatars();
     });
-  }
-
-  toggleEmployees() {
-    this.isEmployeesActive = !this.isEmployeesActive;
-    if (this.isEmployeesActive) {
-      this.findEmployees();
-    } else {
-      this.employees = []; // Clear employees when deactivated
-      this.filteredEmployees = []; // Clear filtered employees also
-    }
-  }
-
-  ngOnDestroy(): void {
-    // Limpar a inscrição ao destruir o componente
-    if (this.themeSubscription) {
-      this.themeSubscription.unsubscribe();
-      this.themeSubscription = null;
-    }
   }
 
   findEmployees(): void {
