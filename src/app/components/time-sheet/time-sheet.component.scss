@@ -1,127 +1,120 @@
-.container {
+.timesheet {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 80vh;
 
-  &__top-section {
-    height: auto;
-    display: flex;
-    align-items: center;
+  &__filter-section {
+    margin-bottom: 20px;
   }
 
-  &__bottom-section {
+  &__content {
     height: 70vh;
-    display: flex;
-    overflow-y: scroll;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
       display: none;
     }
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 }
 
-.filter {
+.timesheet-filter {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-}
+  align-items: center;
 
-.search {
-
-  button {
-    margin-left: 20px;
-  }
-}
-
-.button__filter {
-  color: var(--text-color);
-  padding: 12px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  box-shadow: var(--box-shadow);
-  background: var(--secondary-color);
-  transition: all linear 0.3s;
-  cursor: pointer;
-
-  &--active {
-    color: var(--orange-color);
-    border: 2px solid var(--orange-color);
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 
-  &:hover {
-    color: var(--orange-color);
-    border: 2px solid var(--orange-color);
-  }
-}
-
-.input__employee {
-  width: auto;
-  min-width: 300px;
-  padding: 12px;
-  outline: none;
-  color: var(--text-color);
-  padding-left: 10px;
-  border: none;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  background: var(--secondary-color);
-
-  &::placeholder {
+  &__label {
+    font-size: 0.9em;
     color: var(--text-color);
   }
-}
 
-.input {
-  padding: 12px;
-  outline: none;
-  color: var(--text-color);
-  padding-left: 10px;
-  border: none;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  background: var(--secondary-color);
+  &__input {
+    min-width: 160px;
+    padding: 12px;
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    background: var(--secondary-color);
+    outline: none;
+
+    &::placeholder {
+      color: var(--third-color);
+    }
+  }
+
+  &__select {
+    min-width: 160px;
+    padding: 12px;
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    background: var(--secondary-color);
+    outline: none;
+  }
+
+  &__button {
+    color: var(--text-color);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    box-shadow: var(--box-shadow);
+    background: var(--secondary-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    align-self: flex-end;
+
+    &:hover, &--active {
+      color: var(--orange-color);
+      border-color: var(--orange-color);
+    }
+  }
 }
 
 .employee-table {
   width: 100%;
-  height: 100%;
   border-collapse: separate;
+  border-spacing: 0 12px;
 
   &__body {
     width: 100%;
   }
 
   &__row {
-    height: 70px;
     display: flex;
     align-items: center;
-    border-radius: 8px;
+    justify-content: center;
+    margin-bottom: 15px;
+    height: 70px;
     background: var(--secondary-color);
+    border-radius: 8px;
     box-shadow: var(--box-shadow);
-    margin-bottom: 12px;
-  }
-
-  &__stripe {
-    width: 5px;
-    height: 100%;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    background-color: var(--orange-color);
   }
 
   &__cell {
-    padding: 0 12px;
     height: 100%;
     display: flex;
     align-items: center;
+    padding: 0 12px;
+
+    &--stripe {
+      width: 5px;
+      padding: 0;
+      background-color: var(--orange-color);
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
 
     &--avatar {
-      padding: 0 12px;
-      width: auto;
+      width: 64px;
     }
 
     &--info {
@@ -134,12 +127,15 @@
 
     &--email {
       flex: 2;
-      text-align: start;
       color: var(--gray-color);
+    }
+
+    &--actions {
+      padding-right: 16px;
     }
   }
 
-  &__avatar-img {
+  &__avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -164,11 +160,11 @@
     background-color: var(--primary-color);
     border-radius: 8px;
     cursor: pointer;
-    transition: all ease-in 0.2s;
+    transition: all 0.2s ease-in;
 
     &:hover {
       color: var(--orange-color);
-      border: 1px solid var(--orange-color);
+      border-color: var(--orange-color);
       background: transparent;
     }
   }
