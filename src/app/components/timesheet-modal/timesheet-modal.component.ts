@@ -2,7 +2,7 @@ import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ITimesheetRecord } from '../../interfaces/timesheet-records.interface';
+import { ITimesheetRecord } from '../../interfaces/timesheet-response.interface';
 import { TimesheetReportService } from '../../services/timesheet-report.service';
 
 @Component({

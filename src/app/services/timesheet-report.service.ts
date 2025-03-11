@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ITimesheetResponse } from '../interfaces/timesheet-records.interface';
+import { ITimeSheetResponse } from '../interfaces/timesheet-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,9 @@ export class TimesheetReportService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  getEmployeeTimesheet(employeeName: string): Observable<ITimesheetResponse> {
+  getEmployeeTimesheet(employeeName: string): Observable<ITimeSheetResponse> {
     const headers = this._createHeaders();
     const body = { name: employeeName.toUpperCase() };
-    return this._httpClient.post<ITimesheetResponse>(this._apiUrl, body, { headers });
+    return this._httpClient.post<ITimeSheetResponse>(this._apiUrl, body, { headers });
   }
 }
