@@ -2,13 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LoginService } from '../../services/login.service';
-import { DashboardService } from '../../services/dashboard.service';
-import { ThemeService } from '../../services/theme.service';
+import { LoginService } from '../../core/services/login.service';
+import { DashboardService } from '../../core/services/dashboard.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { MatIconModule } from '@angular/material/icon';
-import { MenuDashboardComponent } from '../../components/menu-dashboard/menu-dashboard.component';
-import { HeaderDashboardComponent } from '../../components/header-dashboard/header-dashboard.component';
-import { IEmployeeResponse } from '../../interfaces/employee-response.interface';
+import { SidebarComponent } from '../../components/workspace/sidebar/menu.component';
+import { HeaderComponent } from '../../components/workspace/header/header.component';
+import { IEmployeeResponse } from '../../core/interfaces/employee-response.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,8 +18,8 @@ import { IEmployeeResponse } from '../../interfaces/employee-response.interface'
     RouterModule,
     FormsModule,
     MatIconModule,
-    MenuDashboardComponent,
-    HeaderDashboardComponent
+    SidebarComponent,
+    HeaderComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'

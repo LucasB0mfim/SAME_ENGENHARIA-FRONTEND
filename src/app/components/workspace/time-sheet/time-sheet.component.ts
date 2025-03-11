@@ -2,15 +2,15 @@ import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ThemeService } from '../../services/theme.service';
-import { IEmployeesRecord, IEmployeesResponse } from '../../interfaces/employees-response.interface';
-import { FindEmployeesService } from '../../services/find-employees.service';
+import { ThemeService } from '../../../core/services/theme.service';
+import { IEmployeesRecord, IEmployeesResponse } from '../../../core/interfaces/employees-response.interface';
+import { FindEmployeesService } from '../../../core/services/find-employees.service';
 import { TimesheetModalComponent } from '../timesheet-modal/timesheet-modal.component';
 import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TimeSheetService } from '../../services/time-sheet.service';
-import { ITimeSheetRequest } from '../../interfaces/timesheet-request.interface';
-import { ITimesheetRecord, ITimeSheetResponse } from '../../interfaces/timesheet-response.interface';
+import { TimeSheetService } from '../../../core/services/time-sheet.service';
+import { ITimeSheetRequest } from '../../../core/interfaces/timesheet-request.interface';
+import { ITimesheetRecord, ITimeSheetResponse } from '../../../core/interfaces/timesheet-response.interface';
 
 @Component({
   selector: 'app-time-sheet',
@@ -97,7 +97,7 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       );
     }
   }
-  
+
   search(): void {
     this.isLoading = true;
 

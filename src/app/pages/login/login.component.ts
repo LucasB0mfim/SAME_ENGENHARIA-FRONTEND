@@ -6,9 +6,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
-import { LoginService } from '../../services/login.service'
-import { FirstLoginService } from '../../services/fisrt-login.service';
-import { ILoginRequest } from '../../interfaces/login-request.interface';
+import { LoginService } from '../../core/services/login.service'
+import { FirstLoginService } from '../../core/services/fisrt-login.service';
+import { ILoginRequest } from '../../core/interfaces/login-request.interface';
 
 @Component({
   selector: 'app-login',

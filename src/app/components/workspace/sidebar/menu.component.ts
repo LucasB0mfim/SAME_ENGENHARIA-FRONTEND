@@ -4,13 +4,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-menu-dashboard',
+  selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterModule],
-  templateUrl: './menu-dashboard.component.html',
-  styleUrl: './menu-dashboard.component.scss'
+  templateUrl: './menu.component.html',
+  styleUrl: './menu.component.scss'
 })
-export class MenuDashboardComponent {
+export class SidebarComponent {
   @Output() logout = new EventEmitter<void>();
 
   onLogout(): void {

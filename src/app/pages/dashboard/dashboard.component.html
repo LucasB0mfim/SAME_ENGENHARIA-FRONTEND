@@ -1,13 +1,11 @@
 <div class="dashboard">
 
-  <app-menu-dashboard (logout)="logout()">
-
-  </app-menu-dashboard>
+  <app-sidebar (logout)="logout()"></app-sidebar>
 
   <main class="workspace">
-    <app-header-dashboard [username]="username" [avatar]="avatar" [isDarkTheme]="isDarkTheme"
+    <app-header [username]="username" [avatar]="avatar" [isDarkTheme]="isDarkTheme"
       (toggleMenu)="toggleMenu()" (toggleTheme)="toggleTheme()">
-    </app-header-dashboard>
+    </app-header>
 
     <section class="workspace__content">
       <router-outlet></router-outlet>

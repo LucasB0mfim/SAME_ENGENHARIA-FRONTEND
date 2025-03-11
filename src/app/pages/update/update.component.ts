@@ -1,12 +1,11 @@
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { UpdateService } from '../../services/update.service';
-import { IUpdateRequest } from '../../interfaces/update-request.interface';
+import { UpdateService } from '../../core/services/update.service';
+import { IUpdateRequest } from '../../core/interfaces/update-request.interface';
 
 @Component({
   selector: 'app-update',

@@ -1,19 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../services/dashboard.service';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 interface EmployeeData {
   name: string;
 }
 
 @Component({
-  selector: 'app-welcome',
+  selector: 'app-general',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './welcome.component.html',
-  styleUrl: './welcome.component.scss'
+  templateUrl: './general.component.html',
+  styleUrl: './general.component.scss'
 })
-export class WelcomeComponent implements OnInit {
+export class GeneralComponent implements OnInit {
   ilustration: string = 'assets/images/peoples.png';
   username: string = 'Carregando...';
 
