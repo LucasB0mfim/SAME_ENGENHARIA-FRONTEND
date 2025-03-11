@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { ITimesheetRecord } from '../../../core/interfaces/timesheet-response.interface';
 import { TimesheetReportService } from '../../../core/services/timesheet-report.service';
 import { MatIconModule } from '@angular/material/icon';
-
+import { TimeSheetService } from '../../../core/services/time-sheet.service';
 
 @Component({
   selector: 'app-timesheet-modal',
@@ -16,7 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './timesheet-modal.component.scss'
 })
 export class TimesheetModalComponent implements OnInit, OnDestroy {
-  private readonly _timesheetService = inject(TimesheetReportService);
+  private readonly _timesheetReportService = inject(TimesheetReportService);
+  private readonly _timeSheetService = inject(TimeSheetService);
   private _subscription: Subscription = new Subscription();
 
   employeeName: string = '';
@@ -26,13 +27,28 @@ export class TimesheetModalComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<TimesheetModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { employeeName: string }
+    @Inject(MAT_DIALOG_DATA) public data: {
+      employeeName: string,
+      records?: ITimesheetRecord[],
+      startDate?: string,
+      endDate?: string,
+      employeeId?: string,
+      status?: string,
+      abono?: string
+    }
   ) {
     this.employeeName = data.employeeName;
   }
 
   ngOnInit(): void {
-    this.loadTimesheetData();
+    // Se os registros já foram fornecidos, use-os diretamente
+    if (this.data.records && this.data.records.length > 0) {
+      this.timesheetRecords = this.data.records;
+      this.isLoading = false;
+    } else {
+      // Caso contrário, carregue-os do serviço
+      this.loadTimesheetData();
+    }
   }
 
   ngOnDestroy(): void {
@@ -43,14 +59,21 @@ export class TimesheetModalComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.error = null;
 
-    const subscription = this._timesheetService.getEmployeeTimesheet(this.employeeName).subscribe({
+    // Utiliza o serviço atualizado com os filtros adicionais
+    const subscription = this._timeSheetService.getEmployeeTimesheet(
+      this.employeeName,
+      this.data.startDate,
+      this.data.endDate,
+      this.data.status,
+      this.data.abono
+    ).subscribe({
       next: (response) => {
         this.timesheetRecords = response.records;
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Failed to load timesheet data:', error);
-        this.error = 'Ocorreu um erro ao carregar os registros de ponto. Por favor, tente novamente.';
+        console.error(error);
+        this.error = 'Erro ao carregar os dados. Tente novamente mais tarde.';
         this.isLoading = false;
       }
     });

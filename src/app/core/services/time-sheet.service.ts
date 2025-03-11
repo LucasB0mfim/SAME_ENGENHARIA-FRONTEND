@@ -22,16 +22,35 @@ export class TimeSheetService {
     return this._httpClient.post<ITimeSheetResponse>(this._apiUrl, request, { headers });
   }
 
-  getEmployeeTimesheet(employeeName: string, startDate?: string, endDate?: string): Observable<ITimeSheetResponse> {
+  getEmployeeTimesheet(
+    employeeName: string,
+    startDate?: string,
+    endDate?: string,
+    status?: string,
+    abono?: string
+  ): Observable<ITimeSheetResponse> {
     const headers = this._createHeaders();
-    const body: any = { name: employeeName.toUpperCase() };
 
+    // Monta o corpo da requisição com todos os filtros disponíveis
+    const body: any = {
+      name: employeeName.toUpperCase()
+    };
+
+    // Adiciona os filtros opcionais quando fornecidos
     if (startDate) {
       body.startDate = startDate;
     }
 
     if (endDate) {
       body.endDate = endDate;
+    }
+
+    if (status && status !== 'all') {
+      body.status = status;
+    }
+
+    if (abono && abono !== 'none') {
+      body.abono = abono;
     }
 
     return this._httpClient.post<ITimeSheetResponse>(this._apiUrl, body, { headers });

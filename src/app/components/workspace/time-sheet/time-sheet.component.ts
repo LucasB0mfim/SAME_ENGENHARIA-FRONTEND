@@ -168,23 +168,39 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       modalData = {
         employeeName: employee.NOME,
         employeeId: employee.CHAPA,
-        records: employee.records,
+        records: employee.records,  // Estes são os registros já filtrados
         startDate: this.startDateFilter,
-        endDate: this.endDateFilter
+        endDate: this.endDateFilter,
+        status: this.statusFilter,
+        abono: this.allowanceFilter
+      };
+    } else if (this.startDateFilter && !this.endDateFilter) {
+      // Caso de apenas uma data: encontramos o registro específico deste funcionário
+      const employeeRecords = this.timesheet.filter(record =>
+        record.CHAPA === employee.CHAPA || record.NOME === employee.NOME);
+
+      modalData = {
+        employeeName: employee.NOME,
+        records: employeeRecords,
+        startDate: this.startDateFilter,
+        status: this.statusFilter,
+        abono: this.allowanceFilter
       };
     } else {
-      // Caso de apenas uma data: passamos apenas o nome
+      // Caso padrão (sem filtros de data): buscaremos todos os registros
       modalData = {
-        employeeName: employee.NOME || employee.name
+        employeeName: employee.name || employee.NOME,
+        status: this.statusFilter,
+        abono: this.allowanceFilter
       };
     }
 
     this._dialog.open(TimesheetModalComponent, {
-      width: '90vw',      // Aumenta a largura para 90% da viewport
-      maxWidth: '90vw',   // Define largura máxima também
-      height: '90vh',     // Define a altura para 90% da viewport
-      maxHeight: '90vh',  // Limita a altura máxima
-      panelClass: 'timesheet-modal-dialog',  // Classe personalizada para estilização adicional
+      width: '90vw',
+      maxWidth: '90vw',
+      height: '90vh',
+      maxHeight: '90vh',
+      panelClass: 'timesheet-modal-dialog',
       data: modalData
     });
   }
