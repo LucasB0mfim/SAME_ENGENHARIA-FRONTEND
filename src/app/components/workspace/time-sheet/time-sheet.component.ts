@@ -180,7 +180,11 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
     }
 
     this._dialog.open(TimesheetModalComponent, {
-      width: '800px',
+      width: '90vw',      // Aumenta a largura para 90% da viewport
+      maxWidth: '90vw',   // Define largura máxima também
+      height: '90vh',     // Define a altura para 90% da viewport
+      maxHeight: '90vh',  // Limita a altura máxima
+      panelClass: 'timesheet-modal-dialog',  // Classe personalizada para estilização adicional
       data: modalData
     });
   }

@@ -1,49 +1,34 @@
-<div class="timesheet-modal">
-  <div class="timesheet-modal__header">
-    <h2 class="timesheet-modal__title">Registros de Ponto - {{ employeeName }}</h2>
-    <button type="button" class="timesheet-modal__close-button" (click)="closeModal()">×</button>
+<div class="record">
+
+  <div class="record__top-section">
+    <h2 class="record__title">Registros de Ponto - {{ employeeName }}</h2>
+    <button type="button" class="record__button" (click)="closeModal()">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
 
-  <div class="timesheet-modal__content">
-    <div *ngIf="isLoading" class="timesheet-modal__loading">
-      <mat-spinner diameter="40"></mat-spinner>
-      <p>Carregando registros...</p>
-    </div>
-
-    <div *ngIf="error" class="timesheet-modal__error">
-      <p>{{ error }}</p>
-      <button type="button" class="timesheet-modal__retry-button" (click)="loadTimesheetData()">Tentar novamente</button>
-    </div>
-
-    <div *ngIf="!isLoading && !error" class="timesheet-modal__table-container">
-      <table class="timesheet-table">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Chapa</th>
-            <th>Jornada Realizada</th>
-            <th>Falta</th>
-            <th>Evento Abono</th>
+  <div class="record__main-section">
+      <table class="record__table">
+        <thead class="record__table-head">
+          <tr class="record__table-head--row">
+            <th class="record__table-head--cell">Data</th>
+            <th class="record__table-head--cell">Chapa</th>
+            <th class="record__table-head--cell">Jornada Realizada</th>
+            <th class="record__table-head--cell">Falta</th>
+            <th class="record__table-head--cell">Evento Abono</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let record of timesheetRecords" [class.timesheet-table__row--absent]="record.FALTA === 'SIM'">
-            <td>{{ record.PERIODO }}</td>
-            <td>{{ record.CHAPA }}</td>
-            <td>{{ record['JORNADA REALIZADA'] }}</td>
-            <td>{{ record.FALTA }}</td>
-            <td>{{ record['EVENTO ABONO'] }}</td>
+
+        <tbody class="record__table-body">
+          <tr class="record__table-body--row" *ngFor="let record of timesheetRecords">
+            <td class="record__table-body--cell record__table-body--cell__stripe"></td>
+            <td class="record__table-body--cell">{{ record.PERIODO }}</td>
+            <td class="record__table-body--cell">{{ record.CHAPA }}</td>
+            <td class="record__table-body--cell">{{ record['JORNADA REALIZADA'] }}</td>
+            <td class="record__table-body--cell">{{ record.FALTA }}</td>
+            <td class="record__table-body--cell">{{ record['EVENTO ABONO'] }}</td>
           </tr>
         </tbody>
       </table>
-
-      <div *ngIf="timesheetRecords.length === 0" class="timesheet-modal__no-records">
-        <p>Nenhum registro de ponto encontrado para este colaborador.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="timesheet-modal__footer">
-    <button type="button" class="timesheet-modal__button" (click)="closeModal()">Fechar</button>
   </div>
 </div>

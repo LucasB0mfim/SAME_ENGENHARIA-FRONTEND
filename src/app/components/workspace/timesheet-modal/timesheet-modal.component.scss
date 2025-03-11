@@ -1,112 +1,116 @@
-.timesheet-modal {
+.record {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  max-width: 800px;
-  background-color: #fff;
+  height: 100%;
+  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: var(--primary-color);
 
-  &__header {
+
+  &__top-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+    height: 10%;
+  }
+
+  &__main-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 90%;
   }
 
   &__title {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #333;
-  }
-
-  &__close-button {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #666;
-
-    &:hover {
-      color: #333;
-    }
-  }
-
-  &__content {
-    padding: 24px;
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-
-  &__loading, &__error, &__no-records {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 0;
-    text-align: center;
-    color: #666;
-  }
-
-  &__error {
-    color: #d32f2f;
-  }
-
-  &__retry-button {
-    margin-top: 16px;
-    padding: 8px 16px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #e0e0e0;
-    }
-  }
-
-  &__table-container {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  &__footer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 16px 24px;
-    border-top: 1px solid #e0e0e0;
+    color: var(--text-color);
   }
 
   &__button {
-    padding: 8px 16px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    width: 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    transition: all ease 0.2s;
     cursor: pointer;
 
     &:hover {
-      background-color: #e0e0e0;
+      color: var(--orange-color);
+      border: 1px solid var(--orange-color);
+      box-shadow: var(--box-shadow);
     }
   }
-}
 
-.timesheet-table {
-  width: 100%;
-  border-collapse: collapse;
+  &__table {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    color: var(--text-color);
 
-  th, td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
+    &-head {
+      width: 100%;
+      height: 10%;
 
-  th {
-    font-weight: 500;
-    color: #333;
-    background-color: #f5f5f5;
-  }
+      &--row {
+        display: flex;
+        height: 100%;
+        width: 100%;
+      }
 
-  &__row--absent {
-    background-color: #ffebee;
+      &--cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        height: 100%;
+        color: var(--gray-color);
+      }
+    }
+
+    &-body {
+      width: 100%;
+      height: 90%;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      &--row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        height: 70px;
+        background: var(--secondary-color);
+        border-radius: 8px;
+        box-shadow: var(--box-shadow);
+      }
+
+      &--cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        height: 100%;
+
+        &__stripe {
+          width: 5px;
+          padding: 0;
+          background-color: var(--orange-color);
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+        }
+      }
+    }
   }
 }
