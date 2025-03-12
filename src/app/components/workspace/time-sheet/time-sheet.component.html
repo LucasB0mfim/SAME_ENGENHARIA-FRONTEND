@@ -59,7 +59,7 @@
           <td class="table__data">{{ employee.email }}</td>
 
           <td class="table__data table__data-button">
-            <button type="button">
+            <button type="button" (click)="FindRecordByName(employee)">
               Detalhes
             </button>
           </td>
@@ -106,7 +106,7 @@
           </td>
 
           <td class="table__data table__data-button">
-            <button type="button" (click)="openTimesheetDetails(employee)">
+            <button type="button" (click)="FindRecordByFilters(employee)">
               Detalhes
             </button>
           </td>

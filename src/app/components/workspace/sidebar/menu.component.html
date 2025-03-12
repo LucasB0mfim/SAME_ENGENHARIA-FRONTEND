@@ -1,9 +1,17 @@
 <nav class="menu">
   <ul class="menu__nav-links">
     <li class="menu__nav-item">
-      <a routerLink="/dashboard" routerLinkActive="menu__nav-link--active" [routerLinkActiveOptions]="{exact: true}" class="menu__nav-link">
+      <a routerLink="/dashboard" routerLinkActive="menu__nav-link--active" [routerLinkActiveOptions]="{exact: true}"
+        class="menu__nav-link">
         <mat-icon>dashboard</mat-icon>
         <span class="menu__nav-text">Dashboard</span>
+      </a>
+    </li>
+
+    <li class="menu__nav-item">
+      <a routerLink="/dashboard/reports" routerLinkActive="menu__nav-link--active" class="menu__nav-link">
+        <mat-icon>description</mat-icon>
+        <span class="menu__nav-text">Relatórios</span>
       </a>
     </li>
 
@@ -13,13 +21,6 @@
         <span class="menu__nav-text">Recursos Humanos</span>
       </a>
     </li>
-
-    <!-- <li class="menu__nav-item">
-      <a routerLink="/dashboard/settings" routerLinkActive="menu__nav-link--active" class="menu__nav-link">
-        <mat-icon>settings</mat-icon>
-        <span class="menu__nav-text">Configurações</span>
-      </a>
-    </li> -->
 
     <li class="menu__nav-item">
       <a routerLinkActive="menu__nav-link--active" class="menu__nav-link logout" (click)="onLogout()">

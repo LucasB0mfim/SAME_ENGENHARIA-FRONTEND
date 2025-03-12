@@ -160,7 +160,7 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
 
   consolidatedTimesheet: any[] = [];
 
-  openTimesheetDetails(employee: any): void {
+  FindRecordByFilters(employee: any): void {
     let modalData: any;
 
     if (this.startDateFilter && this.endDateFilter) {
@@ -202,6 +202,50 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
       maxHeight: '90vh',
       panelClass: 'timesheet-modal-dialog',
       data: modalData
+    });
+  }
+
+  FindRecordByName(employee: any): void {
+    this.isLoading = true;
+
+    // Cria o objeto de requisição com o nome do funcionário e filtros padrão
+    const request: ITimeSheetRequest = {
+      status: 'all', // Filtro padrão para status
+      abono: 'none', // Filtro padrão para abono
+      startDate: '', // Sem data inicial
+      endDate: '', // Sem data final
+    };
+
+    // Usa o método find() do serviço para buscar os registros
+    this._timeSheetService.find(request).subscribe({
+      next: (response: ITimeSheetResponse) => {
+        // Filtra os registros pelo nome do funcionário
+        const employeeRecords = response.records.filter(record =>
+          record.NOME.toLowerCase() === employee.name.toLowerCase()
+        );
+
+        // Prepara os dados para a modal
+        const modalData = {
+          employeeName: employee.name,
+          records: employeeRecords
+        };
+
+        // Abre a modal com os registros do funcionário
+        this._dialog.open(TimesheetModalComponent, {
+          width: '90vw',
+          maxWidth: '90vw',
+          height: '90vh',
+          maxHeight: '90vh',
+          panelClass: 'timesheet-modal-dialog',
+          data: modalData
+        });
+
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao buscar registros de ponto:', error);
+        this.isLoading = false;
+      }
     });
   }
 

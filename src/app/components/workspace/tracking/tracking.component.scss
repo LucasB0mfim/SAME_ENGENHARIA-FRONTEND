@@ -1,0 +1,25 @@
+.tracking {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  font-size: 11px;
+
+  &__main-section {
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.table {
+  width: 100%;
+
+  &__head {
+    width: 100%;
+  }
+
+
+}
+

@@ -9,7 +9,8 @@ import { ITimeSheetResponse } from '../interfaces/timesheet-response.interface';
 })
 export class TimeSheetService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/reports/timeheet/filters';
+  private readonly _apiUrl1 = 'http://localhost:3000/same-engenharia/api/reports/timesheet';
+  private readonly _apiUrl2 = 'http://localhost:3000/same-engenharia/api/reports/timesheet/filters';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -19,7 +20,7 @@ export class TimeSheetService {
 
   find(request: ITimeSheetRequest): Observable<ITimeSheetResponse> {
     const headers = this._createHeaders();
-    return this._httpClient.post<ITimeSheetResponse>(this._apiUrl, request, { headers });
+    return this._httpClient.post<ITimeSheetResponse>(this._apiUrl2, request, { headers });
   }
 
   getEmployeeTimesheet(
@@ -53,6 +54,6 @@ export class TimeSheetService {
       body.abono = abono;
     }
 
-    return this._httpClient.post<ITimeSheetResponse>(this._apiUrl, body, { headers });
+    return this._httpClient.post<ITimeSheetResponse>(this._apiUrl1, body, { headers });
   }
 }
