@@ -8,9 +8,9 @@ import { authGuard } from './core/guard/auth.guard';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
-import { ConstructionComponent } from './components/workspace/construction/construction.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
+import { ExperienceComponent } from './components/workspace/experience/experience.component';
 
 export const routes: Routes = [
   {
@@ -38,11 +38,11 @@ export const routes: Routes = [
     children: [
       { path: '', component: GeneralComponent },
       { path: 'welcome', component: GeneralComponent },
-      { path: 'time-sheet', component: TimeSheetComponent },
-      { path: 'tracking', component: TrackingComponent },
-      { path: 'human-resources', component: HumanResourcesComponent },
       { path: 'reports', component: ReportsComponent },
-      { path: 'construction', component: ConstructionComponent }
+      { path: 'experience', component: ExperienceComponent },
+      { path: 'tracking', component: TrackingComponent },
+      { path: 'time-sheet', component: TimeSheetComponent },
+      { path: 'human-resources', component: HumanResourcesComponent },
     ]
   },
   {

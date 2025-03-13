@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { TrackingService } from '../../../core/services/tracking.service';
 import { TitleService } from '../../../core/services/title.service';
 
-
 @Component({
   selector: 'app-tracking',
   imports: [CommonModule],

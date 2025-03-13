@@ -1,0 +1,34 @@
+<div class="experience">
+  <div class="experience__main-section">
+    <table class="table">
+      <thead class="table__head">
+        <tr class="table__head-row">
+          <th class="table__header table__header-small">CHAPA</th>
+          <th class="table__header table__header-small">STATUS</th>
+          <th class="table__header table__header-small">ESTADO</th>
+          <th class="table__header table__header-medium">CENTRO DE CUSTO</th>
+          <th class="table__header table__header-medium">FUNÇÃO</th>
+          <th class="table__header table__header-large">FUNCIONARIO</th>
+          <th class="table__header table__header-medium">DATA ADMISSÃO</th>
+        </tr>
+      </thead>
+    </table>
+
+    <div class="table__body-container">
+      <table class="table">
+        <tbody class="table__body">
+          <tr class="table__body-row" *ngFor="let data of records">
+            <td class="table__data table__data-border"></td>
+            <td class="table__data table__data-small">{{ data.CHAPA }}</td>
+            <td class="table__data table__data-small">{{ data.STATUS }}</td>
+            <td class="table__data table__data-small">{{ data.ESTADO }}</td>
+            <td class="table__data table__data-medium">{{ data['CENTRO DE CUSTO'] }}</td>
+            <td class="table__data table__data-medium">{{ data['FUNÇÃO'] }}</td>
+            <td class="table__data table__data-large">{{ data.FUNCIONARIO }}</td>
+            <td class="table__data table__data-medium">{{ data['DATA ADMISSÃO'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
