@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../../core/services/dashboard.service';
+import { Component, inject, OnInit } from '@angular/core';
+
 import { TitleService } from '../../../core/services/title.service';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 interface EmployeeData {
   name: string;

@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TrackingService } from '../../../core/services/tracking.service';
+import { Component, inject } from '@angular/core';
+
 import { TitleService } from '../../../core/services/title.service';
+import { TrackingService } from '../../../core/services/tracking.service';
 
 @Component({
   selector: 'app-tracking',

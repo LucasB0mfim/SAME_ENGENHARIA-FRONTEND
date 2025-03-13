@@ -1,7 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { Component, inject, OnInit } from '@angular/core';
+
 import { TitleService } from '../../../core/services/title.service';
 
 @Component({

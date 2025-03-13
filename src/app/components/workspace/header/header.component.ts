@@ -1,8 +1,9 @@
-import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+
 import { TitleService } from '../../../core/services/title.service';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-header',

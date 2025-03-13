@@ -1,12 +1,14 @@
-import { Component, Inject, inject, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subscription } from 'rxjs';
-import { ITimesheetRecord } from '../../../core/interfaces/timesheet-response.interface';
-import { TimesheetReportService } from '../../../core/services/timesheet-report.service';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Component, Inject, inject, OnInit, OnDestroy } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+
 import { TimeSheetService } from '../../../core/services/time-sheet.service';
+import { TimesheetReportService } from '../../../core/services/timesheet-report.service';
+
+import { ITimesheetRecord } from '../../../core/interfaces/timesheet-response.interface';
 
 @Component({
   selector: 'app-timesheet-modal',

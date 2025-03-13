@@ -12,7 +12,7 @@ import { IExperienceRecord } from '../../../core/interfaces/experience-response.
 @Component({
   selector: 'app-experience',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule],
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss'
 })

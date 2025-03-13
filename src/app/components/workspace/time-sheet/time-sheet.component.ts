@@ -1,17 +1,20 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ThemeService } from '../../../core/services/theme.service';
-import { IEmployeesRecord, IEmployeesResponse } from '../../../core/interfaces/employees-response.interface';
-import { FindEmployeesService } from '../../../core/services/find-employees.service';
-import { TimesheetModalComponent } from '../timesheet-modal/timesheet-modal.component';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { TimesheetModalComponent } from '../timesheet-modal/timesheet-modal.component';
+
+import { TitleService } from '../../../core/services/title.service';
+import { ThemeService } from '../../../core/services/theme.service';
 import { TimeSheetService } from '../../../core/services/time-sheet.service';
+import { FindEmployeesService } from '../../../core/services/find-employees.service';
+
 import { ITimeSheetRequest } from '../../../core/interfaces/timesheet-request.interface';
 import { ITimesheetRecord, ITimeSheetResponse } from '../../../core/interfaces/timesheet-response.interface';
-import { TitleService } from '../../../core/services/title.service';
+import { IEmployeesRecord, IEmployeesResponse } from '../../../core/interfaces/employees-response.interface';
 
 @Component({
   selector: 'app-time-sheet',
