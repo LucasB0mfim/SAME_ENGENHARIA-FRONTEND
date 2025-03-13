@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TimeSheetService } from '../../../core/services/time-sheet.service';
 import { ITimeSheetRequest } from '../../../core/interfaces/timesheet-request.interface';
 import { ITimesheetRecord, ITimeSheetResponse } from '../../../core/interfaces/timesheet-response.interface';
+import { TitleService } from '../../../core/services/title.service';
 
 @Component({
   selector: 'app-time-sheet',
@@ -25,6 +26,7 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
   private readonly _dialog = inject(MatDialog);
   private readonly _timeSheetService = inject(TimeSheetService);
   private themeSubscription: Subscription | null = null;
+  private _titleService = inject(TitleService);
 
   defaultAvatar: string = '';
   isDarkTheme: boolean = false;
@@ -53,6 +55,7 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
     this.updateDefaultAvatar();
     this.findEmployees();
+    this._titleService.setTitle('Monitorar Ponto')
 
     // Se inscreve para mudanças de tema
     this.themeSubscription = this._themeService.getThemeState().subscribe(isDark => {

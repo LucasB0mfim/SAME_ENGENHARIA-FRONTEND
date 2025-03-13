@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import { TitleService } from '../../../core/services/title.service';
 
 interface EmployeeData {
   name: string;
@@ -18,6 +19,7 @@ export class GeneralComponent implements OnInit {
   username: string = 'Carregando...';
 
   private readonly _dashboardService = inject(DashboardService);
+  private _titleService = inject(TitleService);
 
   backgroundStyle: string = '';
   textColor: string = '';
@@ -25,6 +27,7 @@ export class GeneralComponent implements OnInit {
   ngOnInit() {
     this.applyDayPeriodStyle();
     this.loadEmployeeData();
+    this._titleService.setTitle('Dashboard')
   }
 
   loadEmployeeData(): void {

@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SidebarComponent } from '../../components/workspace/sidebar/menu.component';
 import { HeaderComponent } from '../../components/workspace/header/header.component';
 import { IEmployeeResponse } from '../../core/interfaces/employee-response.interface';
+import { TitleService } from '../../core/services/title.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,23 +34,26 @@ export class DashboardComponent implements OnInit {
   avatarIconDark: string = 'assets/images/avatarIconDark.png';
   avatarIconLight: string = 'assets/images/avatarIconLight.png';
 
-  name: string = 'Carregando';
-  username: string = 'Carregando...';
-  avatar: string = '';
+  name: string = '...';
+  username: string = '...';
+  avatar: string = '...';
 
   private readonly _dashboardService = inject(DashboardService);
   private readonly _loginService = inject(LoginService);
   private readonly _themeService = inject(ThemeService);
+  private _titleService = inject(TitleService);
 
   constructor() {
     // Obter o tema inicial do localStorage
     this.isDarkTheme = localStorage.getItem('theme') === 'dark';
     this.toggleIconTheme();
     this.applyTheme();
+    this._titleService.setTitle('Dashboard')
   }
 
   ngOnInit() {
     this.loadEmployeeData();
+
   }
 
   loadEmployeeData(): void {
