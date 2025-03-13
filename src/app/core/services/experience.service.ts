@@ -10,7 +10,7 @@ export class ExperienceService {
   private readonly _httpClient = inject(HttpClient);
   private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/reports/experience';
 
-  findAll(): Observable<IExperienceResponse> {
+  find(): Observable<IExperienceResponse> {
     return this._httpClient.get<IExperienceResponse>(this._apiUrl);
   }
 }

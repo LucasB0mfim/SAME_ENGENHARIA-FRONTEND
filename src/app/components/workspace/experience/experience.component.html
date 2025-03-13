@@ -18,7 +18,7 @@
       <table class="table">
         <tbody class="table__body">
           <tr class="table__body-row" *ngFor="let data of records">
-            <td class="table__data table__data-border"></td>
+            <td class="table__data table__data-border" [ngClass]="borderExperience(data['DATA ADMISSÃO'])"></td>
             <td class="table__data table__data-small">{{ data.CHAPA }}</td>
             <td class="table__data table__data-small">{{ data.STATUS }}</td>
             <td class="table__data table__data-small">{{ data.ESTADO }}</td>
