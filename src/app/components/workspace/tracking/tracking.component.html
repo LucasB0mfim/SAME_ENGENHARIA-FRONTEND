@@ -1,44 +1,46 @@
 <div class="tracking">
-
   <div class="tracking__main-section">
     <table class="table">
       <thead class="table__head">
         <tr class="table__head-row">
-          <th class="table__header">CC</th>
-          <th class="table__header">MOV</th>
-          <th class="table__header">ID</th>
-          <th class="table__header">CRIAÇÃO ID</th>
-          <th class="table__header">APV ID</th>
-          <th class="table__header">OC</th>
-          <th class="table__header">CRIAÇÃO OC</th>
-          <th class="table__header">APV OC</th>
-          <th class="table__header">PREV Entrega</th>
-          <th class="table__header">Fornecedor</th>
-          <th class="table__header">Material</th>
-          <th class="table__header">QTD</th>
-          <th class="table__header">UND</th>
+          <th class="table__header table__header-large">CC</th>
+          <th class="table__header table__header-small">MOV</th>
+          <th class="table__header table__header-small">ID</th>
+          <th class="table__header table__header-medium">CRIAÇÃO ID</th>
+          <th class="table__header table__header-medium">APV ID</th>
+          <th class="table__header table__header-medium">OC</th>
+          <th class="table__header table__header-medium">CRIAÇÃO OC</th>
+          <th class="table__header table__header-medium">APV OC</th>
+          <th class="table__header table__header-medium">PREV ENTREGA</th>
+          <th class="table__header table__header-large">FORNECEDOR</th>
+          <th class="table__header table__header-large">MATERIAL</th>
+          <th class="table__header table__header-small">QTD</th>
+          <th class="table__header table__header-small">UND</th>
         </tr>
       </thead>
-
-      <tbody class="table__body">
-        <tr class="table__row" *ngFor="let data of tracking">
-          <td class="table__data table__data-border"></td>
-          <td class="table__data">{{ data.CENTRO_CUSTO }}</td>
-          <td class="table__data">{{ data.MOVIMENTO }}</td>
-          <td class="table__data">{{ data.ID }}</td>
-          <td class="table__data">{{ data.ELABORACAO_PEDIDO }}</td>
-          <td class="table__data">{{ data.APROVACAO_ID }}</td>
-          <td class="table__data">{{ data.NUMERO_OC }}</td>
-          <td class="table__data">{{ data.ELABORACAO_OC }}</td>
-          <td class="table__data">{{ data.APROVACAO_OC }}</td>
-          <td class="table__data">{{ data.DATA_ENTREGA }}</td>
-          <td class="table__data">{{ data.FORNECEDOR }}</td>
-          <td class="table__data">{{ data.MATERIAL }}</td>
-          <td class="table__data">{{ data.QUANTIDADE_TOTAL }}</td>
-          <td class="table__data">{{ data.UNIDADE }}</td>
-        </tr>
-      </tbody>
     </table>
-  </div>
 
+    <div class="table__body-container">
+      <table class="table">
+        <tbody class="table__body">
+          <tr class="table__body-row" *ngFor="let data of tracking">
+            <td class="table__data table__data-border"></td>
+            <td class="table__data table__data-large">{{ data.CENTRO_CUSTO }}</td>
+            <td class="table__data table__data-small">{{ data.MOVIMENTO }}</td>
+            <td class="table__data table__data-small">{{ data.ID }}</td>
+            <td class="table__data table__data-medium">{{ data.ELABORACAO_PEDIDO }}</td>
+            <td class="table__data table__data-medium">{{ data.APROVACAO_ID }}</td>
+            <td class="table__data table__data-medium">{{ data.NUMERO_OC }}</td>
+            <td class="table__data table__data-medium">{{ data.ELABORACAO_OC }}</td>
+            <td class="table__data table__data-medium">{{ data.APROVACAO_OC }}</td>
+            <td class="table__data table__data-medium">{{ data.DATA_ENTREGA }}</td>
+            <td class="table__data table__data-large">{{ data.FORNECEDOR }}</td>
+            <td class="table__data table__data-large">{{ data.MATERIAL }}</td>
+            <td class="table__data table__data-small">{{ data.QUANTIDADE_TOTAL }}</td>
+            <td class="table__data table__data-small">{{ data.UNIDADE }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
