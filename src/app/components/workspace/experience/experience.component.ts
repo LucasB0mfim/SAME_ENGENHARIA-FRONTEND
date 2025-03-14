@@ -7,6 +7,8 @@ import { TitleService } from '../../../core/services/title.service';
 import { ExperienceService } from '../../../core/services/experience.service';
 
 import { IExperienceRecord } from '../../../core/interfaces/experience-response.interface';
+import { Data } from '@angular/router';
+import { first } from 'rxjs';
 
 
 @Component({
@@ -34,23 +36,25 @@ export class ExperienceComponent implements OnInit {
     });
   }
 
-  experienceTime(admissionDate: Date): number {
-    const currentDate = new Date();
-    const admission = new Date(admissionDate);
-    return differenceInCalendarDays(currentDate, admission);
+  experienceTime(experienceDate: Date): number {
+    const today = new Date();
+    const period = new Date(experienceDate);
+    return differenceInCalendarDays(period, today) + 1;
   }
 
-  borderExperience(admissionDate: Date) {
-    const days = this.experienceTime(admissionDate);
+  borderExperience(firstExperience: Date, secondExperience: Date) {
+    const firstDate = this.experienceTime(firstExperience);
+    const secondDate = this.experienceTime(secondExperience);
 
-    if (days <= 30) {
-      return 'one-month';
-    } else if (days <= 60) {
-      return 'two-months';
-    } else if (days <= 90) {
-      return 'three-months';
+    if (firstDate > 0 || secondDate > 0) {
+      if ((firstDate > 0 && firstDate <= 10) || (secondDate > 0 && secondDate <= 10)) {
+        return 'red';
+      } else {
+        return 'greenLight';
+      }
     } else {
-      return 'many-months';
+      return 'blue';
     }
   }
+
 }

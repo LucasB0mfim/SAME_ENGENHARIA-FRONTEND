@@ -6,6 +6,8 @@ export interface IExperienceRecord {
   CHAPA: number,
   FUNCIONARIO: string,
   "DATA ADMISSÃO": Date,
+  "PRIMEIRO PERIODO": Date,
+  "SEGUNDO PERIODO": Date,
 }
 
 export interface IExperienceResponse {

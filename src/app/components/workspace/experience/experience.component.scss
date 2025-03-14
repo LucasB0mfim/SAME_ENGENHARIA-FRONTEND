@@ -37,18 +37,18 @@
     width: auto;
     height: 100%;
     font-size: 14px;
-    color: var(--third-color);
+    color: #878787;
 
     &-small {
-      width: 4.5%;
+      width: 6%;
     }
 
     &-medium {
-      width: 15%;
+      width: 13.7%;
     }
 
     &-large {
-      width: 25%;
+      width: 13.7%;
     }
   }
 
@@ -113,33 +113,29 @@
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
 
-      &.one-month {
-        background-color: #ffd350;
+      &.greenLight {
+        background-color: 	#32CD32;
       }
 
-      &.two-months {
-        background-color: #FF9800;
+      &.blue {
+        background-color: #0000FF;
       }
 
-      &.three-months {
-        background-color: #F44336;
-      }
-
-      &.many-months {
-        background-color: #4CAF50;
+      &.red {
+        background-color: #FF0000;
       }
     }
 
     &-small {
-      width: 4.5%;
+      width: 6%;
     }
 
     &-medium {
-      width: 15%;
+      width: 13.7%;
     }
 
     &-large {
-      width: 25%;
+      width: 13.7%;
     }
   }
 }
