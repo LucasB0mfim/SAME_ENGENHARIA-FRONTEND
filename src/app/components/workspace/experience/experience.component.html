@@ -1,4 +1,33 @@
 <div class="experience">
+  <div class="experience__top-section">
+    <div class="filters">
+      <label for="name">Colaborador:</label>
+      <input type="text" id="name" placeholder="Ex: Lucas Bomfim" [(ngModel)]="employeeName"
+        (ngModelChange)="searchEmployee()">
+    </div>
+
+    <div class="filters">
+      <label for="centroCusco">Centro de Custo:</label>
+      <input type="text" id="centroCusco" placeholder="Ex: BRK" [(ngModel)]="centroCustoName"
+        (ngModelChange)="searchCentroCusto()">
+    </div>
+
+    <div class="filters">
+      <label>Situação:</label>
+      <div class="select-container">
+        <select [(ngModel)]="experienceFilter"
+                (change)="filters()"
+                (mousedown)="toggleSelect()"
+                #situacaoSelect>
+          <option value="all">Todos</option>
+          <option value="withExperience">Em experiência</option>
+          <option value="withoutExperience">Sem experiência</option>
+        </select>
+        <mat-icon class="select-icon" [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
+      </div>
+    </div>
+  </div>
+
   <div class="experience__main-section">
     <table class="table">
       <thead class="table__head">
@@ -20,7 +49,8 @@
       <table class="table">
         <tbody class="table__body">
           <tr class="table__body-row" *ngFor="let data of records">
-            <td class="table__data table__data-border" [ngClass]="borderExperience(data['PRIMEIRO PERIODO'], data['SEGUNDO PERIODO'])"></td>
+            <td class="table__data table__data-border"
+              [ngClass]="borderExperience(data['PRIMEIRO PERIODO'], data['SEGUNDO PERIODO'])"></td>
             <td class="table__data table__data-small">{{ data.CHAPA }}</td>
             <td class="table__data table__data-small">{{ data.STATUS }}</td>
             <td class="table__data table__data-small">{{ data.ESTADO }}</td>
