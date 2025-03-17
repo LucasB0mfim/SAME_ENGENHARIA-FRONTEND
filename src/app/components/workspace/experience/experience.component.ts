@@ -99,6 +99,8 @@ export class ExperienceComponent implements OnInit {
     }
 
     this.records = filteredRecords;
+
+    // Quando um item é selecionado, o select fecha
     this.isSelectOpen = false;
   }
 
@@ -111,8 +113,15 @@ export class ExperienceComponent implements OnInit {
   }
 
   toggleSelect() {
+    // O mousedown ocorre antes do select realmente abrir ou fechar
+    // Então invertemos o estado atual
     setTimeout(() => {
       this.isSelectOpen = !this.isSelectOpen;
     }, 0);
+  }
+
+  resetSelectIcon() {
+    // Quando o select perde o foco (clique fora), o ícone retorna à posição original
+    this.isSelectOpen = false;
   }
 }

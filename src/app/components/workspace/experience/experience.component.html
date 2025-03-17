@@ -18,6 +18,7 @@
         <select [(ngModel)]="experienceFilter"
                 (change)="filters()"
                 (mousedown)="toggleSelect()"
+                (blur)="resetSelectIcon()"
                 #situacaoSelect>
           <option value="all">Todos</option>
           <option value="withExperience">Em experiência</option>
