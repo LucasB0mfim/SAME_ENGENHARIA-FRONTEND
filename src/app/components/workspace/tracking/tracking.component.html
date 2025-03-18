@@ -1,43 +1,66 @@
 <div class="tracking">
-  <div class="tracking__main-section">
+
+  <div class="tracking-top__section">
+    <div class="filters">
+      <label for="CentroCusto">Centro de Custo:</label>
+      <input type="text" id="CentroCusto" placeholder="Ex: Emlurb" [(ngModel)]="centroCustoName" (ngModelChange)="searchCentroCusto()">
+    </div>
+
+    <div class="filters">
+      <label for="id">ID:</label>
+      <input type="text" id="id" placeholder="Ex: 55555" [(ngModel)]="idName" (ngModelChange)="searchId()">
+    </div>
+
+    <div class="filters">
+      <label for="oc">OC:</label>
+      <input type="text" id="oc" placeholder="Ex: 10008" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
+    </div>
+
+    <div class="filters">
+      <label for="material">Material:</label>
+      <input type="text" id="material" placeholder="Ex: Cimento" [(ngModel)]="materialName" (ngModelChange)="searchMaterial()">
+    </div>
+  </div>
+
+  <div class="tracking-main__section">
     <table class="table">
-      <thead class="table__head">
-        <tr class="table__head-row">
-          <th class="table__header table__header-large">CC</th>
-          <th class="table__header table__header-small">MOV</th>
-          <th class="table__header table__header-small">ID</th>
-          <th class="table__header table__header-medium">CRIAÇÃO ID</th>
-          <th class="table__header table__header-medium">APV ID</th>
-          <th class="table__header table__header-medium">OC</th>
-          <th class="table__header table__header-medium">CRIAÇÃO OC</th>
-          <th class="table__header table__header-medium">APV OC</th>
-          <th class="table__header table__header-medium">PREV ENTREGA</th>
-          <th class="table__header table__header-large">FORNECEDOR</th>
-          <th class="table__header table__header-large">MATERIAL</th>
-          <th class="table__header table__header-small">QTD</th>
-          <th class="table__header table__header-small">UND</th>
+      <thead class="table-head">
+        <tr class="table-head__row">
+          <th class="table-header table-header__large">CC</th>
+          <th class="table-header table-header__small">MOV</th>
+          <th class="table-header table-header__small">ID</th>
+          <th class="table-header table-header__medium">CRIAÇÃO ID</th>
+          <th class="table-header table-header__medium">APV ID</th>
+          <th class="table-header table-header__medium">OC</th>
+          <th class="table-header table-header__medium">CRIAÇÃO OC</th>
+          <th class="table-header table-header__medium">APV OC</th>
+          <th class="table-header table-header__medium">PREV ENTREGA</th>
+          <th class="table-header table-header__large">FORNECEDOR</th>
+          <th class="table-header table-header__large">MATERIAL</th>
+          <th class="table-header table-header__small">QTD</th>
+          <th class="table-header table-header__small">UND</th>
         </tr>
       </thead>
     </table>
 
-    <div class="table__body-container">
+    <div class="table-body__container">
       <table class="table">
-        <tbody class="table__body">
-          <tr class="table__body-row" *ngFor="let data of tracking">
-            <td class="table__data table__data-border"></td>
-            <td class="table__data table__data-large">{{ data.CENTRO_CUSTO }}</td>
-            <td class="table__data table__data-small">{{ data.MOVIMENTO }}</td>
-            <td class="table__data table__data-small">{{ data.ID }}</td>
-            <td class="table__data table__data-medium">{{ data.ELABORACAO_PEDIDO }}</td>
-            <td class="table__data table__data-medium">{{ data.APROVACAO_ID }}</td>
-            <td class="table__data table__data-medium">{{ data.NUMERO_OC }}</td>
-            <td class="table__data table__data-medium">{{ data.ELABORACAO_OC }}</td>
-            <td class="table__data table__data-medium">{{ data.APROVACAO_OC }}</td>
-            <td class="table__data table__data-medium">{{ data.DATA_ENTREGA }}</td>
-            <td class="table__data table__data-large">{{ data.FORNECEDOR }}</td>
-            <td class="table__data table__data-large">{{ data.MATERIAL }}</td>
-            <td class="table__data table__data-small">{{ data.QUANTIDADE_TOTAL }}</td>
-            <td class="table__data table__data-small">{{ data.UNIDADE }}</td>
+        <tbody class="table-body">
+          <tr class="table-body__row" *ngFor="let data of records">
+            <td class="table-data table-data__border"></td>
+            <td class="table-data table-data__large">{{ data.CENTRO_CUSTO }}</td>
+            <td class="table-data table-data__small">{{ data.MOVIMENTO }}</td>
+            <td class="table-data table-data__small">{{ data.ID }}</td>
+            <td class="table-data table-data__medium">{{ data.ELABORACAO_PEDIDO }}</td>
+            <td class="table-data table-data__medium">{{ data.APROVACAO_ID }}</td>
+            <td class="table-data table-data__medium">{{ data.NUMERO_OC }}</td>
+            <td class="table-data table-data__medium">{{ data.ELABORACAO_OC }}</td>
+            <td class="table-data table-data__medium">{{ data.APROVACAO_OC }}</td>
+            <td class="table-data table-data__medium">{{ data.DATA_ENTREGA }}</td>
+            <td class="table-data table-data__large">{{ data.FORNECEDOR }}</td>
+            <td class="table-data table-data__large">{{ data.MATERIAL }}</td>
+            <td class="table-data table-data__small">{{ data.QUANTIDADE_TOTAL }}</td>
+            <td class="table-data table-data__small">{{ data.UNIDADE }}</td>
           </tr>
         </tbody>
       </table>
