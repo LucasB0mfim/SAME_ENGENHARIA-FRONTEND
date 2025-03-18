@@ -1,43 +1,39 @@
 <div class="timesheet">
-  <div class="timesheet__filter-section">
-    <form class="timesheet-filter">
-      <div class="timesheet-filter__field">
-        <label for="employeeName" class="timesheet-filter__label">Nome do colaborador:</label>
-        <input type="text" class="timesheet-filter__input" name="employeeName" placeholder="Ex: João Batista"
-          [(ngModel)]="employeeNameFilter" (input)="filterEmployees()">
+
+  <div class="timesheet-top__section">
+    <form class="filter-form">
+      <div class="filter-form__field">
+        <label for="employeeName">Colaborador:</label>
+        <input type="text" id="employeeName" name="employeeName" placeholder="Ex: João Batista" [(ngModel)]="employeeNameFilter"
+          (input)="filterEmployees()">
       </div>
 
-      <div class="timesheet-filter__field">
-        <label for="status" class="timesheet-filter__label">Status:</label>
-        <select name="status" id="status" class="timesheet-filter__select" [(ngModel)]="statusFilter">
+      <div class="filter-form__field">
+        <label for="status">Status:</label>
+        <select id="status" name="status" [(ngModel)]="statusFilter">
           <option value="all">Todos</option>
-          <option value="presentes">Presentes</option>
-          <option value="ausentes">Ausentes</option>
+          <option value="presents">Presentes</option>
+          <option value="absent">Ausentes</option>
+          <option value="vacation">Férias</option>
+          <option value="paid">Abono</option>
+          <option value="certificate">Atestado</option>
         </select>
       </div>
 
-      <div class="timesheet-filter__field">
-        <label for="allowance" class="timesheet-filter__label">Abono:</label>
-        <select name="allowance" id="allowance" class="timesheet-filter__select" [(ngModel)]="allowanceFilter">
-          <option value="none">Nenhum</option>
-          <option value="Férias">Férias</option>
-          <option value="Atestado Médico">Atestado</option>
-          <option value="paid">Abonado</option>
-        </select>
+      <div class="filter-form__field">
+        <label for="dateStart">Data inicial:</label>
+        <input type="date" id="dateStart" name="dateStart" [(ngModel)]="startDateFilter">
       </div>
 
-      <div class="timesheet-filter__field">
-        <label for="dateStart" class="timesheet-filter__label">Data inicial:</label>
-        <input type="date" id="dateStart" class="timesheet-filter__input" [(ngModel)]="startDateFilter"
-          name="startDate">
+      <div class="filter-form__field">
+        <label for="dateEnd">Data final:</label>
+        <input type="date" id="dateEnd" name="dateEnd" [(ngModel)]="endDateFilter">
       </div>
 
-      <div class="timesheet-filter__field">
-        <label for="dateEnd" class="timesheet-filter__label">Data final:</label>
-        <input type="date" id="dateEnd" class="timesheet-filter__input" [(ngModel)]="endDateFilter" name="endDate">
+      <div class="filter-form__button">
+        <button type="button" (click)="search()">Pesquisar</button>
+        <button type="button">Limpar</button>
       </div>
-
-      <button type="button" class="timesheet-filter__button" (click)="search()">Pesquisar</button>
     </form>
   </div>
 
@@ -60,7 +56,7 @@
 
           <td class="table__data table__data-button">
             <button type="button" (click)="FindRecordByName(employee)">
-              Detalhes
+              <mat-icon>visibility</mat-icon>
             </button>
           </td>
         </tr>

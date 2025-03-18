@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -19,17 +20,19 @@ import { IEmployeesRecord, IEmployeesResponse } from '../../../core/interfaces/e
 @Component({
   selector: 'app-time-sheet',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, FormsModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MatDialogModule, FormsModule, MatProgressSpinnerModule, MatIconModule],
   templateUrl: './time-sheet.component.html',
   styleUrl: './time-sheet.component.scss'
 })
 export class TimeSheetComponent implements OnInit, OnDestroy {
-  private readonly _findEmployees = inject(FindEmployeesService);
-  private readonly _themeService = inject(ThemeService);
+
   private readonly _dialog = inject(MatDialog);
-  private readonly _timeSheetService = inject(TimeSheetService);
   private themeSubscription: Subscription | null = null;
+
   private _titleService = inject(TitleService);
+  private readonly _themeService = inject(ThemeService);
+  private readonly _timeSheetService = inject(TimeSheetService);
+  private readonly _findEmployees = inject(FindEmployeesService);
 
   defaultAvatar: string = '';
   isDarkTheme: boolean = false;
@@ -42,8 +45,8 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
 
   // Novos campos para os filtros
   statusFilter: string = 'all';
-  allowanceFilter: string = 'none';
-  startDateFilter: string = '';
+  allowanceFilter: string = '';
+  startDateFilter: string = '02/02/2025';
   endDateFilter: string = '';
 
   // Flag para indicar se estamos carregando dados
@@ -107,13 +110,18 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
   search(): void {
     this.isLoading = true;
 
+    // Define endDateFilter como a data de hoje se não for fornecido
+    if (!this.endDateFilter) {
+      const today = new Date();
+      this.endDateFilter = `${today.getMonth() + 1}/${today.getDate() - 1}/${today.getFullYear()}`;
+    }
+
     // Formatar as datas para o padrão brasileiro
     const formattedStartDate = this.formatDate(this.startDateFilter);
     const formattedEndDate = this.formatDate(this.endDateFilter);
 
     const request: ITimeSheetRequest = {
       status: this.statusFilter,
-      abono: this.allowanceFilter,
       startDate: formattedStartDate,
       endDate: formattedEndDate
     };
@@ -216,8 +224,8 @@ export class TimeSheetComponent implements OnInit, OnDestroy {
 
     // Cria o objeto de requisição com o nome do funcionário e filtros padrão
     const request: ITimeSheetRequest = {
-      status: 'all', // Filtro padrão para status
-      abono: 'none', // Filtro padrão para abono
+      status: '', // Filtro padrão para status
+      abono: '', // Filtro padrão para abono
       startDate: '', // Sem data inicial
       endDate: '', // Sem data final
     };

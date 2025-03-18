@@ -1,6 +1,6 @@
 export interface ITimeSheetRequest {
   status: string,
-  abono: string,
+  abono?: string,
   startDate: string,
   endDate: string,
 }

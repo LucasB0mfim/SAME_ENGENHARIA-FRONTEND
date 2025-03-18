@@ -3,11 +3,12 @@ export interface IExperienceRecord {
   ESTADO: string,
   "CENTRO DE CUSTO": string,
   "FUNÇÃO": string,
-  CHAPA: number,
+  CHAPA: string,
   FUNCIONARIO: string,
   "DATA ADMISSÃO": Date,
   "PRIMEIRO PERIODO": Date,
   "SEGUNDO PERIODO": Date,
+  "VIAJAR": string,
 }
 
 export interface IExperienceResponse {
