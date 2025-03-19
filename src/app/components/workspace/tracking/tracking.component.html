@@ -1,9 +1,25 @@
 <div class="tracking">
-
   <div class="tracking-top__section">
     <div class="filters">
       <label for="CentroCusto">Centro de Custo:</label>
-      <input type="text" id="CentroCusto" placeholder="Ex: Emlurb" [(ngModel)]="centroCustoName" (ngModelChange)="searchCentroCusto()">
+      <div class="select-container">
+        <select id="CentroCusto" [(ngModel)]="centroCustoName" (ngModelChange)="searchCentroCusto()">
+          <option value="">Todos</option>
+          <option *ngFor="let centro of centroCusto" [value]="centro">{{ centro }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters">
+      <label for="material">Material:</label>
+      <input type="text" id="material" placeholder="Ex: Cimento" [(ngModel)]="materialName"
+        (ngModelChange)="searchMaterial()">
+    </div>
+
+    <div class="filters">
+      <label for="movimento">Movimento:</label>
+      <input type="text" id="movimento" placeholder="Ex: 1000" [(ngModel)]="movimentoName"
+        (ngModelChange)="searchMovimento()">
     </div>
 
     <div class="filters">
@@ -15,55 +31,96 @@
       <label for="oc">OC:</label>
       <input type="text" id="oc" placeholder="Ex: 10008" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
     </div>
-
-    <div class="filters">
-      <label for="material">Material:</label>
-      <input type="text" id="material" placeholder="Ex: Cimento" [(ngModel)]="materialName" (ngModelChange)="searchMaterial()">
-    </div>
   </div>
 
   <div class="tracking-main__section">
-    <table class="table">
-      <thead class="table-head">
-        <tr class="table-head__row">
-          <th class="table-header table-header__large">CC</th>
-          <th class="table-header table-header__small">MOV</th>
-          <th class="table-header table-header__small">ID</th>
-          <th class="table-header table-header__medium">CRIAÇÃO ID</th>
-          <th class="table-header table-header__medium">APV ID</th>
-          <th class="table-header table-header__medium">OC</th>
-          <th class="table-header table-header__medium">CRIAÇÃO OC</th>
-          <th class="table-header table-header__medium">APV OC</th>
-          <th class="table-header table-header__medium">PREV ENTREGA</th>
-          <th class="table-header table-header__large">FORNECEDOR</th>
-          <th class="table-header table-header__large">MATERIAL</th>
-          <th class="table-header table-header__small">QTD</th>
-          <th class="table-header table-header__small">UND</th>
-        </tr>
-      </thead>
-    </table>
+    <div class="list-container">
+      <div class="list-item" *ngFor="let data of records; let i = index" [class.expanded]="expandedIndex === i">
+        <div class="list-header" (click)="toggleExpand(i)">
+          <div class="list-status" [ngStyle]="{'background-color': getStatusColor(data)}"></div>
 
-    <div class="table-body__container">
-      <table class="table">
-        <tbody class="table-body">
-          <tr class="table-body__row" *ngFor="let data of records">
-            <td class="table-data table-data__border"></td>
-            <td class="table-data table-data__large">{{ data.CENTRO_CUSTO }}</td>
-            <td class="table-data table-data__small">{{ data.MOVIMENTO }}</td>
-            <td class="table-data table-data__small">{{ data.ID }}</td>
-            <td class="table-data table-data__medium">{{ data.ELABORACAO_PEDIDO }}</td>
-            <td class="table-data table-data__medium">{{ data.APROVACAO_ID }}</td>
-            <td class="table-data table-data__medium">{{ data.NUMERO_OC }}</td>
-            <td class="table-data table-data__medium">{{ data.ELABORACAO_OC }}</td>
-            <td class="table-data table-data__medium">{{ data.APROVACAO_OC }}</td>
-            <td class="table-data table-data__medium">{{ data.DATA_ENTREGA }}</td>
-            <td class="table-data table-data__large">{{ data.FORNECEDOR }}</td>
-            <td class="table-data table-data__large">{{ data.MATERIAL }}</td>
-            <td class="table-data table-data__small">{{ data.QUANTIDADE_TOTAL }}</td>
-            <td class="table-data table-data__small">{{ data.UNIDADE }}</td>
-          </tr>
-        </tbody>
-      </table>
+          <div class="list-summary">
+            <div class="list-primary">
+              <span class="list-id">ID: {{ data.ID }}</span>
+              <span class="list-separator">|</span>
+              <span class="list-cc">{{ data.CENTRO_CUSTO }}</span>
+            </div>
+
+            <div class="list-secondary">
+              <span class="list-material">{{ data.MATERIAL }}</span>
+            </div>
+          </div>
+
+          <div class="list-metadata">
+            <div class="list-meta-item">
+              <span class="meta-label">Mov:</span>
+              <span class="meta-value">{{ data.MOVIMENTO || 'N/A' }}</span>
+            </div>
+
+            <div class="list-meta-item">
+              <span class="meta-label">OC:</span>
+              <span class="meta-value">{{ data.NUMERO_OC || 'N/A' }}</span>
+            </div>
+
+            <div class="list-meta-item">
+              <span class="meta-label">Entrega:</span>
+              <span class="meta-value">{{ data.DATA_ENTREGA || 'N/A' }}</span>
+            </div>
+
+            <div class="list-expand-icon">
+              <i class="arrow" [class.down]="expandedIndex === i"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-details" [class.show]="expandedIndex === i">
+          <div class="details-grid">
+            <div class="detail-group">
+              <h4>Material</h4>
+              <div class="detail-item full-width">
+                <span class="detail-label">Descrição:</span>
+                <span class="detail-value material-description">{{ data.MATERIAL }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Quantidade:</span>
+                <span class="detail-value">{{ data.QUANTIDADE_TOTAL }} {{ data.UNIDADE }}</span>
+              </div>
+            </div>
+
+            <div class="detail-group">
+              <h4>Detalhes do ID</h4>
+              <div class="detail-item">
+                <span class="detail-label">Criação ID:</span>
+                <span class="detail-value">{{ data.ELABORACAO_PEDIDO }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Aprovação ID:</span>
+                <span class="detail-value">{{ data.APROVACAO_ID || 'N/A' }}</span>
+              </div>
+            </div>
+
+            <div class="last">
+              <h4>Detalhes da OC</h4>
+              <div class="detail-item">
+                <span class="detail-label">Criação OC:</span>
+                <span class="detail-value">{{ data.ELABORACAO_OC || 'N/A' }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Fornecedor:</span>
+                <span class="detail-value">{{ data.FORNECEDOR || 'N/A' }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Aprovação OC:</span>
+                <span class="detail-value">{{ data.APROVACAO_OC || 'N/A' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-results" *ngIf="records.length === 0">
+        <p>Nenhum resultado encontrado.</p>
+      </div>
     </div>
   </div>
 </div>

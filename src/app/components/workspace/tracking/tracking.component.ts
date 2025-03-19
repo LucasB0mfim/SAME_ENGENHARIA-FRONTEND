@@ -15,12 +15,15 @@ import { ITrackingRecord } from '../../../core/interfaces/tracking-response.inte
 })
 export class TrackingComponent {
 
+  centroCusto: string[] = [];
+  expandedIndex: number = -1; // Nenhum item expandido inicialmente
   records: ITrackingRecord[] = [];
   allRecords: ITrackingRecord[] = [];
 
   idName: string = '';
   ocName: string = '';
   materialName: string = '';
+  movimentoName: string = '';
   centroCustoName: string = '';
 
   private _titleService = inject(TitleService);
@@ -36,6 +39,7 @@ export class TrackingComponent {
       next: (data) => {
         this.records = data.tracking;
         this.allRecords = [...data.tracking];
+        this.excludeDuplicates();
       },
       error: (error) => {
         console.error(error);
@@ -43,35 +47,68 @@ export class TrackingComponent {
     })
   }
 
+  excludeDuplicates() {
+    const uniqueValues = new Set<string>();
+
+    this.allRecords.forEach(record => {
+      uniqueValues.add(record.CENTRO_CUSTO);
+    });
+
+    this.centroCusto = Array.from(uniqueValues).sort();
+  }
+
+  // Método para expandir/contrair um item
+  toggleExpand(index: number): void {
+    if (this.expandedIndex === index) {
+      this.expandedIndex = -1; // Fecha o item
+    } else {
+      this.expandedIndex = index; // Abre o item clicado
+    }
+  }
+
+  getStatusColor(data: ITrackingRecord): string {
+    if (data.APROVACAO_OC) {
+      return '#32CD32'
+    } else {
+      return '#0000FF'
+    }
+  }
+
   filter() {
     let filteredRecords = [...this.allRecords];
 
     if (this.centroCustoName) {
-      const inputValue = this.centroCustoName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.CENTRO_CUSTO && data.CENTRO_CUSTO.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.idName) {
-      const inputValue = this.idName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.ID && data.ID.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.ocName) {
-      const inputValue = this.ocName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.NUMERO_OC && data.NUMERO_OC.toLowerCase().includes(inputValue)
-      )
+        data.CENTRO_CUSTO === this.centroCustoName
+      );
     }
 
     if (this.materialName) {
       const inputValue = this.materialName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
         data.MATERIAL && data.MATERIAL.toLowerCase().includes(inputValue)
-      )
+      );
+    }
+
+    if (this.movimentoName) {
+      const inputValue = this.movimentoName.toLowerCase();
+      filteredRecords = filteredRecords.filter(data =>
+        data.MOVIMENTO && data.MOVIMENTO.toLowerCase().includes(inputValue)
+      );
+    }
+
+    if (this.idName) {
+      const inputValue = this.idName.toLowerCase();
+      filteredRecords = filteredRecords.filter(data =>
+        data.ID && data.ID.toLowerCase().includes(inputValue)
+      );
+    }
+
+    if (this.ocName) {
+      const inputValue = this.ocName.toLowerCase();
+      filteredRecords = filteredRecords.filter(data =>
+        data.NUMERO_OC && data.NUMERO_OC.toLowerCase().includes(inputValue)
+      );
     }
 
     this.records = filteredRecords;
@@ -81,15 +118,19 @@ export class TrackingComponent {
     this.filter();
   }
 
+  searchMaterial() {
+    this.filter();
+  }
+
+  searchMovimento() {
+    this.filter();
+  }
+
   searchId() {
     this.filter();
   }
 
   searchOc() {
-    this.filter();
-  }
-
-  searchMaterial() {
     this.filter();
   }
 }
