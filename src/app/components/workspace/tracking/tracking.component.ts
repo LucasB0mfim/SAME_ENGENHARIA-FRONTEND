@@ -1,6 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 import { TitleService } from '../../../core/services/title.service';
 import { TrackingService } from '../../../core/services/tracking.service';
@@ -9,7 +10,7 @@ import { ITrackingRecord } from '../../../core/interfaces/tracking-response.inte
 
 @Component({
   selector: 'app-tracking',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './tracking.component.html',
   styleUrl: './tracking.component.scss'
 })
@@ -17,6 +18,7 @@ export class TrackingComponent {
 
   centroCusto: string[] = [];
   expandedIndex: number = -1; // Nenhum item expandido inicialmente
+  isSelectOpen: boolean = false;
   records: ITrackingRecord[] = [];
   allRecords: ITrackingRecord[] = [];
 
@@ -31,7 +33,7 @@ export class TrackingComponent {
 
   ngOnInit(): void {
     this.load();
-    this._titleService.setTitle('Rastreamento de Pedidos')
+    this._titleService.setTitle('Acompanhar Pedidos')
   }
 
   load(): void {
@@ -112,6 +114,7 @@ export class TrackingComponent {
     }
 
     this.records = filteredRecords;
+    this.isSelectOpen = false;
   }
 
   searchCentroCusto() {
@@ -132,5 +135,18 @@ export class TrackingComponent {
 
   searchOc() {
     this.filter();
+  }
+
+  toggleSelect() {
+    // O mousedown ocorre antes do select realmente abrir ou fechar
+    // Então invertemos o estado atual
+    setTimeout(() => {
+      this.isSelectOpen = !this.isSelectOpen;
+    }, 0);
+  }
+
+  resetSelectIcon() {
+    // Quando o select perde o foco (clique fora), o ícone retorna à posição original
+    this.isSelectOpen = false;
   }
 }

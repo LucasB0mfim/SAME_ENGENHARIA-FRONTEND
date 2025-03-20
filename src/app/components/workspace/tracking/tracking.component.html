@@ -1,35 +1,42 @@
 <div class="tracking">
+  
   <div class="tracking-top__section">
     <div class="filters">
-      <label for="CentroCusto">Centro de Custo:</label>
+      <label>Centro de Custo:</label>
       <div class="select-container">
-        <select id="CentroCusto" [(ngModel)]="centroCustoName" (ngModelChange)="searchCentroCusto()">
+        <select
+          [(ngModel)]="centroCustoName"
+          (ngModelChange)="searchCentroCusto()"
+          (mousedown)="toggleSelect()"
+          (blur)="resetSelectIcon()"
+        >
           <option value="">Todos</option>
           <option *ngFor="let centro of centroCusto" [value]="centro">{{ centro }}</option>
         </select>
+        <mat-icon class="select-icon" [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
       </div>
     </div>
 
     <div class="filters">
-      <label for="material">Material:</label>
-      <input type="text" id="material" placeholder="Ex: Cimento" [(ngModel)]="materialName"
+      <label>Material:</label>
+      <input type="text" placeholder="Ex: Cimento" [(ngModel)]="materialName"
         (ngModelChange)="searchMaterial()">
     </div>
 
     <div class="filters">
-      <label for="movimento">Movimento:</label>
-      <input type="text" id="movimento" placeholder="Ex: 1000" [(ngModel)]="movimentoName"
+      <label>Movimento:</label>
+      <input type="text" placeholder="Ex: 1000" [(ngModel)]="movimentoName"
         (ngModelChange)="searchMovimento()">
     </div>
 
     <div class="filters">
-      <label for="id">ID:</label>
-      <input type="text" id="id" placeholder="Ex: 55555" [(ngModel)]="idName" (ngModelChange)="searchId()">
+      <label>ID:</label>
+      <input type="text" placeholder="Ex: 55555" [(ngModel)]="idName" (ngModelChange)="searchId()">
     </div>
 
     <div class="filters">
-      <label for="oc">OC:</label>
-      <input type="text" id="oc" placeholder="Ex: 10008" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
+      <label>OC:</label>
+      <input type="text" placeholder="Ex: 10008" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
     </div>
   </div>
 

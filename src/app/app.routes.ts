@@ -11,6 +11,7 @@ import { HumanResourcesComponent } from './components/workspace/human-resources/
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
+import { RequestsComponent } from './components/workspace/requests/requests.component';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'tracking', component: TrackingComponent },
       { path: 'time-sheet', component: TimeSheetComponent },
       { path: 'human-resources', component: HumanResourcesComponent },
+      { path: 'request', component: RequestsComponent },
     ]
   },
   {

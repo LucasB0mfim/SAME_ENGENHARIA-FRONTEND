@@ -1,0 +1,100 @@
+<div class="request">
+
+  <div class="request__top">
+    <div class="filter">
+      <label class="filter__label">Centro de Custo:</label>
+      <input type="text" class="filter__input">
+    </div>
+
+    <div class="filter">
+      <label class="filter__label">Oc:</label>
+      <input type="text" class="filter__input">
+    </div>
+  </div>
+
+  <div class="request__main">
+    <div class="card">
+
+      <div class="card__item" *ngFor="let data of records; let i = index" [class.expanded]="expandedIndex === i">
+        <div class="card__main" (click)="toggleExpand(i)">
+          <div class="card__border"></div>
+
+          <div class="card__summary">
+            <div class="card__primary">
+              <span class="card__id">{{ data.centro_de_custo }}</span>
+              <span class="card__separator">|</span>
+              <span class="card__cc">{{ data.material }}</span>
+            </div>
+
+            <div class="card__secondary">
+              <span class="card__material">{{ data.fornecedor }}</span>
+            </div>
+          </div>
+
+          <div class="card__meta-data">
+            <div class="card__meta-item">
+              <span class="card__meta-label">Previsão de Entrega:</span>
+              <span class="card__meta-value">{{ data.data_entrega || 'Sem previsão' }}</span>
+            </div>
+
+            <div class="card__meta-item">
+              <span class="card__meta-label">OC:</span>
+              <span class="card__meta-value">{{ data.oc || 'Sem previsão' }}</span>
+            </div>
+
+            <div class="card__expand-icon">
+              <i class="arrow" [class.down]="expandedIndex === i"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="details" [class.show]="expandedIndex === i">
+          <div class="details__grid">
+            <div class="details__column">
+              <h4>Detalhes da Entrega:</h4>
+
+              <div class="details__text">
+                <span class="details__label">Descrição:</span>
+                <span class="details__value">{{ data.material }}</span>
+              </div>
+
+              <div class="details__text">
+                <span class="details__label">Quantidade:</span>
+                <span class="details__value">{{ data.quantidade }}</span>
+              </div>
+            </div>
+
+            <div class="details__column">
+              <h4>Detalhes da OC:</h4>
+
+              <div class="details__text">
+                <span class="details__label">Autorizado por:</span>
+                <span class="details__value">{{ data.usuario_criacao || 'N/A' }}</span>
+              </div>
+
+              <div class="details__text">
+                <span class="details__label">Data da Criação:</span>
+                <span class="details__value">{{ data.data_criacao_oc }}</span>
+              </div>
+            </div>
+
+            <div class="details__column">
+              <h4>Detalhes do Recebimento:</h4>
+
+              <div class="details__buttons">
+                <button>Entregue</button>
+                <button>Não entregue</button>
+                <button>Parcialmente Entregue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-results" *ngIf="records.length === 0">
+        <p>Nenhum resultado encontrado.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
