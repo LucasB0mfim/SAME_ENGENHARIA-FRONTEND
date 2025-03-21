@@ -3,12 +3,22 @@
   <div class="request__top">
     <div class="filter">
       <label class="filter__label">Centro de Custo:</label>
-      <input type="text" class="filter__input">
+      <input type="text" class="filter__input" placeholder="Ex: BRK">
     </div>
 
     <div class="filter">
       <label class="filter__label">Oc:</label>
-      <input type="text" class="filter__input">
+      <input type="text" class="filter__input" placeholder="Ex: 1000">
+    </div>
+
+    <div class="filter">
+      <label class="filter__label">Fornecedor:</label>
+      <input type="text" class="filter__input" placeholder="Ex: Renascer">
+    </div>
+
+    <div class="filter">
+      <label class="filter__label">Valor:</label>
+      <input type="text" class="filter__input" placeholder="Ex: 300">
     </div>
   </div>
 
@@ -60,7 +70,7 @@
 
               <div class="details__text">
                 <span class="details__label">Quantidade:</span>
-                <span class="details__value">{{ data.quantidade }}</span>
+                <span class="details__value">{{ data.quantidade }} {{ data.unidade }}</span>
               </div>
             </div>
 
@@ -68,23 +78,48 @@
               <h4>Detalhes da OC</h4>
 
               <div class="details__text">
-                <span class="details__label">Autorizado por:</span>
+                <span class="details__label">Criado por:</span>
                 <span class="details__value">{{ data.usuario_criacao || 'N/A' }}</span>
               </div>
 
               <div class="details__text">
-                <span class="details__label">Data da Criação:</span>
+                <span class="details__label">Data da Liberação:</span>
                 <span class="details__value">{{ data.data_criacao_oc }}</span>
               </div>
             </div>
 
             <div class="details__column">
-              <h4>Detalhes do Recebimento</h4>
+              <h4>Material Entregue</h4>
 
-              <div class="details__buttons">
-                <button>Entregue</button>
-                <button>Não entregue</button>
-                <button>Parcialmente Entregue</button>
+              <div class="details__confirm">
+                <span class="details__label">Anexar NF:</span>
+                <input type="file" id="file-upload" accept="image/*" class="details__input">
+                <label for="file-upload"></label>
+                <button class="details__button">Confirmar</button>
+              </div>
+            </div>
+
+            <div class="details__column">
+              <h4>Material Parcialmente Entregue</h4>
+
+              <div class="details__confirm">
+                <span class="details__label">Quantidade Recebida:</span>
+                <input type="text" placeholder="Ex: 50" class="details__input">
+                <button class="details__button">Confirmar</button>
+              </div>
+            </div>
+
+            <div class="details__column">
+              <h4>Material Não Entregue</h4>
+
+              <div class="details__confirm">
+                <span class="details__label">Nível de Urgência:</span>
+                <select class="details__input">
+                  <option value="">Baixa</option>
+                  <option value="">Média</option>
+                  <option value="">Alta</option>
+                </select>
+                <button class="details__button">Confirmar</button>
               </div>
             </div>
           </div>

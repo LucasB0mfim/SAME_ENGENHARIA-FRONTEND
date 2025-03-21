@@ -7,6 +7,7 @@ export interface IRequestRecord {
   material: string,
   quantidade: number,
   usuario_criacao: string,
+  unidade: string,
 }
 
 export interface IRequestResponse {
