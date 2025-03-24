@@ -3,22 +3,22 @@
   <div class="request__top">
     <div class="filter">
       <label class="filter__label">Centro de Custo:</label>
-      <input type="text" class="filter__input" placeholder="Ex: BRK">
+      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centroCustoName" (ngModelChange)="searchCentroCusto()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Oc:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 1000">
+      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Fornecedor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: Renascer">
+      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedorName" (ngModelChange)="searchFornecedor()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Valor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 300">
+      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valorName" (ngModelChange)="searchValor()">
     </div>
   </div>
 
@@ -61,11 +61,11 @@
         <div class="details" [class.show]="expandedIndex === i">
           <div class="details__grid">
             <div class="details__column">
-              <h4>Detalhes da Entrega</h4>
+              <h4>Detalhes do Pedido</h4>
 
               <div class="details__text">
-                <span class="details__label">Descrição:</span>
-                <span class="details__value">{{ data.material }}</span>
+                <span class="details__label">Valor:</span>
+                <span class="details__value">R$ {{ data.valor }}</span>
               </div>
 
               <div class="details__text">
@@ -93,34 +93,34 @@
 
               <div class="details__confirm">
                 <span class="details__label">Anexar NF:</span>
-                <input type="file" id="file-upload" accept="image/*" class="details__input">
+                <input type="file" accept="image/*" (change)="onFile($event)" id="file-upload" class="details__input">
                 <label for="file-upload"></label>
-                <button class="details__button">Confirmar</button>
+                <button class="details__button" (click)="delivered(i)">Confirmar</button>
               </div>
             </div>
 
             <div class="details__column">
               <h4>Material Parcialmente Entregue</h4>
 
-              <div class="details__confirm">
+              <form [formGroup]="partiallyDeliveredForm" class="details__confirm">
                 <span class="details__label">Quantidade Recebida:</span>
-                <input type="text" placeholder="Ex: 50" class="details__input">
-                <button class="details__button">Confirmar</button>
-              </div>
+                <input type="text" placeholder="Ex: 50" formControlName="amount" class="details__input">
+                <button class="details__button" (click)="partial(i)">Confirmar</button>
+              </form>
             </div>
 
             <div class="details__column">
               <h4>Material Não Entregue</h4>
 
-              <div class="details__confirm">
+              <form [formGroup]="urgencyForm" class="details__confirm">
                 <span class="details__label">Nível de Urgência:</span>
-                <select class="details__input">
-                  <option value="">Baixa</option>
-                  <option value="">Média</option>
-                  <option value="">Alta</option>
+                <select class="details__input" formControlName="urgency">
+                  <option value="low">Baixa</option>
+                  <option value="medium">Média</option>
+                  <option value="high">Alta</option>
                 </select>
-                <button class="details__button">Confirmar</button>
-              </div>
+                <button class="details__button" (click)="NotDelivered(i)">Confirmar</button>
+              </form>
             </div>
           </div>
         </div>
