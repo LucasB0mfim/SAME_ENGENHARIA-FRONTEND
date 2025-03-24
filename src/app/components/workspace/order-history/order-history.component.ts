@@ -13,10 +13,10 @@ import { IRequestRecord } from '../../../core/interfaces/request-response.interf
   selector: 'app-requests',
   standalone: true,
   imports: [CommonModule, FormsModule, MatIconModule, ReactiveFormsModule],
-  templateUrl: './requests.component.html',
-  styleUrl: './requests.component.scss'
+  templateUrl: './order-history.component.html',
+  styleUrl: './order-history.component.scss'
 })
-export class RequestsComponent implements OnInit {
+export class OrderHistoryComponent implements OnInit {
 
   photo: File | null = null;
   expandedIndex: number = -1;
@@ -51,14 +51,14 @@ export class RequestsComponent implements OnInit {
 
   ngOnInit() {
     this.find();
-    this._titleService.setTitle('Recebimento de Material')
+    this._titleService.setTitle('Histórico de Pedidos')
   }
 
   find() {
     this._requestService.find().subscribe({
       next: (data) => {
-        this.records = data.order.filter(data => data.status === null || data.status === '');
-        this.allRecords = data.order.filter(data => data.status === null || data.status === '');
+        this.records = data.order.filter(data => data.status === 'ENTREGUE');
+        this.allRecords = [...data.order];
       },
       error: (error) => {
         console.error(error);

@@ -4,4 +4,5 @@ export interface IOrderRequest {
   quantidade_entregue: string,
   urgency: string,
   oc: string,
+  ultima_atualizacao: string,
 }

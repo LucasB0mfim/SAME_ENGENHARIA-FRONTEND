@@ -10,15 +10,12 @@ import { RequestService } from '../../../core/services/request.service';
 import { IRequestRecord } from '../../../core/interfaces/request-response.interface';
 
 @Component({
-  selector: 'app-requests',
-  standalone: true,
+  selector: 'app-manage-orders',
   imports: [CommonModule, FormsModule, MatIconModule, ReactiveFormsModule],
-  templateUrl: './requests.component.html',
-  styleUrl: './requests.component.scss'
+  templateUrl: './manage-orders.component.html',
+  styleUrl: './manage-orders.component.scss'
 })
-export class RequestsComponent implements OnInit {
-
-  photo: File | null = null;
+export class ManageOrdersComponent implements OnInit {
   expandedIndex: number = -1;
   records: IRequestRecord[] = [];
   allRecords: IRequestRecord[] = [];
@@ -31,34 +28,24 @@ export class RequestsComponent implements OnInit {
   private _titleService = inject(TitleService);
   private _requestService = inject(RequestService);
 
-  private resetForms() {
-    this.deliveredForm.reset({ image: '' });
-    this.partiallyDeliveredForm.reset({ amount: '' });
-    this.urgencyForm.reset({ urgency: 'low' });
-  }
-
-  deliveredForm: FormGroup = new FormGroup({
-    image: new FormControl('')
+  newDateForm: FormGroup = new FormGroup({
+    newDate: new FormControl('')
   });
 
-  partiallyDeliveredForm: FormGroup = new FormGroup({
-    amount: new FormControl('')
-  });
-
-  urgencyForm: FormGroup = new FormGroup({
-    urgency: new FormControl('low')
+  detailsForm: FormGroup = new FormGroup({
+    details: new FormControl('')
   });
 
   ngOnInit() {
     this.find();
-    this._titleService.setTitle('Recebimento de Material')
+    this._titleService.setTitle('Gerenciar Pedidos')
   }
 
   find() {
     this._requestService.find().subscribe({
       next: (data) => {
-        this.records = data.order.filter(data => data.status === null || data.status === '');
-        this.allRecords = data.order.filter(data => data.status === null || data.status === '');
+        this.records = data.order.filter(data => data.status === 'PARCIALMENTE ENTREGUE' || data.status === 'NÃO ENTREGUE');
+        this.allRecords = [...data.order]
       },
       error: (error) => {
         console.error(error);
@@ -74,54 +61,24 @@ export class RequestsComponent implements OnInit {
     }
   }
 
-  onFile(event: any) {
-    const file = event.target.files[0]
-    if (file) this.photo = file;
-  }
-
-  delivered(index: number) {
-    const formData = new FormData();
-    const today = new Date().toISOString();
+  updateTime(index: number) {
     const currentRecord = this.records[index];
+    const formData = new FormData();
 
-    if (this.photo) {
-      formData.append('nf', this.photo, this.photo.name); // Campo 'nf' para o multer
-    }
-
-    formData.append('urgency', '');
-    formData.append('status', 'ENTREGUE');
-    formData.append('ultima_atualizacao', today);
+    formData.append('data_entrega', this.newDateForm.value.newDate);
+    formData.append('status', '');
+    formData.append('quantidade_entregue', '');
     formData.append('oc', currentRecord.oc.toString());
-    formData.append('quantidade_entregue', currentRecord.quantidade.toString());
 
     this.submitUpdate(formData);
   }
 
-  partial(index: number) {
-    const today = new Date().toISOString();
+  updateDetails(index: number) {
     const currentRecord = this.records[index];
-    const receivedAmount = Number(this.partiallyDeliveredForm.value.amount);
-
     const formData = new FormData();
-    formData.append('urgencia', '');
+
+    formData.append('data_entrega', this.detailsForm.value.details);
     formData.append('oc', currentRecord.oc.toString());
-    formData.append('status', 'PARCIALMENTE ENTREGUE');
-    formData.append('ultima_atualizacao', today);
-    formData.append('quantidade_entregue', receivedAmount.toString());
-
-    this.submitUpdate(formData);
-  }
-
-  NotDelivered(index: number) {
-    const formData = new FormData();
-    const today = new Date().toISOString();
-    const currentRecord = this.records[index];
-
-    formData.append('status', 'NÃO ENTREGUE');
-    formData.append('quantidade_entregue', '0');
-    formData.append('ultima_atualizacao', today);
-    formData.append('oc', currentRecord.oc.toString());
-    formData.append('urgencia', this.urgencyForm.value.urgency);
 
     this.submitUpdate(formData);
   }
@@ -130,13 +87,16 @@ export class RequestsComponent implements OnInit {
     this._requestService.update(formData).subscribe({
       next: () => {
         this.find();
-        this.resetForms();
         this.expandedIndex = -1;
       },
       error: (error) => {
         console.error(error);
       }
     })
+  }
+
+  calculateRemaining(quantidade: string, quantidade_entregue: string) {
+    return Number(quantidade) - Number(quantidade_entregue);
   }
 
   filters() {
@@ -174,7 +134,6 @@ export class RequestsComponent implements OnInit {
   }
 
   searchOc() {
-    console.log('ocName:', this.ocName);
     this.filters();
   }
 

@@ -12,7 +12,8 @@ export interface IRequestRecord {
   quantidade_entregue: string,
   urgencia: string,
   nota_fiscal: string,
-  valor: string
+  valor: string,
+  ultima_atualizacao: string,
 }
 
 export interface IRequestResponse {
