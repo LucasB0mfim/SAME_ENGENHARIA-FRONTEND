@@ -12,6 +12,9 @@ import { TrackingComponent } from './components/workspace/tracking/tracking.comp
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
 import { RequestsComponent } from './components/workspace/requests/requests.component';
+import { ConstructionsComponent } from './components/workspace/constructions/constructions.component';
+import { ManageOrdersComponent } from './components/workspace/manage-orders/manage-orders.component';
+import { OrderHistoryComponent } from './components/workspace/order-history/order-history.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +48,9 @@ export const routes: Routes = [
       { path: 'time-sheet', component: TimeSheetComponent },
       { path: 'human-resources', component: HumanResourcesComponent },
       { path: 'request', component: RequestsComponent },
+      { path: 'constructions', component: ConstructionsComponent },
+      { path: 'maneger-orders', component: ManageOrdersComponent },
+      { path: 'order-history', component: OrderHistoryComponent },
     ]
   },
   {
