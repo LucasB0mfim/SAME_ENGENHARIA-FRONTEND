@@ -7,7 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TitleService } from '../../../core/services/title.service';
 import { RequestService } from '../../../core/services/request.service';
 
-import { IRequestRecord } from '../../../core/interfaces/request-response.interface';
+import { IOrderRecord } from '../../../core/interfaces/order-response.interface';
 
 @Component({
   selector: 'app-requests',
@@ -20,8 +20,8 @@ export class OrderHistoryComponent implements OnInit {
 
   photo: File | null = null;
   expandedIndex: number = -1;
-  records: IRequestRecord[] = [];
-  allRecords: IRequestRecord[] = [];
+  records: IOrderRecord[] = [];
+  allRecords: IOrderRecord[] = [];
 
   ocName: string = '';
   valorName: string = '';
@@ -91,7 +91,7 @@ export class OrderHistoryComponent implements OnInit {
     formData.append('urgency', '');
     formData.append('status', 'ENTREGUE');
     formData.append('ultima_atualizacao', today);
-    formData.append('oc', currentRecord.oc.toString());
+    formData.append('oc', currentRecord.numero_oc.toString());
     formData.append('quantidade_entregue', currentRecord.quantidade.toString());
 
     this.submitUpdate(formData);
@@ -104,7 +104,7 @@ export class OrderHistoryComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('urgencia', '');
-    formData.append('oc', currentRecord.oc.toString());
+    formData.append('oc', currentRecord.numero_oc.toString());
     formData.append('status', 'PARCIALMENTE ENTREGUE');
     formData.append('ultima_atualizacao', today);
     formData.append('quantidade_entregue', receivedAmount.toString());
@@ -120,7 +120,7 @@ export class OrderHistoryComponent implements OnInit {
     formData.append('status', 'NÃO ENTREGUE');
     formData.append('quantidade_entregue', '0');
     formData.append('ultima_atualizacao', today);
-    formData.append('oc', currentRecord.oc.toString());
+    formData.append('oc', currentRecord.numero_oc.toString());
     formData.append('urgencia', this.urgencyForm.value.urgency);
 
     this.submitUpdate(formData);
@@ -145,28 +145,28 @@ export class OrderHistoryComponent implements OnInit {
     if (this.ocName) {
       const inputValue = this.ocName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.oc && data.oc.toLowerCase().includes(inputValue)
+        data.numero_oc && data.numero_oc.toLowerCase().includes(inputValue)
       )
     }
 
     if (this.valorName) {
       const inputValue = this.valorName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.valor && data.valor.toLowerCase().includes(inputValue)
+        data.valor_total && data.valor_total.toLowerCase().includes(inputValue)
       )
     }
 
     if (this.fornecedorName) {
       const inputValue = this.fornecedorName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.fornecedor && data.fornecedor.toLowerCase().includes(inputValue)
+        data.nome_fornecedor && data.nome_fornecedor.toLowerCase().includes(inputValue)
       )
     }
 
     if (this.centroCustoName) {
       const inputValue = this.centroCustoName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.centro_de_custo && data.centro_de_custo.toLowerCase().includes(inputValue)
+        data.centro_custo && data.centro_custo.toLowerCase().includes(inputValue)
       )
     }
 

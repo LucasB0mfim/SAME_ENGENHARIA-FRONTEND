@@ -2,12 +2,13 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TitleService } from '../../../core/services/title.service';
 import { RequestService } from '../../../core/services/request.service';
 
-import { IRequestRecord } from '../../../core/interfaces/request-response.interface';
+import { IGroupedRequest, IOrderRecord } from '../../../core/interfaces/order-response.interface';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-requests',
@@ -17,48 +18,69 @@ import { IRequestRecord } from '../../../core/interfaces/request-response.interf
   styleUrl: './requests.component.scss'
 })
 export class RequestsComponent implements OnInit {
-
   photo: File | null = null;
   expandedIndex: number = -1;
-  records: IRequestRecord[] = [];
-  allRecords: IRequestRecord[] = [];
+  groupedRecords: IGroupedRequest[] = [];
+  allRecords: IOrderRecord[] = [];
+  activeView: { [key: number]: string } = {};
+  employee: string = '';
 
-  ocName: string = '';
-  valorName: string = '';
-  fornecedorName: string = '';
-  centroCustoName: string = '';
+  partiallyDeliveredForm: FormGroup;
 
   private _titleService = inject(TitleService);
   private _requestService = inject(RequestService);
+  private _employee = inject(DashboardService);
 
-  private resetForms() {
-    this.deliveredForm.reset({ image: '' });
-    this.partiallyDeliveredForm.reset({ amount: '' });
-    this.urgencyForm.reset({ urgency: 'low' });
+  constructor() {
+    this.partiallyDeliveredForm = new FormGroup({});
   }
-
-  deliveredForm: FormGroup = new FormGroup({
-    image: new FormControl('')
-  });
-
-  partiallyDeliveredForm: FormGroup = new FormGroup({
-    amount: new FormControl('')
-  });
-
-  urgencyForm: FormGroup = new FormGroup({
-    urgency: new FormControl('low')
-  });
 
   ngOnInit() {
     this.find();
-    this._titleService.setTitle('Recebimento de Material')
+    this.user();
+    this._titleService.setTitle('Recebimento de Material');
   }
 
   find() {
     this._requestService.find().subscribe({
       next: (data) => {
-        this.records = data.order.filter(data => data.status === null || data.status === '');
-        this.allRecords = data.order.filter(data => data.status === null || data.status === '');
+        this.allRecords = data.order;
+        this.groupByOC();
+        this.initPartialDeliveryForm();
+
+        // Initialize activeView
+        this.groupedRecords.forEach((group, index) => {
+          this.activeView[index] = 'pedidos';
+        });
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  // Initialize dynamic form for partial delivery
+  initPartialDeliveryForm() {
+    const formControls: { [key: string]: FormControl } = {};
+
+    this.groupedRecords.forEach((group, groupIndex) => {
+      group.items.forEach((item, itemIndex) => {
+        // Create a unique control name for each item
+        const controlName = `amount${groupIndex}_${itemIndex}`;
+        formControls[controlName] = new FormControl('', [
+          Validators.min(0),
+          Validators.max(Number(item.quantidade))
+        ]);
+      });
+    });
+
+    this.partiallyDeliveredForm = new FormGroup(formControls);
+  }
+
+  user() {
+    this._employee.findAll().subscribe({
+      next: (data) => {
+        this.employee = data.employee.email
       },
       error: (error) => {
         console.error(error);
@@ -66,64 +88,134 @@ export class RequestsComponent implements OnInit {
     })
   }
 
+  groupByOC(): void {
+    const grouped: { [key: string]: IOrderRecord[] } = {};
+
+    // Filtrar apenas registros com status específicos para mostrar
+    const filteredRecords = this.allRecords.filter(item =>
+      !['ENTREGUE', 'NÃO ENTREGUE', 'PARCIALMENTE ENTREGUE'].includes(item.status)
+    );
+
+    filteredRecords.forEach(item => {
+      if (!grouped[item.numero_oc]) {
+        grouped[item.numero_oc] = [];
+      }
+      grouped[item.numero_oc].push(item);
+    });
+
+    this.groupedRecords = Object.keys(grouped).map(oc => ({
+      numero_oc: oc,
+      items: grouped[oc],
+      total: this.ValorDaCompra(grouped[oc])
+    }));
+  }
+
+  // Ensure event stops propagation to prevent toggling expand
+  setActiveView(event: Event, index: number, view: string): void {
+    event.stopPropagation();
+    this.activeView[index] = view;
+    this.expandedIndex = index;
+  }
+
+  ValorDaCompra(items: IOrderRecord[]): number {
+    return items.reduce((total, item) => {
+      return total + Number(item.valor_total);
+    }, 0);
+  }
+
+  unitPrice(valorTotal: string, quantidade: string) {
+    return (Number(valorTotal) / Number(quantidade)).toFixed(2);
+  }
+
+  pluralize(quantidade: string, unidade: string) {
+    if (Number(quantidade) === 1) {
+      return unidade;
+    }
+    return unidade + 's';
+  }
+
   toggleExpand(index: number): void {
     if (this.expandedIndex === index) {
-      this.expandedIndex = -1; // Fecha o item
+      this.expandedIndex = -1;
     } else {
-      this.expandedIndex = index; // Abre o item clicado
+      this.expandedIndex = index;
     }
   }
 
+  private resetForms() {
+    this.partiallyDeliveredForm.reset();
+    this.photo = null;
+  }
+
   onFile(event: any) {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
     if (file) this.photo = file;
   }
 
   delivered(index: number) {
-    const formData = new FormData();
     const today = new Date().toISOString();
-    const currentRecord = this.records[index];
+    const currentRecord = this.groupedRecords[index];
 
-    if (this.photo) {
-      formData.append('nf', this.photo, this.photo.name); // Campo 'nf' para o multer
+    if (!this.photo) {
+      alert('Por favor, selecione uma nota fiscal');
+      return;
     }
 
-    formData.append('urgency', '');
-    formData.append('status', 'ENTREGUE');
-    formData.append('ultima_atualizacao', today);
-    formData.append('oc', currentRecord.oc.toString());
-    formData.append('quantidade_entregue', currentRecord.quantidade.toString());
+    currentRecord.items.forEach((item) => {
+      const formData = new FormData();
+      // Verifica novamente se this.photo não é null antes de adicionar
+      if (this.photo) {
+        formData.append('nota_fiscal', this.photo, this.photo.name);
+      }
+      formData.append('numero_oc', currentRecord.numero_oc);
+      formData.append('status', 'ENTREGUE');
+      formData.append('ultima_atualizacao', today);
+      formData.append('recebedor', this.employee);
+      formData.append('idprd', item.idprd);
+      formData.append('quantidade_entregue', item.quantidade);
 
-    this.submitUpdate(formData);
+      this.submitUpdate(formData);
+    });
   }
 
   partial(index: number) {
     const today = new Date().toISOString();
-    const currentRecord = this.records[index];
-    const receivedAmount = Number(this.partiallyDeliveredForm.value.amount);
+    const currentRecord = this.groupedRecords[index];
 
-    const formData = new FormData();
-    formData.append('urgencia', '');
-    formData.append('oc', currentRecord.oc.toString());
-    formData.append('status', 'PARCIALMENTE ENTREGUE');
-    formData.append('ultima_atualizacao', today);
-    formData.append('quantidade_entregue', receivedAmount.toString());
+    currentRecord.items.forEach((item, itemIndex) => {
+      // Get the received quantity for this specific item
+      const controlName = `amount${index}_${itemIndex}`;
+      const receivedQuantity = this.partiallyDeliveredForm.get(controlName)?.value || 0;
 
-    this.submitUpdate(formData);
+      if (receivedQuantity > 0) {
+        const formData = new FormData();
+        formData.append('numero_oc', currentRecord.numero_oc);
+        formData.append('status', 'PARCIALMENTE ENTREGUE');
+        formData.append('ultima_atualizacao', today);
+        formData.append('recebedor', this.employee);
+        formData.append('idprd', item.idprd);
+        formData.append('quantidade_entregue', receivedQuantity.toString());
+
+        this.submitUpdate(formData);
+      }
+    });
   }
 
   NotDelivered(index: number) {
-    const formData = new FormData();
     const today = new Date().toISOString();
-    const currentRecord = this.records[index];
+    const currentRecord = this.groupedRecords[index];
 
-    formData.append('status', 'NÃO ENTREGUE');
-    formData.append('quantidade_entregue', '0');
-    formData.append('ultima_atualizacao', today);
-    formData.append('oc', currentRecord.oc.toString());
-    formData.append('urgencia', this.urgencyForm.value.urgency);
+    currentRecord.items.forEach((item) => {
+      const formData = new FormData();
+      formData.append('numero_oc', currentRecord.numero_oc);
+      formData.append('status', 'NÃO ENTREGUE');
+      formData.append('ultima_atualizacao', today);
+      formData.append('recebedor', this.employee);
+      formData.append('idprd', item.idprd);
+      formData.append('quantidade_entregue', '0');
 
-    this.submitUpdate(formData);
+      this.submitUpdate(formData);
+    });
   }
 
   submitUpdate(formData: FormData) {
@@ -137,56 +229,5 @@ export class RequestsComponent implements OnInit {
         console.error(error);
       }
     })
-  }
-
-  filters() {
-    let filteredRecords = [...this.allRecords];
-
-    if (this.ocName) {
-      const inputValue = this.ocName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.oc && data.oc.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.valorName) {
-      const inputValue = this.valorName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.valor && data.valor.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.fornecedorName) {
-      const inputValue = this.fornecedorName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.fornecedor && data.fornecedor.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.centroCustoName) {
-      const inputValue = this.centroCustoName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.centro_de_custo && data.centro_de_custo.toLowerCase().includes(inputValue)
-      )
-    }
-
-    this.records = filteredRecords
-  }
-
-  searchOc() {
-    console.log('ocName:', this.ocName);
-    this.filters();
-  }
-
-  searchValor() {
-    this.filters();
-  }
-
-  searchFornecedor() {
-    this.filters();
-  }
-
-  searchCentroCusto() {
-    this.filters();
   }
 }

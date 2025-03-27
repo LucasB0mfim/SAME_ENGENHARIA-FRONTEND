@@ -7,7 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TitleService } from '../../../core/services/title.service';
 import { RequestService } from '../../../core/services/request.service';
 
-import { IRequestRecord } from '../../../core/interfaces/request-response.interface';
+import { IOrderRecord } from '../../../core/interfaces/order-response.interface';
 
 @Component({
   selector: 'app-manage-orders',
@@ -17,8 +17,8 @@ import { IRequestRecord } from '../../../core/interfaces/request-response.interf
 })
 export class ManageOrdersComponent implements OnInit {
   expandedIndex: number = -1;
-  records: IRequestRecord[] = [];
-  allRecords: IRequestRecord[] = [];
+  records: IOrderRecord[] = [];
+  allRecords: IOrderRecord[] = [];
 
   ocName: string = '';
   valorName: string = '';
@@ -68,7 +68,7 @@ export class ManageOrdersComponent implements OnInit {
     formData.append('data_entrega', this.newDateForm.value.newDate);
     formData.append('status', '');
     formData.append('quantidade_entregue', '');
-    formData.append('oc', currentRecord.oc.toString());
+    formData.append('oc', currentRecord.numero_oc.toString());
 
     this.submitUpdate(formData);
   }
@@ -78,7 +78,7 @@ export class ManageOrdersComponent implements OnInit {
     const formData = new FormData();
 
     formData.append('data_entrega', this.detailsForm.value.details);
-    formData.append('oc', currentRecord.oc.toString());
+    formData.append('oc', currentRecord.numero_oc.toString());
 
     this.submitUpdate(formData);
   }
@@ -105,28 +105,28 @@ export class ManageOrdersComponent implements OnInit {
     if (this.ocName) {
       const inputValue = this.ocName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.oc && data.oc.toLowerCase().includes(inputValue)
+        data.numero_oc && data.numero_oc.toLowerCase().includes(inputValue)
       )
     }
 
     if (this.valorName) {
       const inputValue = this.valorName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.valor && data.valor.toLowerCase().includes(inputValue)
+        data.valor_total && data.valor_total.toLowerCase().includes(inputValue)
       )
     }
 
     if (this.fornecedorName) {
       const inputValue = this.fornecedorName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.fornecedor && data.fornecedor.toLowerCase().includes(inputValue)
+        data.nome_fornecedor && data.nome_fornecedor.toLowerCase().includes(inputValue)
       )
     }
 
     if (this.centroCustoName) {
       const inputValue = this.centroCustoName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.centro_de_custo && data.centro_de_custo.toLowerCase().includes(inputValue)
+        data.centro_custo && data.centro_custo.toLowerCase().includes(inputValue)
       )
     }
 

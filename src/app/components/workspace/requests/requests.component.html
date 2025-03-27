@@ -1,135 +1,170 @@
-<div class="request">
-
-  <div class="request__top">
+<div class="orders">
+  <div class="orders__top">
     <div class="filter">
       <label class="filter__label">Centro de Custo:</label>
-      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centroCustoName" (ngModelChange)="searchCentroCusto()">
+      <input type="text" class="filter__input" placeholder="Ex: BRK">
     </div>
 
     <div class="filter">
       <label class="filter__label">Oc:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
+      <input type="text" class="filter__input" placeholder="Ex: 1000">
     </div>
 
     <div class="filter">
       <label class="filter__label">Fornecedor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedorName" (ngModelChange)="searchFornecedor()">
+      <input type="text" class="filter__input" placeholder="Ex: Renascer">
     </div>
 
     <div class="filter">
       <label class="filter__label">Valor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valorName" (ngModelChange)="searchValor()">
+      <input type="text" class="filter__input" placeholder="Ex: 300">
     </div>
   </div>
 
-  <div class="request__main">
-    <div class="card">
+  <div class="orders__main">
+    <div class="cards">
 
-      <div class="card__item" *ngFor="let data of records; let i = index" [class.expanded]="expandedIndex === i">
-        <div class="card__main" (click)="toggleExpand(i)">
+      <div class="card" *ngFor="let data of groupedRecords; let i = index">
+        <div class="card__header" (click)="toggleExpand(i)">
           <div class="card__border"></div>
 
           <div class="card__summary">
-            <div class="card__primary">
-              <span class="card__id">{{ data.centro_de_custo }}</span>
-              <span class="card__separator">|</span>
-              <span class="card__cc">{{ data.material }}</span>
+            <div class="card__top">
+              <div class="card__text card__text--bold">OC: {{ data.numero_oc }}</div>
+              <div class="card__separator">-</div>
+              <div class="card__text">{{ data.items[0].centro_custo }}</div>
             </div>
 
-            <div class="card__secondary">
-              <span class="card__material">{{ data.fornecedor }}</span>
+            <div class="card__bottom">
+              <div class="card__text card__text--bold">{{ data.items[0].nome_fornecedor }}</div>
+              <div class="card__separator">|</div>
+              <div class="card__text card__text--bold">R$ {{ data.total }}</div>
             </div>
           </div>
 
-          <div class="card__meta-data">
-            <div class="card__meta-item">
-              <span class="card__meta-label">Previsão de Entrega:</span>
-              <span class="card__meta-value">{{ data.data_entrega || 'Sem previsão' }}</span>
-            </div>
+          <div class="card__options">
+            <button class="card__button card__button--status" (click)="setActiveView($event, i, 'pedidos')">
+              <mat-icon class="card__icon">inventory_2</mat-icon>
+              <div class="card__text">Pedidos</div>
+            </button>
 
-            <div class="card__meta-item">
-              <span class="card__meta-label">OC:</span>
-              <span class="card__meta-value">{{ data.oc || 'Sem previsão' }}</span>
-            </div>
+            <button class="card__button card__button--status" (click)="setActiveView($event, i, 'entregue')">
+              <mat-icon class="card__icon">check_circle</mat-icon>
+              <div class="card__text">Entregue</div>
+            </button>
 
-            <div class="card__expand-icon">
-              <i class="arrow" [class.down]="expandedIndex === i"></i>
-            </div>
+            <button class="card__button card__button--status" (click)="setActiveView($event, i, 'parcial')">
+              <mat-icon class="card__icon">error</mat-icon>
+              <div class="card__text">Parcial</div>
+            </button>
+
+            <button class="card__button card__button--status" (click)="setActiveView($event, i, 'nao-entregue')">
+              <mat-icon class="card__icon">cancel</mat-icon>
+              <div class="card__text">Não Chegou</div>
+            </button>
+          </div>
+
+          <div class="card__expand-icon">
+            <i class="arrow" [class.down]="expandedIndex === i"></i>
           </div>
         </div>
 
-        <div class="details" [class.show]="expandedIndex === i">
-          <div class="details__grid">
-            <div class="details__column">
-              <h4>Detalhes do Pedido</h4>
+        <div class="card__body" [class.show]="expandedIndex === i">
+          <!-- Pedidos -->
+          <div *ngIf="activeView[i] === 'pedidos'" class="card__grid">
+            <div class="card__columns">
 
-              <div class="details__text">
-                <span class="details__label">Valor:</span>
-                <span class="details__value">R$ {{ data.valor }}</span>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Material</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                  {{ item.descricao }}
+                </div>
               </div>
 
-              <div class="details__text">
-                <span class="details__label">Quantidade:</span>
-                <span class="details__value">{{ data.quantidade }} {{ data.unidade }}</span>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Quantidade</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.items">{{ item.quantidade }} {{
+                  pluralize(item.quantidade, item.unidade) }}
+                </div>
+              </div>
+
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Valor Unitário</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.items">R$ {{ unitPrice(item.valor_total,
+                  item.quantidade) }}
+                </div>
+              </div>
+
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Valor Total</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                  R$ {{ item.valor_total }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Entregue -->
+          <form *ngIf="activeView[i] === 'entregue'" class="card__grid">
+            <input type="file" id="file{{i}}" class="card__file"
+              placeholder="{{ photo ? photo.name : 'Selecionar Arquivo' }}" accept="image/*" (change)="onFile($event)">
+
+            <label for="file{{i}}" class="card__file--mask">
+              {{ photo ? photo.name : 'Selecionar Nota Fiscal' }}
+            </label>
+
+            <button class="card__button card__button--confirm" (click)="delivered(i)">
+              Confirmar Entrega
+            </button>
+          </form>
+
+          <!-- Parcialmente Entregue -->
+          <form *ngIf="activeView[i] === 'parcial'" [formGroup]="partiallyDeliveredForm" class="card__grid">
+            <div class="card__columns">
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Material</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                  {{ item.descricao }}
+                </div>
+              </div>
+
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Quantidade Solicitada</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                  {{ item.quantidade }} {{ pluralize(item.quantidade, item.unidade) }}
+                </div>
+              </div>
+
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Quantidade Recebida</h4>
+                <div class="card__text" *ngFor="let item of data.items; let j = index">
+                  <input
+                    type="number"
+                    class="card__input"
+                    min="0"
+                    [max]="item.quantidade"
+                    [formControlName]="'amount' + i + '_' + j"
+                  >
+                </div>
               </div>
             </div>
 
-            <div class="details__column">
-              <h4>Detalhes da OC</h4>
+            <button class="card__button card__button--confirm" (click)="partial(i)">
+              Confirmar Entrega Parcial
+            </button>
+          </form>
 
-              <div class="details__text">
-                <span class="details__label">Criado por:</span>
-                <span class="details__value">{{ data.usuario_criacao || 'N/A' }}</span>
-              </div>
-
-              <div class="details__text">
-                <span class="details__label">Data da Liberação:</span>
-                <span class="details__value">{{ data.data_criacao_oc }}</span>
-              </div>
-            </div>
-
-            <div class="details__column">
-              <h4>Material Entregue</h4>
-
-              <div class="details__confirm">
-                <span class="details__label">Anexar NF:</span>
-                <input type="file" accept="image/*" (change)="onFile($event)" id="file-upload" class="details__input">
-                <label for="file-upload"></label>
-                <button class="details__button" (click)="delivered(i)">Confirmar</button>
-              </div>
-            </div>
-
-            <div class="details__column">
-              <h4>Material Parcialmente Entregue</h4>
-
-              <form [formGroup]="partiallyDeliveredForm" class="details__confirm">
-                <span class="details__label">Quantidade Recebida:</span>
-                <input type="text" placeholder="Ex: 50" formControlName="amount" class="details__input">
-                <button class="details__button" (click)="partial(i)">Confirmar</button>
-              </form>
-            </div>
-
-            <div class="details__column">
-              <h4>Material Não Entregue</h4>
-
-              <form [formGroup]="urgencyForm" class="details__confirm">
-                <span class="details__label">Nível de Urgência:</span>
-                <select class="details__input" formControlName="urgency">
-                  <option value="low">Baixa</option>
-                  <option value="medium">Média</option>
-                  <option value="high">Alta</option>
-                </select>
-                <button class="details__button" (click)="NotDelivered(i)">Confirmar</button>
-              </form>
-            </div>
+          <!-- Não Entregue -->
+          <div *ngIf="activeView[i] === 'nao-entregue'" class="card__grid">
+            <button class="card__button card__button--confirm" (click)="NotDelivered(i)">Material Não Chegou</button>
           </div>
         </div>
       </div>
 
-      <div class="no-results" *ngIf="records.length === 0">
+      <div class="no-results" *ngIf="groupedRecords.length === 0">
         <p>Nenhum resultado encontrado.</p>
       </div>
+
     </div>
   </div>
-
 </div>

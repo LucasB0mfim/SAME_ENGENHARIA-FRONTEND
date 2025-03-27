@@ -1,4 +1,4 @@
-.request {
+.orders {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -7,9 +7,11 @@
 
   &__top {
     gap: 20px;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     width: 100%;
     height: auto;
+    margin-bottom: 20px;
   }
 
   &__main {
@@ -32,16 +34,17 @@
 }
 
 .filter {
+  gap: 5px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
 
-  label {
+  &__label {
     font-size: 0.9em;
     color: var(--text-color);
   }
 
-  input {
+  &__input {
+    width: 100%;
     border: none;
     outline: none;
     padding: 12px;
@@ -50,6 +53,7 @@
     color: var(--text-color);
     box-shadow: var(--box-shadow);
     background: var(--secondary-color);
+    text-overflow: ellipsis;
 
     &::placeholder {
       color: var(--gray-color);
@@ -57,118 +61,140 @@
   }
 }
 
-.card {
+.cards {
   gap: 10px;
   width: 100%;
   display: flex;
   flex-direction: column;
+}
 
-  &__item {
-    overflow: hidden;
-    border-radius: 4px;
-    margin-right: 10px;
-    transition: all 0.3s ease;
-    box-shadow: var(--box-shadow);
-    background: var(--secondary-color);
+.card {
+  overflow: hidden;
+  border-radius: 4px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+  box-shadow: var(--box-shadow);
+  background: var(--secondary-color);
 
-    &.expanded {
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
+  &:hover {
+    transform: translateY(-2px);
   }
 
-  &__main {
+  &__header {
+    position: relative;
+    padding: 15px;
     display: flex;
     align-items: center;
-    padding: 15px;
     cursor: pointer;
-    position: relative;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.01);
-    }
   }
 
   &__border {
-    width: 6px;
-    min-width: 6px;
-    height: 100%;
     position: absolute;
     left: 0;
     top: 0;
+    width: 6px;
+    height: 100%;
     background: var(--orange-color);
   }
 
   &__summary {
     display: flex;
     flex-direction: column;
-    gap: 5px;
     padding-left: 15px;
+    gap: 5px;
     flex: 1;
-    min-width: 0; // Permite que o conteúdo seja truncado
   }
 
-  &__primary {
+  &__top {
     color: var(--text-color);
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-
-  &__id {
-    font-weight: 600;
-    font-size: 14px;
-    white-space: nowrap;
   }
 
   &__separator {
     color: var(--gray-color);
   }
 
-  &__cc {
+  &__text {
     font-size: 14px;
-    font-weight: 500;
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--text-color);
+
+    &--bold {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    &--title {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      color: var(--fourth-color);
+    }
+
+    &--row {
+      margin: 5px 0;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 
-  &__secondary {
+  &__input {
+    width: 155px;
+    outline: none;
+    border-radius: 8px;
+    border: 1px solid var(--fourth-color);
+    color: var(--text-color);
+    text-align: center;
+    background: transparent;
+  }
+
+  &__bottom {
+    color: var(--text-color);
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  &__material {
-    font-size: 13px;
-    color: var(--gray-color);
-    max-width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__meta-data {
-    display: flex;
-    align-items: center;
+  &__options {
     gap: 15px;
-  }
-
-  &__meta-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
   }
 
-  &__meta-label {
-    font-size: 12px;
+  &__button {
+    cursor: pointer;
     color: var(--gray-color);
+    background: transparent;
+    transition: all ease-in 0.1s;
+
+    &--status {
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    &--confirm {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--fourth-color);
+      box-shadow: var(--box-shadow);
+      color: var(--fourth-color);
+    }
   }
 
-  &__meta-value {
-    color: var(--text-color);
-    font-size: 13px;
-    font-weight: 500;
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
   }
 
   &__expand-icon {
@@ -192,122 +218,80 @@
       }
     }
   }
-}
 
-.details {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
+  &__body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
 
-  &.show {
-    max-height: 500px; // Altura máxima para animação
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    &.show {
+      max-height: 500px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
   }
 
   &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
+    position: relative;
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    margin-bottom: 20px;
   }
 
   &__column {
-    position: relative;
     display: flex;
+    align-items: start;
+    justify-content: start;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 3px;
-
-    h4 {
-      font-size: 14px;
-      font-weight: 600;
-      grid-column: 1 / -1;
-      margin-bottom: 5px;
-      color: var(--text-color);
-    }
   }
 
-  &__text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  &__label {
-    font-size: 12px;
-    color: var(--gray-color);
-  }
-
-  &__value {
-    font-size: 14px;
-    color: var(--text-color);
-  }
-
-  &__confirm {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    input[type="file"] {
-      width: 0.1px;
-      height: 0.1px;
-      opacity: 0;
-      overflow: hidden;
-      position: absolute;
-      z-index: -1;
-    }
-
-    input[type="file"]+label {
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-color);
-      border-radius: 4px;
-      box-shadow: var(--box-shadow);
-      background: var(--primary-color);
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 0 10px;
-      cursor: pointer;
-    }
-
-    input[type="file"]+label::after {
-      content: "Anexar Arquivo";
-    }
-
-    select {
-      cursor: pointer;
-    }
-  }
-
-  &__input {
-    font-size: 12px;
-    outline: none;
-    border: none;
-    border-radius: 4px;
-    height: 30px;
-    color: var(--text-color);
-    padding-left: 10px;
-    box-shadow: var(--box-shadow);
-    background: var(--primary-color);
-  }
-
-  &__button {
-    height: 30px;
+  &__file {
+    position: absolute;
+    top: 20%;
+    left: 3%;
+    width: 94%;
     cursor: pointer;
-    color: var(--orange-color);
-    background: transparent;
-    box-shadow: var(--box-shadow);
-    border-radius: 4px;
-    border: 1px solid var(--orange-color);
-    transition: all ease-in 0.1s;
+    opacity: 0;
+  }
 
-    &:hover {
-      transform: translateY(-3px);
-    }
+  &__file--mask {
+    display: block;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-overflow: ellipsis;
+    color: var(--gray-color);
+    background-color: var(--primary-color);
+    border: 1px dashed var(--third-color);
+  }
+
+  &__delivered {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__partial {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__not-delivery {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
   }
 }
 

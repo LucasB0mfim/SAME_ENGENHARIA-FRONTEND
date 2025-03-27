@@ -2,8 +2,7 @@ import { Observable } from 'rxjs';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { IRequestResponse } from '../interfaces/request-response.interface';
-import { IOrderRequest } from '../interfaces/order-request.interface';
+import { IRequestResponse } from '../interfaces/order-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +16,6 @@ export class RequestService {
   }
 
   update(formData: FormData): Observable<IRequestResponse> {
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data'); // Adiciona o header para FormData
-
-    return this._httpClient.put<IRequestResponse>(this._apiUrl, formData, { headers });
+    return this._httpClient.put<IRequestResponse>(this._apiUrl, formData);
   }
 }

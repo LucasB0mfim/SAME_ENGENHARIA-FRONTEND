@@ -31,13 +31,13 @@
 
           <div class="card__summary">
             <div class="card__primary">
-              <span class="card__id">{{ data.centro_de_custo }}</span>
+              <span class="card__id">{{ data.centro_custo }}</span>
               <span class="card__separator">|</span>
-              <span class="card__cc">{{ data.material }}</span>
+              <span class="card__cc">{{ data.descricao }}</span>
             </div>
 
             <div class="card__secondary">
-              <span class="card__material">{{ data.fornecedor }}</span>
+              <span class="card__material">{{ data.nome_fornecedor }}</span>
             </div>
           </div>
 
@@ -49,7 +49,7 @@
 
             <div class="card__meta-item">
               <span class="card__meta-label">OC:</span>
-              <span class="card__meta-value">{{ data.oc || 'Sem previsão' }}</span>
+              <span class="card__meta-value">{{ data.numero_oc || 'Sem previsão' }}</span>
             </div>
 
             <div class="card__expand-icon">
@@ -65,7 +65,7 @@
 
               <div class="details__text">
                 <span class="details__label">Valor:</span>
-                <span class="details__value">R$ {{ data.valor }}</span>
+                <span class="details__value">R$ {{ data.valor_total }}</span>
               </div>
 
               <div class="details__text">
@@ -79,12 +79,12 @@
 
               <div class="details__text">
                 <span class="details__label">Criado por:</span>
-                <span class="details__value">{{ data.usuario_criacao || 'N/A' }}</span>
+                <span class="details__value">{{ data.aprovador || 'N/A' }}</span>
               </div>
 
               <div class="details__text">
                 <span class="details__label">Data da Liberação:</span>
-                <span class="details__value">{{ data.data_criacao_oc }}</span>
+                <span class="details__value">{{ data.data_aprovacao }}</span>
               </div>
             </div>
 
@@ -93,7 +93,7 @@
 
               <div class="details__text">
                 <span class="details__label">Recebido Por:</span>
-                <span class="details__value">{{ data.usuario_criacao || 'N/A' }}</span>
+                <span class="details__value">{{ data.aprovador || 'N/A' }}</span>
               </div>
             </div>
 
