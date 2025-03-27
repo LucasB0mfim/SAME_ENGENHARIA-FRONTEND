@@ -17,6 +17,7 @@ export interface IOrderRecord {
   nota_fiscal: string,
   ultima_atualizacao: string,
   recebedor: string,
+  criacao: string,
 }
 
 export interface IGroupedRequest {
