@@ -37,12 +37,15 @@
   height: 80%;
 }
 
-.cards {}
+.cards {
+
+}
 
 .card {
   border-radius: 4px;
   box-shadow: var(--box-shadow);
   background: var(--secondary-color);
+  margin-bottom: 10px;
   transition: all ease 0.2s;
 
   &:hover {
@@ -146,7 +149,7 @@
 
     .form__columns {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 300px auto auto auto auto;
     }
 
     .card__columns {
@@ -162,7 +165,6 @@
       background: var(--primary-color);
       text-align: center;
       color: var(--text-color);
-      padding: 4px;
       cursor: pointer;
     }
 

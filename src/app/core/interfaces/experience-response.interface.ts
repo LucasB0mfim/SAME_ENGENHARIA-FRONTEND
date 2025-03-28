@@ -9,6 +9,7 @@ export interface IExperienceRecord {
   "PRIMEIRO PERIODO": Date,
   "SEGUNDO PERIODO": Date,
   "VIAJAR": string,
+  SEGMENTO: string,
 }
 
 export interface IExperienceResponse {
