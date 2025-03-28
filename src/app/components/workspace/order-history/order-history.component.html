@@ -94,6 +94,13 @@
                   R$ {{ item.valor_total }}
                 </div>
               </div>
+
+              <div class="card__column card__column--order">
+                <h4 class="card__text card__text--title">Nota Fiscal</h4>
+                <a href="http://localhost:3000/{{ data.pedidos[0].nota_fiscal }}" target="_blank" class="card__text card__text--row">
+                  <mat-icon class="card__icon">description</mat-icon>
+                </a>
+              </div>
             </div>
           </div>
 
