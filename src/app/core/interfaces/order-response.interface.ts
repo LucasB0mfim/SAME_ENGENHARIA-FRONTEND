@@ -20,14 +20,25 @@ export interface IOrderRecord {
   criacao: string,
 }
 
-export interface IGroupedRequest {
-  total: number;
+export interface IOrderListRequest {
   numero_oc: string;
-  items: IOrderRecord[];
+  valor_total: number;
+  pedidos: IOrderRecord[];
 }
 
-export interface IRequestResponse {
+export interface IOrderResponse {
   success: boolean;
   message: string;
   order: IOrderRecord[]
+}
+
+export interface IOrderItemUpdate {
+  idprd: string;
+  newQuantity: string;
+}
+
+export interface IManagerOrderRequest {
+  numero_oc: string;
+  date: Date;
+  items: IOrderItemUpdate[];
 }

@@ -5,9 +5,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TitleService } from '../../../core/services/title.service';
-import { RequestService } from '../../../core/services/request.service';
+import { OrderService } from '../../../core/services/order.service';
 
-import { IGroupedRequest, IOrderRecord } from '../../../core/interfaces/order-response.interface';
+import { IOrderListRequest, IOrderRecord } from '../../../core/interfaces/order-response.interface';
 import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
@@ -20,7 +20,7 @@ import { DashboardService } from '../../../core/services/dashboard.service';
 export class RequestsComponent implements OnInit {
   photo: File | null = null;
   expandedIndex: number = -1;
-  groupedRecords: IGroupedRequest[] = [];
+  groupedRecords: IOrderListRequest[] = [];
   allRecords: IOrderRecord[] = [];
   activeView: { [key: number]: string } = {};
   employee: string = '';
@@ -28,7 +28,7 @@ export class RequestsComponent implements OnInit {
   partiallyDeliveredForm: FormGroup;
 
   private _titleService = inject(TitleService);
-  private _requestService = inject(RequestService);
+  private _orderService = inject(OrderService);
   private _employee = inject(DashboardService);
 
   constructor() {
@@ -42,7 +42,7 @@ export class RequestsComponent implements OnInit {
   }
 
   find() {
-    this._requestService.find().subscribe({
+    this._orderService.find().subscribe({
       next: (data) => {
         this.allRecords = data.order;
         this.groupByOC();
@@ -64,7 +64,7 @@ export class RequestsComponent implements OnInit {
     const formControls: { [key: string]: FormControl } = {};
 
     this.groupedRecords.forEach((group, groupIndex) => {
-      group.items.forEach((item, itemIndex) => {
+      group.pedidos.forEach((item, itemIndex) => {
         // Create a unique control name for each item
         const controlName = `amount${groupIndex}_${itemIndex}`;
         formControls[controlName] = new FormControl('', [
@@ -105,8 +105,8 @@ export class RequestsComponent implements OnInit {
 
     this.groupedRecords = Object.keys(grouped).map(oc => ({
       numero_oc: oc,
-      items: grouped[oc],
-      total: this.ValorDaCompra(grouped[oc])
+      pedidos: grouped[oc],
+      valor_total: this.ValorDaCompra(grouped[oc])
     }));
   }
 
@@ -161,7 +161,7 @@ export class RequestsComponent implements OnInit {
       return;
     }
 
-    currentRecord.items.forEach((item) => {
+    currentRecord.pedidos.forEach((item) => {
       const formData = new FormData();
       // Verifica novamente se this.photo não é null antes de adicionar
       if (this.photo) {
@@ -182,7 +182,7 @@ export class RequestsComponent implements OnInit {
     const today = new Date().toISOString();
     const currentRecord = this.groupedRecords[index];
 
-    currentRecord.items.forEach((item, itemIndex) => {
+    currentRecord.pedidos.forEach((item, itemIndex) => {
       // Get the received quantity for this specific item
       const controlName = `amount${index}_${itemIndex}`;
       const receivedQuantity = this.partiallyDeliveredForm.get(controlName)?.value || 0;
@@ -205,7 +205,7 @@ export class RequestsComponent implements OnInit {
     const today = new Date().toISOString();
     const currentRecord = this.groupedRecords[index];
 
-    currentRecord.items.forEach((item) => {
+    currentRecord.pedidos.forEach((item) => {
       const formData = new FormData();
       formData.append('numero_oc', currentRecord.numero_oc);
       formData.append('status', 'NÃO ENTREGUE');
@@ -219,7 +219,7 @@ export class RequestsComponent implements OnInit {
   }
 
   submitUpdate(formData: FormData) {
-    this._requestService.update(formData).subscribe({
+    this._orderService.update(formData).subscribe({
       next: () => {
         this.find();
         this.resetForms();

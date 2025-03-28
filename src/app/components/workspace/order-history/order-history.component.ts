@@ -5,9 +5,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../core/services/title.service';
-import { RequestService } from '../../../core/services/request.service';
+import { OrderService } from '../../../core/services/order.service';
 
-import { IGroupedRequest, IOrderRecord } from '../../../core/interfaces/order-response.interface';
+import { IOrderListRequest, IOrderRecord } from '../../../core/interfaces/order-response.interface';
 
 @Component({
   selector: 'app-requests',
@@ -24,13 +24,13 @@ export class OrderHistoryComponent implements OnInit {
   centroCustoName: string = '';
 
   expandedIndex: number = -1;
-  groupedRecords: IGroupedRequest[] = [];
+  groupedRecords: IOrderListRequest[] = [];
   allRecords: IOrderRecord[] = [];
   activeView: { [key: number]: string } = {};
 
 
   private _titleService = inject(TitleService);
-  private _requestService = inject(RequestService);
+  private _orderService = inject(OrderService);
 
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class OrderHistoryComponent implements OnInit {
   }
 
   find() {
-    this._requestService.find().subscribe({
+    this._orderService.find().subscribe({
       next: (data) => {
         this.allRecords = data.order;
         this.groupByOC();
@@ -70,8 +70,8 @@ export class OrderHistoryComponent implements OnInit {
 
     this.groupedRecords = Object.keys(grouped).map(oc => ({
       numero_oc: oc,
-      items: grouped[oc],
-      total: this.fullPrice(grouped[oc])
+      pedidos: grouped[oc],
+      valor_total: this.fullPrice(grouped[oc])
     }));
   }
 

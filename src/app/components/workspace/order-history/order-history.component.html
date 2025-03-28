@@ -37,13 +37,13 @@
             <div class="card__top">
               <div class="card__text card__text--bold">OC: {{ data.numero_oc }}</div>
               <div class="card__separator">-</div>
-              <div class="card__text">{{ data.items[0].centro_custo }}</div>
+              <div class="card__text">{{ data.pedidos[0].centro_custo }}</div>
             </div>
 
             <div class="card__bottom">
-              <div class="card__text card__text--bold">{{ data.items[0].nome_fornecedor }}</div>
+              <div class="card__text card__text--bold">{{ data.pedidos[0].nome_fornecedor }}</div>
               <div class="card__separator">|</div>
-              <div class="card__text card__text--bold">R$ {{ data.total }}</div>
+              <div class="card__text card__text--bold">R$ {{ data.valor_total }}</div>
             </div>
           </div>
 
@@ -71,21 +71,21 @@
 
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Material</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
                   {{ item.descricao }}
                 </div>
               </div>
 
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Quantidade</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">{{ item.quantidade }} {{
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">{{ item.quantidade }} {{
                   pluralize(item.quantidade, item.unidade) }}
                 </div>
               </div>
 
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Valor Unitário</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">R$ {{
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">R$ {{
                   unitPrice(item.valor_total,
                   item.quantidade) }}
                 </div>
@@ -93,7 +93,7 @@
 
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Valor Total</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
                   R$ {{ item.valor_total }}
                 </div>
               </div>
@@ -105,44 +105,44 @@
             <div class="card__columns card__columns--details">
 
               <div class="card__column card__column--details">
-                <h4 class="card__text card__text--title">Criador da OC:</h4>
+                <h4 class="card__text card__text--title">Criado Por:</h4>
                 <div class="card__text">
-                  {{ data.items[0].criacao }}
+                  {{ data.pedidos[0].criacao }}
                 </div>
               </div>
 
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Data da Aprovação:</h4>
                 <div class="card__text">
-                  {{ data.items[0].data_aprovacao }}
+                  {{ data.pedidos[0].data_aprovacao }}
                 </div>
               </div>
 
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Aprovado Por:</h4>
                 <div class="card__text">
-                  {{ data.items[0].aprovador }}
+                  {{ data.pedidos[0].aprovador }}
                 </div>
               </div>
 
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Previsão da Entrega:</h4>
                 <div class="card__text">
-                  {{ data.items[0].data_entrega }}
+                  {{ data.pedidos[0].data_entrega }}
                 </div>
               </div>
 
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Data da Entrega:</h4>
                 <div class="card__text">
-                  {{ data.items[0].ultima_atualizacao }}
+                  {{ data.pedidos[0].ultima_atualizacao }}
                 </div>
               </div>
 
               <div class="card__column card__column--details">
-                <h4 class="card__text card__text--title">Recebido Por:</h4>
+                <h4 class="card__text card__text--title">Registrado Por:</h4>
                 <div class="card__text">
-                  {{ data.items[0].recebedor }}
+                  {{ data.pedidos[0].recebedor }}
                 </div>
               </div>
 

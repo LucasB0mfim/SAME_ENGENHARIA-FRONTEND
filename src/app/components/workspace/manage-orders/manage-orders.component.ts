@@ -1,151 +1,88 @@
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 
+import { OrderService } from '../../../core/services/order.service';
 import { TitleService } from '../../../core/services/title.service';
-import { RequestService } from '../../../core/services/request.service';
-
 import { IOrderRecord } from '../../../core/interfaces/order-response.interface';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatIconModule, ReactiveFormsModule],
   selector: 'app-manage-orders',
-  imports: [CommonModule, FormsModule, MatIconModule, ReactiveFormsModule],
   templateUrl: './manage-orders.component.html',
-  styleUrl: './manage-orders.component.scss'
+  styleUrl: './manage-orders.component.scss',
 })
 export class ManageOrdersComponent implements OnInit {
-  expandedIndex: number = -1;
-  records: IOrderRecord[] = [];
-  allRecords: IOrderRecord[] = [];
+  orderList: { [key: string]: IOrderRecord[] } = {};
+  orderForms: { [key: string]: FormGroup } = {};
 
-  ocName: string = '';
-  valorName: string = '';
-  fornecedorName: string = '';
-  centroCustoName: string = '';
-
+  private readonly _orderService = inject(OrderService);
   private _titleService = inject(TitleService);
-  private _requestService = inject(RequestService);
-
-  newDateForm: FormGroup = new FormGroup({
-    newDate: new FormControl('')
-  });
-
-  detailsForm: FormGroup = new FormGroup({
-    details: new FormControl('')
-  });
 
   ngOnInit() {
-    this.find();
-    this._titleService.setTitle('Gerenciar Pedidos')
+    this.getOrder();
+    this._titleService.setTitle('Gerenciar Pedidos');
   }
 
-  find() {
-    this._requestService.find().subscribe({
+  getOrder() {
+    this._orderService.find().subscribe({
       next: (data) => {
-        this.records = data.order.filter(data => data.status === 'PARCIALMENTE ENTREGUE' || data.status === 'NÃO ENTREGUE');
-        this.allRecords = [...data.order]
+        this.orderList = {};
+        for (const order of data.order) {
+          if (order.status === 'NÃO ENTREGUE' || order.status === 'PARCIALMENTE ENTREGUE') {
+            const oc = order.numero_oc;
+
+            if (!this.orderList[oc]) {
+              this.orderList[oc] = [];
+              this.orderForms[oc] = new FormGroup({
+                date: new FormControl('')
+                // Removemos o FormGroup 'quantities' aqui
+              });
+            }
+
+            this.orderList[oc].push(order);
+
+            // Adiciona o controle diretamente no FormGroup principal
+            this.orderForms[oc].addControl(
+              order.idprd,
+              new FormControl('')
+            );
+          }
+        }
       },
-      error: (error) => {
-        console.error(error);
-      }
-    })
+      error: (error) => console.log(error)
+    });
   }
 
-  toggleExpand(index: number): void {
-    if (this.expandedIndex === index) {
-      this.expandedIndex = -1; // Fecha o item
-    } else {
-      this.expandedIndex = index; // Abre o item clicado
-    }
+  updateOrder(numero_oc: string) {
+    const formData = this.orderForms[numero_oc].value;
+    const dataEntrega = formData.date;
+
+    // Para cada item da OC
+    this.orderList[numero_oc].forEach(order => {
+      // Acessa diretamente o valor do controle pelo idprd
+      const quantidade = formData[order.idprd] || order.quantidade;
+
+      const request = {
+        numero_oc: numero_oc,
+        idprd: order.idprd,
+        quantidade: quantidade,
+        data_entrega: dataEntrega,
+        status: '',
+      };
+
+      this._orderService.managerOrder(request).subscribe({
+        next: () => console.log(`Item ${order.idprd} atualizado`),
+        error: (error) => console.error(`Erro no item ${order.idprd}`, error)
+      });
+    });
+
+    setTimeout(() => this.getOrder(), 1000);
   }
 
-  updateTime(index: number) {
-    const currentRecord = this.records[index];
-    const formData = new FormData();
-
-    formData.append('data_entrega', this.newDateForm.value.newDate);
-    formData.append('status', '');
-    formData.append('quantidade_entregue', '');
-    formData.append('oc', currentRecord.numero_oc.toString());
-
-    this.submitUpdate(formData);
-  }
-
-  updateDetails(index: number) {
-    const currentRecord = this.records[index];
-    const formData = new FormData();
-
-    formData.append('data_entrega', this.detailsForm.value.details);
-    formData.append('oc', currentRecord.numero_oc.toString());
-
-    this.submitUpdate(formData);
-  }
-
-  submitUpdate(formData: FormData) {
-    this._requestService.update(formData).subscribe({
-      next: () => {
-        this.find();
-        this.expandedIndex = -1;
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    })
-  }
-
-  calculateRemaining(quantidade: string, quantidade_entregue: string) {
-    return Number(quantidade) - Number(quantidade_entregue);
-  }
-
-  filters() {
-    let filteredRecords = [...this.allRecords];
-
-    if (this.ocName) {
-      const inputValue = this.ocName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.numero_oc && data.numero_oc.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.valorName) {
-      const inputValue = this.valorName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.valor_total && data.valor_total.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.fornecedorName) {
-      const inputValue = this.fornecedorName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.nome_fornecedor && data.nome_fornecedor.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.centroCustoName) {
-      const inputValue = this.centroCustoName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.centro_custo && data.centro_custo.toLowerCase().includes(inputValue)
-      )
-    }
-
-    this.records = filteredRecords
-  }
-
-  searchOc() {
-    this.filters();
-  }
-
-  searchValor() {
-    this.filters();
-  }
-
-  searchFornecedor() {
-    this.filters();
-  }
-
-  searchCentroCusto() {
-    this.filters();
+  getOrderCount(): number {
+    return Object.keys(this.orderList).length;
   }
 }

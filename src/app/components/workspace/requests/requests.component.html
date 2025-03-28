@@ -32,13 +32,13 @@
             <div class="card__top">
               <div class="card__text card__text--bold">OC: {{ data.numero_oc }}</div>
               <div class="card__separator">-</div>
-              <div class="card__text">{{ data.items[0].centro_custo }}</div>
+              <div class="card__text">{{ data.pedidos[0].centro_custo }}</div>
             </div>
 
             <div class="card__bottom">
-              <div class="card__text card__text--bold">{{ data.items[0].nome_fornecedor }}</div>
+              <div class="card__text card__text--bold">{{ data.pedidos[0].nome_fornecedor }}</div>
               <div class="card__separator">|</div>
-              <div class="card__text card__text--bold">R$ {{ data.total }}</div>
+              <div class="card__text card__text--bold">R$ {{ data.valor_total }}</div>
             </div>
           </div>
 
@@ -76,28 +76,28 @@
 
               <div class="card__column">
                 <h4 class="card__text card__text--title">Material</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
                   {{ item.descricao }}
                 </div>
               </div>
 
               <div class="card__column">
                 <h4 class="card__text card__text--title">Quantidade</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">{{ item.quantidade }} {{
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">{{ item.quantidade }} {{
                   pluralize(item.quantidade, item.unidade) }}
                 </div>
               </div>
 
               <div class="card__column">
                 <h4 class="card__text card__text--title">Valor Unitário</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">R$ {{ unitPrice(item.valor_total,
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">R$ {{ unitPrice(item.valor_total,
                   item.quantidade) }}
                 </div>
               </div>
 
               <div class="card__column">
                 <h4 class="card__text card__text--title">Valor Total</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
                   R$ {{ item.valor_total }}
                 </div>
               </div>
@@ -123,21 +123,21 @@
             <div class="card__columns">
               <div class="card__column">
                 <h4 class="card__text card__text--title">Material</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
                   {{ item.descricao }}
                 </div>
               </div>
 
               <div class="card__column">
-                <h4 class="card__text card__text--title">Quantidade Solicitada</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.items">
+                <h4 class="card__text card__text--title">Qtd. Solicitada</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
                   {{ item.quantidade }} {{ pluralize(item.quantidade, item.unidade) }}
                 </div>
               </div>
 
               <div class="card__column">
-                <h4 class="card__text card__text--title">Quantidade Recebida</h4>
-                <div class="card__text" *ngFor="let item of data.items; let j = index">
+                <h4 class="card__text card__text--title">Qtd. Recebida</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos; let j = index">
                   <input
                     type="number"
                     class="card__input"

@@ -1,123 +1,132 @@
-<div class="request">
-
-  <div class="request__top">
-    <div class="filter">
-      <label class="filter__label">Centro de Custo:</label>
-      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centroCustoName"
-        (ngModelChange)="searchCentroCusto()">
-    </div>
-
-    <div class="filter">
-      <label class="filter__label">Oc:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
-    </div>
-
-    <div class="filter">
-      <label class="filter__label">Fornecedor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedorName"
-        (ngModelChange)="searchFornecedor()">
-    </div>
-
-    <div class="filter">
-      <label class="filter__label">Valor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valorName"
-        (ngModelChange)="searchValor()">
-    </div>
-  </div>
-
-  <div class="request__main">
-    <div class="card">
-
-      <div class="card__item" *ngFor="let data of records; let i = index" [class.expanded]="expandedIndex === i">
-        <div class="card__main" (click)="toggleExpand(i)">
+<div class="orders">
+  <div class="orders__top"></div>
+  <div class="orders__main">
+    <!-- Lista de Cards -->
+    <div class="cards">
+      <!-- Card Individual -->
+      <div class="card" *ngFor="let data of orderList | keyvalue">
+        <!-- Cabeçalho do Card -->
+        <div class="card__header">
+          <!-- Borda Lateral -->
           <div class="card__border"></div>
-
+          <!-- Lado Esquerdo do Card -->
           <div class="card__summary">
-            <div class="card__primary">
-              <span class="card__id">{{ data.centro_custo }}</span>
-              <span class="card__separator">|</span>
-              <span class="card__cc">{{ data.nome_fornecedor }}</span>
+            <!-- Parte Superior do Cabeçalho -->
+            <div class="card__top">
+              <div class="card__text">OC: {{ data.key }}</div>
+              <div class="card__separator">-</div>
+              <div class="card__text">{{ data.value[0].centro_custo }}</div>
             </div>
-
-            <div class="card__secondary">
-              <span class="card__material">{{ data.descricao }}</span>
+            <!-- Parte Inferior do Cabeçalho -->
+            <div class="card__bottom">
+              <div class="card__text">{{ data.value[0].nome_fornecedor }}</div>
+              <div class="card__separator">|</div>
+              <div class="card__text">R$ {{ data.value[0].valor_total }}</div>
             </div>
           </div>
-
-          <div class="card__meta-data">
-
-            <div class="card__meta-item">
-              <span class="card__meta-label">OC:</span>
-              <span class="card__meta-value">{{ data.numero_oc || 'Sem previsão' }}</span>
+          <!-- Lado Direito do Card -->
+          <div class="card__buttons">
+            <div class="card__button">
+              <mat-icon class="card__icon">inventory_2</mat-icon>
+              <div class="card__text">Pedidos</div>
             </div>
-
-            <div class="card__expand-icon">
-              <i class="arrow" [class.down]="expandedIndex === i"></i>
+            <div class="card__button">
+              <mat-icon class="card__icon">person</mat-icon>
+              <div class="card__text">OC</div>
             </div>
+          </div>
+          <!-- Seta de Expansão -->
+          <div class="card__arrow">
+            <i class="arrow"></i>
           </div>
         </div>
-
-        <div class="details" [class.show]="expandedIndex === i">
-          <div class="details__grid">
-
-            <div class="details__order">
-              <h4>Detalhes da Entrega</h4>
-
-              <div class="details__text">
-                <span class="details__label">Quantidade Solicitada:</span>
-                <span class="details__value">{{ data.quantidade || 'N/A' }} {{ data.unidade }}</span>
-              </div>
-
-              <div class="details__text">
-                <span class="details__label">Quantidade Entregue:</span>
-                <span class="details__value">{{ data.quantidade_entregue || 'N/A' }} {{ data.unidade }}</span>
-              </div>
-
-              <div class="details__text">
-                <span class="details__label">Falta Entregar:</span>
-                <span class="details__value">{{ calculateRemaining(data.quantidade, data.quantidade_entregue) }} {{ data.unidade }}</span>
-              </div>
-
-              <div class="details__text">
-                <span class="details__label">Criação da OC:</span>
-                <span class="details__value">{{ data.data_aprovacao }}</span>
-              </div>
-
-              <div class="details__text">
-                <span class="details__label">Última Atualização:</span>
-                <span class="details__value">{{ data.ultima_atualizacao }}</span>
-              </div>
-
-            </div>
-
-            <div class="details__column">
-              <h4>Atualizar Pedido</h4>
-
-              <form [formGroup]="newDateForm" class="details__confirm">
-                <span class="details__label">Nova data de entrega:</span>
-                <input type="date" formControlName="newDate" class="details__input">
-                <button class="details__button" (click)="updateTime(i)">Confirmar</button>
+        <!-- Corpo do Card -->
+        <div class="card__body">
+          <!-- Seção de Pedidos -->
+          <div class="card__container">
+            <div class="card__columns">
+              <form [formGroup]="orderForms[data.key]" (ngSubmit)="updateOrder(data.key)">
+                <div class="card__column">
+                  <h4 class="card__text">Material:</h4>
+                  <div class="card__data" *ngFor="let order of data.value">
+                    {{ order.descricao }}
+                  </div>
+                </div>
+                <div class="card__column">
+                  <h4 class="card__text">Qtd. Solicitada:</h4>
+                  <div class="card__data" *ngFor="let order of data.value">
+                    {{ order.quantidade }}
+                  </div>
+                </div>
+                <div class="card__column">
+                  <h4 class="card__text">Qtd. Entregue:</h4>
+                  <div class="card__data" *ngFor="let order of data.value">
+                    {{ order.quantidade_entregue }}
+                  </div>
+                </div>
+                <div class="card__column">
+                  <h4 class="card__text">Definir Previsão:</h4>
+                  <div class="card__data">
+                    <input type="date" formControlName="date">
+                  </div>
+                </div>
+                <div class="card__column">
+                  <h4 class="card__text">Definir Qtd:</h4>
+                  <div class="card__data" *ngFor="let order of data.value">
+                    <input type="number" [formControlName]="order.idprd">
+                  </div>
+                </div>
+                <button type="submit">Confirmar</button>
               </form>
-
             </div>
-
-            <div class="details__column">
-              <h4>Cancelar Pedido</h4>
-
-              <form [formGroup]="detailsForm" class="details__confirm">
-                <span class="details__label">Motivo do Cancelamento:</span>
-                <input type="text" formControlName="details" class="details__input">
-                <button class="details__button" (click)="updateDetails(i)">Confirmar</button>
-              </form>
+          </div>
+          <!-- Seção de Detalhes -->
+          <div class="card__container">
+            <div class="card__columns">
+              <div class="card__column">
+                <h4 class="card__text">Criado Por:</h4>
+                <div class="card__data">
+                  {{ data.value[0].criacao }}
+                </div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text">Aprovado Por:</h4>
+                <div class="card__data">
+                  {{ data.value[0].aprovador }}
+                </div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text">Registrado Por:</h4>
+                <div class="card__data">
+                  {{ data.value[0].recebedor }}
+                </div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text">Previsão de Entrega:</h4>
+                <div class="card__data">
+                  {{ data.value[0].data_entrega }}
+                </div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text">Data da Aprovação:</h4>
+                <div class="card__data">
+                  {{ data.value[0].data_aprovacao }}
+                </div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text">última Atualização:</h4>
+                <div class="card__data">
+                  {{ data.value[0].ultima_atualizacao }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="no-results" *ngIf="records.length === 0">
+      <!-- Mensagem de Lista Vazia -->
+      <div class="no__result" *ngIf="getOrderCount() === 0">
         <p>Nenhum resultado encontrado.</p>
       </div>
     </div>
   </div>
-
 </div>

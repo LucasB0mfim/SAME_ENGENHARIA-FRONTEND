@@ -8,7 +8,7 @@ import { IEmployeeResponse } from '../interfaces/employee-response.interface';
 })
 export class DashboardService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://206.42.34.79:3000/same-engenharia/api/employee';
+  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/employee';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

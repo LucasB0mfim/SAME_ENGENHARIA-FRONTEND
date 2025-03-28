@@ -12,7 +12,7 @@ export class LoginService {
 
   private readonly _httpClient = inject(HttpClient);
   private readonly _router = inject(Router);
-  private readonly _apiUrl = 'http://206.42.34.79:3000/same-engenharia/api/auth/employee/login';
+  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/auth/employee/login';
 
   login(request: ILoginRequest): Observable<ILoginResponse> {
     return this._httpClient.post<ILoginResponse>(this._apiUrl, request).pipe(
