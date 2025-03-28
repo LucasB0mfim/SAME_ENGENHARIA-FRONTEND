@@ -168,16 +168,16 @@
   }
 
   &__button {
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--gray-color);
     background: transparent;
     transition: all ease-in 0.1s;
+    cursor: pointer;
 
     &--status {
       border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
     }
 
@@ -239,7 +239,7 @@
 
   &__columns {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto;
     margin-bottom: 20px;
   }
 
@@ -308,4 +308,14 @@
     font-size: 16px;
     color: var(--gray-color);
   }
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--fourth-color);
+  stroke-width: 8%;
 }

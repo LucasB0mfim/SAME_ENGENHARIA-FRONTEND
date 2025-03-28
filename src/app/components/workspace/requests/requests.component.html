@@ -2,22 +2,22 @@
   <div class="orders__top">
     <div class="filter">
       <label class="filter__label">Centro de Custo:</label>
-      <input type="text" class="filter__input" placeholder="Ex: BRK">
+      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centro_custo" (ngModelChange)="searchCentroCusto()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Oc:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 1000">
+      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ordem_compra" (ngModelChange)="searchOrdemCompra()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Fornecedor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: Renascer">
+      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedor" (ngModelChange)="searchFornecedor()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Valor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 300">
+      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valor" (ngModelChange)="searchValor()">
     </div>
   </div>
 
@@ -101,6 +101,13 @@
                   R$ {{ item.valor_total }}
                 </div>
               </div>
+
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Previsão de Entrega</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
+                  {{ item.data_entrega }}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -114,7 +121,10 @@
             </label>
 
             <button class="card__button card__button--confirm" (click)="delivered(i)">
-              Confirmar Entrega
+              <span *ngIf="!loading">Confirmar</span>
+                <span *ngIf="loading">
+                  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                </span>
             </button>
           </form>
 
@@ -150,13 +160,21 @@
             </div>
 
             <button class="card__button card__button--confirm" (click)="partial(i)">
-              Confirmar Entrega Parcial
+              <span *ngIf="!loading">Confirmar</span>
+                <span *ngIf="loading">
+                  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                </span>
             </button>
           </form>
 
           <!-- Não Entregue -->
           <div *ngIf="activeView[i] === 'nao-entregue'" class="card__grid">
-            <button class="card__button card__button--confirm" (click)="NotDelivered(i)">Material Não Chegou</button>
+            <button class="card__button card__button--confirm" (click)="NotDelivered(i)">
+              <span *ngIf="!loading">Confirmar</span>
+                <span *ngIf="loading">
+                  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                </span>
+            </button>
           </div>
         </div>
       </div>

@@ -3,25 +3,22 @@
   <div class="request__top">
     <div class="filter">
       <label class="filter__label">Centro de Custo:</label>
-      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centroCustoName"
-        (ngModelChange)="searchCentroCusto()">
+      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centro_custo" (ngModelChange)="searchCentroCusto()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Oc:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
+      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ordem_compra" (ngModelChange)="searchOrdemCompra()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Fornecedor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedorName"
-        (ngModelChange)="searchFornecedor()">
+      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedor" (ngModelChange)="searchFornecedor()">
     </div>
 
     <div class="filter">
       <label class="filter__label">Valor:</label>
-      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valorName"
-        (ngModelChange)="searchValor()">
+      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valor" (ngModelChange)="searchValor()">
     </div>
   </div>
 

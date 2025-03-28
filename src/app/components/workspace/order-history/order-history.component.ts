@@ -17,21 +17,18 @@ import { IOrderListRequest, IOrderRecord } from '../../../core/interfaces/order-
   styleUrl: './order-history.component.scss'
 })
 export class OrderHistoryComponent implements OnInit {
-
-  ocName: string = '';
-  valorName: string = '';
-  fornecedorName: string = '';
-  centroCustoName: string = '';
+  valor: string = '';
+  fornecedor: string = '';
+  centro_custo: string = '';
+  ordem_compra: string = '';
 
   expandedIndex: number = -1;
   groupedRecords: IOrderListRequest[] = [];
   allRecords: IOrderRecord[] = [];
   activeView: { [key: number]: string } = {};
 
-
   private _titleService = inject(TitleService);
   private _orderService = inject(OrderService);
-
 
   ngOnInit() {
     this.find();
@@ -57,9 +54,8 @@ export class OrderHistoryComponent implements OnInit {
   groupByOC(): void {
     const grouped: { [key: string]: IOrderRecord[] } = {};
 
-    const filteredRecords = this.allRecords.filter(item =>
-      ['ENTREGUE'].includes(item.status)
-    );
+    // Filter only delivered records
+    const filteredRecords = this.allRecords.filter(item => item.status === 'ENTREGUE');
 
     filteredRecords.forEach(item => {
       if (!grouped[item.numero_oc]) {
@@ -106,53 +102,91 @@ export class OrderHistoryComponent implements OnInit {
     }
   }
 
-  filters() {
-    let filteredRecords = [...this.allRecords];
+  filter() {
+    let filteredRecords = this.allRecords.filter(item => item.status === 'ENTREGUE');
 
-    if (this.ocName) {
-      const inputValue = this.ocName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.numero_oc && data.numero_oc.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.valorName) {
-      const inputValue = this.valorName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.valor_total && data.valor_total.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.fornecedorName) {
-      const inputValue = this.fornecedorName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.nome_fornecedor && data.nome_fornecedor.toLowerCase().includes(inputValue)
-      )
-    }
-
-    if (this.centroCustoName) {
-      const inputValue = this.centroCustoName.toLowerCase();
+    if (this.centro_custo) {
+      const inputValue = this.centro_custo.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
         data.centro_custo && data.centro_custo.toLowerCase().includes(inputValue)
-      )
+      );
     }
 
-    this.allRecords = filteredRecords
+    if (this.ordem_compra) {
+      const inputValue = this.ordem_compra.toLowerCase();
+      filteredRecords = filteredRecords.filter(data =>
+        data.numero_oc && data.numero_oc.toLowerCase().includes(inputValue)
+      );
+    }
+
+    if (this.fornecedor) {
+      const inputValue = this.fornecedor.toLowerCase();
+      filteredRecords = filteredRecords.filter(data =>
+        data.nome_fornecedor && data.nome_fornecedor.toLowerCase().includes(inputValue)
+      );
+    }
+
+    if (this.valor) {
+      const inputValue = parseFloat(this.valor);
+      if (!isNaN(inputValue)) {
+        const lowerBound = inputValue * 0.83;  // 20% less
+        const upperBound = inputValue * 1.25;  // 20% more
+
+        // Group records by OC first to compare the total value
+        const ocGroups: { [key: string]: IOrderRecord[] } = {};
+        filteredRecords.forEach(item => {
+          if (!ocGroups[item.numero_oc]) {
+            ocGroups[item.numero_oc] = [];
+          }
+          ocGroups[item.numero_oc].push(item);
+        });
+
+        // Filter OCs where the total value is within the range
+        const filteredOcs = Object.keys(ocGroups).filter(oc => {
+          const totalValue = this.fullPrice(ocGroups[oc]);
+          return totalValue >= lowerBound && totalValue <= upperBound;
+        });
+
+        // Get all records from the filtered OCs
+        filteredRecords = filteredRecords.filter(item =>
+          filteredOcs.includes(item.numero_oc)
+        );
+      }
+    }
+
+    this.updateGroupedRecords(filteredRecords);
   }
 
-  searchOc() {
-    this.filters();
-  }
+  updateGroupedRecords(records: IOrderRecord[]) {
+    const grouped: { [key: string]: IOrderRecord[] } = {};
 
-  searchValor() {
-    this.filters();
-  }
+    records.forEach(item => {
+      if (!grouped[item.numero_oc]) {
+        grouped[item.numero_oc] = [];
+      }
+      grouped[item.numero_oc].push(item);
+    });
 
-  searchFornecedor() {
-    this.filters();
+    this.groupedRecords = Object.keys(grouped).map(oc => ({
+      numero_oc: oc,
+      pedidos: grouped[oc],
+      valor_total: this.fullPrice(grouped[oc])
+    }));
   }
 
   searchCentroCusto() {
-    this.filters();
+    this.filter();
+  }
+
+  searchOrdemCompra() {
+    this.filter();
+  }
+
+  searchFornecedor() {
+    this.filter();
+  }
+
+  searchValor() {
+    this.filter();
   }
 }
