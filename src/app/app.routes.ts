@@ -15,6 +15,7 @@ import { RequestsComponent } from './components/workspace/requests/requests.comp
 import { ConstructionsComponent } from './components/workspace/constructions/constructions.component';
 import { ManageOrdersComponent } from './components/workspace/manage-orders/manage-orders.component';
 import { OrderHistoryComponent } from './components/workspace/order-history/order-history.component';
+import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,7 @@ export const routes: Routes = [
       { path: 'constructions', component: ConstructionsComponent },
       { path: 'maneger-orders', component: ManageOrdersComponent },
       { path: 'order-history', component: OrderHistoryComponent },
+      { path: 'upload-timesheet', component: UploadTimesheetComponent },
     ]
   },
   {

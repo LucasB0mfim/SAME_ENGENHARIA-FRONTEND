@@ -1,0 +1,44 @@
+<div class="upload">
+  <!-- Mensagens de feedback -->
+  @if (showError) {
+  <div class="upload__message upload__message--error">
+    <mat-icon>error</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+  }
+
+  @if (showSuccess) {
+  <div class="upload__message upload__message--success">
+    <mat-icon>check_circle</mat-icon>
+    <span>{{ successMessage }}</span>
+  </div>
+  }
+
+  <!-- Container para selecionar o arquivo -->
+  <div class="upload__timesheet" (click)="triggerFileInput()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+
+    <input type="file" [accept]="acceptedFileTypes" #fileInput (change)="onFileSelected($event)" class="upload__input">
+
+    <label class="upload__label">
+      <mat-icon>cloud_upload</mat-icon>
+      <span class="upload__filename">
+        {{ file?.name || 'Arraste ou selecione o arquivo CSV' }}
+      </span>
+      @if (!file) {
+      <span class="upload__instruction">
+        Tamanho máximo: 5MB
+      </span>
+      }
+    </label>
+  </div>
+
+  <!-- Botão para enviar o arquivo -->
+  <button type="button" class="upload__button" [disabled]="!file || loading" (click)="submitTimesheet()">
+    @if (!loading) {
+    <span>Enviar</span>
+    } @else {
+    <mat-progress-spinner mode="indeterminate" diameter="24" class="upload__spinner">
+    </mat-progress-spinner>
+    }
+  </button>
+</div>
