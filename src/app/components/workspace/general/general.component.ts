@@ -44,21 +44,28 @@ export class GeneralComponent implements OnInit {
 
   // Dados mockados (ideal seria vir do serviço)
   birthdayPeople: BirthdayPerson[] = [
-    { name: 'João' },
-    { name: 'Maria' },
-    { name: 'Pedro' },
-    { name: 'Ana' },
-    { name: 'Carlos' }
+    { name: 'Anthonny' },
+    { name: 'Giovanna' },
+    { name: 'Francisco' },
+    { name: 'Ailton' }
   ];
 
   notices: Notice[] = [
     {
-      title: 'Reunião - Sexta Feira',
-      content: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. A amet officiis vero.'
+      title: 'Sexta Feira - 04/04/2025',
+      content: 'Agenda semanal para alinhamento de projetos e metas. Prepare seus relatórios de progresso e venha com ideias para o sprint seguinte.'
     },
     {
-      title: 'Treinamento - Segunda Feira',
-      content: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. A amet officiis vero.'
+      title: 'Segunda Feira - 31/03/2025',
+      content: 'Workshop de capacitação sobre as novas ferramentas da plataforma. Todos os colaboradores devem trazer seus notebooks para a parte prática.'
+    },
+    {
+      title: 'Pagamento do caju - 31/03/2025',
+      content: 'O benefício flexível do Caju será creditado até as 18h no app. Confira seu saldo e aproveite os parceiros da rede!'
+    },
+    {
+      title: 'Pagamento do salário - 31/03/2025',
+      content: 'A folha de pagamento será processada até o final do dia útil. Verifique sua conta corrente ou plataforma de pagamento digital.'
     }
   ];
 

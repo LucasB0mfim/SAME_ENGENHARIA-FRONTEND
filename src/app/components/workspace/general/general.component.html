@@ -1,6 +1,6 @@
 <div class="dashboard">
   <!-- Seção Superior -->
-  <div class="dashboard__top">
+  <div class="dashboard__left">
     <!-- Cartão de Boas-vindas -->
     <div class="welcome-card" [ngStyle]="{ 'background': backgroundStyle, 'color': textColor }">
       <div class="welcome-card__text">
@@ -9,6 +9,17 @@
       </div>
       <div class="welcome-card__illustration">
         <img [src]="ilustration" alt="Ilustração de boas-vindas">
+      </div>
+    </div>
+
+    <!-- Aniversariantes do Mês -->
+    <div class="birthday">
+      <h1 class="birthday__title">Aniversariantes do Mês</h1>
+      <div class="birthday__columns">
+        <div *ngFor="let person of birthdayPeople" class="birthday__column">
+          <mat-icon class="birthday__icon">person</mat-icon>
+          <span class="birthday__text">{{ person.name }}</span>
+        </div>
       </div>
     </div>
 
@@ -28,22 +39,7 @@
   </div>
 
   <!-- Seção Principal -->
-  <div class="dashboard__main">
-    <!-- Aniversariantes do Mês -->
-    <div class="birthday">
-      <h1 class="birthday__title">Aniversariantes do Mês</h1>
-      <div class="birthday__columns">
-        <div *ngFor="let person of birthdayPeople" class="birthday__column">
-          <div class="birthday__avatar">
-            <mat-icon>person</mat-icon>
-          </div>
-          <div class="birthday__name">
-            <span>{{ person.name }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  <div class="dashboard__right">
     <!-- Mural de Avisos -->
     <div class="notices">
       <h1 class="notices__title">Mural de Avisos</h1>
