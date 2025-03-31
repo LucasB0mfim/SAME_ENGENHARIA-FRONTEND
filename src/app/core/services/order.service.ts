@@ -9,7 +9,7 @@ import { IManagerOrderRequest, IOrderResponse } from '../interfaces/order-respon
 })
 export class OrderService {
   private readonly _httpClient = inject(HttpClient);
-  private _apiUrl = 'http://localhost:3000/same-engenharia/api/reports/request';
+  private _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/request';
 
   find(): Observable<IOrderResponse> {
     return this._httpClient.get<IOrderResponse>(this._apiUrl);
