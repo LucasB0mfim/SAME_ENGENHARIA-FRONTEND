@@ -6,15 +6,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TitleService } from '../../../core/services/title.service';
 
 @Component({
-  selector: 'app-constructions',
+  selector: 'app-construction',
   imports: [CommonModule, MatIconModule, RouterModule],
-  templateUrl: './constructions.component.html',
-  styleUrl: './constructions.component.scss'
+  templateUrl: './construction.component.html',
+  styleUrl: './construction.component.scss'
 })
-export class ConstructionsComponent implements OnInit {
+export class ConstructionComponent implements OnInit {
   private _titleService = inject(TitleService);
 
   ngOnInit() {
-    this._titleService.setTitle('Obras')
+    this._titleService.setTitle('Obra')
   }
 }

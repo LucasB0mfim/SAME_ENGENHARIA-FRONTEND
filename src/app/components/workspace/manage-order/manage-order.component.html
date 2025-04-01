@@ -3,92 +3,78 @@
     <div class="filters">
       <div class="filter">
         <label class="filter__text">Centro de Custo:</label>
-        <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centro_custo"
-          (ngModelChange)="searchCentroCusto()">
+        <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centro_custo" (ngModelChange)="searchCentroCusto()">
       </div>
-
       <div class="filter">
         <label class="filter__text">Oc:</label>
-        <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ordem_compra"
-          (ngModelChange)="searchOrdemCompra()">
+        <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ordem_compra" (ngModelChange)="searchOrdemCompra()">
       </div>
-
       <div class="filter">
         <label class="filter__text">Fornecedor:</label>
-        <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedor"
-          (ngModelChange)="searchFornecedor()">
+        <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedor" (ngModelChange)="searchFornecedor()">
       </div>
-
       <div class="filter">
         <label class="filter__text">Valor:</label>
-        <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valor"
-          (ngModelChange)="searchValor()">
+        <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valor" (ngModelChange)="searchValor()">
       </div>
     </div>
   </div>
+
   <div class="orders__main">
-    <!-- Lista de Cards -->
     <div class="cards">
-      <!-- Card Individual -->
-      <div class="card" *ngFor="let data of orderList | keyvalue; let i = index">
-        <!-- Cabeçalho do Card -->
+      <div class="card" *ngFor="let data of filteredOrders | keyvalue; let i = index">
         <div class="card__header" (click)="expandScreen(i)">
-          <!-- Borda Lateral -->
           <div class="card__border"></div>
-          <!-- Lado Esquerdo do Card -->
           <div class="card__summary">
-            <!-- Parte Superior do Cabeçalho -->
             <div class="card__top">
               <div class="card__text card__text--bold">OC: {{ data.key }}</div>
               <div class="card__separator">-</div>
-              <div class="card__text">{{ data.value[0].centro_custo }}</div>
+              <div class="card__text">{{ data.value.centro_custo }}</div>
             </div>
-            <!-- Parte Inferior do Cabeçalho -->
             <div class="card__bottom">
-              <div class="card__text card__text--bold">{{ data.value[0].nome_fornecedor }}</div>
+              <div class="card__text card__text--bold">{{ data.value.fornecedor }}</div>
               <div class="card__text card__text--bold">|</div>
-              <div class="card__text card__text--bold">R$ {{ data.value[0].valor_total }}</div>
+              <div class="card__text card__text--bold">R$ {{ calculateTotalValue(data.value.order) }}</div>
             </div>
           </div>
-          <!-- Lado Direito do Card -->
           <div class="card__buttons">
-            <div class="card__button" (click)="openSection($event, i, 'orders')">
+            <div class="card__button" [class.active]="activeSection[i] === 'orders'" (click)="openSection($event, i, 'orders')">
               <mat-icon class="card__icon">inventory_2</mat-icon>
               <div class="card__text">Pedidos</div>
             </div>
-            <div class="card__button" (click)="openSection($event, i, 'oc')">
+            <div class="card__button" [class.active]="activeSection[i] === 'oc'" (click)="openSection($event, i, 'oc')">
               <mat-icon class="card__icon">person</mat-icon>
               <div class="card__text">OC</div>
             </div>
           </div>
         </div>
-        <!-- Corpo do Card -->
-        <div class="card__body" [class.show]="i === index"> <!-- Body fica visível quando o index For igual a 0 -->
+
+        <div class="card__body" [class.show]="i === expandedIndex">
           <!-- Seção de Pedidos -->
           <div class="card__container" *ngIf="activeSection[i] === 'orders'">
             <form class="form__columns" [formGroup]="orderForms[data.key]" (ngSubmit)="updateOrder(data.key)">
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Material:</h4>
-                <div class="card__text card__text--ellipsis" *ngFor="let order of data.value">
-                  {{ order.descricao }}
+                <div class="card__text card__text--ellipsis" *ngFor="let order of data.value.order">
+                  {{ order.material }}
                 </div>
               </div>
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Qtd. Solicitada:</h4>
-                <div class="card__text" *ngFor="let order of data.value">
+                <div class="card__text" *ngFor="let order of data.value.order">
                   {{ order.quantidade }}
                 </div>
               </div>
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Qtd. Entregue:</h4>
-                <div class="card__text" *ngFor="let order of data.value">
-                  {{ order.quantidade_entregue }}
+                <div class="card__text" *ngFor="let order of data.value.order">
+                  {{ order.quantidade_entregue || 0 }}
                 </div>
               </div>
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Definir Qtd:</h4>
-                <div class="card__text" *ngFor="let order of data.value">
-                  <input type="number" class="card__input" [formControlName]="order.idprd">
+                <div class="card__text" *ngFor="let order of data.value.order">
+                  <input type="number" class="card__input" [formControlName]="order.idprd" min="0" [max]="order.quantidade">
                 </div>
               </div>
               <div class="card__column">
@@ -97,7 +83,7 @@
                   <input type="date" class="card__input" formControlName="date">
                 </div>
               </div>
-              <button type="submit" class="card__button">
+              <button type="submit" class="card__button" [disabled]="loading">
                 <span *ngIf="!loading">Confirmar</span>
                 <span *ngIf="loading">
                   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -105,50 +91,31 @@
               </button>
             </form>
           </div>
+
           <!-- Seção de Detalhes -->
           <div class="card__container" *ngIf="activeSection[i] === 'oc'">
             <div class="card__columns">
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Criado Por:</h4>
-                <div class="card__text">
-                  {{ data.value[0].criacao }}
-                </div>
-              </div>
-              <div class="card__column">
-                <h4 class="card__text card__text--orange">Aprovado Por:</h4>
-                <div class="card__text">
-                  {{ data.value[0].aprovador }}
-                </div>
+                <div class="card__text">{{ data.value.usuario_criacao || 'N/A' }}</div>
               </div>
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Registrado Por:</h4>
-                <div class="card__text">
-                  {{ data.value[0].recebedor }}
-                </div>
+                <div class="card__text">{{ data.value.order[0].registrado || 'N/A' }}</div>
               </div>
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Previsão de Entrega:</h4>
-                <div class="card__text">
-                  {{ data.value[0].data_entrega }}
-                </div>
+                <div class="card__text">{{ data.value.previsao_entrega || 'N/A' }}</div>
               </div>
               <div class="card__column">
-                <h4 class="card__text card__text--orange">Data da Aprovação:</h4>
-                <div class="card__text">
-                  {{ data.value[0].data_aprovacao }}
-                </div>
-              </div>
-              <div class="card__column">
-                <h4 class="card__text card__text--orange">última Atualização:</h4>
-                <div class="card__text">
-                  {{ data.value[0].ultima_atualizacao }}
-                </div>
+                <h4 class="card__text card__text--orange">Última Atualização:</h4>
+                <div class="card__text">{{ data.value.order[0].data_entrega || 'N/A' }}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Mensagem de Lista Vazia -->
+
       <div class="card__no-result" *ngIf="getOrderCount() === 0">
         <p class="card__text card__text--light">Nenhum resultado encontrado.</p>
       </div>

@@ -11,9 +11,9 @@ import { HumanResourcesComponent } from './components/workspace/human-resources/
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
-import { RequestsComponent } from './components/workspace/requests/requests.component';
-import { ConstructionsComponent } from './components/workspace/constructions/constructions.component';
-import { ManageOrdersComponent } from './components/workspace/manage-orders/manage-orders.component';
+import { OrderComponent } from './components/workspace/order/order.component';
+import { ConstructionComponent } from './components/workspace/construction/construction.component';
+import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { OrderHistoryComponent } from './components/workspace/order-history/order-history.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 
@@ -48,9 +48,9 @@ export const routes: Routes = [
       { path: 'tracking', component: TrackingComponent },
       { path: 'time-sheet', component: TimeSheetComponent },
       { path: 'human-resources', component: HumanResourcesComponent },
-      { path: 'request', component: RequestsComponent },
-      { path: 'constructions', component: ConstructionsComponent },
-      { path: 'maneger-orders', component: ManageOrdersComponent },
+      { path: 'order', component: OrderComponent },
+      { path: 'constructions', component: ConstructionComponent },
+      { path: 'maneger-order', component: ManageOrderComponent },
       { path: 'order-history', component: OrderHistoryComponent },
       { path: 'upload-timesheet', component: UploadTimesheetComponent },
     ]

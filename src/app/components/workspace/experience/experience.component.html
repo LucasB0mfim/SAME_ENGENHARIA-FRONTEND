@@ -53,18 +53,18 @@
         <tbody class="table__body">
           <tr class="table__body-row" *ngFor="let data of records">
             <td class="table__data table__data-border"
-              [ngClass]="borderExperience(data['PRIMEIRO PERIODO'], data['SEGUNDO PERIODO'])"></td>
-            <td class="table__data table__data-small">{{ data.CHAPA }}</td>
-            <td class="table__data table__data-small">{{ data.STATUS }}</td>
-            <td class="table__data table__data-small">{{ data.ESTADO }}</td>
-            <td class="table__data table__data-medium">{{ data['CENTRO DE CUSTO'] }}</td>
-            <td class="table__data table__data-medium">{{ data['FUNÇÃO'] }}</td>
-            <td class="table__data table__data-large">{{ data.FUNCIONARIO }}</td>
-            <td class="table__data table__data-medium">{{ data['DATA ADMISSÃO'] }}</td>
-            <td class="table__data table__data-medium">{{ data['PRIMEIRO PERIODO'] }}</td>
-            <td class="table__data table__data-medium">{{ data['SEGUNDO PERIODO'] }}</td>
-            <td class="table__data table__data-small">{{ data.VIAJAR }}</td>
-            <td class="table__data table__data-small">{{ data.SEGMENTO }}</td>
+              [ngClass]="borderExperience(data.primeiro_periodo, data.segundo_periodo)"></td>
+            <td class="table__data table__data-small">{{ data.chapa }}</td>
+            <td class="table__data table__data-small">{{ data.status }}</td>
+            <td class="table__data table__data-small">{{ data.estado }}</td>
+            <td class="table__data table__data-medium">{{ data.centro_custo }}</td>
+            <td class="table__data table__data-medium">{{ data.funcao }}</td>
+            <td class="table__data table__data-large">{{ data.funcionario }}</td>
+            <td class="table__data table__data-medium">{{ data.admissao }}</td>
+            <td class="table__data table__data-medium">{{ data.primeiro_periodo }}</td>
+            <td class="table__data table__data-medium">{{ data.segundo_periodo }}</td>
+            <td class="table__data table__data-small">{{ data.viajar }}</td>
+            <td class="table__data table__data-small">{{ data.segmento }}</td>
           </tr>
         </tbody>
       </table>

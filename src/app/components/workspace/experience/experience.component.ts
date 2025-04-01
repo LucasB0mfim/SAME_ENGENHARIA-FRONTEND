@@ -10,7 +10,6 @@ import { ExperienceService } from '../../../core/services/experience.service';
 
 import { IExperienceRecord } from '../../../core/interfaces/experience-response.interface';
 
-
 @Component({
   selector: 'app-experience',
   standalone: true,
@@ -39,19 +38,25 @@ export class ExperienceComponent implements OnInit {
     this._experienceService.find().subscribe({
       next: (data) => {
         this.records = data.records;
-        this.allRecords = [...data.records]
+        this.allRecords = [...data.records];
       },
-      error: (error) => { console.error(error) }
+      error: (error) => { console.error(error); }
     });
   }
 
-  experienceTime(experienceDate: Date): number {
+  // Função auxiliar para converter data no formato brasileiro (DD/MM/YYYY) para Date
+  parseBrazilianDate(dateString: string): Date {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day); // month - 1 porque o Date usa 0-11 para meses
+  }
+
+  experienceTime(experienceDate: string): number {
     const today = new Date();
-    const period = new Date(experienceDate);
+    const period = this.parseBrazilianDate(experienceDate);
     return differenceInCalendarDays(period, today) + 1;
   }
 
-  borderExperience(firstExperience: Date, secondExperience: Date) {
+  borderExperience(firstExperience: string, secondExperience: string) {
     const firstDate = this.experienceTime(firstExperience);
     const secondDate = this.experienceTime(secondExperience);
 
@@ -67,8 +72,8 @@ export class ExperienceComponent implements OnInit {
   }
 
   isInExperience(data: IExperienceRecord): boolean {
-    const firstDate = this.experienceTime(data['PRIMEIRO PERIODO']);
-    const secondDate = this.experienceTime(data['SEGUNDO PERIODO']);
+    const firstDate = this.experienceTime(data.primeiro_periodo);
+    const secondDate = this.experienceTime(data.segundo_periodo);
     return firstDate > 0 || secondDate > 0;
   }
 
@@ -79,7 +84,7 @@ export class ExperienceComponent implements OnInit {
     if (this.employeeName) {
       const inputValue = this.employeeName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.FUNCIONARIO.toLowerCase().includes(inputValue)
+        data.funcionario.toLowerCase().includes(inputValue)
       );
     }
 
@@ -87,7 +92,7 @@ export class ExperienceComponent implements OnInit {
     if (this.centroCustoName) {
       const inputValue = this.centroCustoName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data['CENTRO DE CUSTO'].toLowerCase().includes(inputValue)
+        data.centro_custo.toLowerCase().includes(inputValue)
       );
     }
 

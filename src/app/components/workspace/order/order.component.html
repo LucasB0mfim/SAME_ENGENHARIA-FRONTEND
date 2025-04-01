@@ -1,0 +1,134 @@
+<div class="orders">
+  <div class="orders__top">
+    <div class="filter">
+      <label class="filter__label">Centro de Custo:</label>
+      <input type="text" class="filter__input" placeholder="Ex: BRK" [(ngModel)]="centro_custo" (ngModelChange)="searchCentroCusto()">
+    </div>
+
+    <div class="filter">
+      <label class="filter__label">OC:</label>
+      <input type="text" class="filter__input" placeholder="Ex: 1000" [(ngModel)]="ordem_compra" (ngModelChange)="searchOrdemCompra()">
+    </div>
+
+    <div class="filter">
+      <label class="filter__label">Fornecedor:</label>
+      <input type="text" class="filter__input" placeholder="Ex: Renascer" [(ngModel)]="fornecedor" (ngModelChange)="searchFornecedor()">
+    </div>
+
+    <div class="filter">
+      <label class="filter__label">Valor:</label>
+      <input type="text" class="filter__input" placeholder="Ex: 300" [(ngModel)]="valor" (ngModelChange)="searchValor()">
+    </div>
+  </div>
+
+  <div class="orders__main">
+    <div class="cards">
+      <div class="card" *ngFor="let data of filteredPendingOrders | keyvalue; let i = index">
+        <div class="card__header" (click)="toggleExpand(i)">
+          <div class="card__border"></div>
+
+          <div class="card__summary">
+            <div class="card__top">
+              <div class="card__text card__text--bold">OC: {{ data.value.numero_oc }}</div>
+              <div class="card__separator">-</div>
+              <div class="card__text">{{ data.value.centro_custo }}</div>
+            </div>
+            <div class="card__bottom">
+              <div class="card__text card__text--bold">{{ data.value.fornecedor }}</div>
+              <div class="card__separator">|</div>
+              <div class="card__text card__text--bold">R$ {{ calculateTotalValue(data.value.order) }}</div>
+            </div>
+          </div>
+
+          <div class="card__options">
+            <button class="card__button card__button--status" [class.active]="activeSection[data.key] === 'pedidos'" (click)="toggleSection($event, data.key, 'pedidos')">
+              <mat-icon class="card__icon">inventory_2</mat-icon>
+              <div class="card__text">Pedidos</div>
+            </button>
+            <button class="card__button card__button--status" [class.active]="activeSection[data.key] === 'entregue'" (click)="toggleSection($event, data.key, 'entregue')">
+              <mat-icon class="card__icon">check_circle</mat-icon>
+              <div class="card__text">Entregue</div>
+            </button>
+            <button class="card__button card__button--status" [class.active]="activeSection[data.key] === 'parcial'" (click)="toggleSection($event, data.key, 'parcial')">
+              <mat-icon class="card__icon">error</mat-icon>
+              <div class="card__text">Parcial</div>
+            </button>
+            <button class="card__button card__button--status" [class.active]="activeSection[data.key] === 'nao_entregue'" (click)="toggleSection($event, data.key, 'nao_entregue')">
+              <mat-icon class="card__icon">cancel</mat-icon>
+              <div class="card__text">Não Chegou</div>
+            </button>
+          </div>
+
+          <div class="card__expand-icon">
+            <i class="arrow" [class.down]="expandedIndex === i"></i>
+          </div>
+        </div>
+
+        <div class="card__body" [class.show]="expandedIndex === i">
+          <!-- Seção PEDIDOS -->
+          <div class="card__grid" *ngIf="activeSection[data.key] === 'pedidos'">
+            <div class="card__columns">
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Material</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">{{ item.material }}</div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Quantidade</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">{{ item.quantidade }} {{ item.unidade }}</div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Valor Unitário</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">R$ {{ item.valor_unitario }}</div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Valor Total</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">R$ {{ item.valor_total }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção ENTREGUE -->
+          <div class="card__grid" *ngIf="activeSection[data.key] === 'entregue'">
+            <div class="delivered">
+              <label class="card__file--mask">Selecione um arquivo</label>
+              <input type="file" [accept]="acceptedFile" class="card__file" (change)="onFileSelected($event)">
+              <button type="button" (click)="deliveredOrder(data.key)" class="card__button card__button--confirm">Confirmar</button>
+            </div>
+          </div>
+
+          <!-- Seção PARCIALMENTE ENTREGUE -->
+          <div class="card__grid" *ngIf="activeSection[data.key] === 'parcial'">
+            <div class="card__columns">
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Material</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">{{ item.material }}</div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Qtd. Solicitada</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">{{ item.quantidade }} {{ item.unidade }}</div>
+              </div>
+              <div class="card__column">
+                <h4 class="card__text card__text--title">Qtd. Recebida</h4>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">
+                  <input type="number" class="card__input" [(ngModel)]="item.quantidade_entregue" min="0" [max]="item.quantidade">
+                </div>
+              </div>
+            </div>
+            <button type="button" (click)="orderPartiallyDelivered(data.key)" class="card__button card__button--confirm">Confirmar</button>
+          </div>
+
+          <!-- Seção NÃO ENTREGUE -->
+          <div class="card__grid" *ngIf="activeSection[data.key] === 'nao_entregue'">
+            <div class="notDelivered">
+              <button type="button" (click)="orderNotDelivered(data.key)" class="card__button card__button--confirm">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-results" *ngIf="isFilteredPendingOrdersEmpty()">
+        <p>Nenhum resultado encontrado.</p>
+      </div>
+    </div>
+  </div>
+</div>

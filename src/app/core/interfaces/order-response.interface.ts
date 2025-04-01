@@ -1,44 +1,33 @@
-export interface IOrderRecord {
-  aprovador: string,
-  data_aprovacao: Date,
-  centro_custo: string,
-  data_entrega: Date,
-  numero_oc: string,
-  quantidade: string,
-  valor_total: string,
+export interface IItemRecord {
   idprd: string,
-  descricao: string,
-  tipo_mov: string,
-  serie: string,
-  nome_fornecedor: string,
+  data_criacao_oc: string,
+  material: string,
+  quantidade: string,
   unidade: string,
+  valor_unitario: string,
+  valor_total: string,
   status: string,
-  quantidade_entregue: string,
+  data_entrega: string,
   nota_fiscal: string,
-  ultima_atualizacao: string,
-  recebedor: string,
-  criacao: string,
+  registrado: string,
+  quantidade_entregue: string
 }
 
-export interface IOrderListRequest {
-  numero_oc: string;
-  valor_total: number;
-  pedidos: IOrderRecord[];
+export interface ICommonData {
+  data_criacao_oc: string,
+  numero_oc: string,
+  fornecedor: string,
+  previsao_entrega: string,
+  centro_custo: string,
+  usuario_criacao: string,
+  data_entrega: string,
+  nota_fiscal: string,
+  registrado: string,
+  order: IItemRecord[]
 }
 
 export interface IOrderResponse {
   success: boolean;
   message: string;
-  order: IOrderRecord[]
-}
-
-export interface IOrderItemUpdate {
-  idprd: string;
-  newQuantity: string;
-}
-
-export interface IManagerOrderRequest {
-  numero_oc: string;
-  date: Date;
-  items: IOrderItemUpdate[];
+  order: []
 }

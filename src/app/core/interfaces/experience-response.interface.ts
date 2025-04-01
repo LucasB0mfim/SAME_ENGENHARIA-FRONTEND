@@ -1,15 +1,15 @@
 export interface IExperienceRecord {
-  STATUS: string,
-  ESTADO: string,
-  "CENTRO DE CUSTO": string,
-  "FUNÇÃO": string,
-  CHAPA: string,
-  FUNCIONARIO: string,
-  "DATA ADMISSÃO": Date,
-  "PRIMEIRO PERIODO": Date,
-  "SEGUNDO PERIODO": Date,
-  "VIAJAR": string,
-  SEGMENTO: string,
+  status: string,
+  estado: string,
+  centro_custo: string,
+  funcao: string,
+  chapa: string,
+  funcionario: string,
+  admissao: string,
+  primeiro_periodo: string,
+  segundo_periodo: string,
+  viajar: string,
+  segmento: string,
 }
 
 export interface IExperienceResponse {

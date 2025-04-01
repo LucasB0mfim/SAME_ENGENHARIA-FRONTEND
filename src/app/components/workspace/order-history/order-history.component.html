@@ -1,5 +1,4 @@
 <div class="request">
-
   <div class="request__top">
     <div class="filter">
       <label class="filter__label">Centro de Custo:</label>
@@ -24,33 +23,29 @@
 
   <div class="request__main">
     <div class="cards">
-
-      <div class="card" *ngFor="let data of groupedRecords; let i = index">
+      <div class="card" *ngFor="let data of filteredDeliveredOrders | keyvalue; let i = index">
         <div class="card__header" (click)="toggleExpand(i)">
-
           <div class="card__border"></div>
 
           <div class="card__summary">
             <div class="card__top">
-              <div class="card__text card__text--bold">OC: {{ data.numero_oc }}</div>
+              <div class="card__text card__text--bold">OC: {{ data.value.numero_oc }}</div>
               <div class="card__separator">-</div>
-              <div class="card__text">{{ data.pedidos[0].centro_custo }}</div>
+              <div class="card__text">{{ data.value.centro_custo }}</div>
             </div>
-
             <div class="card__bottom">
-              <div class="card__text card__text--bold">{{ data.pedidos[0].nome_fornecedor }}</div>
+              <div class="card__text card__text--bold">{{ data.value.fornecedor }}</div>
               <div class="card__separator">|</div>
-              <div class="card__text card__text--bold">R$ {{ data.valor_total }}</div>
+              <div class="card__text card__text--bold">R$ {{ calculateTotalValue(data.value.order) }}</div>
             </div>
           </div>
 
           <div class="card__options">
-            <button class="card__button card__button--status" (click)="setActiveView($event, i, 'pedidos')">
+            <button class="card__button card__button--status" [class.active]="activeSection[data.key] === 'pedidos'" (click)="toggleSection($event, data.key, 'pedidos')">
               <mat-icon class="card__icon">inventory_2</mat-icon>
               <div class="card__text">Pedidos</div>
             </button>
-
-            <button class="card__button card__button--status" (click)="setActiveView($event, i, 'detalhes')">
+            <button class="card__button card__button--status" [class.active]="activeSection[data.key] === 'detalhes'" (click)="toggleSection($event, data.key, 'detalhes')">
               <mat-icon class="card__icon">info</mat-icon>
               <div class="card__text">Detalhes</div>
             </button>
@@ -63,103 +58,63 @@
 
         <div class="card__body" [class.show]="expandedIndex === i">
           <!-- Pedidos -->
-          <div *ngIf="activeView[i] === 'pedidos'" class="card__grid">
+          <div *ngIf="activeSection[data.key] === 'pedidos'" class="card__grid">
             <div class="card__columns">
-
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Material</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
-                  {{ item.descricao }}
-                </div>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">{{ item.material }}</div>
               </div>
-
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Quantidade</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">{{ item.quantidade }} {{
-                  pluralize(item.quantidade, item.unidade) }}
-                </div>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">{{ item.quantidade }} {{ pluralize(item.quantidade, item.unidade) }}</div>
               </div>
-
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Valor Unitário</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">R$ {{
-                  unitPrice(item.valor_total,
-                  item.quantidade) }}
-                </div>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">R$ {{ item.valor_unitario }}</div>
               </div>
-
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Valor Total</h4>
-                <div class="card__text card__text--row" *ngFor="let item of data.pedidos">
-                  R$ {{ item.valor_total }}
-                </div>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">R$ {{ item.valor_total }}</div>
               </div>
-
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Nota Fiscal</h4>
-                <a href="http://192.168.10.17:3000/{{ data.pedidos[0].nota_fiscal }}" target="_blank" class="card__text card__text--row">
-                  <mat-icon class="card__icon">description</mat-icon>
-                </a>
+                <div class="card__text card__text--row" *ngFor="let item of data.value.order">
+                  <a href="#" target="_blank" *ngIf="item.nota_fiscal">
+                    <mat-icon class="card__icon">description</mat-icon>
+                  </a>
+                  <span *ngIf="!item.nota_fiscal">N/A</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Entregue -->
-          <form *ngIf="activeView[i] === 'detalhes'" class="card__grid">
+          <!-- Detalhes -->
+          <div *ngIf="activeSection[data.key] === 'detalhes'" class="card__grid">
             <div class="card__columns card__columns--details">
-
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Criado Por:</h4>
-                <div class="card__text">
-                  {{ data.pedidos[0].criacao }}
-                </div>
+                <div class="card__text">{{ data.value.usuario_criacao }}</div>
               </div>
-
-              <div class="card__column card__column--details">
-                <h4 class="card__text card__text--title">Data da Aprovação:</h4>
-                <div class="card__text">
-                  {{ data.pedidos[0].data_aprovacao }}
-                </div>
-              </div>
-
-              <div class="card__column card__column--details">
-                <h4 class="card__text card__text--title">Aprovado Por:</h4>
-                <div class="card__text">
-                  {{ data.pedidos[0].aprovador }}
-                </div>
-              </div>
-
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Previsão da Entrega:</h4>
-                <div class="card__text">
-                  {{ data.pedidos[0].data_entrega }}
-                </div>
+                <div class="card__text">{{ data.value.previsao_entrega || 'N/A' }}</div>
               </div>
-
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Data da Entrega:</h4>
-                <div class="card__text">
-                  {{ data.pedidos[0].ultima_atualizacao }}
-                </div>
+                <div class="card__text">{{ data.value.order[0].data_entrega || 'N/A' }}</div>
               </div>
-
               <div class="card__column card__column--details">
                 <h4 class="card__text card__text--title">Registrado Por:</h4>
-                <div class="card__text">
-                  {{ data.pedidos[0].recebedor }}
-                </div>
+                <div class="card__text">{{ data.value.order[0].registrado || 'N/A' }}</div>
               </div>
-
             </div>
-          </form>
+          </div>
         </div>
       </div>
 
-      <div class="no-results" *ngIf="groupedRecords.length === 0">
+      <div class="no-results" *ngIf="isFilteredDeliveredOrdersEmpty()">
         <p>Nenhum resultado encontrado.</p>
       </div>
-
     </div>
   </div>
-
 </div>
