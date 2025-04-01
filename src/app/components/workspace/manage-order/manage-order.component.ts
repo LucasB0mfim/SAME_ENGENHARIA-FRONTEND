@@ -177,7 +177,7 @@ export class ManageOrderComponent implements OnInit {
       const payload = {
         idprd: item.idprd,
         status: 'PENDENTE',
-        previsao_entrega: data_entrega,
+        data_entrega: data_entrega,
         registrado: item.registrado || 'TESTE',
         quantidade: quantidade_entregue.toString()
       };

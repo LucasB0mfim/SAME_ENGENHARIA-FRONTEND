@@ -74,7 +74,7 @@
               <div class="card__column">
                 <h4 class="card__text card__text--orange">Definir Qtd:</h4>
                 <div class="card__text" *ngFor="let order of data.value.order">
-                  <input type="number" class="card__input" [formControlName]="order.idprd" min="0" [max]="order.quantidade">
+                  <input type="number" class="card__input" [formControlName]="order.idprd" min="0">
                 </div>
               </div>
               <div class="card__column">
