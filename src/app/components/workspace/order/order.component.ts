@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TitleService } from '../../../core/services/title.service';
 import { OrderService } from '../../../core/services/order.service';
 import { ICommonData } from '../../../core/interfaces/order-response.interface';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-order',
@@ -19,6 +20,7 @@ import { ICommonData } from '../../../core/interfaces/order-response.interface';
 export class OrderComponent implements OnInit {
   private __titleService = inject(TitleService);
   private readonly __orderService = inject(OrderService);
+  private readonly __employeeService = inject(DashboardService);
 
   record: any[] = [];
   recordOC: Record<string, ICommonData> = {};
@@ -31,6 +33,7 @@ export class OrderComponent implements OnInit {
   nota_fiscal: File | null = null;
   today = new Date().toISOString();
   acceptedFile: string = '.png, .jpg, .jpeg, .gif, .bmp, .webp';
+  email_employee: string = '';
 
   centro_custo: string = '';
   ordem_compra: string = '';
@@ -38,8 +41,16 @@ export class OrderComponent implements OnInit {
   valor: string = '';
 
   ngOnInit() {
+    this.getUser();
     this.getOrder();
     this.__titleService.setTitle('Recebimento de Material');
+  }
+
+  getUser() {
+    this.__employeeService.findAll().subscribe({
+      next: (data) => this.email_employee = data.employee.email,
+      error: (error) => console.error(error)
+    });
   }
 
   getOrder() {
@@ -135,7 +146,7 @@ export class OrderComponent implements OnInit {
       formData.append('status', 'ENTREGUE');
       formData.append('data_entrega', this.today);
       formData.append('nota_fiscal', this.nota_fiscal, this.nota_fiscal.name);
-      formData.append('registrado', 'TESTE');
+      formData.append('registrado', this.email_employee);
       formData.append('quantidade_entregue', item.quantidade);
       this.__orderService.update(formData).subscribe({
         next: () => this.getOrder(),
@@ -155,7 +166,7 @@ export class OrderComponent implements OnInit {
         idprd: item.idprd,
         status: 'PARCIALMENTE ENTREGUE',
         data_entrega: this.today,
-        registrado: 'TESTE',
+        registrado: this.email_employee,
         quantidade_entregue: item.quantidade_entregue
       };
       this.__orderService.updateStatus(payload).subscribe({
@@ -172,7 +183,7 @@ export class OrderComponent implements OnInit {
         idprd: item.idprd,
         status: 'NÃO ENTREGUE',
         data_entrega: this.today,
-        registrado: 'TESTE',
+        registrado: this.email_employee,
         quantidade_entregue: '0'
       };
       this.__orderService.updateStatus(payload).subscribe({
