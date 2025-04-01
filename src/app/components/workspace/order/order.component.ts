@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core'; // Adicionei ElementRef e ViewChild
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -21,6 +21,8 @@ export class OrderComponent implements OnInit {
   private __titleService = inject(TitleService);
   private readonly __orderService = inject(OrderService);
   private readonly __employeeService = inject(DashboardService);
+
+  @ViewChild('fileLabel') fileLabel!: ElementRef; // Referência ao label
 
   record: any[] = [];
   recordOC: Record<string, ICommonData> = {};
@@ -132,8 +134,12 @@ export class OrderComponent implements OnInit {
     return order.reduce((sum, item) => sum + parseFloat(item.valor_total || 0), 0);
   }
 
-  onFileSelected(event: any) {
-    this.nota_fiscal = event.target.files[0];
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.nota_fiscal = input.files[0]; // Armazena o arquivo selecionado
+      this.fileLabel.nativeElement.textContent = this.nota_fiscal.name; // Atualiza o label com o nome do arquivo
+    }
   }
 
   private formatDate(): string {
