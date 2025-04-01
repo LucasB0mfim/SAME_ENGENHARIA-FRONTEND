@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core'; // Adicionei ElementRef e ViewChild
+import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -22,7 +22,7 @@ export class OrderComponent implements OnInit {
   private readonly __orderService = inject(OrderService);
   private readonly __employeeService = inject(DashboardService);
 
-  @ViewChild('fileLabel') fileLabel!: ElementRef; // Referência ao label
+  @ViewChild('fileLabel') fileLabel!: ElementRef;
 
   record: any[] = [];
   recordOC: Record<string, ICommonData> = {};
@@ -137,8 +137,8 @@ export class OrderComponent implements OnInit {
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.nota_fiscal = input.files[0]; // Armazena o arquivo selecionado
-      this.fileLabel.nativeElement.textContent = this.nota_fiscal.name; // Atualiza o label com o nome do arquivo
+      this.nota_fiscal = input.files[0];
+      this.fileLabel.nativeElement.textContent = this.nota_fiscal.name;
     }
   }
 
@@ -170,8 +170,14 @@ export class OrderComponent implements OnInit {
 
   orderPartiallyDelivered(numero_oc: string) {
     const itensOC = this.recordOC[numero_oc].order;
-    itensOC.forEach((item: any) => {
-      if (item.quantidade_entregue === undefined || item.quantidade_entregue < 0 || item.quantidade_entregue > item.quantidade) {
+    for (const item of itensOC) {
+      // Validação: quantidade_entregue maior que quantidade
+      if (item.quantidade_entregue > item.quantidade) {
+        alert('Coloque um valor menor do que a quantidade solicitada');
+        return;
+      }
+      // Validação existente: undefined, negativo ou fora do intervalo
+      if (item.quantidade_entregue === undefined || Number(item.quantidade_entregue) < 0) {
         alert(`Quantidade inválida para o item ${item.idprd}`);
         return;
       }
@@ -186,7 +192,7 @@ export class OrderComponent implements OnInit {
         next: () => this.getOrder(),
         error: (error) => console.error(error)
       });
-    });
+    }
   }
 
   orderNotDelivered(numero_oc: string) {
