@@ -31,7 +31,6 @@ export class OrderComponent implements OnInit {
   expandedIndex: number | null = null;
 
   nota_fiscal: File | null = null;
-  today = new Date().toISOString();
   acceptedFile: string = '.png, .jpg, .jpeg, .gif, .bmp, .webp';
   email_employee: string = '';
 
@@ -137,6 +136,14 @@ export class OrderComponent implements OnInit {
     this.nota_fiscal = event.target.files[0];
   }
 
+  private formatDate(): string {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = String(today.getFullYear()).slice(-2);
+    return `${day}/${month}/${year}`;
+  }
+
   deliveredOrder(numero_oc: string) {
     const itemsOC = this.recordOC[numero_oc].order;
     itemsOC.forEach((item: any) => {
@@ -144,7 +151,7 @@ export class OrderComponent implements OnInit {
       const formData = new FormData();
       formData.append('idprd', item.idprd);
       formData.append('status', 'ENTREGUE');
-      formData.append('data_entrega', this.today);
+      formData.append('data_entrega', this.formatDate());
       formData.append('nota_fiscal', this.nota_fiscal, this.nota_fiscal.name);
       formData.append('registrado', this.email_employee);
       formData.append('quantidade_entregue', item.quantidade);
@@ -165,7 +172,7 @@ export class OrderComponent implements OnInit {
       const payload = {
         idprd: item.idprd,
         status: 'PARCIALMENTE ENTREGUE',
-        data_entrega: this.today,
+        data_entrega: this.formatDate(),
         registrado: this.email_employee,
         quantidade_entregue: item.quantidade_entregue
       };
@@ -182,7 +189,7 @@ export class OrderComponent implements OnInit {
       const payload = {
         idprd: item.idprd,
         status: 'NÃO ENTREGUE',
-        data_entrega: this.today,
+        data_entrega: this.formatDate(),
         registrado: this.email_employee,
         quantidade_entregue: '0'
       };
