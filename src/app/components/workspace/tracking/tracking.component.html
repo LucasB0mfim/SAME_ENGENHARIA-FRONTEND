@@ -109,16 +109,21 @@
             <div class="last">
               <h4>Detalhes da OC</h4>
               <div class="detail-item">
-                <span class="detail-label">Criação OC:</span>
+                <span class="detail-label">Criado Por:</span>
+                <span class="detail-value">{{ data.criacao || 'N/A' }}</span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Data Criação:</span>
                 <span class="detail-value">{{ data.elaboracao_oc || 'N/A' }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Data Aprovação:</span>
+                <span class="detail-value">{{ data.aprovacao_oc || 'N/A' }}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Fornecedor:</span>
                 <span class="detail-value">{{ data.fornecedor || 'N/A' }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Aprovação OC:</span>
-                <span class="detail-value">{{ data.aprovacao_oc || 'N/A' }}</span>
               </div>
             </div>
           </div>
