@@ -9,7 +9,6 @@ import { ITimeSheetResponse } from '../interfaces/timesheet-response.interface';
 })
 export class TimeSheetService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _baseUrl = 'http://206.42.34.79:3000/same-engenharia/api/reports';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -19,7 +18,7 @@ export class TimeSheetService {
 
   find(request: ITimeSheetRequest): Observable<ITimeSheetResponse> {
     const headers = this._createHeaders();
-    return this._httpClient.post<ITimeSheetResponse>(`${this._baseUrl}/timesheet`, request, { headers });
+    return this._httpClient.post<ITimeSheetResponse>('http://206.42.34.79:3000/same-engenharia/api/reports/timesheet/filters', request, { headers });
   }
 
   getEmployeeTimesheet(
@@ -53,10 +52,10 @@ export class TimeSheetService {
       body.abono = abono;
     }
 
-    return this._httpClient.post<ITimeSheetResponse>(`${this._baseUrl}/timesheet/filters`, body, { headers });
+    return this._httpClient.post<ITimeSheetResponse>('http://206.42.34.79:3000/same-engenharia/api/reports/timesheet', body, { headers });
   }
 
   uploadTimesheet(formData: FormData): Observable<any> {
-    return this._httpClient.post(`${this._baseUrl}/csv`, formData)
+    return this._httpClient.post('http://206.42.34.79:3000/same-engenharia/api/reports/csv`', formData)
   }
 }
