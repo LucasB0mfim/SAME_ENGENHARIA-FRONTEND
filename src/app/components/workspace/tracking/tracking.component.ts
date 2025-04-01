@@ -53,7 +53,7 @@ export class TrackingComponent {
     const uniqueValues = new Set<string>();
 
     this.allRecords.forEach(record => {
-      uniqueValues.add(record.CENTRO_CUSTO);
+      uniqueValues.add(record.centro_custo);
     });
 
     this.centroCusto = Array.from(uniqueValues).sort();
@@ -69,7 +69,7 @@ export class TrackingComponent {
   }
 
   getStatusColor(data: ITrackingRecord): string {
-    if (data.APROVACAO_OC) {
+    if (data.aprovacao_oc) {
       return '#32CD32'
     } else {
       return '#0000FF'
@@ -81,35 +81,35 @@ export class TrackingComponent {
 
     if (this.centroCustoName) {
       filteredRecords = filteredRecords.filter(data =>
-        data.CENTRO_CUSTO === this.centroCustoName
+        data.centro_custo === this.centroCustoName
       );
     }
 
     if (this.materialName) {
       const inputValue = this.materialName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.MATERIAL && data.MATERIAL.toLowerCase().includes(inputValue)
+        data.material && data.material.toLowerCase().includes(inputValue)
       );
     }
 
     if (this.movimentoName) {
       const inputValue = this.movimentoName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.MOVIMENTO && data.MOVIMENTO.toLowerCase().includes(inputValue)
+        data.movimento && data.movimento.toLowerCase().includes(inputValue)
       );
     }
 
     if (this.idName) {
       const inputValue = this.idName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.ID && data.ID.toLowerCase().includes(inputValue)
+        data.id && data.id.toLowerCase().includes(inputValue)
       );
     }
 
     if (this.ocName) {
       const inputValue = this.ocName.toLowerCase();
       filteredRecords = filteredRecords.filter(data =>
-        data.NUMERO_OC && data.NUMERO_OC.toLowerCase().includes(inputValue)
+        data.numero_oc && data.numero_oc.toLowerCase().includes(inputValue)
       );
     }
 

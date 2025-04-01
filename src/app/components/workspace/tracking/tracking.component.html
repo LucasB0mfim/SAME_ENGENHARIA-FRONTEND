@@ -1,5 +1,5 @@
 <div class="tracking">
-  
+
   <div class="tracking-top__section">
     <div class="filters">
       <label>Centro de Custo:</label>
@@ -48,30 +48,30 @@
 
           <div class="list-summary">
             <div class="list-primary">
-              <span class="list-id">ID: {{ data.ID }}</span>
+              <span class="list-id">ID: {{ data.id }}</span>
               <span class="list-separator">|</span>
-              <span class="list-cc">{{ data.CENTRO_CUSTO }}</span>
+              <span class="list-cc">{{ data.centro_custo }}</span>
             </div>
 
             <div class="list-secondary">
-              <span class="list-material">{{ data.MATERIAL }}</span>
+              <span class="list-material">{{ data.material }}</span>
             </div>
           </div>
 
           <div class="list-metadata">
             <div class="list-meta-item">
               <span class="meta-label">Mov:</span>
-              <span class="meta-value">{{ data.MOVIMENTO || 'N/A' }}</span>
+              <span class="meta-value">{{ data.movimento || 'N/A' }}</span>
             </div>
 
             <div class="list-meta-item">
               <span class="meta-label">OC:</span>
-              <span class="meta-value">{{ data.NUMERO_OC || 'N/A' }}</span>
+              <span class="meta-value">{{ data.numero_oc || 'N/A' }}</span>
             </div>
 
             <div class="list-meta-item">
               <span class="meta-label">Entrega:</span>
-              <span class="meta-value">{{ data.DATA_ENTREGA || 'N/A' }}</span>
+              <span class="meta-value">{{ data.data_entrega || 'N/A' }}</span>
             </div>
 
             <div class="list-expand-icon">
@@ -86,11 +86,11 @@
               <h4>Material</h4>
               <div class="detail-item full-width">
                 <span class="detail-label">Descrição:</span>
-                <span class="detail-value material-description">{{ data.MATERIAL }}</span>
+                <span class="detail-value material-description">{{ data.material }}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Quantidade:</span>
-                <span class="detail-value">{{ data.QUANTIDADE_TOTAL }} {{ data.UNIDADE }}</span>
+                <span class="detail-value">{{ data.quantidade_total }} {{ data.unidade }}</span>
               </div>
             </div>
 
@@ -98,11 +98,11 @@
               <h4>Detalhes do ID</h4>
               <div class="detail-item">
                 <span class="detail-label">Criação ID:</span>
-                <span class="detail-value">{{ data.ELABORACAO_PEDIDO }}</span>
+                <span class="detail-value">{{ data.elaboracao_pedido }}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Aprovação ID:</span>
-                <span class="detail-value">{{ data.APROVACAO_ID || 'N/A' }}</span>
+                <span class="detail-value">{{ data.aprovacao_id || 'N/A' }}</span>
               </div>
             </div>
 
@@ -110,15 +110,15 @@
               <h4>Detalhes da OC</h4>
               <div class="detail-item">
                 <span class="detail-label">Criação OC:</span>
-                <span class="detail-value">{{ data.ELABORACAO_OC || 'N/A' }}</span>
+                <span class="detail-value">{{ data.elaboracao_oc || 'N/A' }}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Fornecedor:</span>
-                <span class="detail-value">{{ data.FORNECEDOR || 'N/A' }}</span>
+                <span class="detail-value">{{ data.fornecedor || 'N/A' }}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Aprovação OC:</span>
-                <span class="detail-value">{{ data.APROVACAO_OC || 'N/A' }}</span>
+                <span class="detail-value">{{ data.aprovacao_oc || 'N/A' }}</span>
               </div>
             </div>
           </div>

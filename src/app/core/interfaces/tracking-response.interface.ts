@@ -1,20 +1,21 @@
 export interface ITrackingRecord {
-  "COTACAO": string,
-  "INTEGRACAO": string,
-  "CENTRO_CUSTO": string,
-  "MOVIMENTO": string,
-  "ID": string,
-  "ELABORACAO_PEDIDO": Date,
-  "APROVACAO_ID": Date,
-  "NUMERO_OC": string,
-  "ELABORACAO_OC": Date,
-  "APROVACAO_OC": Date,
-  "DATA_ENTREGA": Date,
-  "FORNECEDOR": string
-  "MATERIAL": string,
-  "QUANTIDADE_TOTAL": string,
-  "UNIDADE": string,
-  "STATUS": string,
+  cotacao: string,
+  integracao: string,
+  centro_custo: string,
+  movimento: string,
+  id: string,
+  elaboracao_pedido: string,
+  aprovacao_id: string,
+  numero_oc: string,
+  elaboracao_oc: string,
+  aprovacao_oc: string,
+  data_entrega: string,
+  fornecedor: string,
+  material: string,
+  quantidade_total: string,
+  unidade: string,
+  status: string,
+  criacao: string
 }
 
 export interface ITrackingResponse {
