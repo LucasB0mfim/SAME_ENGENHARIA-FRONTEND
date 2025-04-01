@@ -109,7 +109,6 @@ export class OrderComponent implements OnInit {
     );
   }
 
-  // Novo método para verificar se filteredPendingOrders está vazio
   isFilteredPendingOrdersEmpty(): boolean {
     return Object.keys(this.filteredPendingOrders).length === 0;
   }
@@ -152,13 +151,14 @@ export class OrderComponent implements OnInit {
         alert(`Quantidade inválida para o item ${item.idprd}`);
         return;
       }
-      const formData = new FormData();
-      formData.append('idprd', item.idprd);
-      formData.append('status', 'PARCIALMENTE ENTREGUE');
-      formData.append('data_entrega', this.today);
-      formData.append('registrado', 'TESTE');
-      formData.append('quantidade_entregue', item.quantidade_entregue);
-      this.__orderService.updateStatus(formData).subscribe({
+      const payload = {
+        idprd: item.idprd,
+        status: 'PARCIALMENTE ENTREGUE',
+        data_entrega: this.today,
+        registrado: 'TESTE',
+        quantidade_entregue: item.quantidade_entregue
+      };
+      this.__orderService.updateStatus(payload).subscribe({
         next: () => this.getOrder(),
         error: (error) => console.error(error)
       });
@@ -168,13 +168,14 @@ export class OrderComponent implements OnInit {
   orderNotDelivered(numero_oc: string) {
     const itensOC = this.recordOC[numero_oc].order;
     itensOC.forEach((item: any) => {
-      const formData = new FormData();
-      formData.append('idprd', item.idprd);
-      formData.append('status', 'NÃO ENTREGUE');
-      formData.append('data_entrega', this.today);
-      formData.append('registrado', 'TESTE');
-      formData.append('quantidade_entregue', '0');
-      this.__orderService.updateStatus(formData).subscribe({
+      const payload = {
+        idprd: item.idprd,
+        status: 'NÃO ENTREGUE',
+        data_entrega: this.today,
+        registrado: 'TESTE',
+        quantidade_entregue: '0'
+      };
+      this.__orderService.updateStatus(payload).subscribe({
         next: () => this.getOrder(),
         error: (error) => console.error(error)
       });

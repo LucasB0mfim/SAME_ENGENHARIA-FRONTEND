@@ -174,14 +174,15 @@ export class ManageOrderComponent implements OnInit {
       const quantidade_entregue = form.get(item.idprd)?.value;
       const data_entrega = form.get('date')?.value;
 
-      const formData = new FormData();
-      formData.append('idprd', item.idprd);
-      formData.append('status', 'PENDENTE');
-      formData.append('previsao_entrega', data_entrega);
-      formData.append('registrado', item.registrado || 'TESTE');
-      formData.append('quantidade', quantidade_entregue.toString());
+      const payload = {
+        idprd: item.idprd,
+        status: 'PENDENTE',
+        previsao_entrega: data_entrega,
+        registrado: item.registrado || 'TESTE',
+        quantidade: quantidade_entregue.toString()
+      };
 
-      this._orderService.updateStatus(formData).subscribe({
+      this._orderService.updateStatus(payload).subscribe({
         next: () => {
           this.loading = false;
           this.getOrders();

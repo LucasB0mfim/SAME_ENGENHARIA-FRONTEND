@@ -19,8 +19,10 @@ export class OrderService {
     return this._httpClient.put<any>(this._apiUrl, formData);
   }
 
-  updateStatus(formData: FormData): Observable<any> {
-    return this._httpClient.put<any>('http://206.42.34.79:3000/same-engenharia/api/order/update', formData);
+  updateStatus(payload: any): Observable<any> {
+    return this._httpClient.put<any>('http://206.42.34.79:3000/same-engenharia/api/order/update', payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   managerOrder(request: any): Observable<IOrderResponse> {
