@@ -8,7 +8,7 @@ import { ITimeSheetResponse } from '../interfaces/timesheet-response.interface';
 })
 export class TimesheetReportService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/reports/timeheet';
+  private readonly _apiUrl = 'http://206.42.34.79:3000/same-engenharia/api/reports/timeheet';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
