@@ -9,7 +9,7 @@ import { IOrderResponse } from '../interfaces/order-response.interface';
 })
 export class OrderService {
   private readonly _httpClient = inject(HttpClient);
-  private _apiUrl = 'http://206.42.34.79:3000/same-engenharia/api/reports/request';
+  private _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/request';
 
   findAll(): Observable<any> {
     return this._httpClient.get<any>(this._apiUrl);
@@ -20,7 +20,7 @@ export class OrderService {
   }
 
   updateStatus(payload: any): Observable<any> {
-    return this._httpClient.put<any>('http://206.42.34.79:3000/same-engenharia/api/order/update', payload, {
+    return this._httpClient.put<any>('http://192.168.10.17:3000/same-engenharia/api/order/update', payload, {
       headers: { 'Content-Type': 'application/json' }
     });
   }

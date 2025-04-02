@@ -8,7 +8,7 @@ import { IEmployeesResponse } from '../interfaces/employees-response.interface';
 })
 export class FindEmployeesService {
   private readonly _htppClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://206.42.34.79:3000/same-engenharia/api/employees';
+  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/employees';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

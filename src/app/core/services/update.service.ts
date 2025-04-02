@@ -10,7 +10,7 @@ import { IUpdateRequest } from '../interfaces/update-request.interface';
 export class UpdateService {
 
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://206.42.34.79:3000/same-engenharia/api/employee';
+  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/employee';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

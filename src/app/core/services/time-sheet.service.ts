@@ -18,7 +18,7 @@ export class TimeSheetService {
 
   find(request: ITimeSheetRequest): Observable<ITimeSheetResponse> {
     const headers = this._createHeaders();
-    return this._httpClient.post<ITimeSheetResponse>('http://206.42.34.79:3000/same-engenharia/api/reports/timesheet/filters', request, { headers });
+    return this._httpClient.post<ITimeSheetResponse>('http://192.168.10.17:3000/same-engenharia/api/reports/timesheet/filters', request, { headers });
   }
 
   getEmployeeTimesheet(
@@ -52,10 +52,10 @@ export class TimeSheetService {
       body.abono = abono;
     }
 
-    return this._httpClient.post<ITimeSheetResponse>('http://206.42.34.79:3000/same-engenharia/api/reports/timesheet', body, { headers });
+    return this._httpClient.post<ITimeSheetResponse>('http://192.168.10.17:3000/same-engenharia/api/reports/timesheet', body, { headers });
   }
 
   uploadTimesheet(formData: FormData): Observable<any> {
-    return this._httpClient.post('http://206.42.34.79:3000/same-engenharia/api/reports/csv`', formData)
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/csv`', formData)
   }
 }

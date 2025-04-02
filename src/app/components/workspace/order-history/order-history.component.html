@@ -79,7 +79,7 @@
               <div class="card__column card__column--order">
                 <h4 class="card__text card__text--title">Nota Fiscal</h4>
                 <div class="card__text card__text--row" *ngFor="let item of data.value.order">
-                  <a href="http://206.42.34.79:3000/same-engenharia/api/notas_fiscais/{{ item.nota_fiscal }}" target="_blank" *ngIf="item.nota_fiscal">
+                  <a href="http://192.168.10.17:3000/same-engenharia/api/notas_fiscais/{{ item.nota_fiscal }}" target="_blank" *ngIf="item.nota_fiscal">
                     <mat-icon class="card__icon">description</mat-icon>
                   </a>
                   <span *ngIf="!item.nota_fiscal">N/A</span>
