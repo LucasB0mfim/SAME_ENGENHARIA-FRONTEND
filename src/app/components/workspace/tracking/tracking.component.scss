@@ -1,327 +1,64 @@
-.tracking {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  width: 100%;
+.container {}
 
-  &-top__section {
-    gap: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    width: 100%;
-    height: auto;
-    margin-bottom: 20px;
+.filters {}
+
+.card__container {}
+
+.card {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  box-shadow: var(--box-shadow);
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
   }
 
-  &-main__section {
+  &__subtitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-color);
+  }
+
+  &__separator {
+    color: var(--gray-color);
+  }
+
+  &__header {
+    width: 100%;
+    padding: 20px;
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 80%;
-    overflow-y: auto;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--secondary-color);
+    border-left: 5px solid var(--orange-color);
 
-    &::-webkit-scrollbar {
-      width: 5px;
-    }
+    .card__primary {
+      display: flex;
+      flex-direction: column;
 
-    &::-webkit-scrollbar-thumb {
-      background-color: #f93f03;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-  }
-}
+      .card__top {
+        gap: 8px;
+        display: flex;
+        align-items: center;
+      }
 
-.filters {
-  gap: 5px;
-  display: flex;
-  flex-direction: column;
+      .card__bottom {
 
-  label {
-    font-size: 0.9em;
-    color: var(--text-color);
-  }
-
-  input,
-  select {
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 12px;
-    min-width: 200px;
-    border-radius: 8px;
-    color: var(--text-color);
-    box-shadow: var(--box-shadow);
-    background: var(--secondary-color);
-    text-overflow: ellipsis;
-
-    &::placeholder {
-      color: var(--gray-color);
-    }
-  }
-
-  .select-container {
-    position: relative;
-    display: inline-block;
-
-    select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      padding-right: 30px;
-    }
-
-    .select-icon {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: var(--text-color);
-      transition: transform 0.3s ease; /* Transição mais suave */
-
-      &.rotated {
-        transform: translateY(-50%) rotate(180deg);
       }
     }
-  }
-}
 
-// Lista expansível
-.list-container {
-  gap: 10px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.list-item {
-  overflow: hidden;
-  border-radius: 4px;
-  margin-right: 10px;
-  transition: all 0.3s ease;
-  box-shadow: var(--box-shadow);
-  background: var(--secondary-color);
-
-  &.expanded {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.list-header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  cursor: pointer;
-  position: relative;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.01);
-  }
-}
-
-.list-status {
-  width: 6px;
-  min-width: 6px;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #0000FF;
-}
-
-.list-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding-left: 15px;
-  flex: 1;
-  min-width: 0; // Permite que o conteúdo seja truncado
-}
-
-.list-primary {
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .list-id {
-    font-weight: 600;
-    font-size: 14px;
-    white-space: nowrap;
-  }
-
-  .list-separator {
-    color: var(--gray-color);
-  }
-
-  .list-cc {
-    font-size: 14px;
-    font-weight: 500;
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.list-secondary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .list-material {
-    font-size: 13px;
-    color: var(--gray-color);
-    max-width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .list-quantity {
-    font-size: 13px;
-    color: var(--gray-color);
-    white-space: nowrap;
-  }
-}
-
-.list-metadata {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.list-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  .meta-label {
-    font-size: 12px;
-    color: var(--gray-color);
-  }
-
-  .meta-value {
-    color: var(--text-color);
-    font-size: 13px;
-    font-weight: 500;
-  }
-}
-
-.list-expand-icon {
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-
-  .arrow {
-    border: solid var(--gray-color);
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    padding: 3px;
-    transform: rotate(-45deg);
-    transition: transform 0.3s ease;
-
-    &.down {
-      transform: rotate(45deg);
+    .card__secondary {
+      gap: 8px;
+      display: flex;
     }
   }
-}
 
-.list-details {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-
-  &.show {
-    max-height: 500px; // Altura máxima para animação
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-  }
-}
-
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.detail-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  h4 {
-    margin: 0;
-    font-size: 14px;
-    color: var(--text-color);
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
-}
-
-.last {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: auto auto auto;
-  gap: 10px;
-
-  h4 {
-    margin: 0;
-    font-size: 14px;
-    color: var(--text-color);
-    font-weight: 600;
-    margin-bottom: 5px;
-    grid-column: 1 / -1; // Faz o cabeçalho ocupar toda a largura
-  }
-}
-
-.detail-item {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-
-  &.second-column {
-    grid-column: 2; // Força este item para a segunda coluna
-    grid-row: 2; // Posiciona na segunda linha
-  }
-
-  &.full-width {
-    grid-column: 1 / -1;
-  }
-
-  .detail-label {
-    font-size: 12px;
-    color: var(--gray-color);
-  }
-
-  .detail-value {
-    font-size: 14px;
-    color: var(--text-color);
-
-    &.material-description {
-      line-height: 1.5;
-      word-break: break-word;
-      width: 50%;
-    }
-  }
-}
-
-.no-results {
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  background: var(--secondary-color);
-
-  p {
-    font-size: 16px;
-    color: var(--gray-color);
+  &__text {
+    gap: 8px;
+    display: flex;
   }
 }

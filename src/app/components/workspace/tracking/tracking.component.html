@@ -1,137 +1,34 @@
-<div class="tracking">
-
-  <div class="tracking-top__section">
-    <div class="filters">
-      <label>Centro de Custo:</label>
-      <div class="select-container">
-        <select
-          [(ngModel)]="centroCustoName"
-          (ngModelChange)="searchCentroCusto()"
-          (mousedown)="toggleSelect()"
-          (blur)="resetSelectIcon()"
-        >
-          <option value="">Todos</option>
-          <option *ngFor="let centro of centroCusto" [value]="centro">{{ centro }}</option>
-        </select>
-        <mat-icon class="select-icon" [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
-      </div>
-    </div>
-
-    <div class="filters">
-      <label>Material:</label>
-      <input type="text" placeholder="Ex: Cimento" [(ngModel)]="materialName"
-        (ngModelChange)="searchMaterial()">
-    </div>
-
-    <div class="filters">
-      <label>Movimento:</label>
-      <input type="text" placeholder="Ex: 1000" [(ngModel)]="movimentoName"
-        (ngModelChange)="searchMovimento()">
-    </div>
-
-    <div class="filters">
-      <label>ID:</label>
-      <input type="text" placeholder="Ex: 55555" [(ngModel)]="idName" (ngModelChange)="searchId()">
-    </div>
-
-    <div class="filters">
-      <label>OC:</label>
-      <input type="text" placeholder="Ex: 10008" [(ngModel)]="ocName" (ngModelChange)="searchOc()">
-    </div>
-  </div>
-
-  <div class="tracking-main__section">
-    <div class="list-container">
-      <div class="list-item" *ngFor="let data of records; let i = index" [class.expanded]="expandedIndex === i">
-        <div class="list-header" (click)="toggleExpand(i)">
-          <div class="list-status" [ngStyle]="{'background-color': getStatusColor(data)}"></div>
-
-          <div class="list-summary">
-            <div class="list-primary">
-              <span class="list-id">ID: {{ data.id }}</span>
-              <span class="list-separator">|</span>
-              <span class="list-cc">{{ data.centro_custo }}</span>
-            </div>
-
-            <div class="list-secondary">
-              <span class="list-material">{{ data.material }}</span>
-            </div>
+<div class="container">
+  <div class="filters"></div>
+  <div class="card__container">
+    <div class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">ID: 10261</div>
+            <span class="card__separator">|</span>
+            <div class="card__subtitle">LOCAÇÃO DE SERRA CIRCULAR</div>
           </div>
-
-          <div class="list-metadata">
-            <div class="list-meta-item">
-              <span class="meta-label">Mov:</span>
-              <span class="meta-value">{{ data.movimento || 'N/A' }}</span>
-            </div>
-
-            <div class="list-meta-item">
-              <span class="meta-label">OC:</span>
-              <span class="meta-value">{{ data.numero_oc || 'N/A' }}</span>
-            </div>
-
-            <div class="list-meta-item">
-              <span class="meta-label">Entrega:</span>
-              <span class="meta-value">{{ data.data_entrega || 'N/A' }}</span>
-            </div>
-
-            <div class="list-expand-icon">
-              <i class="arrow" [class.down]="expandedIndex === i"></i>
-            </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">CANALETA DE CONCRETO</div>
           </div>
         </div>
-
-        <div class="list-details" [class.show]="expandedIndex === i">
-          <div class="details-grid">
-            <div class="detail-group">
-              <h4>Material</h4>
-              <div class="detail-item full-width">
-                <span class="detail-label">Descrição:</span>
-                <span class="detail-value material-description">{{ data.material }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Quantidade:</span>
-                <span class="detail-value">{{ data.quantidade_total }} {{ data.unidade }}</span>
-              </div>
-            </div>
-
-            <div class="detail-group">
-              <h4>Detalhes do ID</h4>
-              <div class="detail-item">
-                <span class="detail-label">Criação ID:</span>
-                <span class="detail-value">{{ data.elaboracao_pedido }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Aprovação ID:</span>
-                <span class="detail-value">{{ data.aprovacao_id || 'N/A' }}</span>
-              </div>
-            </div>
-
-            <div class="last">
-              <h4>Detalhes da OC</h4>
-              <div class="detail-item">
-                <span class="detail-label">Criado Por:</span>
-                <span class="detail-value">{{ data.criacao || 'N/A' }}</span>
-              </div>
-
-              <div class="detail-item">
-                <span class="detail-label">Data Criação:</span>
-                <span class="detail-value">{{ data.elaboracao_oc || 'N/A' }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Data Aprovação:</span>
-                <span class="detail-value">{{ data.aprovacao_oc || 'N/A' }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">Fornecedor:</span>
-                <span class="detail-value">{{ data.fornecedor || 'N/A' }}</span>
-              </div>
-            </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__title">Mov: </div>
+            <div class="card__subtitle">321</div>
           </div>
         </div>
       </div>
-
-      <div class="no-results" *ngIf="records.length === 0">
-        <p>Nenhum resultado encontrado.</p>
+      <div class="card__body">
+        <!-- SEÇÃO DETALHES -->
+        <div class="card__column">
+          <h4 class="card__title">Material</h4>
+          <div class="card__text">
+            <div class="card__title">Descrição</div>
+            <div class="card__subtitle">Caneta</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
