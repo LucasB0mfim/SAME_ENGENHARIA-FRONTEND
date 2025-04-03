@@ -39,10 +39,12 @@
   }
 
   select {
+    width: 100%;
     border: none;
     outline: none;
-    padding: 12px;
+    padding: 12px 40px 12px 12px;
     border-radius: 4px;
+    text-overflow: ellipsis;
     color: var(--text-color);
     box-shadow: var(--box-shadow);
     background: var(--secondary-color);
@@ -55,7 +57,7 @@
   mat-icon {
     position: absolute;
     right: 8px;
-    top: 60%;
+    top: 65%;
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--text-color);
