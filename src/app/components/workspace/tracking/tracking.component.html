@@ -1,33 +1,86 @@
 <div class="container">
-  <div class="filters"></div>
+  <div class="filter-container">
+    <div class="filter">
+      <label>CENTRO DE CUSTO</label>
+      <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()" (blur)="resetSelectIcon()">
+        <option value="">Todos</option>
+        <option *ngFor="let centro of centrosCustoUnicos" [value]="centro">{{ centro }}</option>
+      </select>
+      <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
+    </div>
+    <div class="filter">
+      <label for="fornecedorField">FORNECEDOR</label>
+      <input type="text" id="fornecedorField" placeholder="Ex: PAYFY" [(ngModel)]="fornecedorField" (input)="applyFilters()">
+    </div>
+    <div class="filter">
+      <label for="movimentoField">MOVIMENTO</label>
+      <input type="text" id="movimentoField" placeholder="Ex: 52" [(ngModel)]="movimentoField" (input)="applyFilters()">
+    </div>
+    <div class="filter">
+      <label for="idField">ID</label>
+      <input type="text" id="idField" placeholder="Ex: 54026" [(ngModel)]="idField" (input)="applyFilters()">
+    </div>
+    <div class="filter">
+      <label for="ocField">OC</label>
+      <input type="text" id="ocField" placeholder="Ex: 10294" [(ngModel)]="ocField" (input)="applyFilters()">
+    </div>
+  </div>
   <div class="card__container">
-    <div class="card">
-      <div class="card__header">
+    <div class="card" *ngFor="let data of order">
+      <div class="card__header" (click)="toggleCard(data.id)">
         <div class="card__primary">
           <div class="card__top">
-            <div class="card__title">ID: 10261</div>
-            <span class="card__separator">|</span>
-            <div class="card__subtitle">LOCAÇÃO DE SERRA CIRCULAR</div>
+            <div class="card__title">ID: {{ data.id }}</div>
+            <span class="card__subtitle">|</span>
+            <div class="card__subtitle">{{ data.centro_custo || 'N/A' }}</div>
           </div>
           <div class="card__bottom">
-            <div class="card__subtitle">CANALETA DE CONCRETO</div>
+            <div class="card__subtitle">{{ data.fornecedor || 'N/A' }}</div>
           </div>
         </div>
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__title">Mov: </div>
-            <div class="card__subtitle">321</div>
+            <div class="card__subtitle">{{ data.movimento || 'N/A' }}</div>
           </div>
         </div>
       </div>
-      <div class="card__body">
-        <!-- SEÇÃO DETALHES -->
-        <div class="card__column">
-          <h4 class="card__title">Material</h4>
-          <div class="card__text">
-            <div class="card__title">Descrição</div>
-            <div class="card__subtitle">Caneta</div>
-          </div>
+      <div class="card__body" [class.expanded]="expandedCard === data.id">
+        <div class="card__info">
+          <div class="card__title card__title--info">MATERIAL</div>
+          <div class="card__subtitle">{{ data.material }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">QUANTIDADE</div>
+          <div class="card__subtitle">{{ data.quantidade_total }} {{ data.unidade }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">DATA CRIAÇÃO</div>
+          <div class="card__subtitle">{{ data.elaboracao_pedido || 'N/A' }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">DATA APROVAÇÃO</div>
+          <div class="card__subtitle">{{ data.aprovacao_id || 'N/A' }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">NUMERO OC</div>
+          <div class="card__subtitle">{{ data.numero_oc || 'N/A' }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">CRIAÇÃO OC</div>
+          <div class="card__subtitle">{{ data.elaboracao_oc || 'N/A' }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">APROVAÇÃO OC</div>
+          <div class="card__subtitle">{{ data.aprovacao_oc || 'N/A' }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">PREVISÃO ENTREGA</div>
+          <div class="card__subtitle">{{ data.data_entrega || 'N/A' }}</div>
+        </div>
+        <div class="card__info">
+          <div class="card__title card__title--info">CRIADOR</div>
+          <div class="card__subtitle">{{ data.criacao || 'N/A' }}</div>
         </div>
       </div>
     </div>

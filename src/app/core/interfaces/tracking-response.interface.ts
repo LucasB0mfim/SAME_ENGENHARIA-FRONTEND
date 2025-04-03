@@ -1,4 +1,4 @@
-export interface ITrackingRecord {
+export interface ITrackingInfo {
   cotacao: string,
   integracao: string,
   centro_custo: string,
@@ -21,5 +21,5 @@ export interface ITrackingRecord {
 export interface ITrackingResponse {
   success: boolean;
   message: string;
-  tracking: ITrackingRecord[]
+  tracking: ITrackingInfo[]
 }
