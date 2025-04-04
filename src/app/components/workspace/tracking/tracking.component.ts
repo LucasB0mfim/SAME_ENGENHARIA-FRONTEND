@@ -21,7 +21,6 @@ export class TrackingComponent implements OnInit {
 
   originalOrder: ITrackingInfo[] = [];
   order: ITrackingInfo[] = [];
-  expandedCard: string | null = null;
   centrosCustoUnicos: string[] = [];
   isLoading: boolean = true;
   isVoid: boolean = false;
@@ -61,10 +60,6 @@ export class TrackingComponent implements OnInit {
     });
 
     this.centrosCustoUnicos = Array.from(centrosCustoSet).sort();
-  }
-
-  toggleCard(cardID: string) {
-    this.expandedCard = (this.expandedCard === cardID) ? null : cardID;
   }
 
   applyFilters() {

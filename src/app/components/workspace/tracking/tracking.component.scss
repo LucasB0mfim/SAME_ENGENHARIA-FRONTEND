@@ -70,7 +70,7 @@
 }
 
 .card__container {
-  gap: 15px;
+  gap: 30px;
   height: 85%;
   display: flex;
   padding: 2vw 1vw 0 0;
@@ -98,7 +98,7 @@
   background-color: var(--secondary-color);
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
   }
 
   &__text {
@@ -129,9 +129,7 @@
     align-items: center;
     justify-content: space-between;
     border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
     border-left: 5px solid var(--orange-color);
-    border-bottom: 1px solid var(--primary-color);
   }
 
   &__secondary {
@@ -153,6 +151,7 @@
   &__body {
     padding: 20px;
     display: grid;
+    border-top: 1px solid var(--primary-color);
     grid-template-columns: 25% auto auto auto auto auto auto auto auto;
 
     .card__info {
