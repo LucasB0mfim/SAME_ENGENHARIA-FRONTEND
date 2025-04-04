@@ -2,6 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
 import { TrackingService } from '../../../core/services/tracking.service';
@@ -10,7 +11,7 @@ import { ITrackingInfo } from '../../../core/interfaces/tracking-response.interf
 
 @Component({
   selector: 'app-tracking',
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './tracking.component.html',
   styleUrl: './tracking.component.scss'
 })
@@ -22,6 +23,8 @@ export class TrackingComponent implements OnInit {
   order: ITrackingInfo[] = [];
   expandedCard: string | null = null;
   centrosCustoUnicos: string[] = [];
+  isLoading: boolean = true;
+  isVoid: boolean = false;
 
   idField: string = '';
   ocField: string = '';
@@ -41,6 +44,8 @@ export class TrackingComponent implements OnInit {
         this.originalOrder = data.tracking;
         this.order = [...this.originalOrder];
         this.removeDuplicate();
+        this.isLoading = false;
+        if (this.order.length === 0) this.isVoid = true;
       },
       error: (error) => console.error('Não foi possível carregar os pedidos:', error)
     });
