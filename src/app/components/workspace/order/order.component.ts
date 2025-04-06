@@ -1,14 +1,11 @@
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnInit, inject, ElementRef, ViewChild } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ReactiveFormsModule } from '@angular/forms';
-
-import { TitleService } from '../../../core/services/title.service';
 import { OrderService } from '../../../core/services/order.service';
+import { TitleService } from '../../../core/services/title.service';
 import { ICommonData } from '../../../core/interfaces/order-response.interface';
-import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-order',
@@ -18,54 +15,76 @@ import { DashboardService } from '../../../core/services/dashboard.service';
   styleUrl: './order.component.scss'
 })
 export class OrderComponent implements OnInit {
-  private __titleService = inject(TitleService);
+  // Referências ViewChild
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  // Injeção de Dependências
   private readonly __orderService = inject(OrderService);
-  private readonly __employeeService = inject(DashboardService);
+  private readonly __titleService = inject(TitleService);
 
-  @ViewChild('fileLabel') fileLabel!: ElementRef;
+  // Constantes
+  readonly acceptedFileTypes: string = '.png, .jpeg, .webp';
+  readonly maxFileSize: number = 5 * 1024 * 1024;
 
-  record: any[] = [];
-  recordOC: Record<string, ICommonData> = {};
-  pendingOrders: Record<string, ICommonData> = {};
-  filteredPendingOrders: Record<string, ICommonData> = {};
-
-  activeSection: Record<string, string> = {};
+  // Variáveis de Estado
+  isVoid: boolean = false;
+  isLoading: boolean = true;
+  isSelectOpen: boolean = false;
   expandedIndex: number | null = null;
 
-  nota_fiscal: File | null = null;
-  acceptedFile: string = '.png, .jpg, .jpeg, .gif, .bmp, .webp';
-  email_employee: string = '';
+  // Modelos de Dados
+  order: any[] = [];
+  originalOrder: any[] = [];
+  purchaseOrder: Record<string, ICommonData> = {};
+  activeSection: Record<string, string> = {};
 
-  centro_custo: string = '';
-  ordem_compra: string = '';
-  fornecedor: string = '';
-  valor: string = '';
+  // Variáveis de Filtro
+  ocField: string = '';
+  fornecedorField: string = '';
+  centroCustoField: string = '';
+  centrosCustoUnicos: string[] = [];
 
-  ngOnInit() {
-    this.getUser();
+  // Variáveis de Upload de Arquivos
+  file: File | null = null;
+  loadingFile: boolean = false;
+  showError: boolean = false;
+  showSuccess: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
+
+  // Hooks de Ciclo de Vida
+  ngOnInit(): void {
     this.getOrder();
-    this.__titleService.setTitle('Recebimento de Material');
+    this.__titleService.setTitle('Receber Material');
   }
 
-  getUser() {
-    this.__employeeService.findAll().subscribe({
-      next: (data) => this.email_employee = data.employee.email,
-      error: (error) => console.error(error)
-    });
-  }
-
-  getOrder() {
+  // Métodos de Dados de Pedidos
+  getOrder(): void {
     this.__orderService.findAll().subscribe({
       next: (data) => {
-        this.record = data.order;
-        this.getCard();
+        // Salvar os dados originais para filtragem posterior
+        this.originalOrder = data.order;
+        // Inicializar order com os dados originais
+        this.order = [...this.originalOrder];
+
+        this.removeDuplicate();
+        this.groupByOC();
+        this.initializeActiveSections();
+
+        this.isLoading = false;
+        this.isVoid = this.order.length === 0;
       },
-      error: (error) => console.error(error)
+      error: (error) => {
+        console.error('Não foi possível carregar os pedidos:', error);
+        this.isLoading = false;
+        this.isVoid = true;
+      }
     });
   }
 
-  getCard() {
-    this.recordOC = this.record.reduce((acc: any, item: any) => {
+  // Agrupar itens por OC
+  groupByOC(): void {
+    this.purchaseOrder = this.order.reduce((acc: any, item: any) => {
       if (!acc[item.numero_oc]) {
         acc[item.numero_oc] = {
           data_criacao_oc: item.data_criacao_oc,
@@ -80,6 +99,7 @@ export class OrderComponent implements OnInit {
           order: []
         };
       }
+
       acc[item.numero_oc].order.push({
         idprd: item.idprd,
         data_criacao_oc: item.data_criacao_oc,
@@ -94,134 +114,211 @@ export class OrderComponent implements OnInit {
         registrado: item.registrado,
         quantidade_entregue: item.quantidade_entregue,
       });
+
       return acc;
     }, {});
-
-    this.filterPendingOrders();
   }
 
-  filterPendingOrders() {
-    this.pendingOrders = Object.fromEntries(
-      Object.entries(this.recordOC).filter(([_, oc]) =>
-        oc.order.every(item => item.status === 'PENDENTE')
-      )
-    );
-    this.applyFilters();
+  // Calcula o valor total do pedido
+  calculateOrderTotal(orderData: ICommonData): number {
+    const total = orderData.order.reduce((acc, item) => {
+      const itemTotal = item.valor_total ? parseFloat(item.valor_total) : 0;
+      return acc + itemTotal;
+    }, 0);
+
+    return Number(total.toFixed(2));
   }
 
-  applyFilters() {
-    this.filteredPendingOrders = Object.fromEntries(
-      Object.entries(this.pendingOrders).filter(([_, oc]) => {
-        const matchesCentroCusto = !this.centro_custo || oc.centro_custo.toLowerCase().includes(this.centro_custo.toLowerCase());
-        const matchesOrdemCompra = !this.ordem_compra || oc.numero_oc.toString().includes(this.ordem_compra);
-        const matchesFornecedor = !this.fornecedor || oc.fornecedor.toLowerCase().includes(this.fornecedor.toLowerCase());
-        const matchesValor = !this.valor || this.calculateTotalValue(oc.order).toString().includes(this.valor);
-        return matchesCentroCusto && matchesOrdemCompra && matchesFornecedor && matchesValor;
-      })
-    );
+  // Retorna apenas um centro de custo por vez
+  removeDuplicate(): void {
+    const centrosCustoSet = new Set<string>();
+
+    this.originalOrder.forEach(item => {
+      if (item.centro_custo && item.centro_custo.trim() !== '') {
+        centrosCustoSet.add(item.centro_custo);
+      }
+    });
+
+    this.centrosCustoUnicos = Array.from(centrosCustoSet).sort();
   }
 
-  isFilteredPendingOrdersEmpty(): boolean {
-    return Object.keys(this.filteredPendingOrders).length === 0;
-  }
+  // Método para filtrar as OC's
+  applyFilters(): void {
+    // Aplicar filtros aos dados originais
+    let filteredData = [...this.originalOrder];
 
-  searchCentroCusto() { this.applyFilters(); }
-  searchOrdemCompra() { this.applyFilters(); }
-  searchFornecedor() { this.applyFilters(); }
-  searchValor() { this.applyFilters(); }
-
-  calculateTotalValue(order: any[]): number {
-    return order.reduce((sum, item) => sum + parseFloat(item.valor_total || 0), 0);
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.nota_fiscal = input.files[0];
-      this.fileLabel.nativeElement.textContent = this.nota_fiscal.name;
+    // Filtro por número OC
+    if (this.ocField && this.ocField.trim() !== '') {
+      filteredData = filteredData.filter(item =>
+        item.numero_oc && item.numero_oc.toLowerCase().includes(this.ocField.toLowerCase())
+      );
     }
+
+    // Filtro por centro de custo
+    if (this.centroCustoField && this.centroCustoField.trim() !== '') {
+      filteredData = filteredData.filter(item =>
+        item.centro_custo === this.centroCustoField
+      );
+    }
+
+    // Filtro por fornecedor
+    if (this.fornecedorField && this.fornecedorField.trim() !== '') {
+      filteredData = filteredData.filter(item =>
+        item.fornecedor?.toLowerCase().includes(this.fornecedorField.toLowerCase())
+      );
+    }
+
+    // Atualizar os dados filtrados
+    this.order = filteredData;
+
+    // Reagrupar os dados filtrados por OC
+    this.groupByOC();
+
+    // Resetar o estado de expansão e seções ativas
+    this.expandedIndex = null;
+    this.initializeActiveSections();
   }
 
-  private formatDate(): string {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = String(today.getFullYear()).slice(-2);
-    return `${day}/${month}/${year}`;
-  }
-
-  deliveredOrder(numero_oc: string) {
-    const itemsOC = this.recordOC[numero_oc].order;
-    itemsOC.forEach((item: any) => {
-      if (!this.nota_fiscal) return;
-      const formData = new FormData();
-      formData.append('idprd', item.idprd);
-      formData.append('status', 'ENTREGUE');
-      formData.append('data_entrega', this.formatDate());
-      formData.append('nota_fiscal', this.nota_fiscal, this.nota_fiscal.name);
-      formData.append('registrado', this.email_employee);
-      formData.append('quantidade_entregue', item.quantidade);
-      this.__orderService.update(formData).subscribe({
-        next: () => this.getOrder(),
-        error: (error) => console.error(error)
-      });
+  // Métodos de Estado da Interface
+  initializeActiveSections(): void {
+    Object.keys(this.purchaseOrder).forEach(key => {
+      this.activeSection[key] = 'details';
     });
   }
 
-  orderPartiallyDelivered(numero_oc: string) {
-    const itensOC = this.recordOC[numero_oc].order;
-    for (const item of itensOC) {
-      // Validação: quantidade_entregue maior que quantidade
-      if (item.quantidade_entregue > item.quantidade) {
-        alert('Coloque um valor menor do que a quantidade solicitada');
-        return;
-      }
-      // Validação existente: undefined, negativo ou fora do intervalo
-      if (item.quantidade_entregue === undefined || Number(item.quantidade_entregue) < 0) {
-        alert(`Quantidade inválida para o item ${item.idprd}`);
-        return;
-      }
-      const payload = {
-        idprd: item.idprd,
-        status: 'PARCIALMENTE ENTREGUE',
-        data_entrega: this.formatDate(),
-        registrado: this.email_employee,
-        quantidade_entregue: item.quantidade_entregue
-      };
-      this.__orderService.updateStatus(payload).subscribe({
-        next: () => this.getOrder(),
-        error: (error) => console.error(error)
-      });
+  toggleExpand(index: number, event?: Event): void {
+    // Impedir propagação do evento se vier de um clique em botão
+    if (event) {
+      event.stopPropagation();
     }
-  }
 
-  orderNotDelivered(numero_oc: string) {
-    const itensOC = this.recordOC[numero_oc].order;
-    itensOC.forEach((item: any) => {
-      const payload = {
-        idprd: item.idprd,
-        status: 'NÃO ENTREGUE',
-        data_entrega: this.formatDate(),
-        registrado: this.email_employee,
-        quantidade_entregue: '0'
-      };
-      this.__orderService.updateStatus(payload).subscribe({
-        next: () => this.getOrder(),
-        error: (error) => console.error(error)
-      });
-    });
-  }
-
-  toggleSection(event: Event, ocNumber: string, section: string) {
-    event.stopPropagation();
-    if (this.activeSection[ocNumber] === section) {
-      this.activeSection[ocNumber] = '';
+    // Alternar estado expandido
+    if (this.expandedIndex === index) {
+      this.expandedIndex = null;
     } else {
-      this.activeSection[ocNumber] = section;
+      this.expandedIndex = index;
+    }
+
+    // Se clicar no cabeçalho (não em um botão), garantir que 'details' seja a seção ativa
+    if (!event) {
+      const ocKey = Object.keys(this.purchaseOrder)[index];
+      this.activeSection[ocKey] = 'details';
     }
   }
 
-  toggleExpand(index: number) {
-    this.expandedIndex = this.expandedIndex === index ? null : index;
+  setActiveSection(key: string, section: string, index: number, event: Event): void {
+    event.stopPropagation(); // Prevenir a expansão do card
+    this.activeSection[key] = section;
+    // Garantir que o card esteja expandido quando um botão for clicado
+    this.expandedIndex = index;
+  }
+
+  toggleSelect(): void {
+    setTimeout(() => {
+      this.isSelectOpen = !this.isSelectOpen;
+    }, 0);
+  }
+
+  resetSelectIcon(): void {
+    this.isSelectOpen = false;
+  }
+
+  // Processa o arquivo selecionado pelo usuário
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+    this.clearMessages();
+
+    if (!this.validateFile(file)) {
+      this.resetFileInput();
+      return;
+    }
+
+    this.file = file;
+  }
+
+  // Processa o arquivo solto na área de upload
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const files = event.dataTransfer?.files;
+    if (files?.length) {
+      const file = files[0];
+      this.clearMessages();
+      if (this.validateFile(file)) {
+        this.file = file;
+      }
+    }
+  }
+
+  // Lida com o evento de arrastar e soltar arquivos
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  // Simula o clique no input de arquivo
+  triggerFileInput(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  // Valida o tipo e tamanho do arquivo
+  private validateFile(file: File): boolean {
+    // Verificar se a extensão do arquivo é válida
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const validExtensions = ['png', 'jpeg', 'jpg', 'webp'];
+
+    if (!fileExtension || !validExtensions.includes(fileExtension)) {
+      this.setErrorMessage('Apenas arquivos PNG, JPEG e WEBP são aceitos');
+      return false;
+    }
+
+    if (file.size > this.maxFileSize) {
+      this.setErrorMessage('O arquivo excede o tamanho máximo de 5MB');
+      return false;
+    }
+
+    return true;
+  }
+
+  // Limpa o input de arquivo
+  private resetFileInput(): void {
+    this.fileInput.nativeElement.value = '';
+    this.file = null;
+  }
+
+  // Define mensagem de sucesso e ativa sua exibição
+  private setSuccessMessage(message: string): void {
+    this.successMessage = message;
+    this.showSuccess = true;
+    this.showError = false;
+
+    // Auto-ocultar mensagem após 3 segundos
+    setTimeout(() => {
+      this.showSuccess = false;
+    }, 3000);
+  }
+
+  // Define mensagem de erro e ativa sua exibição
+  private setErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.showError = true;
+    this.showSuccess = false;
+
+    // Auto-ocultar mensagem após 5 segundos
+    setTimeout(() => {
+      this.showError = false;
+    }, 5000);
+  }
+
+  // Limpa todas as mensagens
+  private clearMessages(): void {
+    this.showError = false;
+    this.showSuccess = false;
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 }
