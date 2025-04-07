@@ -1,5 +1,7 @@
 <div class="container">
+  <!-- FILTROS DE BUSCA -->
   <div class="filter-container">
+    <!-- Centro de Custo Filter -->
     <div class="filter">
       <label>CENTRO DE CUSTO</label>
       <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()"
@@ -9,21 +11,29 @@
       </select>
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
+
+    <!-- Fornecedor Filter -->
     <div class="filter">
       <label for="fornecedorField">FORNECEDOR</label>
       <input type="text" id="fornecedorField" placeholder="Ex: PAYFY" [(ngModel)]="fornecedorField"
         (input)="applyFilters()">
     </div>
+
+    <!-- OC Filter -->
     <div class="filter">
       <label for="ocField">OC</label>
       <input type="text" id="ocField" placeholder="Ex: 10294" [(ngModel)]="ocField" (input)="applyFilters()">
     </div>
   </div>
+
+  <!-- LISTA DE ORDENS DE COMPRA -->
   <div class="card__container">
-    <!-- LISTA CARREGADA -->
+    <!-- PEDIDOS -->
     <div class="card" *ngFor="let data of purchaseOrder | keyvalue; let i = index">
+      <!-- CABEÇALHO DO CARD -->
       <div class="card__header" (click)="toggleExpand(i)">
         <div class="card__primary">
+          <!-- Informações Principais -->
           <div class="card__top">
             <div class="card__title">OC: {{ data.value.numero_oc }}</div>
             <div class="card__subtitle">|</div>
@@ -35,6 +45,8 @@
             <div class="card__subtitle">R$ {{ calculateOrderTotal(data.value) }}</div>
           </div>
         </div>
+
+        <!-- Botões de Navegação -->
         <div class="card__secondary">
           <!-- BOTÃO DETALHES -->
           <button class="card__section" [class.active]="activeSection[data.key] === 'details'"
@@ -42,53 +54,67 @@
             <mat-icon>inventory_2</mat-icon>
             <span>DETALHES</span>
           </button>
+
           <!-- BOTÃO ENTREGUE -->
           <button class="card__section" [class.active]="activeSection[data.key] === 'delivered'"
             (click)="setActiveSection(data.key, 'delivered', i, $event)">
             <mat-icon>check_circle</mat-icon>
             <span>ENTREGUE</span>
           </button>
+
           <!-- BOTÃO PARCIAL -->
           <button class="card__section" [class.active]="activeSection[data.key] === 'partial'"
             (click)="setActiveSection(data.key, 'partial', i, $event)">
-            <mat-icon>error</mat-icon>
-            <span>PARCIAL</span>
+            <mat-icon>donut_large</mat-icon>
+            <span>INCOMPLETO</span>
           </button>
+
           <!-- BOTÃO NÃO CHEGOU -->
           <button class="card__section" [class.active]="activeSection[data.key] === 'notDelivered'"
             (click)="setActiveSection(data.key, 'notDelivered', i, $event)">
             <mat-icon>cancel</mat-icon>
-            <span>NÃO CHEGOU</span>
+            <span>NÃO ENTREGUE</span>
           </button>
         </div>
       </div>
+
+      <!-- CONTEÚDO DO CARD (EXPANSÍVEL) -->
       <div class="card__body" [class.show]="expandedIndex === i">
         <!-- SEÇÃO DETALHES -->
         <div class="card__details" *ngIf="activeSection[data.key] === 'details'">
+          <!-- Material Info -->
           <div class="card__text">
             <div class="card__title">MATERIAL</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
               {{ item.material }}
             </div>
           </div>
+
+          <!-- Quantidade Info -->
           <div class="card__text">
             <div class="card__title">QUANTIDADE</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
               {{ item.quantidade }} {{ item.unidade }}
             </div>
           </div>
+
+          <!-- Valor Unitário Info -->
           <div class="card__text">
             <div class="card__title">VALOR UNITARIO</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
               R$ {{ item.valor_unitario }}
             </div>
           </div>
+
+          <!-- Valor Total Info -->
           <div class="card__text">
             <div class="card__title">VALOR TOTAL</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
-              R$ {{ item.valor_total }}
+              {{ formateValue(item.valor_total) }}
             </div>
           </div>
+
+          <!-- Previsão Entrega Info -->
           <div class="card__text">
             <div class="card__title">PREVISÃO ENTREGA</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
@@ -99,14 +125,14 @@
 
         <!-- SEÇÃO ENTREGA -->
         <div class="card__delivered" *ngIf="activeSection[data.key] === 'delivered'">
+          <!-- Upload Area -->
           <div class="card__file" (click)="triggerFileInput()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+
             <input type="file" [accept]="acceptedFileTypes" #fileInput (change)="onFileSelected($event)"
               class="card__input">
 
             <label class="card__label">
-
               <mat-icon>cloud_upload</mat-icon>
-
               <span class="card__filename">
                 {{ file?.name || 'Arraste ou selecione a nota fiscal' }}
               </span>
@@ -114,10 +140,10 @@
               @if(!file) {
               <span class="card__instruction">Tamanho máximo: 5MB</span>
               }
-
             </label>
           </div>
 
+          <!-- Submit Button -->
           <button type="button" class="card__button" [disabled]="!file || loadingFile">
             @if (!loadingFile) {
             <span>ENVIAR</span>
@@ -129,41 +155,52 @@
 
         <!-- SEÇÃO PARCIAL -->
         <div class="card__partial" *ngIf="activeSection[data.key] === 'partial'">
+          <!-- Material Info -->
           <div class="card__text">
             <div class="card__title">MATERIAL</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
               {{ item.material }}
             </div>
           </div>
+
+          <!-- Quantidade Solicitada Info -->
           <div class="card__text">
             <div class="card__title">QUANTIDADE SOLICITADA</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
               {{ item.quantidade }} {{ item.unidade }}
             </div>
           </div>
+
+          <!-- Quantidade Entregue Input -->
           <div class="card__text">
             <div class="card__title">QUANTIDADE QUE CHEGOU</div>
             <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
               <input type="number" [(ngModel)]="item.quantidade_entregue" class="card__qtd">
             </div>
           </div>
+
+          <!-- Submit Button -->
           <button type="button" class="card__button">ENVIAR</button>
         </div>
 
         <!-- SEÇÃO NÃO CHEGOU -->
         <div class="card__not-delivered" *ngIf="activeSection[data.key] === 'notDelivered'">
+          <div class="card__text">
+            <img src="https://usagif.com/wp-content/uploads/2022/4hv9xm/crying-emoji-9.gif" alt="crying emoji">
+            <span class="card__span">MINHA ENCOMENDA NÃO CHEGOU</span>
+          </div>
           <button class="card__button">ENVIAR</button>
         </div>
       </div>
-
     </div>
 
-    <!-- CARREGANDO LISTA -->
+    <!-- ESTADOS DO SISTEMA -->
+    <!-- Loading State -->
     <div class="loading" *ngIf="isLoading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
 
-    <!-- LISTA SEM RESULTADO -->
+    <!-- Empty State -->
     <div class="noResult" *ngIf="isVoid">
       <div class="noResult__card">
         <span>Nenhum pedido encontrado</span>
@@ -171,7 +208,8 @@
       </div>
     </div>
 
-    <!-- AVISO DE ERRO AO USUÁRIO -->
+    <!-- NOTIFICAÇÕES -->
+    <!-- Error Message -->
     @if (showError) {
     <div class="card__message card__message--error">
       <mat-icon>error</mat-icon>
@@ -179,7 +217,7 @@
     </div>
     }
 
-    <!-- AVISO DE SUCESSO AO USUÁRIO -->
+    <!-- Success Message -->
     @if (showSuccess) {
     <div class="card__message card__message--success">
       <mat-icon>check_circle</mat-icon>

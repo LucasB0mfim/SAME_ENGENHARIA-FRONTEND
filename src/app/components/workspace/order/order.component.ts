@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { OrderService } from '../../../core/services/order.service';
 import { TitleService } from '../../../core/services/title.service';
+
 import { ICommonData } from '../../../core/interfaces/order-response.interface';
 
 @Component({
@@ -129,6 +131,11 @@ export class OrderComponent implements OnInit {
     return Number(total.toFixed(2));
   }
 
+  // Retorna o valor total do item com decimal
+  formateValue(valorTotal: string) {
+    return 'R$ ' + Number(valorTotal).toFixed(2);
+  }
+
   // Retorna apenas um centro de custo por vez
   removeDuplicate(): void {
     const centrosCustoSet = new Set<string>();
@@ -150,7 +157,7 @@ export class OrderComponent implements OnInit {
     // Filtro por número OC
     if (this.ocField && this.ocField.trim() !== '') {
       filteredData = filteredData.filter(item =>
-        item.numero_oc && item.numero_oc.toLowerCase().includes(this.ocField.toLowerCase())
+        String(item.numero_oc).includes(this.ocField)
       );
     }
 

@@ -74,7 +74,7 @@ export class TrackingComponent implements OnInit {
 
     if (this.ocField && this.ocField.trim() !== '') {
       filteredData = filteredData.filter(item =>
-        item.numero_oc && item.numero_oc.toLowerCase().includes(this.ocField.toLowerCase())
+        String(item.numero_oc).includes(this.ocField)
       );
     }
 
