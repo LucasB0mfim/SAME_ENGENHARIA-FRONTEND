@@ -61,7 +61,7 @@
   mat-icon {
     position: absolute;
     right: 8px;
-    top: 50%;
+    top: 42px;
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--text-color);
@@ -250,7 +250,7 @@
     .card__text {
       gap: 5px;
       width: 100%;
-      padding: 20px;
+      padding: 20px 20px 0 20px;
       height: auto;
       display: flex;
       align-items: center;
@@ -278,6 +278,7 @@
     border-radius: 4px;
     color: var(--gray-color);
     border: 1px solid var(--gray-color);
+    background-color: transparent;
   }
 
   // File Upload Area
@@ -348,17 +349,16 @@
     border-radius: 4px;
     font-weight: 600;
     letter-spacing: 4px;
-    color: var(--text-color);
+    color: var(--sidebar-color);
     border: none;
     cursor: pointer;
     position: relative;
-    box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.3);
-    background-color: var(--primary-color);
+    box-shadow: var(--box-shadow);
+    background-color: var(--third-color);
     transition: all ease 0.2s;
     grid-column: 1/-1;
 
     &:hover:not(:disabled) {
-      color: var(--orange-color);
       transform: translateY(-2px);
     }
 

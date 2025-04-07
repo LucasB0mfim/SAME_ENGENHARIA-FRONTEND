@@ -1,6 +1,7 @@
 <div class="container">
   <!-- FILTROS DE BUSCA -->
   <div class="filter-container">
+    <!-- Centro de Custo -->
     <div class="filter">
       <label>CENTRO DE CUSTO</label>
       <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()"
@@ -10,31 +11,44 @@
       </select>
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
+
+    <!-- Fornecedor -->
     <div class="filter">
       <label for="fornecedorField">FORNECEDOR</label>
       <input type="text" id="fornecedorField" placeholder="Ex: PAYFY" [(ngModel)]="fornecedorField"
         (input)="applyFilters()">
     </div>
+
+    <!-- Movimento -->
     <div class="filter">
       <label for="movimentoField">MOVIMENTO</label>
       <input type="text" id="movimentoField" placeholder="Ex: 52" [(ngModel)]="movimentoField" (input)="applyFilters()">
     </div>
+
+    <!-- Material -->
     <div class="filter">
       <label for="materialField">MATERIAL</label>
       <input type="text" id="materialField" placeholder="Ex: CABO" [(ngModel)]="materialField" (input)="applyFilters()">
     </div>
+
+    <!-- ID -->
     <div class="filter">
       <label for="idField">ID</label>
       <input type="text" id="idField" placeholder="Ex: 54026" [(ngModel)]="idField" (input)="applyFilters()">
     </div>
+
+    <!-- OC -->
     <div class="filter">
       <label for="ocField">OC</label>
       <input type="text" id="ocField" placeholder="Ex: 10294" [(ngModel)]="ocField" (input)="applyFilters()">
     </div>
   </div>
+
+  <!-- CONTAINER DE CARTÕES -->
   <div class="card__container">
     <!-- LISTA CARREGADA -->
     <div class="card" *ngFor="let data of order">
+      <!-- Cabeçalho do Card -->
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
@@ -53,49 +67,70 @@
           </div>
         </div>
       </div>
+
+      <!-- Corpo do Card -->
       <div class="card__body">
+        <!-- Material -->
         <div class="card__info">
           <div class="card__title">MATERIAL</div>
           <div class="card__subtitle">{{ data.material }}</div>
         </div>
+
+        <!-- Quantidade -->
         <div class="card__info">
           <div class="card__title">QUANTIDADE</div>
           <div class="card__subtitle">{{ data.quantidade_total }} {{ data.unidade }}</div>
         </div>
+
+        <!-- Data de Criação -->
         <div class="card__info">
           <div class="card__title">DATA CRIAÇÃO</div>
           <div class="card__subtitle">{{ data.elaboracao_pedido || 'N/A' }}</div>
         </div>
+
+        <!-- Data de Aprovação -->
         <div class="card__info">
           <div class="card__title">DATA APROVAÇÃO</div>
           <div class="card__subtitle">{{ data.aprovacao_id || 'N/A' }}</div>
         </div>
+
+        <!-- Número OC -->
         <div class="card__info">
           <div class="card__title">NUMERO OC</div>
           <div class="card__subtitle">{{ data.numero_oc || 'N/A' }}</div>
         </div>
+
+        <!-- Criação OC -->
         <div class="card__info">
           <div class="card__title">CRIAÇÃO OC</div>
           <div class="card__subtitle">{{ data.elaboracao_oc || 'N/A' }}</div>
         </div>
+
+        <!-- Aprovação OC -->
         <div class="card__info">
           <div class="card__title">APROVAÇÃO OC</div>
           <div class="card__subtitle">{{ data.aprovacao_oc || 'N/A' }}</div>
         </div>
+
+        <!-- Previsão de Entrega -->
         <div class="card__info">
           <div class="card__title">PREVISÃO ENTREGA</div>
           <div class="card__subtitle">{{ data.data_entrega || 'N/A' }}</div>
         </div>
+
+        <!-- Criador -->
         <div class="card__info">
           <div class="card__title">CRIADOR</div>
           <div class="card__subtitle">{{ data.criacao || 'N/A' }}</div>
         </div>
       </div>
     </div>
+
     <!-- CARREGANDO LISTA -->
     <div class="loading" *ngIf="isLoading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
+
     <!-- LISTA SEM RESULTADO -->
     <div class="noResult" *ngIf="isVoid">
       <div class="noResult__card">
