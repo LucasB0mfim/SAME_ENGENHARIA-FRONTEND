@@ -19,6 +19,12 @@
         (input)="applyFilters()">
     </div>
 
+    <!-- Material Filter -->
+    <div class="filter">
+      <label for="materialField">MATERIAL</label>
+      <input type="text" id="materialField" placeholder="Ex: TELHA" [(ngModel)]="materialField" (input)="applyFilters()">
+    </div>
+
     <!-- OC Filter -->
     <div class="filter">
       <label for="ocField">OC</label>

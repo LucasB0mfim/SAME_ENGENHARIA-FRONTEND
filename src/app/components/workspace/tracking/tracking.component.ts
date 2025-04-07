@@ -33,7 +33,7 @@ export class TrackingComponent implements OnInit {
   movimentoField: string = '';
 
   ngOnInit() {
-    this.__titleService.setTitle('Rastreamento de Pedidos');
+    this.__titleService.setTitle('Rastrear Pedido');
     this.getID();
   }
 

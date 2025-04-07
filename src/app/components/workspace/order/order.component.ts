@@ -44,6 +44,7 @@ export class OrderComponent implements OnInit {
   ocField: string = '';
   fornecedorField: string = '';
   centroCustoField: string = '';
+  materialField: string = '';
   centrosCustoUnicos: string[] = [];
 
   // Variáveis de Upload de Arquivos
@@ -165,6 +166,14 @@ export class OrderComponent implements OnInit {
     if (this.centroCustoField && this.centroCustoField.trim() !== '') {
       filteredData = filteredData.filter(item =>
         item.centro_custo === this.centroCustoField
+      );
+    }
+
+    // Filtro por material
+    if (this.materialField && this.materialField.trim() !== '') {
+      const materialFilter = this.materialField.toLowerCase();
+      filteredData = filteredData.filter(item =>
+        String(item.material).toLowerCase().includes(materialFilter)
       );
     }
 

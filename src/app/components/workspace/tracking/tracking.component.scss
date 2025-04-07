@@ -9,8 +9,7 @@
   gap: 5%;
   height: 15%;
   display: grid;
-  padding-right: 1.5vw;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 200px repeat(5, 1fr);
 }
 
 .filter {
@@ -73,7 +72,7 @@
   gap: 30px;
   height: 85%;
   display: flex;
-  padding: 2vw 1vw 0 0;
+  padding: 2vw 1vw 2vw 0;
   flex-direction: column;
   overflow-y: auto;
 
@@ -107,17 +106,13 @@
   }
 
   &__title {
-    font-size: 0.85vw;
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
     font-weight: 600;
     color: var(--text-color);
-
-    &--info {
-      color: var(--fourth-color);
-    }
   }
 
   &__subtitle {
-    font-size: 0.85vw;
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
     font-weight: 500;
     color: var(--gray-color);
   }
@@ -132,17 +127,19 @@
     border-left: 5px solid var(--orange-color);
   }
 
-  &__secondary {
-    gap: 8px;
-    display: flex;
-  }
-
   &__primary {
     display: flex;
     flex-direction: column;
   }
 
-  &__top {
+  &__secondary {
+    height: 100%;
+    gap: 20px;
+    display: flex;
+  }
+
+  &__top,
+  &__bottom {
     gap: 8px;
     display: flex;
     align-items: center;
@@ -152,15 +149,16 @@
     padding: 20px;
     display: grid;
     border-top: 1px solid var(--primary-color);
-    grid-template-columns: 25% auto auto auto auto auto auto auto auto;
+    grid-template-columns: repeat(8, 1fr);
 
     .card__info {
       display: flex;
       flex-direction: column;
-      color: var(--fourth-color);
 
       &:first-child {
-        padding-right: 30px;
+        width: 90%;
+        grid-column: 1/-1;
+        margin-bottom: 20px;
       }
     }
   }
