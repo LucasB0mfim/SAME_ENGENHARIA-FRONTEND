@@ -31,6 +31,7 @@ export class TrackingComponent implements OnInit {
   centroCustoField: string = '';
   fornecedorField: string = '';
   movimentoField: string = '';
+  materialField: string = '';
 
   ngOnInit() {
     this.__titleService.setTitle('Rastrear Pedido');
@@ -93,6 +94,14 @@ export class TrackingComponent implements OnInit {
     if (this.movimentoField && this.movimentoField.trim() !== '') {
       filteredData = filteredData.filter(item =>
         item.movimento?.toLowerCase().includes(this.movimentoField.toLowerCase())
+      );
+    }
+
+    // Filtro por material
+    if (this.materialField && this.materialField.trim() !== '') {
+      const materialFilter = this.materialField.toLowerCase();
+      filteredData = filteredData.filter(item =>
+        String(item.material).toLowerCase().includes(materialFilter)
       );
     }
 
