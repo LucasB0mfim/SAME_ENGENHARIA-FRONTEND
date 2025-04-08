@@ -22,7 +22,8 @@
     <!-- Material Filter -->
     <div class="filter">
       <label for="materialField">MATERIAL</label>
-      <input type="text" id="materialField" placeholder="Ex: TELHA" [(ngModel)]="materialField" (input)="applyFilters()">
+      <input type="text" id="materialField" placeholder="Ex: TELHA" [(ngModel)]="materialField"
+        (input)="applyFilters()">
     </div>
 
     <!-- OC Filter -->
@@ -200,18 +201,15 @@
       </div>
     </div>
 
-    <!-- ESTADOS DO SISTEMA -->
-    <!-- Loading State -->
-    <div class="loading" *ngIf="isLoading">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <!-- Lista vazia -->
+    <div class="card__empty" *ngIf="isVoid">
+      <span>Nenhum pedido encontrado</span>
+      <mat-icon>search</mat-icon>
     </div>
 
-    <!-- Empty State -->
-    <div class="noResult" *ngIf="isVoid">
-      <div class="noResult__card">
-        <span>Nenhum pedido encontrado</span>
-        <mat-icon>search</mat-icon>
-      </div>
+    <!-- Carregando lista -->
+    <div class="card__loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
 
     <!-- NOTIFICAÇÕES -->

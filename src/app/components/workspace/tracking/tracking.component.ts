@@ -107,6 +107,7 @@ export class TrackingComponent implements OnInit {
 
     // Atualizamos os dados filtrados
     this.order = filteredData;
+    this.isVoid = this.order.length === 0;
   }
 
   toggleSelect() {

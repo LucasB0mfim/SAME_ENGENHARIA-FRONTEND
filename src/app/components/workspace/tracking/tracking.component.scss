@@ -10,7 +10,7 @@
   gap: 2%;
   height: 15%;
   display: grid;
-  grid-template-columns: 20% 20% 15% 8% 8% 8%;
+  grid-template-columns: 12% 12% 12% 12% 12% 12%;
 }
 
 // FILTROS INDIVIDUAIS
@@ -158,7 +158,7 @@
   &__body {
     padding: 20px;
     display: grid;
-    border-top: 1px solid var(--primary-color);
+    border-top: 2px solid var(--primary-color);
     grid-template-columns: repeat(8, 1fr);
 
     .card__info {
@@ -174,13 +174,30 @@
   }
 }
 
-.loading {
+// CARD DE AVISO SE NÃO HOUVER CARDS NA API
+.card__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+}
+
+// CARD LOAGING PARA CARREGAR OS CARDS DA API
+.card__loading {
   height: 85%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+// SCRIPT PARA APARECER O LOADING
 :host ::ng-deep mat-progress-spinner {
   width: 3vw !important;
   height: 3vw !important;
@@ -189,34 +206,4 @@
 :host ::ng-deep mat-progress-spinner circle {
   stroke: var(--orange-color);
   stroke-width: 8%;
-}
-
-.noResult {
-  height: 85%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2vw 1vw 0 0;
-
-  &__card {
-    width: 100%;
-    display: flex;
-    padding: 20px;
-    cursor: pointer;
-    border-radius: 4px;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-color);
-    transition: all ease 0.3s;
-    box-shadow: var(--box-shadow);
-    background-color: var(--secondary-color);
-
-    &:hover {
-      transform: translateY(-2px);
-    }
-
-    span {
-      margin-right: 10px;
-    }
-  }
 }

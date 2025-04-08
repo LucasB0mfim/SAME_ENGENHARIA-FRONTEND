@@ -75,7 +75,7 @@ export class OrderComponent implements OnInit {
         this.initializeActiveSections();
 
         this.isLoading = false;
-        this.isVoid = this.order.length === 0;
+        if (this.originalOrder.length === 0) this.isVoid = true;
       },
       error: (error) => {
         console.error('Não foi possível carregar os pedidos:', error);
@@ -191,6 +191,7 @@ export class OrderComponent implements OnInit {
     this.groupByOC();
 
     // Resetar o estado de expansão e seções ativas
+    this.isVoid = this.order.length === 0;
     this.expandedIndex = null;
     this.initializeActiveSections();
   }
