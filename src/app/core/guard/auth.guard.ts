@@ -16,7 +16,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const _router = inject(Router);
   const headers = _createHeaders();
   const _httpClient = inject(HttpClient);
-  const _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/auth/validate-token';
+  const _apiUrl = 'http://localhost:3000/same-engenharia/api/auth/validate-token';
 
   return _httpClient.post<IValidateTokenResponse>(_apiUrl, body, {headers}).pipe(
     map(response => {
