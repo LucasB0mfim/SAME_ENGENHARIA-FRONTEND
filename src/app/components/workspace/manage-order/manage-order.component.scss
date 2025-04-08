@@ -4,6 +4,79 @@
   flex-direction: column;
 }
 
+// CONTAINER DOS FILTROS
+.filter__container {
+  gap: 2%;
+  height: 15%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+// FILTROS INDIVIDUAIS
+.filter {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+
+  label {
+    padding-left: 5px;
+    margin-bottom: 8px;
+    font-size: 0.85vw;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--text-color);
+  }
+
+  input {
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: var(--text-color);
+    background: var(--secondary-color);
+    transition: all 0.2s ease;
+    box-shadow: var(--box-shadow);
+
+    &::placeholder {
+      color: var(--gray-color);
+      opacity: 0.7;
+    }
+  }
+
+  select {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 12px 40px 12px 16px;
+    border-radius: 8px;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+    background: var(--secondary-color);
+    box-shadow: var(--box-shadow);
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  mat-icon {
+    position: absolute;
+    right: 12px;
+    top: 45px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--text-color);
+    transition: transform 0.3s ease;
+    opacity: 0.7;
+
+    &.rotated {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+}
+
 .card__container {
   gap: 30px;
   height: 85%;
@@ -30,6 +103,11 @@
   flex-direction: column;
   box-shadow: var(--box-shadow);
   background-color: var(--secondary-color);
+  transition: all ease 0.3s;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 
   // TIPOGRAFIA DO CARD
   &__title {
@@ -42,6 +120,12 @@
     font-weight: 500;
     color: var(--gray-color);
     font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+
+    &--tall {
+      height: 2vw;
+      display: flex;
+      align-items: center;
+    }
   }
 
   // CABEÇALHO DO CARD
@@ -86,8 +170,8 @@
 
   // CORPO DO CARD
   &__body {
-    // padding: 0;
-    // max-height: 0;
+    padding: 0;
+    max-height: 0;
     overflow: hidden;
     transition: all 0.3s ease;
 
@@ -99,17 +183,20 @@
   }
 
   &__details {
+    padding: 20px;
     display: grid;
-    grid-template-columns: 50% auto auto auto auto;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   }
 
-  &__qtd {
+  &__input {
     outline: none;
+    cursor: pointer;
     text-align: center;
     border-radius: 4px;
     color: var(--gray-color);
     background-color: transparent;
     border: 1px solid var(--gray-color);
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
   }
 
   // BOTÃO DO CARD
@@ -118,6 +205,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 20px;
     border: none;
     cursor: pointer;
     font-weight: 600;
@@ -135,4 +223,38 @@
       transform: translateY(-4px);
     }
   }
+}
+
+// CARD DE AVISO SE NÃO HOUVER CARDS NA API
+.card__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+}
+
+// CARD LOAGING PARA CARREGAR OS CARDS DA API
+.card__loading {
+  height: 85%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// SCRIPT PARA APARECER O LOADING
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
 }

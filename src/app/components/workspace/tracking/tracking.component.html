@@ -1,6 +1,6 @@
 <div class="container">
   <!-- FILTROS DE BUSCA -->
-  <div class="filter-container">
+  <div class="filter__container">
     <!-- Centro de Custo -->
     <div class="filter">
       <label>CENTRO DE CUSTO</label>
@@ -19,16 +19,16 @@
         (input)="applyFilters()">
     </div>
 
-    <!-- Movimento -->
-    <div class="filter">
-      <label for="movimentoField">MOVIMENTO</label>
-      <input type="text" id="movimentoField" placeholder="Ex: 52" [(ngModel)]="movimentoField" (input)="applyFilters()">
-    </div>
-
     <!-- Material -->
     <div class="filter">
       <label for="materialField">MATERIAL</label>
       <input type="text" id="materialField" placeholder="Ex: CABO" [(ngModel)]="materialField" (input)="applyFilters()">
+    </div>
+
+    <!-- Movimento -->
+    <div class="filter">
+      <label for="movimentoField">MOVIMENTO</label>
+      <input type="text" id="movimentoField" placeholder="Ex: 52" [(ngModel)]="movimentoField" (input)="applyFilters()">
     </div>
 
     <!-- ID -->

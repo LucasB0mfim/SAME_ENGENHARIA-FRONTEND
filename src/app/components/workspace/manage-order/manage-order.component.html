@@ -1,14 +1,40 @@
 <div class="container">
   <!-- FILTROS DE BUSCA -->
   <div class="filter__container">
+
     <!-- Centro de custo -->
-    <div class="filter"></div>
+    <div class="filter">
+      <label>CENTRO DE CUSTO</label>
+      <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect('centroCusto')"
+        (blur)="resetSelectIcon('centroCusto')">
+        <option value="">Todos</option>
+        <option *ngFor="let cc of singleCentroCusto" [value]="cc">{{ cc }}</option>
+      </select>
+      <mat-icon [class.rotated]="centroCustoArrow">arrow_drop_down</mat-icon>
+    </div>
+
     <!-- Fornecedor -->
-    <div class="filter"></div>
-    <!-- Movimento -->
-    <div class="filter"></div>
+    <div class="filter">
+      <label>FORNECEDOR</label>
+      <select [(ngModel)]="fornecedorField" (change)="applyFilters()" (mousedown)="toggleSelect('fornecedor')"
+        (blur)="resetSelectIcon('fornecedor')">
+        <option value="">Todos</option>
+        <option *ngFor="let fornecedor of singleFornecedor" [value]="fornecedor">{{ fornecedor }}</option>
+      </select>
+      <mat-icon [class.rotated]="fornecedorArrow">arrow_drop_down</mat-icon>
+    </div>
+
+    <!-- Material -->
+    <div class="filter">
+      <label>MATERIAL</label>
+      <input type="text" placeholder="Ex: CANO" [(ngModel)]="materialField" (input)="applyFilters()">
+    </div>
+
     <!-- Oc -->
-    <div class="filter"></div>
+    <div class="filter">
+      <label>OC</label>
+      <input type="text" placeholder="Ex: 10294" [(ngModel)]="ocField" (input)="applyFilters()">
+    </div>
   </div>
 
   <!-- LISTA DE CARDS -->
@@ -18,7 +44,7 @@
     <div class="card" *ngFor="let data of purchaseOrder | keyvalue; let i = index">
 
       <!-- Cabeçalho do card -->
-      <div class="card__header">
+      <div class="card__header" (click)="openCard(i)">
 
         <!-- Lado esquerdo do cabeçalho -->
         <div class="card__primary">
@@ -41,20 +67,20 @@
         <!-- Lado direito do cabeçalho -->
         <div class="card__secondary">
           <div class="card__text">
-            <div class="card__title">Previsão Entrega: </div>
-            <div class="card__subtitle">{{ data.value.previsao_entrega}}</div>
+            <div class="card__title">Previsão Entrega</div>
+            <div class="card__subtitle">{{ data.value.data_entrega || 'SEM PREVISÃO'}}</div>
           </div>
         </div>
       </div>
 
       <!-- Corpo do card -->
-      <div class="card__body">
+      <div class="card__body" [class.show]="index === i">
         <div class="card__details">
 
           <!-- Material -->
           <div class="card__info">
             <div class="card__title">MATERIAL</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.order">
+            <div class="card__subtitle card__subtitle--tall" *ngFor="let item of data.value.order">
               {{ item.material }}
             </div>
           </div>
@@ -62,7 +88,7 @@
           <!-- Quantidade Solicitada -->
           <div class="card__info">
             <div class="card__title">QUANTIDADE SOLICITADA</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.order">
+            <div class="card__subtitle card__subtitle--tall" *ngFor="let item of data.value.order">
               {{ item.quantidade }}
             </div>
           </div>
@@ -70,7 +96,7 @@
           <!-- Quantidade Entregue -->
           <div class="card__info">
             <div class="card__title">QUANTIDADE ENTREGUE</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.order">
+            <div class="card__subtitle card__subtitle--tall" *ngFor="let item of data.value.order">
               {{ item.quantidade_entregue }}
             </div>
           </div>
@@ -78,16 +104,16 @@
           <!-- Nova Quantidade -->
           <div class="card__info">
             <div class="card__title">DEFINIR NOVA QTD</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.order">
-              <input type="number" class="card__qtd">
+            <div class="card__subtitle card__subtitle--tall" *ngFor="let item of data.value.order">
+              <input type="number" class="card__input">
             </div>
           </div>
 
           <!-- Nova Data -->
           <div class="card__info">
             <div class="card__title">DEFINIR NOVA DATA</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.order">
-              <input type="date">
+            <div class="card__subtitle card__subtitle--tall" *ngFor="let item of data.value.order">
+              <input type="date" class="card__input">
             </div>
           </div>
 
@@ -98,5 +124,15 @@
       </div>
     </div>
 
+    <!-- Lista vazia -->
+    <div class="card__empty" *ngIf="isVoid">
+      <span>Nenhum pedido encontrado</span>
+      <mat-icon>search</mat-icon>
+    </div>
+
+    <!-- Carregando lista -->
+    <div class="card__loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
   </div>
 </div>

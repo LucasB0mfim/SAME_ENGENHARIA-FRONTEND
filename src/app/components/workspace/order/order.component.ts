@@ -58,7 +58,7 @@ export class OrderComponent implements OnInit {
   // Hooks de Ciclo de Vida
   ngOnInit(): void {
     this.getOrder();
-    this.__titleService.setTitle('Receber Material');
+    this.__titleService.setTitle('Receber Pedido');
   }
 
   // Métodos de Dados de Pedidos

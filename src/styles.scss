@@ -22,24 +22,30 @@
 
 // Tema claro (padrão)
 :root[data-theme="light"] {
-  --primary-color: #F2F1EF;
-  --secondary-color: #FFFFFF;
+  // --primary-color: #F2F1EF;
+  // --secondary-color: #FFFFFF;
+  --primary-color: #FFFFFF;
+  --secondary-color: #F5F5F5;
   --third-color: #c0c0c0;
   --fourth-color: #878787;
   --text-color: #525252;
   --hover-active: #f5f5f5;
   --sidebar-color: #1E1E2A;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 // Tema escuro
 :root[data-theme="dark"] {
-  --primary-color: #12121E;
-  --secondary-color: #1E1E2A;
+  // --primary-color: #12121E;
+  // --secondary-color: #1E1E2A;
+  --primary-color: #121212;
+  --secondary-color: #1E1E1E;
   --third-color: #3c3c4b;
   --fourth-color: #FF6F00;
   --text-color: #FFFFFF;
   --hover-active: #3A3A3A;
   --sidebar-color: #FFFFFF;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 // Definições padrão (fallback)
@@ -47,5 +53,5 @@
   --gray-color: #878787;
   --white-color: #FFFFFF;
   --orange-color: #FF6F00;
-  --box-shadow: 0px 5px 15px rgb(0, 0, 0, 0.1);
+  //--box-shadow: 0px 5px 15px rgb(0, 0, 0, 0.1);
 }
