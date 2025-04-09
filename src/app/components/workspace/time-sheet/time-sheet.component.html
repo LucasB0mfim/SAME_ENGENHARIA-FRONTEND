@@ -82,8 +82,8 @@
 
           <!-- DATA DA BATIDA -->
           <div class="card__info">
-            <div class="card__title">DATA</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.records">
+            <div class="card__title">DATA DO REGISTRO</div>
+            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.records">
               {{ item.periodo }}
             </div>
           </div>
@@ -91,8 +91,16 @@
           <!-- MOTIVO DA AUSÊNCIA -->
           <div class="card__info">
             <div class="card__title">MOTIVO DA AUSÊNCIA</div>
-            <div class="card__subtitle" *ngFor="let item of data.value.records">
+            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.records">
               {{ item.evento_abono }}
+            </div>
+          </div>
+
+          <!-- MOTIVO DA AUSÊNCIA -->
+          <div class="card__info">
+            <div class="card__title">JORNADA REALIZADA</div>
+            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.records">
+              {{ item.jornada_realizada }}
             </div>
           </div>
         </div>

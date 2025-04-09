@@ -120,6 +120,10 @@
     font-weight: 500;
     color: var(--gray-color);
     font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+
+    &--margin {
+      margin: 5px 0;
+    }
   }
 
   // CABEÇALHO DO CARD
@@ -172,16 +176,27 @@
     transition: all 0.3s ease;
 
     &.show {
-      max-height: 1000px;
+      max-height: 300px;
       overflow: visible;
       border-top: 5px solid var(--primary-color);
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        border-radius: 3px;
+        background-color: #f93f03;
+      }
     }
   }
 
   &__details {
     padding: 20px;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
   &__input {
