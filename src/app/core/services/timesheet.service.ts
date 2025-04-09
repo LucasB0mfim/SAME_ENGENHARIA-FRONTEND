@@ -20,6 +20,6 @@ export class TimesheetService {
   }
 
   upload(formData: FormData): Observable<any> {
-    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/csv`', formData)
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/csv', formData)
   }
 }
