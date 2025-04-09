@@ -1,6 +1,35 @@
 <div class="container">
   <!-- FILTRO DE BUSCA -->
-  <div class="filter__container"></div>
+  <div class="filter__container">
+
+    <!-- COLABORADOR -->
+    <div class="filter">
+      <label for="colaboradorField">COLABORADOR</label>
+      <input type="text" id="colaboradorField" placeholder="Ex: JOÃOZINHO">
+    </div>
+
+    <!-- STATUS -->
+    <div class="filter">
+      <label>STATUS</label>
+      <select (mousedown)="toggleSelect()">
+        <option value="">Todos</option>
+        <option>NINGUEM</option>
+      </select>
+      <mat-icon [class.rotated]="statusArrow">arrow_drop_down</mat-icon>
+    </div>
+
+    <!-- DATA INICIAL -->
+    <div class="filter">
+      <label>DATA INICIAL</label>
+      <input type="date">
+    </div>
+
+    <!-- DATA FINAL -->
+    <div class="filter">
+      <label>DATA FINAL</label>
+      <input type="date">
+    </div>
+  </div>
 
   <!-- LISTA DE CARDS -->
   <div class="card__container">

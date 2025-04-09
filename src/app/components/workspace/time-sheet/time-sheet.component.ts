@@ -38,6 +38,9 @@ export class TimeSheetComponent implements OnInit {
   // ABRIR O CORPO DO CARD
   index: number | null = null;
 
+  // ANIMAÇÃO DA SETA DO SELECT
+  statusArrow: boolean = false;
+
   ngOnInit(): void {
     this.getTimesheet();
     this._titleService.setTitle('Monitorar Ponto');
@@ -117,5 +120,19 @@ export class TimeSheetComponent implements OnInit {
     } else {
       this.index = cardIndex;
     }
+  }
+
+  // REINICIAR SETA DO SELECT //
+
+  resetSelectIcon(): void {
+    this.statusArrow = false;
+  }
+
+  // ANIMAR A SETA DO SELECT //
+
+  toggleSelect(): void {
+    setTimeout(() => {
+      this.statusArrow = !this.statusArrow;
+    }, 0);
   }
 }
