@@ -1,14 +1,18 @@
 export interface ITimesheetRecord {
-  PERIODO: string;
-  CHAPA: string;
-  NOME: string;
-  'JORNADA REALIZADA': string;
-  FALTA: string;
-  'EVENTO ABONO': string;
+  periodo: string;
+  jornada_realizada: string;
+  falta: string;
+  evento_abono: string;
 }
 
 export interface ITimeSheetResponse {
   success: boolean;
   message: string;
+  records: [];
+}
+
+export interface ICommonData {
+  chapa: string,
+  nome: string,
   records: ITimesheetRecord[];
 }

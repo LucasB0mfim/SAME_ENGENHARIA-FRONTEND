@@ -6,7 +6,7 @@ import { Component, ViewChild, ElementRef, inject, OnInit } from '@angular/core'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
-import { TimeSheetService } from '../../../core/services/time-sheet.service';
+import { TimesheetService } from '../../../core/services/timesheet.service';
 
 @Component({
   selector: 'app-upload-timesheet',
@@ -29,7 +29,7 @@ export class UploadTimesheetComponent implements OnInit {
   readonly maxFileSize: number = 5 * 1024 * 1024; // 5MB
 
   private _title = inject(TitleService);
-  private readonly _timesheetService = inject(TimeSheetService);
+  private readonly _timesheetService = inject(TimesheetService);
 
   errorMessage: string = '';
   successMessage: string = '';
@@ -150,7 +150,7 @@ export class UploadTimesheetComponent implements OnInit {
     formData.append('folha_ponto', this.file, this.file.name);
 
     // Enviar o arquivo para o serviço
-    this._timesheetService.uploadTimesheet(formData)
+    this._timesheetService.upload(formData)
       .pipe(
         // Finalizar o loading independentemente do resultado
         finalize(() => {
