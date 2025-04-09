@@ -1,113 +1,84 @@
-<div class="timesheet">
+<div class="container">
+  <!-- FILTRO DE BUSCA -->
+  <div class="filter__container"></div>
 
-  <div class="timesheet-top__section">
-    <form class="filter-form">
-      <div class="filter-form__field">
-        <label for="employeeName">Colaborador:</label>
-        <input type="text" id="employeeName" name="employeeName" placeholder="Ex: João Batista" [(ngModel)]="employeeNameFilter"
-          (input)="filterEmployees()">
+  <!-- LISTA DE CARDS -->
+  <div class="card__container">
+
+    <!-- CARD INDIVIDUAL -->
+    <div class="card" *ngFor="let data of employeeHistory | keyvalue; let i = index">
+
+      <!-- CABEÇA DO CARD -->
+      <div class="card__header" (click)="openCard(i)">
+
+        <!-- LADO ESQUEDO DO CARD -->
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__subtitle">CHAPA: </div>
+            <div class="card__subtitle">{{ data.value.chapa }}</div>
+          </div>
+
+          <!-- Parte inferiro do cabeçalho -->
+          <div class="card__bottom">
+            <div class="card__title">{{ data.value.nome }}</div>
+          </div>
+        </div>
+
+        <!-- LADO DIREITO DO CARD -->
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">FALTAS: </div>
+            <div class="card__title">{{ faultCounter(data.key) }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">ATESTADOS: </div>
+            <div class="card__title">{{ certificateCounter(data.key) }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">ABONOS: </div>
+            <div class="card__title">{{ abonoCounter(data.key) }}</div>
+          </div>
+        </div>
       </div>
 
-      <div class="filter-form__field">
-        <label for="status">Status:</label>
-        <select id="status" name="status" [(ngModel)]="statusFilter">
-          <option value="all">Todos</option>
-          <option value="presents">Presentes</option>
-          <option value="absent">Ausentes</option>
-          <option value="vacation">Férias</option>
-          <option value="paid">Abono</option>
-          <option value="certificate">Atestado</option>
-        </select>
+      <!-- CORPO DO CARD -->
+      <div class="card__body" [class.show]="index === i">
+
+        <!-- DETALHES DO CARD -->
+        <div class="card__details">
+
+          <!-- DATA DA BATIDA -->
+          <div class="card__info">
+            <div class="card__title">DATA</div>
+            <div class="card__subtitle" *ngFor="let item of data.value.records">
+              {{ item.periodo }}
+            </div>
+          </div>
+
+          <!-- MOTIVO DA AUSÊNCIA -->
+          <div class="card__info">
+            <div class="card__title">MOTIVO DA AUSÊNCIA</div>
+            <div class="card__subtitle" *ngFor="let item of data.value.records">
+              {{ item.evento_abono }}
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="filter-form__field">
-        <label for="dateStart">Data inicial:</label>
-        <input type="date" id="dateStart" name="dateStart" [(ngModel)]="startDateFilter">
-      </div>
+    <!-- LISTA VAZIA -->
+    <div class="empty" *ngIf="isVoid">
+      <span>Nenhum pedido encontrado</span>
+      <mat-icon>search</mat-icon>
+    </div>
 
-      <div class="filter-form__field">
-        <label for="dateEnd">Data final:</label>
-        <input type="date" id="dateEnd" name="dateEnd" [(ngModel)]="endDateFilter">
-      </div>
-
-      <div class="filter-form__button">
-        <button type="button" (click)="search()">Pesquisar</button>
-        <button type="button">Limpar</button>
-      </div>
-    </form>
-  </div>
-
-  <div class="employees" *ngIf="showEmployeeTable && !isLoading">
-    <table class="table">
-      <tbody class="table__body">
-        <tr class="table__row" *ngFor="let employee of filteredEmployees">
-          <td class="table__data table__data-border"></td>
-
-          <td class="table__data table__data-avatar">
-            <img [src]="employee.avatar" alt="">
-          </td>
-
-          <td class="table__data table__data-info">
-            <div>{{ employee.name }}</div>
-            <div>{{ employee.role }}</div>
-          </td>
-
-          <td class="table__data">{{ employee.email }}</td>
-
-          <td class="table__data table__data-button">
-            <button type="button" (click)="FindRecordByName(employee)">
-              <mat-icon>visibility</mat-icon>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="single__record" *ngIf="!showEmployeeTable && !isLoading && startDateFilter && !endDateFilter">
-    <table class="table">
-      <tbody class="table__body">
-        <tr class="table__row" *ngFor="let records of timesheet">
-          <td class="table__data table__data-border"></td>
-
-          <td class="table__data table__data-avatar">
-            <img [src]="defaultAvatar" alt="">
-          </td>
-
-          <td class="table__data table__data-info">
-            <div>{{ records.NOME }}</div>
-            <div>{{ records.CHAPA }}</div>
-          </td>
-
-          <td class="table__data ">{{ records['EVENTO ABONO'] }}</td>
-          <td class="table__data table__data-period">{{ records.PERIODO }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="multiple__records" *ngIf="!showEmployeeTable && !isLoading && startDateFilter && endDateFilter">
-    <table class="table">
-      <tbody class="table__body">
-        <tr class="table__row" *ngFor="let employee of consolidatedTimesheet">
-          <td class="table__data table__data-border"></td>
-
-          <td class="table__data table__data-avatar">
-            <img [src]="defaultAvatar" alt="">
-          </td>
-
-          <td class="table__data table__data-info">
-            <div>{{ employee.NOME }}</div>
-            <div>{{ employee.CHAPA }}</div>
-          </td>
-
-          <td class="table__data table__data-button">
-            <button type="button" (click)="FindRecordByFilters(employee)">
-              Detalhes
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- CARREGANDO LISTA -->
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
   </div>
 </div>
