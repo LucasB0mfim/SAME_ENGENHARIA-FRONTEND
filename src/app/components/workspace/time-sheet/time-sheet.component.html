@@ -1,19 +1,23 @@
 <div class="container">
   <!-- FILTRO DE BUSCA -->
-  <div class="filter__container">
+  <form [formGroup]="filterForm" class="filter__container">
 
     <!-- COLABORADOR -->
     <div class="filter">
-      <label for="colaboradorField">COLABORADOR</label>
-      <input type="text" id="colaboradorField" placeholder="Ex: JOÃOZINHO">
+      <label>COLABORADOR</label>
+      <input type="text" placeholder="Ex: JOÃOZINHO" formControlName="employee" (input)="applyFilters()">
     </div>
 
     <!-- STATUS -->
     <div class="filter">
       <label>STATUS</label>
-      <select (mousedown)="toggleSelect()">
-        <option value="">Todos</option>
-        <option>NINGUEM</option>
+      <select formControlName="status" (mousedown)="toggleSelect()" (blur)="resetSelectIcon()">
+        <option value="Geral">Geral</option>
+        <option value="Férias">Férias</option>
+        <option value="Gestor decibiu abonar">Abono</option>
+        <option value="Atestado Médico">Atestado Médico</option>
+        <option value="Justificado">Falta Justificada</option>
+        <option value="Injustificado">Falta Injustificada</option>
       </select>
       <mat-icon [class.rotated]="statusArrow">arrow_drop_down</mat-icon>
     </div>
@@ -21,15 +25,19 @@
     <!-- DATA INICIAL -->
     <div class="filter">
       <label>DATA INICIAL</label>
-      <input type="date">
+      <input type="date" formControlName="startDate">
     </div>
 
     <!-- DATA FINAL -->
     <div class="filter">
       <label>DATA FINAL</label>
-      <input type="date">
+      <input type="date" formControlName="endDate">
     </div>
-  </div>
+
+    <button (click)="onSearch()" class="button">BUSCAR</button>
+
+    <button (click)="onClear()" class="button">LIMPAR</button>
+  </form>
 
   <!-- LISTA DE CARDS -->
   <div class="card__container">
@@ -44,7 +52,7 @@
         <div class="card__primary">
           <div class="card__top">
             <div class="card__subtitle">CHAPA: </div>
-            <div class="card__subtitle">{{ data.value.chapa }}</div>
+            <div class="card__subtitle">{{ data.value.chapa || 'N/A' }}</div>
           </div>
 
           <!-- Parte inferiro do cabeçalho -->
@@ -83,7 +91,7 @@
           <!-- DATA DA BATIDA -->
           <div class="card__info">
             <div class="card__title">DATA DO REGISTRO</div>
-            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.records">
+            <div class="card__subtitle card__subtitle--info" *ngFor="let item of data.value.records">
               {{ item.periodo }}
             </div>
           </div>
@@ -91,7 +99,7 @@
           <!-- MOTIVO DA AUSÊNCIA -->
           <div class="card__info">
             <div class="card__title">MOTIVO DA AUSÊNCIA</div>
-            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.records">
+            <div class="card__subtitle card__subtitle--info" *ngFor="let item of data.value.records">
               {{ item.evento_abono }}
             </div>
           </div>
@@ -99,7 +107,7 @@
           <!-- MOTIVO DA AUSÊNCIA -->
           <div class="card__info">
             <div class="card__title">JORNADA REALIZADA</div>
-            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.records">
+            <div class="card__subtitle card__subtitle--info" *ngFor="let item of data.value.records">
               {{ item.jornada_realizada }}
             </div>
           </div>
@@ -109,7 +117,7 @@
 
     <!-- LISTA VAZIA -->
     <div class="empty" *ngIf="isVoid">
-      <span>Nenhum pedido encontrado</span>
+      <span>Nenhum registro encontrado</span>
       <mat-icon>search</mat-icon>
     </div>
 
