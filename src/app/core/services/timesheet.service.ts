@@ -19,6 +19,10 @@ export class TimesheetService {
     return this._httpClient.get('http://192.168.10.17:3000/same-engenharia/api/reports/timesheets')
   }
 
+  findByFilter(request: any): Observable<any> {
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/timesheet/filters', request)
+  }
+
   upload(formData: FormData): Observable<any> {
     return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/csv', formData)
   }
