@@ -142,10 +142,10 @@ export class TimeSheetComponent implements OnInit {
       endDate: this.filterForm.value.endDate
     };
 
-
     this._timesheetService.findByFilter(request).subscribe({
       next: (data) => {
         this.item = data.records;
+        this.employeeFilter = [...this.item];
         this.groupByEmployee();
         this.isLoading = false;
         if (this.item.length === 0) this.isVoid = true;
