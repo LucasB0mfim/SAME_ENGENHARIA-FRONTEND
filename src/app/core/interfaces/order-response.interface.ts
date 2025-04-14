@@ -20,7 +20,6 @@ export interface ICommonData {
   previsao_entrega: string,
   centro_custo: string,
   usuario_criacao: string,
-  data_entrega: string,
   nota_fiscal: string,
   registrado: string,
   order: IItemRecord[]

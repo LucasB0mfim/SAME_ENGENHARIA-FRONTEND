@@ -124,8 +124,8 @@
           <!-- Previsão Entrega Info -->
           <div class="card__text">
             <div class="card__title">PREVISÃO ENTREGA</div>
-            <div class="card__subtitle card__subtitle--margin" *ngFor="let item of data.value.order">
-              {{ item.data_entrega || 'SEM PREVISÃO'}}
+            <div class="card__subtitle card__subtitle--margin">
+              {{ data.value.previsao_entrega }}
             </div>
           </div>
         </div>

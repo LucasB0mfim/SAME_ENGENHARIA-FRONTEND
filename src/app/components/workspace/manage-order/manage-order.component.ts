@@ -88,13 +88,11 @@ export class ManageOrderComponent implements OnInit {
           previsao_entrega: item.previsao_entrega,
           centro_custo: item.centro_custo,
           usuario_criacao: item.usuario_criacao,
-          data_entrega: item.data_entrega,
           nota_fiscal: item.nota_fiscal,
           registrado: item.registrado,
           order: []
-        }
+        };
       }
-
       acc[item.numero_oc].order.push({
         idprd: item.idprd,
         data_criacao_oc: item.data_criacao_oc,

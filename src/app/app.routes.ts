@@ -12,7 +12,6 @@ import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
 import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { ConstructionComponent } from './components/workspace/construction/construction.component';
-import { OrderHistoryComponent } from './components/workspace/order-history/order-history.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 
@@ -51,7 +50,6 @@ export const routes: Routes = [
       { path: 'tracking', component: TrackingComponent },
       { path: 'time-sheet', component: TimeSheetComponent },
       { path: 'order', component: OrderComponent },
-      { path: 'order-history', component: OrderHistoryComponent },
       {
         path: 'constructions',
         component: ConstructionComponent
