@@ -151,11 +151,15 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="button" class="card__button" [disabled]="!file || loadingFile" (click)="submitNotaFiscal()">
+          <button type="button" [disabled]="!file" (click)="submitNotaFiscal(data.value)" class="card__button">
             @if (!loadingFile) {
             <span>ENVIAR</span>
             } @else {
-            <mat-progress-spinner mode="indeterminate" diameter="24" class="upload__spinner"></mat-progress-spinner>
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
             }
           </button>
         </div>

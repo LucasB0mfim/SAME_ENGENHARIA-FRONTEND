@@ -3,6 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { OrderService } from '../../../core/services/order.service';
 import { TitleService } from '../../../core/services/title.service';
@@ -13,7 +14,7 @@ import { DashboardService } from '../../../core/services/dashboard.service';
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, ReactiveFormsModule, MatProgressSpinnerModule],
+  imports: [CommonModule, FormsModule, MatIconModule, ReactiveFormsModule, MatProgressSpinnerModule, MatProgressBarModule],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss'
 })
@@ -52,6 +53,8 @@ export class OrderComponent implements OnInit {
   // Variáveis de Upload de Arquivos
   file: File | null = null;
   loadingFile: boolean = false;
+
+  // Mensagens de erro
   showError: boolean = false;
   showSuccess: boolean = false;
   errorMessage: string = '';
@@ -341,7 +344,7 @@ export class OrderComponent implements OnInit {
     }, 5000);
   }
 
-  // Limpa todas as mensagens
+  // MÉTODO PARA LIMPAR AS VARIÁVEIS DE MENSAGEM //
   private clearMessages(): void {
     this.showError = false;
     this.showSuccess = false;
@@ -358,40 +361,43 @@ export class OrderComponent implements OnInit {
   }
 
   // MÉTODO PARA ENVIAR NOTA FISCAL //
+  async submitNotaFiscal(order: ICommonData) {
+    this.loadingFile = true;
 
-  async submitNotaFiscal() {
     if (!this.file) {
-      this.setErrorMessage('Selecione uma nota fiscal.');
+      this.setErrorMessage('Selecione uma nota fiscal para continuar');
       return;
     }
 
-    // Encontra a OC atualmente expandida
-    const currentOCKey = Object.keys(this.purchaseOrder)[this.expandedIndex ?? -1];
-    if (!currentOCKey) return;
-
-    const currentOC = this.purchaseOrder[currentOCKey];
-    this.loadingFile = true;
-
-    const uploadPromises = currentOC.order.map(item => {
+    // Processa cada item individualmente
+    for (const item of order.order) {
+      // Cria FormData para cada item
       const formData = new FormData();
 
-      formData.append('idprd', item.idprd);
-      formData.append('numero_oc', currentOC.numero_oc);
-      formData.append('quantidade_entregue', item.quantidade);
-
+      // Campos comuns
       formData.append('status', 'ENTREGUE');
       formData.append('registrado', this.emailEmployee);
-      formData.append('nota_fiscal', this.file!, this.file!.name);
+      formData.append('nota_fiscal', this.file, this.file.name);
       formData.append('data_entrega', this.currentDate.toISOString());
 
+      // Campos individuais
+      formData.append('idprd', item.idprd);
+      formData.append('numero_oc', order.numero_oc);
+      formData.append('quantidade_entregue', item.quantidade);
+
+      // Envia requisição
       this._orderService.update(formData).subscribe({
-        next: (data) => {
-          this.setSuccessMessage('Nota fiscal enviada com sucesso!');
+        next: () => {
+          this.loadingFile = false;
           this.getOrder();
-          console.log(data);
+          this.setSuccessMessage('Nota fiscal enviada com sucesso!');
         },
-        error: (error) => console.error('deu erro: ', error)
-      })
-    });
+        error: (error) => {
+          this.loadingFile = false;
+          console.error('Erro ao enviar nota fiscal: ', error);
+          this.setErrorMessage('Erro ao enviar nota fiscal. Tente novamente.');
+        }
+      });
+    }
   }
 }
