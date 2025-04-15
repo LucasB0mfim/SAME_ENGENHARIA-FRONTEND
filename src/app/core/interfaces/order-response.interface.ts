@@ -17,6 +17,7 @@ export interface ICommonData {
   data_criacao_oc: string,
   numero_oc: string,
   fornecedor: string,
+  data_entrega: string,
   previsao_entrega: string,
   centro_custo: string,
   usuario_criacao: string,
