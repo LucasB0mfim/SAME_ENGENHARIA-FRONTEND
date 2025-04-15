@@ -151,7 +151,7 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="button" class="card__button" [disabled]="!file || loadingFile">
+          <button type="button" class="card__button" [disabled]="!file || loadingFile" (click)="submitNotaFiscal()">
             @if (!loadingFile) {
             <span>ENVIAR</span>
             } @else {

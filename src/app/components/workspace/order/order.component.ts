@@ -8,6 +8,7 @@ import { OrderService } from '../../../core/services/order.service';
 import { TitleService } from '../../../core/services/title.service';
 
 import { ICommonData } from '../../../core/interfaces/order-response.interface';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-order',
@@ -21,8 +22,9 @@ export class OrderComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   // Injeção de Dependências
-  private readonly __orderService = inject(OrderService);
-  private readonly __titleService = inject(TitleService);
+  private readonly _orderService = inject(OrderService);
+  private readonly _titleService = inject(TitleService);
+  private readonly _dashboardService = inject(DashboardService);
 
   // Constantes
   readonly acceptedFileTypes: string = '.png, .jpeg, .webp';
@@ -55,15 +57,22 @@ export class OrderComponent implements OnInit {
   errorMessage: string = '';
   successMessage: string = '';
 
+  // Variável para capturar email do colaborador
+  emailEmployee: string = '';
+
+  // Variável para capturar a data de hoje
+  currentDate: Date = new Date();
+
   // Hooks de Ciclo de Vida
   ngOnInit(): void {
     this.getOrder();
-    this.__titleService.setTitle('Receber Pedido');
+    this.getEmailEmployee();
+    this._titleService.setTitle('Receber Pedido');
   }
 
   // Métodos de Dados de Pedidos
   getOrder(): void {
-    this.__orderService.findAll().subscribe({
+    this._orderService.findAll().subscribe({
       next: (data) => {
         // Salvar os dados originais para filtragem posterior
         this.originalOrder = data.order.filter((item: { status: string }) => item.status !== 'CANCELADO');
@@ -338,5 +347,51 @@ export class OrderComponent implements OnInit {
     this.showSuccess = false;
     this.errorMessage = '';
     this.successMessage = '';
+  }
+
+  // MÉTODO PARA CAPTURAR EMAIL DO COLABORADOR //
+  getEmailEmployee() {
+    this._dashboardService.findAll().subscribe({
+      next: (data) => this.emailEmployee = data.employee.email,
+      error: (error) => console.log('Não foi possível carregar as informações do colaborador: ', error)
+    })
+  }
+
+  // MÉTODO PARA ENVIAR NOTA FISCAL //
+
+  async submitNotaFiscal() {
+    if (!this.file) {
+      this.setErrorMessage('Selecione uma nota fiscal.');
+      return;
+    }
+
+    // Encontra a OC atualmente expandida
+    const currentOCKey = Object.keys(this.purchaseOrder)[this.expandedIndex ?? -1];
+    if (!currentOCKey) return;
+
+    const currentOC = this.purchaseOrder[currentOCKey];
+    this.loadingFile = true;
+
+    const uploadPromises = currentOC.order.map(item => {
+      const formData = new FormData();
+
+      formData.append('idprd', item.idprd);
+      formData.append('numero_oc', currentOC.numero_oc);
+      formData.append('quantidade_entregue', item.quantidade);
+
+      formData.append('status', 'ENTREGUE');
+      formData.append('registrado', this.emailEmployee);
+      formData.append('nota_fiscal', this.file!, this.file!.name);
+      formData.append('data_entrega', this.currentDate.toISOString());
+
+      this._orderService.update(formData).subscribe({
+        next: (data) => {
+          this.setSuccessMessage('Nota fiscal enviada com sucesso!');
+          this.getOrder();
+          console.log(data);
+        },
+        error: (error) => console.error('deu erro: ', error)
+      })
+    });
   }
 }
