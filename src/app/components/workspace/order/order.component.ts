@@ -66,7 +66,8 @@ export class OrderComponent implements OnInit {
     this.__orderService.findAll().subscribe({
       next: (data) => {
         // Salvar os dados originais para filtragem posterior
-        this.originalOrder = data.order;
+        this.originalOrder = data.order.filter((item: { status: string }) => item.status !== 'CANCELADO');
+
         // Inicializar order com os dados originais
         this.order = [...this.originalOrder];
 
