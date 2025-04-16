@@ -78,7 +78,7 @@ export class OrderComponent implements OnInit {
     this._orderService.findAll().subscribe({
       next: (data) => {
         // Salvar os dados originais para filtragem posterior
-        this.originalOrder = data.order.filter((item: { status: string }) => item.status !== 'CANCELADO');
+        this.originalOrder = data.order.filter((item: { status: string }) => item.status === 'PENDENTE');
 
         // Inicializar order com os dados originais
         this.order = [...this.originalOrder];
@@ -361,7 +361,7 @@ export class OrderComponent implements OnInit {
   }
 
   // MÉTODO PARA ENVIAR NOTA FISCAL //
-  async submitNotaFiscal(order: ICommonData) {
+  confirmDelivery(order: ICommonData) {
     this.loadingFile = true;
 
     if (!this.file) {
@@ -369,7 +369,7 @@ export class OrderComponent implements OnInit {
       return;
     }
 
-    // Processa cada item individualmente
+    // Atualiza cada item individualmente
     for (const item of order.order) {
       // Cria FormData para cada item
       const formData = new FormData();
@@ -395,9 +395,70 @@ export class OrderComponent implements OnInit {
         error: (error) => {
           this.loadingFile = false;
           console.error('Erro ao enviar nota fiscal: ', error);
-          this.setErrorMessage('Erro ao enviar nota fiscal. Tente novamente.');
+          this.setErrorMessage('Erro ao enviar nota fiscal.');
         }
       });
+    }
+  }
+
+  // MÉTODO PARA CONFIRMAR QUE O PEDIDO NÃO FOI ENTREGUE //
+  orderNotDelivered(order: ICommonData) {
+    this.loadingFile = true;
+
+    // Atualiza cada item individualmente
+    for (const item of order.order) {
+
+      const request = {
+        registrado: this.emailEmployee,
+        status: 'NÃO ENTREGUE',
+        idprd: item.idprd,
+        quantidade_entregue: '0'
+      };
+
+      // Envia requisição
+      this._orderService.updateStatus(request).subscribe({
+        next: () => {
+          this.loadingFile = false;
+          this.getOrder();
+          this.setSuccessMessage('Pedido atualizado com sucesso.');
+        },
+        error: (error) => {
+          this.loadingFile = false;
+          console.error('Erro ao atualizar o pedido: ', error);
+          this.setErrorMessage('Não foi possível atualizar o pedido.');
+        }
+      })
+    }
+  }
+
+  // MÉTODO PARA CONFIRMAR QUE O PEDIDO FOI PARCIALMENTE ENTREGUE //
+  orderPartiallyDelivered(order: ICommonData) {
+    this.loadingFile = true;
+
+    // Atualiza cada item individualmente
+    for (const item of order.order) {
+
+      const request = {
+        registrado: this.emailEmployee,
+        status: 'PARCIALMENTE ENTREGUE',
+        idprd: item.idprd,
+        quantidade_entregue: item.quantidade_entregue,
+        data_entrega: this.currentDate.toISOString()
+      };
+
+      // Envia requisição
+      this._orderService.updateStatus(request).subscribe({
+        next: () => {
+          this.getOrder();
+          this.setSuccessMessage('Pedido atualizado com sucesso.');
+          this.loadingFile = false;
+        },
+        error: (error) => {
+          console.error('Erro ao atualizar o pedido: ', error);
+          this.setErrorMessage('Não foi possível atualizar o pedido.');
+          this.loadingFile = false;
+        }
+      })
     }
   }
 }

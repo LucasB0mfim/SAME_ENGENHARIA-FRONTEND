@@ -151,7 +151,7 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="button" [disabled]="!file" (click)="submitNotaFiscal(data.value)" class="card__button">
+          <button type="button" [disabled]="!file" (click)="confirmDelivery(data.value)" class="card__button">
             @if (!loadingFile) {
             <span>ENVIAR</span>
             } @else {
@@ -191,7 +191,17 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="button" class="card__button">ENVIAR</button>
+          <button type="button" (click)="orderPartiallyDelivered(data.value)" class="card__button">
+            @if (!loadingFile) {
+            <span>ENVIAR</span>
+            } @else {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            }
+          </button>
         </div>
 
         <!-- SEÇÃO NÃO CHEGOU -->
@@ -200,7 +210,17 @@
             <img src="https://usagif.com/wp-content/uploads/2022/4hv9xm/crying-emoji-9.gif" alt="crying emoji">
             <span class="card__span">Meu pedido não chegou :(</span>
           </div>
-          <button class="card__button">ENVIAR</button>
+          <button type="button" (click)="orderNotDelivered(data.value)" class="card__button">
+            @if (!loadingFile) {
+            <span>ENVIAR</span>
+            } @else {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            }
+          </button>
         </div>
       </div>
     </div>
