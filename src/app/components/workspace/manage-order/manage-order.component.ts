@@ -70,7 +70,9 @@ export class ManageOrderComponent implements OnInit {
     this._orderService.findAll().subscribe({
       next: (data) => {
         // Salvar os dados originais para filtragem posterior
-        this.originalOrder = data.order.filter((item: { status: string }) => item.status !== 'PENDENTE');
+        this.originalOrder = data.order.filter((item: { status: string }) =>
+          item.status !== 'PENDENTE' && item.status !== 'ENTREGUE'
+        );
 
         // Inicializar order com os dados originais
         this.order = [...this.originalOrder];
