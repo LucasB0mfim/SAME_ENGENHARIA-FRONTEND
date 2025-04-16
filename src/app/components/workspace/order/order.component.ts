@@ -439,6 +439,12 @@ export class OrderComponent implements OnInit {
     // Atualiza cada item individualmente
     for (const item of order.order) {
 
+      if (Number(item.quantidade_entregue) <= 0) {
+        this.setErrorMessage('Digite uma quantidade válida.');
+        this.loadingFile = false;
+        return
+      }
+
       const request = {
         registrado: this.emailEmployee,
         status: 'PARCIALMENTE ENTREGUE',
