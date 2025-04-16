@@ -8,6 +8,7 @@ export interface IItemRecord {
   valor_total: string,
   status: string,
   data_entrega: string,
+  previsao_entrega: string,
   nota_fiscal: string,
   registrado: string,
   quantidade_entregue: string

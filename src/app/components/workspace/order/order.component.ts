@@ -126,6 +126,7 @@ export class OrderComponent implements OnInit {
         valor_total: item.valor_total,
         status: item.status || 'PENDENTE',
         data_entrega: item.data_entrega,
+        previsao_entrega: item.previsao_entrega,
         nota_fiscal: item.nota_fiscal,
         registrado: item.registrado,
         quantidade_entregue: item.quantidade_entregue,

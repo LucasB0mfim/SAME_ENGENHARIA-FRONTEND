@@ -1,3 +1,4 @@
+// Main Container Structure
 .container {
   height: 100%;
   display: flex;
@@ -77,14 +78,16 @@
   }
 }
 
+// ===== CARD CONTAINER =====
 .card__container {
   gap: 30px;
   height: 85%;
   display: flex;
-  overflow-y: auto;
   padding: 2vw 1vw 2vw 0;
   flex-direction: column;
+  overflow-y: auto;
 
+  // Scrollbar Styling
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -96,39 +99,15 @@
   }
 }
 
-// CARD
+// ===== CARD COMPONENT =====
 .card {
   display: flex;
   border-radius: 4px;
   flex-direction: column;
   box-shadow: var(--box-shadow);
   background-color: var(--secondary-color);
-  transition: all ease 0.3s;
 
-  &:hover {
-    transform: translateY(-4px);
-  }
-
-  // TIPOGRAFIA DO CARD
-  &__title {
-    font-weight: 600;
-    color: var(--text-color);
-    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
-  }
-
-  &__subtitle {
-    font-weight: 500;
-    color: var(--gray-color);
-    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
-
-    &--tall {
-      height: 2vw;
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  // CABEÇALHO DO CARD
+  // Card Header
   &__header {
     width: 100%;
     padding: 20px;
@@ -142,14 +121,17 @@
     transition: border-radius 1s ease;
   }
 
+  /* Remove the bottom-left radius when card is expanded */
   &:has(.card__body.show) .card__header {
     border-bottom-left-radius: 0;
   }
 
+  /* Alternative approach using a class if :has is not supported */
   &__header.header-expanded {
     border-bottom-left-radius: 0;
   }
 
+  // Card Layout Components
   &__primary {
     display: flex;
     flex-direction: column;
@@ -168,7 +150,70 @@
     align-items: center;
   }
 
-  // CORPO DO CARD
+  // Card Typography
+  &__title {
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+    font-weight: 600;
+    color: var(--text-color);
+
+    &--info {
+      color: var(--fourth-color);
+    }
+  }
+
+  &__subtitle {
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+    font-weight: 500;
+    color: var(--gray-color);
+
+    &--margin {
+      width: 90%;
+      height: 24px;
+      margin: 5px 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  // Navigation Sections
+  &__section {
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 0.85vw;
+    color: var(--gray-color);
+    outline: none;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all ease 0.2s;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      color: var(--orange-color);
+    }
+
+    &.active {
+      color: var(--orange-color);
+      border-bottom: 2px solid var(--orange-color);
+    }
+
+    mat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    }
+
+    span {
+      font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+    }
+  }
+
+  // Expandable Body
   &__body {
     padding: 0;
     max-height: 0;
@@ -182,45 +227,158 @@
     }
   }
 
+  // ===== CARD CONTENT SECTIONS =====
+
+  // Details Section
   &__details {
     padding: 20px;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 50% auto auto auto auto;
   }
 
-  &__input {
-    outline: none;
-    cursor: pointer;
+  // Partial Delivery Section
+  &__partial {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 40% auto auto auto auto;
+  }
+
+  // Quantity Input
+  &__qtd {
+    height: 100%;
     text-align: center;
+    outline: none;
     border-radius: 4px;
     color: var(--gray-color);
-    background-color: transparent;
     border: 1px solid var(--gray-color);
-    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+    background-color: transparent;
   }
 
-  // BOTÃO DO CARD
-  &__button {
-    width: 100%;
+  // File Upload Area
+  &__file {
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
-    border: none;
     cursor: pointer;
-    font-weight: 600;
-    grid-column: 1/-1;
-    border-radius: 4px;
-    letter-spacing: 4px;
+    position: relative;
+    border-radius: 8px;
+    border: 1px dashed var(--fourth-color);
     transition: all ease 0.2s;
-    color: var(--sidebar-color);
-    box-shadow: var(--box-shadow);
-    padding: clamp(0.6rem, 1vw, 2rem);
-    background-color: var(--third-color);
-    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
 
     &:hover {
-      transform: translateY(-4px);
+      background-color: var(--primary-color);
+    }
+  }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    z-index: -1;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    color: var(--fourth-color);
+
+    mat-icon {
+      width: auto;
+      height: auto;
+      font-size: 50px;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__filename {
+    font-size: 16px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    word-break: break-word;
+    text-overflow: ellipsis;
+  }
+
+  &__instruction {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  // Action Button
+  &__button {
+    width: 100%;
+    height: 3vw;
+    padding: clamp(0.6rem, 1vw, 2rem);
+    margin-top: 26px;
+    display: flex;
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--sidebar-color);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    box-shadow: var(--box-shadow);
+    background-color: var(--third-color);
+    transition: all ease 0.2s;
+    grid-column: 1/-1;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__spinner {
+    margin: 0 auto;
+  }
+
+  // ===== NOTIFICATION MESSAGES =====
+  &__message {
+    position: absolute;
+    top: 7%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 30%;
+    padding: 10px 16px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    animation: slideDown 0.3s ease-in-out;
+    z-index: 10;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &--error {
+      background-color: rgba(255, 87, 87, 0.1);
+      color: #ff5757;
+      border: 1px solid #ff5757;
+    }
+
+    &--success {
+      background-color: rgba(75, 210, 143, 0.1);
+      color: #4bd28f;
+      border: 1px solid #4bd28f;
     }
   }
 }
@@ -248,7 +406,7 @@
   justify-content: center;
 }
 
-// SCRIPT PARA APARECER O LOADING
+// ESTILO GERAL PARA SPINNERS
 :host ::ng-deep mat-progress-spinner {
   width: 3vw !important;
   height: 3vw !important;
@@ -257,4 +415,47 @@
 :host ::ng-deep mat-progress-spinner circle {
   stroke: var(--orange-color);
   stroke-width: 8%;
+}
+
+
+// ANIMAÇÃO DE PONTOS CARREGANDO
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--sidebar-color);
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
