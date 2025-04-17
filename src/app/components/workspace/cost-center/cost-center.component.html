@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="card__container">
+    <div class="card">
+      <h2 class="card__title">A RECEBER</h2>
+      <span class="card__subtitle">{{ selectedCostCenter?.total_receber || 'N/A' }}</span>
+    </div>
+
+    <div class="card">
+      <h2 class="card__title">GASTO COM MATERIAL</h2>
+      <span class="card__subtitle">{{ selectedCostCenter?.total_pago_material || 'N/A' }}</span>
+    </div>
+
+    <div class="card">
+      <h2 class="card__title">GASTO COM SERVIÇOS</h2>
+      <span class="card__subtitle">{{ selectedCostCenter?.total_pago_servico || 'N/A' }}</span>
+    </div>
+
+    <div class="card">
+      <h2 class="card__title">FOLHA DE PAGAMENTO</h2>
+      <span class="card__subtitle">{{ selectedCostCenter?.folha_pagamento || 'N/A' }}</span>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="grafic">
+    <canvas baseChart
+      [type]="barChartType"
+      [data]="barChartData"
+      [options]="barChartOptions">
+    </canvas>
+  </div>
+</div>

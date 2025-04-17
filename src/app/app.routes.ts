@@ -10,15 +10,18 @@ import { GeneralComponent } from './components/workspace/general/general.compone
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
+import { IndicatorsComponent } from './components/workspace/indicators/indicators.component';
+import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
 import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { ConstructionComponent } from './components/workspace/construction/construction.component';
-import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
+import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
+import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 
 import { authGuard } from './core/guard/auth.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
-import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
+import { indicatorsGuard } from './core/guard/indicators.guard';
 
 export const routes: Routes = [
   {
@@ -70,6 +73,15 @@ export const routes: Routes = [
         component: UploadTimesheetComponent,
         canActivate: [humanResourcesGuard]
       },
+      {
+        path: 'indicators',
+        component: IndicatorsComponent
+      },
+      {
+        path: 'indicators/cost-center',
+        component: CostCenterComponent,
+        canActivate: [indicatorsGuard]
+      }
     ]
   },
   {
