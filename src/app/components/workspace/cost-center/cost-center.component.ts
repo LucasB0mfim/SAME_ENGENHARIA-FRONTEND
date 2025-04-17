@@ -22,9 +22,9 @@ export class CostCenterComponent implements OnInit {
   costCenter: any[] = [];
   selectedCostCenter: any = null;
 
-  public barChartType: ChartType = 'line';
+  public barChartType: ChartType = 'bar';
 
-  public barChartData: ChartData<'line'> = {
+  public barChartData: ChartData<'bar'> = {
     labels: [],
     datasets: []
   }
