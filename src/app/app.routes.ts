@@ -18,6 +18,7 @@ import { HumanResourcesComponent } from './components/workspace/human-resources/
 import { authGuard } from './core/guard/auth.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
+import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
 
 export const routes: Routes = [
   {
@@ -50,6 +51,7 @@ export const routes: Routes = [
       { path: 'tracking', component: TrackingComponent },
       { path: 'time-sheet', component: TimeSheetComponent },
       { path: 'order', component: OrderComponent },
+      { path: 'order-delivered', component: OrderDeliveredComponent },
       {
         path: 'constructions',
         component: ConstructionComponent
