@@ -22,9 +22,9 @@ export class CostCenterComponent implements OnInit {
   costCenter: any[] = [];
   selectedCostCenter: any = null;
 
-  public barChartType: ChartType = 'bar';
+  public barChartType: ChartType = 'line';
 
-  public barChartData: ChartData<'bar'> = {
+  public barChartData: ChartData<'line'> = {
     labels: [],
     datasets: []
   }
@@ -36,18 +36,18 @@ export class CostCenterComponent implements OnInit {
       x: {
         display: false,
         grid: {
-          display: false
+          display: true
         }
       },
       y: {
         beginAtZero: true,
         grid: {
-          display: false
+          display: true
         },
         ticks: {
-          display: false
+          display: true
         },
-        display: false
+        display: true
       }
     },
     plugins: {
@@ -71,12 +71,8 @@ export class CostCenterComponent implements OnInit {
       }
     },
     onClick: (event: any, elements: any) => {
-      console.log('Graph click event:', event);
-      console.log('Clicked elements:', elements);
-
       if (elements && elements.length > 0) {
         const index = elements[0].index;
-        console.log('Selected index:', index);
         this.selectCostCenterByIndex(index);
       }
     }
@@ -90,15 +86,12 @@ export class CostCenterComponent implements OnInit {
   getCostCenter() {
     this._indicatorService.findCostCenter().subscribe({
       next: (data) => {
-        console.log('API response data:', data);
         this.costCenter = data.result.filter((item: { nome_centro_custo: string }) =>
           item.nome_centro_custo !== 'Outro Centro de Custo'
         );
-        console.log('Filtered cost centers:', this.costCenter);
 
         if (this.costCenter.length > 0) {
           this.selectedCostCenter = {...this.costCenter[0]};
-          console.log('Initial selected cost center:', this.selectedCostCenter);
         }
         this.updateChartData();
         this.cdr.detectChanges();
@@ -110,37 +103,26 @@ export class CostCenterComponent implements OnInit {
   }
 
   selectCostCenterByIndex(index: number) {
-    console.log('Selecting cost center by index:', index);
-    console.log('Available cost centers:', this.costCenter);
-
     if (index >= 0 && index < this.costCenter.length) {
       this.selectedCostCenter = {...this.costCenter[index]};
-      console.log('New selected cost center:', this.selectedCostCenter);
       this.cdr.detectChanges();
-    } else {
-      console.warn('Invalid index:', index);
     }
   }
 
   updateChartData() {
-    console.log('Updating chart data...');
-
     const labels = this.costCenter.map(item => item.nome_centro_custo);
-    console.log('Chart labels:', labels);
 
     const datasets = [{
       data: this.costCenter.map(item => {
         const material = this.formateValue(item.total_pago_material);
         const servico = this.formateValue(item.total_pago_servico);
         const folha = this.formateValue(item.folha_pagamento);
-        const total = material + servico + folha;
-        console.log(`Calculating total for ${item.nome_centro_custo}:`, {material, servico, folha, total});
-        return total;
+        return material + servico + folha;
       }),
       label: 'Total',
-      backgroundColor: 'rgba(99, 102, 241, 0.8)',
-      borderColor: 'rgba(99, 102, 241, 1)',
-      hoverBackgroundColor: 'rgba(99, 102, 241, 1)',
+      backgroundColor: 'rgb(255, 111, 0)',
+      borderColor: 'rgb(255, 111, 0)',
+      hoverBackgroundColor: 'rgb(255, 131, 37)',
       barThickness: 30,
     }];
 
@@ -149,8 +131,6 @@ export class CostCenterComponent implements OnInit {
       datasets: datasets
     };
 
-    console.log('Updated chart data:', this.barChartData);
-
     if (this.chart?.chart) {
       this.chart.chart.update();
     }
@@ -158,7 +138,6 @@ export class CostCenterComponent implements OnInit {
 
   formateValue(constructionPrice: string): number {
     if (!constructionPrice || typeof constructionPrice !== 'string') {
-      console.warn('Invalid construction price:', constructionPrice);
       return 0;
     }
 
@@ -169,12 +148,23 @@ export class CostCenterComponent implements OnInit {
         .replace(',', '.');
 
       const value = parseFloat(numStr);
-      const result = isNaN(value) ? 0 : value;
-      console.log(`Formatted value: ${constructionPrice} -> ${result}`);
-      return result;
+      return isNaN(value) ? 0 : value;
     } catch (error) {
-      console.error('Error formatting value:', error);
       return 0;
     }
+  }
+
+  getTotalGasto(): string {
+    if (!this.selectedCostCenter) return 'N/A';
+
+    const material = this.formateValue(this.selectedCostCenter.total_pago_material);
+    const servico = this.formateValue(this.selectedCostCenter.total_pago_servico);
+    const folha = this.formateValue(this.selectedCostCenter.folha_pagamento);
+    const total = material + servico + folha;
+
+    return 'R$ ' + total.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
 }

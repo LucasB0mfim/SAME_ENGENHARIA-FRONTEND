@@ -8,22 +8,21 @@
 
 .card__title {
   font-weight: 500;
-  letter-spacing: 1px;
   color: var(--gray-color);
-  font-size: clamp(0.6rem, 0.9vw, 0.9rem);
+  font-size: clamp(0.6rem, 0.80vw, 0.9rem);
 }
 
 .card__subtitle {
   font-weight: 600;
   color: var(--orange-color);
-  font-size: 1.5vw;
+  font-size: clamp(1rem, 1.2vw, 1.4rem);
 }
 
 .card__container {
   gap: 2vw;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .card,

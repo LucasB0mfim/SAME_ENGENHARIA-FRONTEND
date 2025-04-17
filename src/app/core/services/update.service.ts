@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IUpdateResponse } from '../interfaces/update-response.interface';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { IUpdateRequest } from '../interfaces/update-request.interface';
+import { IUpdateResponse } from '../interfaces/update-response.interface';
 
 @Injectable({
   providedIn: 'root'

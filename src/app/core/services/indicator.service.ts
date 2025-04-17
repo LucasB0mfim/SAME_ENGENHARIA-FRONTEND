@@ -1,15 +1,13 @@
 import { Observable } from 'rxjs';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-import { ITrackingResponse } from '../interfaces/tracking-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TrackingService {
+export class IndicatorService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/tracking';
+  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/indicators/cost-center';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -17,8 +15,8 @@ export class TrackingService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findAll(): Observable<ITrackingResponse> {
+  findCostCenter(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<ITrackingResponse>(this._apiUrl, {headers});
+    return this._httpClient.get<any>(this._apiUrl, {headers});
   }
 }
