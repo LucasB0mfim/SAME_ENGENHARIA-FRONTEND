@@ -28,29 +28,37 @@ interface CostCenterIndicator {
   styleUrl: './cost-center.component.scss'
 })
 export class CostCenterComponent implements OnInit {
+  // CAPTURAR O CANVAS NO HTML
+  @ViewChild('lineChart', { static: true }) ctx: ElementRef | undefined;
+
+  // INJEÇÃO DE DEPENDENCIAS
   private chartInstance: Chart | undefined;
   private _titleService = inject(TitleService);
   private readonly _indicatorService = inject(IndicatorService);
 
-  @ViewChild('lineChart', { static: true }) ctx: ElementRef | undefined;
-
+  // GERENCIAR ESTADO
   isSelectOpen: boolean = false;
-  isLoading: boolean = false;
   hasSelection: boolean = false;
-
-  centroCustoField: string = 'Nenhum';
-  uniqueCostCenter: string[] = [];
-  indicators: CostCenterIndicator[] = [];
-  indicatorsCopie: CostCenterIndicator[] = [];
   activeSection: Record<string, string> = {};
 
+  // VARIÁVEL DO FILTRO
+  centroCustoField: string = 'Nenhum';
+
+  // VARIÁVEL PARA RECEBER APENAS UM TIPO DE CENTRO DE CUSTO
+  uniqueCostCenter: string[] = [];
+
+  // MODELOS
+  indicators: CostCenterIndicator[] = [];
+  indicatorsCopie: CostCenterIndicator[] = [];
+
+  // HOOK DE CICLO
   ngOnInit(): void {
     this._titleService.setTitle('Centro de Custo');
     this.getIndicators();
   }
 
+  // BUSCAR OS INDICADORES NA API
   getIndicators() {
-    this.isLoading = true;
     this._indicatorService.findCostCenter().subscribe({
       next: (data) => {
         this.indicators = data.result.filter((item: CostCenterIndicator) =>
@@ -59,15 +67,14 @@ export class CostCenterComponent implements OnInit {
         this.indicatorsCopie = [...this.indicators];
         this.removeDuplicate();
         this.applyFilters();
-        this.isLoading = false;
       },
       error: (error) => {
         console.error('Não foi possível buscar os registros financeiros: ', error);
-        this.isLoading = false;
       }
     });
   }
 
+  // CONFIGURAÇÃO DO GRÁFICO
   startChart() {
     if (this.chartInstance) {
       this.chartInstance.destroy();
@@ -141,6 +148,7 @@ export class CostCenterComponent implements OnInit {
     });
   }
 
+  // FORMATAR O PREÇO DA API
   formateValue(value: string): number {
     const onlyNumber = value.replace('R$ ', '');
     const removePoint = onlyNumber.replace(/\./g, '');
@@ -148,6 +156,35 @@ export class CostCenterComponent implements OnInit {
     return parseFloat(addDecimal) || 0;
   }
 
+  // CALCULAR O FATURAMENTO DE CENTRO DE CUSTO
+  calculateFaturamento(): string {
+    if (this.centroCustoField === 'Nenhum') {
+      return '0,00';
+    }
+
+    const indicator = this.indicatorsCopie.find(
+      (item) => item.nome_centro_custo === this.centroCustoField
+    );
+
+    if (!indicator) {
+      return '0,00';
+    }
+
+    const totalReceber = this.formateValue(indicator.total_receber);
+    const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+    const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+    const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+
+    const total = totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento;
+
+    return total.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+
+  // APLICAR FILTROS DE BUSCA
   applyFilters() {
     let filteredData = [...this.indicators];
 
@@ -166,6 +203,7 @@ export class CostCenterComponent implements OnInit {
     }
   }
 
+  // REMOVER DUPLICATAS
   removeDuplicate(): void {
     const constCenterArray = new Set<string>();
     this.indicators.forEach((item) => {
@@ -176,12 +214,14 @@ export class CostCenterComponent implements OnInit {
     this.uniqueCostCenter = Array.from(constCenterArray).sort();
   }
 
+  // ALTERAR O ESTADO DO SELECT
   toggleSelect(): void {
     setTimeout(() => {
       this.isSelectOpen = !this.isSelectOpen;
     }, 0);
   }
 
+  // REINICIAR ESTADO DO SELECT
   resetSelectIcon(): void {
     this.isSelectOpen = false;
   }

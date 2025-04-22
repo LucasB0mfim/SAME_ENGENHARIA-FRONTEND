@@ -1,7 +1,9 @@
 <div class="container">
+
   <!-- FILTROS DE BUSCA -->
   <div class="filter__container">
-    <!-- Centro de Custo Filter -->
+
+    <!-- CENTRO DE CUSTO -->
     <div class="filter">
       <label>CENTRO DE CUSTO</label>
       <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()"
@@ -11,19 +13,27 @@
       </select>
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
+
+    <!-- FATURAMENTO -->
+    <div class="filter">
+      <label>FATURAMENTO</label>
+      <span>R$ {{ calculateFaturamento() }}</span>
+    </div>
   </div>
 
-  <!-- LISTA DE ORDENS DE COMPRA -->
+  <!-- CONTAINER DO GRÁFICO -->
   <div class="grafic__container">
+
     <!-- GRÁFICO -->
     <div class="grafic">
       <canvas #lineChart>
       </canvas>
     </div>
 
-    <!-- Lista vazia -->
+    <!-- AVISO PARA SELECIONAR ALGUM CENTRO DE CUSTO -->
     <div class="grafic__empty" *ngIf="centroCustoField === 'Nenhum'">
       <span>Selecione algum Centro de Custo</span>
       <mat-icon>search</mat-icon>
     </div>
   </div>
+</div>
