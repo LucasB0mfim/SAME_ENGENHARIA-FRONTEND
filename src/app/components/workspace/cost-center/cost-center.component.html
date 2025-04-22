@@ -1,37 +1,29 @@
 <div class="container">
-  <div class="card__container">
-    <div class="card">
-      <h2 class="card__title">GASTO COM MATERIAL</h2>
-      <span class="card__subtitle">{{ selectedCostCenter?.total_pago_material || 'N/A' }}</span>
-    </div>
-
-    <div class="card">
-      <h2 class="card__title">GASTO COM SERVIÇOS</h2>
-      <span class="card__subtitle">{{ selectedCostCenter?.total_pago_servico || 'N/A' }}</span>
-    </div>
-
-    <div class="card">
-      <h2 class="card__title">GASTO COM FUNCIONÁRIOS</h2>
-      <span class="card__subtitle">{{ selectedCostCenter?.folha_pagamento || 'N/A' }}</span>
-    </div>
-
-    <div class="card">
-      <h2 class="card__title">GASTO TOTAL</h2>
-      <span class="card__subtitle">{{ getTotalGasto() || 'N/A' }}</span>
-    </div>
-
-    <div class="card">
-      <h2 class="card__title">A RECEBER</h2>
-      <span class="card__subtitle">{{ selectedCostCenter?.total_receber || 'N/A' }}</span>
+  <!-- FILTROS DE BUSCA -->
+  <div class="filter__container">
+    <!-- Centro de Custo Filter -->
+    <div class="filter">
+      <label>CENTRO DE CUSTO</label>
+      <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()"
+        (blur)="resetSelectIcon()">
+        <option value="Nenhum">Nenhum</option>
+        <option *ngFor="let centro of uniqueCostCenter" [value]="centro">{{ centro }}</option>
+      </select>
+      <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
   </div>
 
-  <!-- GRÁFICO -->
-  <div class="grafic">
-    <canvas baseChart
-      [type]="barChartType"
-      [data]="barChartData"
-      [options]="barChartOptions">
-    </canvas>
+  <!-- LISTA DE ORDENS DE COMPRA -->
+  <div class="grafic__container">
+    <!-- GRÁFICO -->
+    <div class="grafic">
+      <canvas #lineChart>
+      </canvas>
+    </div>
+
+    <!-- Lista vazia -->
+    <div class="grafic__empty" *ngIf="centroCustoField === 'Nenhum'">
+      <span>Selecione algum Centro de Custo</span>
+      <mat-icon>search</mat-icon>
+    </div>
   </div>
-</div>

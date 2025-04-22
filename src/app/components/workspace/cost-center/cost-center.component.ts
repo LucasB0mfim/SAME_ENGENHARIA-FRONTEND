@@ -1,170 +1,188 @@
-import { Component, inject, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Chart } from 'chart.js';
+import { NgChartsModule } from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
-import { IndicatorService } from '../../../core/services/indicator.service.js';
+import { MatIconModule } from '@angular/material/icon';
 import { TitleService } from '../../../core/services/title.service.js';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { IndicatorService } from '../../../core/services/indicator.service.js';
+import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
+
+interface CostCenterIndicator {
+  nome_centro_custo: string;
+  total_receber: string;
+  total_pago_material: string;
+  material_pago: string;
+  material_apagar: string;
+  total_pago_servico: string;
+  servico_pago: string;
+  servico_apagar: string;
+  folha_pagamento: string;
+}
 
 @Component({
   selector: 'app-cost-center',
   standalone: true,
-  imports: [CommonModule, NgChartsModule],
+  imports: [CommonModule, NgChartsModule, MatIconModule, MatProgressSpinnerModule, FormsModule],
   templateUrl: './cost-center.component.html',
   styleUrl: './cost-center.component.scss'
 })
 export class CostCenterComponent implements OnInit {
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-
+  private chartInstance: Chart | undefined;
   private _titleService = inject(TitleService);
   private readonly _indicatorService = inject(IndicatorService);
-  private readonly cdr = inject(ChangeDetectorRef);
 
-  costCenter: any[] = [];
-  selectedCostCenter: any = null;
+  @ViewChild('lineChart', { static: true }) ctx: ElementRef | undefined;
 
-  public barChartType: ChartType = 'bar';
+  isSelectOpen: boolean = false;
+  isLoading: boolean = false;
+  hasSelection: boolean = false;
 
-  public barChartData: ChartData<'bar'> = {
-    labels: [],
-    datasets: []
-  }
-
-  public barChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        display: false,
-        grid: {
-          display: true
-        }
-      },
-      y: {
-        beginAtZero: true,
-        grid: {
-          display: true
-        },
-        ticks: {
-          display: true
-        },
-        display: true
-      }
-    },
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        enabled: true,
-        callbacks: {
-          label: function (context) {
-            let label = context.dataset.label || '';
-            if (label) {
-              label += ': ';
-            }
-            if (context.parsed.y !== null) {
-              label += 'R$ ' + context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            }
-            return label;
-          }
-        }
-      }
-    },
-    onClick: (event: any, elements: any) => {
-      if (elements && elements.length > 0) {
-        const index = elements[0].index;
-        this.selectCostCenterByIndex(index);
-      }
-    }
-  }
+  centroCustoField: string = 'Nenhum';
+  uniqueCostCenter: string[] = [];
+  indicators: CostCenterIndicator[] = [];
+  indicatorsCopie: CostCenterIndicator[] = [];
+  activeSection: Record<string, string> = {};
 
   ngOnInit(): void {
-    this.getCostCenter();
     this._titleService.setTitle('Centro de Custo');
+    this.getIndicators();
   }
 
-  getCostCenter() {
+  getIndicators() {
+    this.isLoading = true;
     this._indicatorService.findCostCenter().subscribe({
       next: (data) => {
-        this.costCenter = data.result.filter((item: { nome_centro_custo: string }) =>
+        this.indicators = data.result.filter((item: CostCenterIndicator) =>
           item.nome_centro_custo !== 'Outro Centro de Custo'
         );
-
-        if (this.costCenter.length > 0) {
-          this.selectedCostCenter = {...this.costCenter[0]};
-        }
-        this.updateChartData();
-        this.cdr.detectChanges();
+        this.indicatorsCopie = [...this.indicators];
+        this.removeDuplicate();
+        this.applyFilters();
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Não foi possível buscar os registros financeiros: ', error);
+        this.isLoading = false;
       }
     });
   }
 
-  selectCostCenterByIndex(index: number) {
-    if (index >= 0 && index < this.costCenter.length) {
-      this.selectedCostCenter = {...this.costCenter[index]};
-      this.cdr.detectChanges();
-    }
-  }
-
-  updateChartData() {
-    const labels = this.costCenter.map(item => item.nome_centro_custo);
-
-    const datasets = [{
-      data: this.costCenter.map(item => {
-        const material = this.formateValue(item.total_pago_material);
-        const servico = this.formateValue(item.total_pago_servico);
-        const folha = this.formateValue(item.folha_pagamento);
-        return material + servico + folha;
-      }),
-      label: 'Total',
-      backgroundColor: 'rgb(255, 111, 0)',
-      borderColor: 'rgb(255, 111, 0)',
-      hoverBackgroundColor: 'rgb(255, 131, 37)',
-      barThickness: 30,
-    }];
-
-    this.barChartData = {
-      labels: labels,
-      datasets: datasets
-    };
-
-    if (this.chart?.chart) {
-      this.chart.chart.update();
-    }
-  }
-
-  formateValue(constructionPrice: string): number {
-    if (!constructionPrice || typeof constructionPrice !== 'string') {
-      return 0;
+  startChart() {
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+      this.chartInstance = undefined;
     }
 
-    try {
-      const numStr = constructionPrice
-        .replace('R$ ', '')
-        .replace(/\./g, '')
-        .replace(',', '.');
+    const indicator = this.indicatorsCopie.find(
+      (item) => item.nome_centro_custo === this.centroCustoField
+    ) || this.indicatorsCopie[0];
 
-      const value = parseFloat(numStr);
-      return isNaN(value) ? 0 : value;
-    } catch (error) {
-      return 0;
-    }
-  }
+    const labels = [
+      'Total a Receber',
+      'Total Pago Material',
+      'Material Pago',
+      'Material a Pagar',
+      'Total Pago Serviço',
+      'Serviço Pago',
+      'Serviço a Pagar',
+      'Folha de Pagamento'
+    ];
 
-  getTotalGasto(): string {
-    if (!this.selectedCostCenter) return 'N/A';
+    const data = [
+      this.formateValue(indicator.total_receber),
+      this.formateValue(indicator.total_pago_material),
+      this.formateValue(indicator.material_pago),
+      this.formateValue(indicator.material_apagar),
+      this.formateValue(indicator.total_pago_servico),
+      this.formateValue(indicator.servico_pago),
+      this.formateValue(indicator.servico_apagar),
+      this.formateValue(indicator.folha_pagamento)
+    ];
 
-    const material = this.formateValue(this.selectedCostCenter.total_pago_material);
-    const servico = this.formateValue(this.selectedCostCenter.total_pago_servico);
-    const folha = this.formateValue(this.selectedCostCenter.folha_pagamento);
-    const total = material + servico + folha;
-
-    return 'R$ ' + total.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+    this.chartInstance = new Chart(this.ctx?.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: indicator.nome_centro_custo,
+          data: data,
+          borderWidth: 2,
+          borderColor: '#FFCC00',
+          backgroundColor: '#FF9500',
+          barThickness: 40,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          },
+          x: {
+            ticks: {
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0,
+              align: 'center',
+              font: {
+                size: 12
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
     });
+  }
+
+  formateValue(value: string): number {
+    const onlyNumber = value.replace('R$ ', '');
+    const removePoint = onlyNumber.replace(/\./g, '');
+    const addDecimal = removePoint.replace(',', '.');
+    return parseFloat(addDecimal) || 0;
+  }
+
+  applyFilters() {
+    let filteredData = [...this.indicators];
+
+    if (this.centroCustoField && this.centroCustoField !== 'Nenhum') {
+      filteredData = filteredData.filter(
+        (item) => item.nome_centro_custo === this.centroCustoField
+      );
+      this.indicatorsCopie = filteredData;
+      this.startChart();
+    } else {
+      this.indicatorsCopie = filteredData;
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
+        this.chartInstance = undefined;
+      }
+    }
+  }
+
+  removeDuplicate(): void {
+    const constCenterArray = new Set<string>();
+    this.indicators.forEach((item) => {
+      if (item.nome_centro_custo && item.nome_centro_custo.trim() !== '') {
+        constCenterArray.add(item.nome_centro_custo);
+      }
+    });
+    this.uniqueCostCenter = Array.from(constCenterArray).sort();
+  }
+
+  toggleSelect(): void {
+    setTimeout(() => {
+      this.isSelectOpen = !this.isSelectOpen;
+    }, 0);
+  }
+
+  resetSelectIcon(): void {
+    this.isSelectOpen = false;
   }
 }
