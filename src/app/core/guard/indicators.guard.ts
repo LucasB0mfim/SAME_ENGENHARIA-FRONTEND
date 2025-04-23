@@ -10,7 +10,7 @@ export const indicatorsGuard: CanActivateFn = (route, state) => {
 
   return _dashboardService.findAll().pipe(
     map(response => {
-      if (response.employee.role === 'Desenvolvedor') {
+      if (response.employee.role === 'Desenvolvedor' || response.employee.role === 'Financeiro') {
         return true
       } else if (response.employee.position === 'Diretor') {
         return true

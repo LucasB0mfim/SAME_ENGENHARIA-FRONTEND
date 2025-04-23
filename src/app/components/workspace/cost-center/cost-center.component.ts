@@ -8,6 +8,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IndicatorService } from '../../../core/services/indicator.service.js';
 import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 
+import { ThemeService } from '../../../core/services/theme.service.js';
+
 interface CostCenterIndicator {
   nome_centro_custo: string;
   total_receber: string;
@@ -32,11 +34,13 @@ export class CostCenterComponent implements OnInit {
   @ViewChild('lineChart', { static: true }) ctx: ElementRef | undefined;
 
   // INJEÇÃO DE DEPENDENCIAS
+  private readonly _themeService = inject(ThemeService);
   private chartInstance: Chart | undefined;
   private _titleService = inject(TitleService);
   private readonly _indicatorService = inject(IndicatorService);
 
   // GERENCIAR ESTADO
+  isDarkTheme: boolean = false;
   isSelectOpen: boolean = false;
   hasSelection: boolean = false;
   activeSection: Record<string, string> = {};
@@ -54,6 +58,14 @@ export class CostCenterComponent implements OnInit {
   // HOOK DE CICLO
   ngOnInit(): void {
     this._titleService.setTitle('Centro de Custo');
+
+
+    this._themeService.getThemeState().subscribe(theme => {
+      this.isDarkTheme = theme;
+
+      if (this.chartInstance) this.updateChartColors();
+    })
+
     this.getIndicators();
   }
 
@@ -72,6 +84,60 @@ export class CostCenterComponent implements OnInit {
         console.error('Não foi possível buscar os registros financeiros: ', error);
       }
     });
+  }
+
+  // COR DAS LINHAS E DO TEXTO
+  getThemeColors() {
+    if (this.isDarkTheme) {
+      return {
+        grid: '#3c3c4b',
+        text: '#ffffff'
+      };
+    } else {
+      return {
+        grid: '#e0e0e0',
+        text: '#333333'
+      };
+    }
+  }
+
+  // COR DAS BARRAS
+  getBarColors() {
+    return {
+      borderColor: '#FFCC00',
+      backgroundColor: '#FF9500'
+    };
+  }
+
+  // ATUALIZA AS CORES DE ACORDO COM O TEMA ATUAL
+  updateChartColors() {
+    if (!this.chartInstance) return;
+
+    const themeColors = this.getThemeColors();
+    const scales = this.chartInstance.options.scales;
+
+    // Verificações mais rigorosas para evitar erros de nulo
+    if (scales && scales['x']) {
+      if (scales['x'].grid) {
+        scales['x'].grid.color = themeColors.grid;
+      }
+
+      if (scales['x'].ticks) {
+        scales['x'].ticks.color = themeColors.text;
+      }
+    }
+
+    if (scales && scales['y']) {
+      if (scales['y'].grid) {
+        scales['y'].grid.color = themeColors.grid;
+      }
+
+      if (scales['y'].ticks) {
+        scales['y'].ticks.color = themeColors.text;
+      }
+    }
+
+    this.chartInstance.update();
   }
 
   // CONFIGURAÇÃO DO GRÁFICO
@@ -107,6 +173,9 @@ export class CostCenterComponent implements OnInit {
       this.formateValue(indicator.folha_pagamento)
     ];
 
+    const themeColors = this.getThemeColors();
+    const barColors = this.getBarColors();
+
     this.chartInstance = new Chart(this.ctx?.nativeElement, {
       type: 'bar',
       data: {
@@ -115,8 +184,8 @@ export class CostCenterComponent implements OnInit {
           label: indicator.nome_centro_custo,
           data: data,
           borderWidth: 2,
-          borderColor: '#FFCC00',
-          backgroundColor: '#FF9500',
+          borderColor: barColors.borderColor,
+          backgroundColor: barColors.backgroundColor,
           barThickness: 40,
         }]
       },
@@ -125,7 +194,13 @@ export class CostCenterComponent implements OnInit {
         maintainAspectRatio: false,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            grid: {
+              color: themeColors.grid
+            },
+            ticks: {
+              color: themeColors.text
+            }
           },
           x: {
             ticks: {
@@ -135,13 +210,20 @@ export class CostCenterComponent implements OnInit {
               align: 'center',
               font: {
                 size: 12
-              }
+              },
+              color: themeColors.text
+            },
+            grid: {
+              color: themeColors.grid
             }
           }
         },
         plugins: {
           legend: {
-            display: false
+            display: false,
+            labels: {
+              color: themeColors.text
+            }
           }
         }
       }
