@@ -48,6 +48,14 @@ $card-padding: 24px;
     background: var(--secondary-color);
     color: var(--text-color);
     box-shadow: var(--box-shadow);
+
+    &.positive {
+      color: var(--green-color);
+    }
+
+    &.negative {
+      color: var(--red-color);
+    }
   }
 
   select {

@@ -7,7 +7,6 @@ import { TitleService } from '../../../core/services/title.service.js';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IndicatorService } from '../../../core/services/indicator.service.js';
 import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
-
 import { ThemeService } from '../../../core/services/theme.service.js';
 
 interface CostCenterIndicator {
@@ -30,13 +29,12 @@ interface CostCenterIndicator {
   styleUrl: './cost-center.component.scss'
 })
 export class CostCenterComponent implements OnInit {
-  // CAPTURAR O CANVAS NO HTML
   @ViewChild('lineChart', { static: true }) ctx: ElementRef | undefined;
 
-  // INJEÇÃO DE DEPENDENCIAS
-  private readonly _themeService = inject(ThemeService);
+  // INJEÇÃO DE DEPENDÊNCIA
   private chartInstance: Chart | undefined;
   private _titleService = inject(TitleService);
+  private readonly _themeService = inject(ThemeService);
   private readonly _indicatorService = inject(IndicatorService);
 
   // GERENCIAR ESTADO
@@ -45,13 +43,11 @@ export class CostCenterComponent implements OnInit {
   hasSelection: boolean = false;
   activeSection: Record<string, string> = {};
 
-  // VARIÁVEL DO FILTRO
-  centroCustoField: string = 'Nenhum';
-
-  // VARIÁVEL PARA RECEBER APENAS UM TIPO DE CENTRO DE CUSTO
-  uniqueCostCenter: string[] = [];
+  // FILTRO
+  centroCustoField: string = 'Geral';
 
   // MODELOS
+  uniqueCostCenter: string[] = [];
   indicators: CostCenterIndicator[] = [];
   indicatorsCopie: CostCenterIndicator[] = [];
 
@@ -59,17 +55,15 @@ export class CostCenterComponent implements OnInit {
   ngOnInit(): void {
     this._titleService.setTitle('Centro de Custo');
 
-
     this._themeService.getThemeState().subscribe(theme => {
       this.isDarkTheme = theme;
-
       if (this.chartInstance) this.updateChartColors();
-    })
+    });
 
     this.getIndicators();
   }
 
-  // BUSCAR OS INDICADORES NA API
+  // BUSCAR INDICADORES NA API
   getIndicators() {
     this._indicatorService.findCostCenter().subscribe({
       next: (data) => {
@@ -86,7 +80,7 @@ export class CostCenterComponent implements OnInit {
     });
   }
 
-  // COR DAS LINHAS E DO TEXTO
+  // DEFINIR COR DAS GRADES E LETRAS DO GRÁFICO
   getThemeColors() {
     if (this.isDarkTheme) {
       return {
@@ -101,27 +95,25 @@ export class CostCenterComponent implements OnInit {
     }
   }
 
-  // COR DAS BARRAS
+  // DENIFIR COR DAS BARRAS DO GRÁFICO
   getBarColors() {
     return {
-      borderColor: '#FFCC00',
-      backgroundColor: '#FF9500'
+      borderColor: '#D9480F',
+      backgroundColor: '#FFA94D'
     };
   }
 
-  // ATUALIZA AS CORES DE ACORDO COM O TEMA ATUAL
+  // ATUALIZAR TEMA DO GRÁFICO COM BASE NO TEMA DO SITE
   updateChartColors() {
     if (!this.chartInstance) return;
 
     const themeColors = this.getThemeColors();
     const scales = this.chartInstance.options.scales;
 
-    // Verificações mais rigorosas para evitar erros de nulo
     if (scales && scales['x']) {
       if (scales['x'].grid) {
         scales['x'].grid.color = themeColors.grid;
       }
-
       if (scales['x'].ticks) {
         scales['x'].ticks.color = themeColors.text;
       }
@@ -131,7 +123,6 @@ export class CostCenterComponent implements OnInit {
       if (scales['y'].grid) {
         scales['y'].grid.color = themeColors.grid;
       }
-
       if (scales['y'].ticks) {
         scales['y'].ticks.color = themeColors.text;
       }
@@ -140,16 +131,27 @@ export class CostCenterComponent implements OnInit {
     this.chartInstance.update();
   }
 
-  // CONFIGURAÇÃO DO GRÁFICO
+  // INICIA O GRÁFICO
   startChart() {
     if (this.chartInstance) {
       this.chartInstance.destroy();
       this.chartInstance = undefined;
     }
 
+    if (this.centroCustoField === 'Geral') {
+      this.createGeneralChart();
+    } else {
+      this.createSpecificChart();
+    }
+  }
+
+  // DEFINI OS DADOS DO GRÁFICO
+  createSpecificChart() {
     const indicator = this.indicatorsCopie.find(
       (item) => item.nome_centro_custo === this.centroCustoField
-    ) || this.indicatorsCopie[0];
+    );
+
+    if (!indicator) return;
 
     const labels = [
       'Total a Receber',
@@ -173,6 +175,22 @@ export class CostCenterComponent implements OnInit {
       this.formateValue(indicator.folha_pagamento)
     ];
 
+    this.createBarChart(labels, data, indicator.nome_centro_custo);
+  }
+
+  // CONFIGURAÇÃO DO GRÁFICO 'GERAL'
+  createGeneralChart() {
+    const labels = this.uniqueCostCenter;
+    const data = this.uniqueCostCenter.map(centro => {
+      const indicator = this.indicators.find(item => item.nome_centro_custo === centro);
+      return indicator ? this.formateValue(indicator.total_receber) : 0;
+    });
+
+    this.createBarChart(labels, data, 'Total a Receber');
+  }
+
+  // CONFIGURAÇÃO DO GRÁFICO 'POR CENTRO DE CUSTO'
+  createBarChart(labels: string[], data: number[], title: string) {
     const themeColors = this.getThemeColors();
     const barColors = this.getBarColors();
 
@@ -181,7 +199,7 @@ export class CostCenterComponent implements OnInit {
       data: {
         labels: labels,
         datasets: [{
-          label: indicator.nome_centro_custo,
+          label: title,
           data: data,
           borderWidth: 2,
           borderColor: barColors.borderColor,
@@ -204,6 +222,7 @@ export class CostCenterComponent implements OnInit {
           },
           x: {
             ticks: {
+              display: this.centroCustoField !== 'Geral',
               autoSkip: false,
               maxRotation: 0,
               minRotation: 0,
@@ -224,13 +243,13 @@ export class CostCenterComponent implements OnInit {
             labels: {
               color: themeColors.text
             }
-          }
+          },
         }
       }
     });
   }
 
-  // FORMATAR O PREÇO DA API
+  // FORMATA O VALOR PARA BRL
   formateValue(value: string): number {
     const onlyNumber = value.replace('R$ ', '');
     const removePoint = onlyNumber.replace(/\./g, '');
@@ -238,54 +257,87 @@ export class CostCenterComponent implements OnInit {
     return parseFloat(addDecimal) || 0;
   }
 
-  // CALCULAR O FATURAMENTO DE CENTRO DE CUSTO
+  // CALCULO O SALDO TOTAL DE UMA OBRA
   calculateFaturamento(): string {
-    if (this.centroCustoField === 'Nenhum') {
-      return '0,00';
-    }
+    if (this.centroCustoField === 'Geral') {
+      let totalGeral = 0;
 
-    const indicator = this.indicatorsCopie.find(
-      (item) => item.nome_centro_custo === this.centroCustoField
-    );
+      this.indicators.forEach(indicator => {
+        const totalReceber = this.formateValue(indicator.total_receber);
+        const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+        const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+        const folhaPagamento = this.formateValue(indicator.folha_pagamento);
 
-    if (!indicator) {
-      return '0,00';
-    }
+        const saldoObra = totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento;
+        totalGeral += saldoObra;
+      });
 
-    const totalReceber = this.formateValue(indicator.total_receber);
-    const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
-    const totalPagoServico = this.formateValue(indicator.total_pago_servico);
-    const folhaPagamento = this.formateValue(indicator.folha_pagamento);
-
-    const total = totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento;
-
-    return total.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-  }
-
-
-  // APLICAR FILTROS DE BUSCA
-  applyFilters() {
-    let filteredData = [...this.indicators];
-
-    if (this.centroCustoField && this.centroCustoField !== 'Nenhum') {
-      filteredData = filteredData.filter(
+      return totalGeral.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    } else {
+      const indicator = this.indicatorsCopie.find(
         (item) => item.nome_centro_custo === this.centroCustoField
       );
-      this.indicatorsCopie = filteredData;
-      this.startChart();
-    } else {
-      this.indicatorsCopie = filteredData;
-      if (this.chartInstance) {
-        this.chartInstance.destroy();
-        this.chartInstance = undefined;
+
+      if (!indicator) {
+        return '0,00';
       }
+
+      const totalReceber = this.formateValue(indicator.total_receber);
+      const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+      const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+      const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+
+      const total = totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento;
+
+      return total.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
     }
   }
 
-  // REMOVER DUPLICATAS
+  // ALTERA A COR DO SALDO
+  isSaldoPositive(): boolean {
+    if (this.centroCustoField === 'Geral') {
+      const totalGeral = this.indicators.reduce((sum, indicator) => {
+        const totalReceber = this.formateValue(indicator.total_receber);
+        const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+        const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+        const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+        return sum + (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento);
+      }, 0);
+      return totalGeral >= 0;
+    } else {
+      const indicator = this.indicatorsCopie.find(
+        (item) => item.nome_centro_custo === this.centroCustoField
+      );
+      if (!indicator) return true;
+
+      const totalReceber = this.formateValue(indicator.total_receber);
+      const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+      const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+      const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+
+      return (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento) >= 0;
+    }
+  }
+
+  // FILTRAR POR CENTRO DE CUSTO
+  applyFilters() {
+    if (this.centroCustoField === 'Geral') {
+      this.indicatorsCopie = [...this.indicators];
+    } else {
+      this.indicatorsCopie = this.indicators.filter(
+        (item) => item.nome_centro_custo === this.centroCustoField
+      );
+    }
+    this.startChart();
+  }
+
+  // REMOVE AS DUPLICATAS DE CENTRO DE CUSTO
   removeDuplicate(): void {
     const constCenterArray = new Set<string>();
     this.indicators.forEach((item) => {
@@ -296,14 +348,14 @@ export class CostCenterComponent implements OnInit {
     this.uniqueCostCenter = Array.from(constCenterArray).sort();
   }
 
-  // ALTERAR O ESTADO DO SELECT
+  // ALTERA O ESTADO DO SELECT
   toggleSelect(): void {
     setTimeout(() => {
       this.isSelectOpen = !this.isSelectOpen;
     }, 0);
   }
 
-  // REINICIAR ESTADO DO SELECT
+  // REINICIA O ESTADO DO SELECT
   resetSelectIcon(): void {
     this.isSelectOpen = false;
   }

@@ -8,7 +8,7 @@
       <label>CENTRO DE CUSTO</label>
       <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()"
         (blur)="resetSelectIcon()">
-        <option value="Nenhum">Nenhum</option>
+        <option value="Geral">GERAL</option>
         <option *ngFor="let centro of uniqueCostCenter" [value]="centro">{{ centro }}</option>
       </select>
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
@@ -16,8 +16,10 @@
 
     <!-- SALDO DA OBRA -->
     <div class="filter">
-      <label>LUCRO</label>
-      <span>R$ {{ calculateFaturamento() }}</span>
+      <label>SALDO</label>
+      <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
+        R$ {{ calculateFaturamento() }}
+      </span>
     </div>
   </div>
 
@@ -28,12 +30,6 @@
     <div class="grafic">
       <canvas #lineChart>
       </canvas>
-    </div>
-
-    <!-- AVISO PARA SELECIONAR ALGUM CENTRO DE CUSTO -->
-    <div class="grafic__empty" *ngIf="centroCustoField === 'Nenhum'">
-      <span>Selecione algum Centro de Custo</span>
-      <mat-icon>search</mat-icon>
     </div>
   </div>
 </div>
