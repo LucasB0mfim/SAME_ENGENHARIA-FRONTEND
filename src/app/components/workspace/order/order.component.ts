@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit {
   private readonly _dashboardService = inject(DashboardService);
 
   // Constantes
-  readonly acceptedFileTypes: string = '.png, .jpeg, .webp';
+  readonly acceptedFileTypes: string = '.png, .jpeg, .webp, .pdf';
   readonly maxFileSize: number = 5 * 1024 * 1024;
 
   // Variáveis de Estado
@@ -300,15 +300,15 @@ export class OrderComponent implements OnInit {
   private validateFile(file: File): boolean {
     // Verificar se a extensão do arquivo é válida
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    const validExtensions = ['png', 'jpeg', 'jpg', 'webp'];
+    const validExtensions = ['png', 'jpeg', 'jpg', 'webp', 'pdf'];
 
     if (!fileExtension || !validExtensions.includes(fileExtension)) {
-      this.setErrorMessage('Apenas arquivos PNG, JPEG e WEBP são aceitos');
+      this.setErrorMessage('Apenas arquivos PNG, JPEG, WEBP e PDF são aceitos.');
       return false;
     }
 
     if (file.size > this.maxFileSize) {
-      this.setErrorMessage('O arquivo excede o tamanho máximo de 5MB');
+      this.setErrorMessage('O arquivo excede o tamanho máximo de 5MB.');
       return false;
     }
 
@@ -366,7 +366,7 @@ export class OrderComponent implements OnInit {
     this.loadingFile = true;
 
     if (!this.file) {
-      this.setErrorMessage('Selecione uma nota fiscal para continuar');
+      this.setErrorMessage('Selecione uma nota fiscal para continuar.');
       return;
     }
 
@@ -391,7 +391,7 @@ export class OrderComponent implements OnInit {
         next: () => {
           this.loadingFile = false;
           this.getOrder();
-          this.setSuccessMessage('Nota fiscal enviada com sucesso!');
+          this.setSuccessMessage('Nota fiscal enviada com sucesso.');
         },
         error: (error) => {
           this.loadingFile = false;
