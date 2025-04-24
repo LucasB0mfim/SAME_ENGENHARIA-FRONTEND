@@ -204,7 +204,7 @@ export class CostCenterComponent implements OnInit {
           borderWidth: 2,
           borderColor: barColors.borderColor,
           backgroundColor: barColors.backgroundColor,
-          barThickness: 40,
+          barThickness: this.centroCustoField === 'Geral' ? 20 : 40,
         }]
       },
       options: {
@@ -299,10 +299,11 @@ export class CostCenterComponent implements OnInit {
         const totalPagoServico = this.formateValue(indicator.total_pago_servico);
         const folhaPagamento = this.formateValue(indicator.folha_pagamento);
 
-        const gastoTotal = - totalPagoMaterial - totalPagoServico - folhaPagamento;
-        totalGeral -= gastoTotal;
+        // Acumula os valores diretamente como negativos
+        totalGeral -= (totalPagoMaterial + totalPagoServico + folhaPagamento);
       });
 
+      console.log(totalGeral);
       return totalGeral.toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -322,14 +323,15 @@ export class CostCenterComponent implements OnInit {
 
       const total = totalPagoMaterial + totalPagoServico + folhaPagamento;
 
-      return total.toLocaleString('pt-BR', {
+      // Garantir que o valor retornado seja negativo
+      return (-total).toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
     }
   }
 
-  // CALCULO O SALDO TOTAL DE UMA OBRA
+  // CALCULA O SALDO TOTAL DE UMA OBRA
   calculateSaldo(): string {
     if (this.centroCustoField === 'Geral') {
       let totalGeral = 0;
@@ -371,26 +373,16 @@ export class CostCenterComponent implements OnInit {
     }
   }
 
-  // ALTERA A COR DO CARD INDIVIDUALMENTE
-  isSaldoPositive(type: 'faturamento' | 'gasto' | 'saldo'): boolean {
-    const totalGeral = this.indicators.reduce((sum, indicator) => {
-      const totalReceber = this.formateValue(indicator.total_receber);
-      const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
-      const totalPagoServico = this.formateValue(indicator.total_pago_servico);
-      const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+  colorCard(value: string): string {
+    const numericValue = parseFloat(value.replace(/\./g, '').replace(',', '.'));
 
-      switch (type) {
-        case 'faturamento':
-          return sum + totalReceber;
-        case 'gasto':
-          return sum - (totalPagoMaterial + totalPagoServico + folhaPagamento);
-        case 'saldo':
-          return sum + (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento);
-        default:
-          return sum;
-      }
-    }, 0);
-    return totalGeral >= 0;
+    if (numericValue > 0) {
+      return 'positive';
+    } else if (numericValue < 0) {
+      return 'negative';
+    } else {
+      return 'neutral';
+    }
   }
 
   // FILTRAR POR CENTRO DE CUSTO
