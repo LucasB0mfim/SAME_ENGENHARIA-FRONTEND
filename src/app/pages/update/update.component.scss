@@ -1,108 +1,447 @@
-.body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100vh;
-}
+// Variáveis
+$primary-color: #FF6F00;
+$primary-light: #FF9800;
+$primary-dark: #E65100;
+$text-brand: #FF6F00;
 
+$text-dark: #333333;
+$text-light: #777777;
+$background-color: #f5f5f5;
+$white: #ffffff;
+$error-color: #e74c3c;
+$success-color: #2ecc71;
+$border-color: #eeeeee;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+// Container principal
 .container {
-  background-color: #fff;
-  border-radius: 100px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-  position: relative;
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
   display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background-color: $background-color;
+  position: relative;
 }
 
-.informativo {
-  background: linear-gradient(to right, #3e3e3e, #1a1a1a);
-  border-radius: 100px;
-  width: 50%;
-  padding: 20px;
-  color: #fff;
+// Card principal
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+// Banner da tela (lado direito)
+.banner {
+  height: 100vh;
+  position: relative;
+  width: 55%;
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  gap: 20px;
+  overflow: hidden;
 
-  h1 {
-    color: #ff741e;
+  &__content {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    padding: 2rem;
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  p {
-    width: 80%;
+  &__logo {
+    width: 10vw;
+    height: auto;
+    animation: slideUp 0.8s ease-out forwards;
   }
 
-  p:last-child {
-    font-size: 0.7rem;
+  &__title {
+    color: $white;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1.5rem;
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  &__subtitle {
+    color: $white;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1.5s ease-out;
   }
 }
 
-.update {
-  width: 50%;
-  padding: 20px;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba($primary-dark, 0.85) 0%, rgba($primary-color, 0.85) 100%);
+  z-index: 1;
+}
+
+// Área de login (lado esquerdo)
+.login {
+  width: 45%;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: slideIn 0.8s ease-out;
+  overflow-y: auto;
+  max-height: 100vh;
+
+  &__wrapper {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $text-brand;
+    margin-bottom: 0.3rem;
+  }
+
+  &__subtitle {
+    font-size: 0.85rem;
+    color: $text-light;
+    line-height: 1.5;
+    margin-top: 1rem;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    mat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 
   &__message {
-    position: absolute;
-    right: 0;
-    bottom: 8%;
-    width: 50%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-out;
 
     &-error {
-      width: 100%;
+      color: $error-color;
+      font-size: 0.85rem;
       text-align: center;
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: rgb(200, 72, 72);
     }
   }
 }
 
-.update form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+// Grupos do formulário
+.form__group {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+    border: 1px solid $border-color;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    color: $text-dark;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &::placeholder {
+      color: $text-light;
+      opacity: 0.7;
+    }
+  }
+
+  .input__field-row {
+    display: none; // Removemos a linha inferior conforme design
+  }
+
+  .mat-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    font-size: 1.2rem;
+    pointer-events: none;
+    transition: color 0.3s ease;
+  }
+
+  .input__field-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    cursor: pointer;
+    pointer-events: all;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  input:focus~.mat-icon {
+    color: $primary-color;
+  }
 }
 
-input {
-  background-color: #eee;
-  border: none;
-  margin: 8px 0;
-  padding: 10px 15px;
-  font-size: 13px;
-  border-radius: 8px;
-  width: 100%;
-  outline: none;
+// Requisitos de senha
+.password-requirements {
+  background-color: $white;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid $border-color;
+  animation: fadeIn 0.5s ease-out;
+
+  .requirements__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text-dark;
+    margin-bottom: 0.8rem;
+  }
+
+  .requirements__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: $text-light;
+      margin-bottom: 0.5rem;
+      padding: 0.3rem 0;
+      transition: all 0.3s ease;
+
+      .mat-icon {
+        font-size: 1rem;
+        height: 1rem;
+        width: 1rem;
+        margin-right: 0.5rem;
+        color: $error-color;
+      }
+
+      &.requirement-met {
+        color: $text-dark;
+
+        .mat-icon {
+          color: $success-color;
+        }
+      }
+    }
+  }
 }
 
+// Criar conta
+.login__create-account {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: $text-light;
+
+  .login__link {
+    color: $primary-color;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Botão de submit
 button {
+  color: $white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
-  width: 120px;
-  height: 40px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  margin-top: 10px;
-  cursor: pointer;
-  background-color: var(--orange-color);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+  background: linear-gradient(to right, $primary-color, $primary-light);
+
+  &:hover {
+    background: linear-gradient(to right, $primary-dark, $primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba($primary-color, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+  }
+
+  &:disabled {
+    background: linear-gradient(to right, #999, #bbb);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+  }
 }
 
+// Personalização do spinner
 :host ::ng-deep mat-progress-spinner {
-  width: 20px !important;
-  height: 20px !important;
+  width: 22px !important;
+  height: 22px !important;
 }
 
 :host ::ng-deep mat-progress-spinner circle {
-  stroke: var(--white-color);
-  stroke-width: 8%;
+  stroke: $white;
+  stroke-width: 10%;
+}
+
+// Animações
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Media queries para responsividade
+@media screen and (max-width: 1100px) {
+  .container::after {
+    width: 90%;
+    height: 650px;
+  }
+
+  .banner__title {
+    font-size: 2.4rem;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .container::after {
+    width: 90%;
+    height: auto;
+  }
+
+  .container {
+    flex-direction: column;
+    padding: 2rem 0;
+
+    &::after {
+      height: auto;
+      top: 0;
+      transform: translateX(-50%);
+    }
+  }
+
+  .banner {
+    width: 100%;
+    height: auto;
+    padding: 3rem 1rem;
+    border-radius: 20px 20px 0 0;
+
+    &__title {
+      font-size: 2.2rem;
+    }
+
+    &__subtitle {
+      font-size: 0.85rem;
+    }
+  }
+
+  .login {
+    width: 100%;
+    padding: 2rem 10%;
+    max-height: none;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .container::after {
+    width: 95%;
+  }
+
+  .banner {
+    padding: 2rem 1rem;
+
+    &__logo {
+      width: 60px;
+    }
+
+    &__title {
+      font-size: 1.8rem;
+    }
+
+    &__subtitle {
+      font-size: 0.8rem;
+    }
+  }
+
+  .login {
+    padding: 1.5rem 7%;
+
+    &__title {
+      font-size: 1.5rem;
+
+      &:first-of-type {
+        font-size: 1rem;
+      }
+    }
+  }
 }

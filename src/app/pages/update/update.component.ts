@@ -1,7 +1,8 @@
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { UpdateService } from '../../core/services/update.service';
@@ -10,7 +11,7 @@ import { IUpdateRequest } from '../../core/interfaces/update-request.interface';
 @Component({
   selector: 'app-update',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, MatProgressSpinnerModule, MatIconModule],
   templateUrl: './update.component.html',
   styleUrl: './update.component.scss'
 })
@@ -18,6 +19,24 @@ export class UpdateComponent {
 
   loading: boolean = false;
   updateError: string = '';
+
+  currentPasswordType: 'password' | 'text' = 'password';
+  newPasswordType: 'password' | 'text' = 'password';
+
+  currentPasswordIcon: 'lock' | 'visibility' | 'visibility_off' = 'lock';
+  newPasswordIcon: 'lock' | 'visibility' | 'visibility_off' = 'lock';
+
+  logo = 'assets/images/banner-logo.png';
+  backgroundImageUrl = 'assets/images/wallpaper-login.jpg';
+
+  passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  passwordRequirements = {
+    minLength: false,
+    hasUpperCase: false,
+    hasLowerCase: false,
+    hasNumber: false,
+    hasSpecialChar: false
+  };
 
   private readonly _router = inject(Router);
   private readonly _updateService = inject(UpdateService);
@@ -35,6 +54,7 @@ export class UpdateComponent {
 
     if (this.updateForm.invalid) {
       this.updateForm.markAllAsTouched();
+      this.loading = false;
       return;
     }
 
@@ -72,5 +92,73 @@ export class UpdateComponent {
         console.log(error);
       }
     });
+  }
+
+  toggleCurrentPasswordVisibility() {
+    if (this.currentPasswordType === 'password') {
+      this.currentPasswordType = 'text';
+      this.currentPasswordIcon = 'visibility';
+    } else {
+      this.currentPasswordType = 'password';
+      this.currentPasswordIcon = 'visibility_off';
+    }
+  }
+
+  toggleNewPasswordVisibility() {
+    if (this.newPasswordType === 'password') {
+      this.newPasswordType = 'text';
+      this.newPasswordIcon = 'visibility';
+    } else {
+      this.newPasswordType = 'password';
+      this.newPasswordIcon = 'visibility_off';
+    }
+  }
+
+  updateCurrentPasswordIcon() {
+    const currentPasswordValue = this.updateForm.get('currentPassword')?.value;
+
+    if (!currentPasswordValue) {
+      this.currentPasswordIcon = 'lock';
+    } else {
+      this.currentPasswordIcon = this.currentPasswordType === 'password' ? 'visibility' : 'visibility_off';
+    }
+  }
+
+  updateNewPasswordIcon() {
+    const newPasswordValue = this.updateForm.get('newPassword')?.value;
+
+    if (!newPasswordValue) {
+      this.newPasswordIcon = 'lock';
+    } else {
+      this.newPasswordIcon = this.newPasswordType === 'password' ? 'visibility' : 'visibility_off';
+    }
+
+    this.checkPasswordRequirements(newPasswordValue);
+  }
+
+  checkPasswordRequirements(password: string) {
+    this.passwordRequirements = {
+      minLength: password?.length >= 8,
+      hasUpperCase: /[A-Z]/.test(password || ''),
+      hasLowerCase: /[a-z]/.test(password || ''),
+      hasNumber: /\d/.test(password || ''),
+      hasSpecialChar: /[@$!%*?&]/.test(password || '')
+    };
+  }
+
+  validatePassword(control: FormControl) {
+    const value = control.value;
+
+    if (!value) return null;
+
+    this.checkPasswordRequirements(value);
+
+    const isValid = this.passwordRequirements.minLength &&
+      this.passwordRequirements.hasUpperCase &&
+      this.passwordRequirements.hasLowerCase &&
+      this.passwordRequirements.hasNumber &&
+      this.passwordRequirements.hasSpecialChar;
+
+    return isValid ? null : { invalidPassword: true };
   }
 }
