@@ -1,251 +1,395 @@
-.body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100vh;
-}
+// Variáveis
+$primary-color: #FF6F00;
+$primary-light: #FF9800;
+$primary-dark: #E65100;
+$text-brand: #FF6F00;
 
+$text-dark: #333333;
+$text-light: #777777;
+$background-color: #f5f5f5;
+$white: #ffffff;
+$error-color: #e74c3c;
+$border-color: #eeeeee;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+// Container principal
 .container {
-  background-color: #fff;
-  border-radius: 100px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-  position: relative;
+  display: flex;
+  height: 100vh;
+  width: 100%;
   overflow: hidden;
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
-}
-
-.container p {
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.3px;
-  margin: 20px 0;
-}
-
-.container span {
-  font-size: 12px;
-}
-
-.container a {
-  color: #333;
-  font-size: 13px;
-  text-decoration: none;
-  margin: 15px 0 10px;
-}
-
-.container button {
-  display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
-  width: 120px;
-  height: 40px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  background-color: #ff741e;
-}
-
-.container button.hidden {
-  background-color: transparent;
-  border-color: #fff;
-}
-
-.container form {
+  background-color: $background-color;
   position: relative;
-  background-color: #fff;
+}
+
+// Card principal
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+// Banner da tela (lado direito)
+.banner {
+  height: 100vh;
+  position: relative;
+  width: 55%;
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  flex-direction: column;
-  padding: 0 40px;
-  height: 100%;
+  overflow: hidden;
+
+  &__content {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    padding: 2rem;
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 10vw;
+    height: auto;
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  &__title {
+    color: $white;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1.5rem;
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  &__subtitle {
+    color: $white;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1.5s ease-out;
+  }
 }
 
-.sign-up,
-.sign-in {
+.overlay {
   position: absolute;
   top: 0;
-  height: 100%;
-  transition: all 0.6s ease-in-out;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba($primary-dark, 0.85) 0%, rgba($primary-color, 0.85) 100%);
+  z-index: 1;
 }
 
-.sign-in {
-  left: 0;
-  width: 50%;
-  z-index: 2;
+// Área de login (lado esquerdo)
+.login {
+  width: 45%;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: slideIn 0.8s ease-out;
+
+  &__wrapper {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $text-brand;
+    margin-bottom: 0.3rem;
+
+    &:first-of-type {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: $text-light;
+      letter-spacing: 1px;
+      margin-bottom: 0.2rem;
+    }
+  }
+
+  &__subtitle {
+    font-size: 0.85rem;
+    color: $text-light;
+    line-height: 1.5;
+    margin-top: 1rem;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    mat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 
   &__message {
-    position: absolute;
-    bottom: 15%;
-    width: 100%;
+    margin-top: 1rem;
     display: flex;
-    align-items: center;
     justify-content: center;
+    animation: fadeIn 0.5s ease-out;
 
     &-error {
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: rgb(200, 72, 72);
+      color: $error-color;
+      font-size: 0.85rem;
+      text-align: center;
     }
   }
 }
 
-.input__field {
-  background-color: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 45px;
-  width: 100%;
-  border-radius: 8px;
-
-  &-row {
-    border: 1px solid #dadada;
-    height: 100%;
-  }
-
-  &-icon {
-    cursor: pointer;
-  }
-}
-
-input {
-  background-color: #eee;
-  border: none;
-  margin: 8px 0;
-  padding: 10px 15px;
-  font-size: 13px;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  width: 80%;
-  height: 100%;
-  outline: none;
-}
-
-mat-icon {
-  color: #686868;
-  width: 20%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sign-in h1,
-.sign-up h1 {
-  color: #ff741e;
-}
-
-.container.active .sign-in {
-  transform: translateX(100%);
-}
-
-.sign-up {
-  left: 0;
-  width: 50%;
-  z-index: 1;
-  opacity: 0;
-}
-
-.container.active .sign-up {
-  transform: translateX(100%);
-  opacity: 1;
-  z-index: 5;
-  animation: move 0.6s;
-}
-
-@keyframes move {
-
-  0%,
-  49.99% {
-    opacity: 0;
-    z-index: 1;
-  }
-
-  50%,
-  100% {
-    opacity: 1;
-    z-index: 5;
-  }
-}
-
-.toogle-container {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 100px;
-  z-index: 1000;
-  transition: all 0.6s ease-in-out;
-}
-
-.container.active .toogle-container {
-  transform: translateX(-100%);
-  border-radius: 100px;
-}
-
-.toogle {
-  background-color: #1a1a1a;
-  height: 100%;
-  background: linear-gradient(to right, #3e3e3e, #1a1a1a);
-  color: #fff;
+// Grupos do formulário
+.form__group {
   position: relative;
-  left: -100%;
-  width: 200%;
-  transform: translateX(0);
-  transition: all 0.6s ease-in-out;
+
+  input {
+    width: 100%;
+    padding: 0.9rem 0.9rem 0.9rem 2.8rem;
+    border: 1px solid $border-color;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    color: $text-dark;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &::placeholder {
+      color: $text-light;
+      opacity: 0.7;
+    }
+  }
+
+  .input__field-row {
+    display: none; // Removemos a linha inferior conforme design
+  }
+
+  .mat-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    font-size: 1.2rem;
+    pointer-events: none;
+    transition: color 0.3s ease;
+  }
+
+  .input__field-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    cursor: pointer;
+    pointer-events: all;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  input:focus~.mat-icon {
+    color: $primary-color;
+  }
 }
 
-.container.active .toogle {
-  transform: translateX(50%);
+// Criar conta
+.login__create-account {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: $text-light;
+
+  .login__link {
+    color: $primary-color;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
 }
 
-.toogle-panel {
-  position: absolute;
-  width: 50%;
-  height: 100%;
+// Botão de submit
+button {
+  color: $white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  padding: 0 30px;
-  text-align: center;
-  top: 0;
-  transform: translateX(0);
-  transition: all 0.6s ease-in-out;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+  background: linear-gradient(to right, $primary-color, $primary-light);
+
+  &:hover {
+    background: linear-gradient(to right, $primary-dark, $primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba($primary-color, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+  }
 }
 
-.toogle-left {
-  transform: translateX(-200%);
-}
-
-.container.active .toogle-left {
-  transform: translateX(0);
-}
-
-.toogle-right {
-  right: 0;
-  transform: translateX(0);
-}
-
-.container.active .toogle-right {
-  transform: translateX(200%);
-}
-
+// Personalização do spinner
 :host ::ng-deep mat-progress-spinner {
-  width: 20px !important;
-  height: 20px !important;
+  width: 22px !important;
+  height: 22px !important;
 }
 
 :host ::ng-deep mat-progress-spinner circle {
-  stroke: var(--white-color);
-  stroke-width: 8%;
+  stroke: $white;
+  stroke-width: 10%;
+}
+
+// Animações
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Media queries para responsividade
+@media screen and (max-width: 1100px) {
+  .container::after {
+    width: 90%;
+    height: 650px;
+  }
+
+  .banner__title {
+    font-size: 2.4rem;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .container::after {
+    width: 90%;
+    height: auto;
+  }
+
+  .container {
+    flex-direction: column;
+    padding: 2rem 0;
+
+    &::after {
+      height: auto;
+      top: 0;
+      transform: translateX(-50%);
+    }
+  }
+
+  .banner {
+    width: 100%;
+    height: auto;
+    padding: 3rem 1rem;
+    border-radius: 20px 20px 0 0;
+
+    &__title {
+      font-size: 2.2rem;
+    }
+
+    &__subtitle {
+      font-size: 0.85rem;
+    }
+  }
+
+  .login {
+    width: 100%;
+    padding: 2rem 10%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .container::after {
+    width: 95%;
+  }
+
+  .banner {
+    padding: 2rem 1rem;
+
+    &__logo {
+      width: 60px;
+    }
+
+    &__title {
+      font-size: 1.8rem;
+    }
+
+    &__subtitle {
+      font-size: 0.8rem;
+    }
+  }
+
+  .login {
+    padding: 1.5rem 7%;
+
+    &__title {
+      font-size: 1.5rem;
+
+      &:first-of-type {
+        font-size: 1rem;
+      }
+    }
+  }
 }

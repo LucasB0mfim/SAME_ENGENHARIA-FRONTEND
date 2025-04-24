@@ -21,6 +21,9 @@ export class LoginComponent implements AfterViewInit {
   @ViewChild('registerbtn') registerbtn!: ElementRef;
   @ViewChild('loginbtn') loginbtn!: ElementRef;
 
+  logo = 'assets/images/banner-logo.png';
+  backgroundImageUrl = 'assets/images/wallpaper-login.jpg';
+
   ngAfterViewInit() {
     this.registerbtn.nativeElement.addEventListener('click', () => {
       this.container.nativeElement.classList.add('active');

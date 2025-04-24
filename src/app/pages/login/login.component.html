@@ -1,70 +1,61 @@
-<div class="body">
-  <div class="container" id="container" #container>
+<div class="container">
 
-    <div class="sign-up">
-      <form [formGroup]="loginForm" (ngSubmit)="firstLogin()">
-        <h1>Primeiro acesso</h1>
-        <div class="input__field">
-          <input type="text" placeholder="Email" formControlName="email" />
-          <span class="input__field-row"></span>
-          <mat-icon>mail</mat-icon>
-        </div>
-        <div class="input__field">
-          <input [type]="passwordType" placeholder="Senha" formControlName="password" (input)="updatePasswordIcon()" />
-          <span class="input__field-row"></span>
-          <mat-icon (click)="togglePasswordVisibility()" class="input__field-icon">{{ showPasswordIcon }}</mat-icon>
-        </div>
-        <button>
-          <span *ngIf="!loading">Cadastrar</span>
-          <span *ngIf="loading">
-            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-          </span>
-        </button>
-        <div class="sign-in__message" *ngIf="firstLoginError">
-          <p class="sign-in__message-error">{{ firstLoginError }}</p>
-        </div>
-      </form>
+  <!-- BANNER DA TELA -->
+  <aside class="banner" [style.background-image]="'url(' + backgroundImageUrl + ')'">
+    <div class="overlay"></div>
+    <div class="banner__content">
+      <img [src]="logo" alt="Logo Same" class="banner__logo">
+      <h1 class="banner__title">SAME ENGENHARIA</h1>
+      <span class="banner__subtitle">
+        Na Same Engenharia, temos um compromisso inabalável com a qualidade em cada etapa da sua obra. Mais do que
+        construir, buscamos entregar excelência, segurança e confiança para transformar projetos em realidade com
+        responsabilidade e precisão.
+      </span>
+    </div>
+  </aside>
+
+  <!-- ÁREA DE LOGIN DA TELA -->
+  <main class="login">
+
+    <!-- MENSAGEM DE INTERAÇÃO -->
+    <div class="login__wrapper">
+      <h1 class="login__title">BEM-VINDO A</h1>
+      <h1 class="login__title">SAME ENGENHARIA</h1>
+      <p class="login__subtitle">Entre com suas credenciais para continuar</p>
     </div>
 
-    <div class="sign-in">
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <h1>Entrar</h1>
-        <div class="input__field">
-          <input type="text" placeholder="Email" formControlName="email" />
-          <span class="input__field-row"></span>
-          <mat-icon>mail</mat-icon>
-        </div>
-        <div class="input__field">
-          <input [type]="passwordType" placeholder="Senha" formControlName="password" (input)="updatePasswordIcon()" />
-          <span class="input__field-row"></span>
-          <mat-icon (click)="togglePasswordVisibility()" class="input__field-icon">{{ showPasswordIcon }}</mat-icon>
-        </div>
-        <button>
-          <span *ngIf="!loading">Entrar</span>
-          <span *ngIf="loading">
-            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-          </span>
-        </button>
-        <div class="sign-in__message" *ngIf="loginError">
-          <p class="sign-in__message-error">{{ loginError }}</p>
-        </div>
-      </form>
-    </div>
+    <!-- FORMULÁRIO DE LOGIN -->
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login__form">
 
-    <div class="toogle-container">
-      <div class="toogle">
-        <div class="toogle-panel toogle-left">
-          <h1>Bem Vindo! Colaborador</h1>
-          <p>Se você já tem uma conta</p>
-          <button class="hidden" id="login" #loginbtn>Entrar</button>
-        </div>
-
-        <div class="toogle-panel toogle-right">
-          <h1>Olá, Colaborador!</h1>
-          <p>Se você não tem uma conta</p>
-          <button class="hidden" id="register" #registerbtn>Criar</button>
-        </div>
+      <!-- EMAIL -->
+      <div class="form__group">
+        <input type="text" placeholder="Email" formControlName="email" />
+        <mat-icon>mail</mat-icon>
       </div>
-    </div>
-  </div>
+
+      <!-- SENHA -->
+      <div class="form__group">
+        <input [type]="passwordType" placeholder="Senha" formControlName="password" (input)="updatePasswordIcon()" />
+        <mat-icon (click)="togglePasswordVisibility()" class="input__field-icon">{{ showPasswordIcon }}</mat-icon>
+      </div>
+
+      <!-- BOTÃO DE SUBMIT -->
+      <button>
+        <span *ngIf="!loading">Entrar</span>
+        <span *ngIf="loading">
+          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        </span>
+      </button>
+
+      <!-- CRIAR CONTA -->
+      <div class="login__create-account">
+        <p>Não tem uma conta? <a href="#" class="login__link">Cadastre-se aqui</a></p>
+      </div>
+
+      <!-- MENSAGEM DE ERRO -->
+      <div class="login__message" *ngIf="loginError">
+        <p class="login__message-error">{{ loginError }}</p>
+      </div>
+    </form>
+  </main>
 </div>
