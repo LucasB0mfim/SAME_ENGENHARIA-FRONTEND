@@ -19,13 +19,12 @@
 
     <!-- MENSAGEM DE INTERAÇÃO -->
     <div class="login__wrapper">
-      <h1 class="login__title">BEM-VINDO A</h1>
-      <h1 class="login__title">SAME ENGENHARIA</h1>
-      <p class="login__subtitle">Entre com suas credenciais para continuar</p>
+      <h1 class="login__title">CADASTRAR CONTA</h1>
+      <p class="login__subtitle">Entre com as credenciais forncedidas pela empresa</p>
     </div>
 
     <!-- FORMULÁRIO DE LOGIN -->
-    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login__form">
+    <form [formGroup]="loginForm" (ngSubmit)="firstLogin()" class="login__form">
 
       <!-- EMAIL -->
       <div class="form__group">
@@ -41,7 +40,7 @@
 
       <!-- BOTÃO DE SUBMIT -->
       <button>
-        <span *ngIf="!loading">Entrar</span>
+        <span *ngIf="!loading">ENTRAR</span>
         <span *ngIf="loading">
           <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
         </span>
@@ -49,7 +48,7 @@
 
       <!-- CRIAR CONTA -->
       <div class="login__create-account">
-        <p>Não tem uma conta? <a href="/first-login" class="login__link">Cadastre-se aqui</a></p>
+        <p>Já tem uma conta? <a routerLink="/first-login" class="login__link">Acesse aqui!</a></p>
       </div>
 
       <!-- MENSAGEM DE ERRO -->

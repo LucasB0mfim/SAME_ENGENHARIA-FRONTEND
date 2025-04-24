@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { UpdateComponent } from './pages/update/update.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { OrderComponent } from './components/workspace/order/order.component';
+import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
@@ -19,9 +20,9 @@ import { HumanResourcesComponent } from './components/workspace/human-resources/
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 
 import { authGuard } from './core/guard/auth.guard';
+import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
-import { indicatorsGuard } from './core/guard/indicators.guard';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'first-login',
+    component: FirstLoginComponent
   },
   {
     path: 'update',

@@ -1,22 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
 
-import { LoginService } from '../../core/services/login.service'
-
+import { FirstLoginService } from '../../core/services/fisrt-login.service';
 import { ILoginRequest } from '../../core/interfaces/login-request.interface';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-first-login',
   imports: [MatProgressSpinnerModule, MatIconModule, CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './first-login.component.html',
+  styleUrl: './first-login.component.scss'
 })
-export class LoginComponent {
-
+export class FirstLoginComponent {
   logo = 'assets/images/banner-logo.png';
   backgroundImageUrl = 'assets/images/wallpaper-login.jpg';
 
@@ -28,7 +27,7 @@ export class LoginComponent {
   showPasswordIcon: 'lock' | 'visibility' | 'visibility_off' = 'lock';
 
   private readonly _router = inject(Router);
-  private readonly _loginService = inject(LoginService);
+  private readonly _firstLoginService = inject(FirstLoginService)
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
@@ -58,10 +57,9 @@ export class LoginComponent {
     }
   }
 
-  login() {
-
+  firstLogin() {
     this.loading = true;
-    this.loginError = '';
+    this.firstLoginError = '';
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -73,26 +71,26 @@ export class LoginComponent {
       password: this.loginForm.value.password,
     }
 
-    this._loginService.login(request).subscribe({
+    this._firstLoginService.login(request).subscribe({
       next: () => {
         this.loading = false;
-        this._router.navigate(['dashboard']);
+        this._router.navigate(['update']);
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         this.loading = false;
 
         if (error.status === 400) {
-          this.loginError = 'Preencha todos os campos';
+          this.firstLoginError = 'Preencha todos os campos';
         } else if (error.status === 401) {
-          this.loginError = 'Email ou senha incorreto(s)';
+          this.firstLoginError = 'Email ou senha incorreto(s)';
         } else if (error.status === 404) {
-          this.loginError = 'Email ou senha incorreto(s)';
+          this.firstLoginError = 'O colaborador não foi encontrado';
         } else {
-          this.loginError = 'Erro interno. Tente novamente outra hora'
+          this.firstLoginError = 'Erro interno. Tente outra hora'
         }
 
         setTimeout(() => {
-          this.loginError = '';
+          this.firstLoginError = '';
         }, 3000);
 
         console.error(error);
