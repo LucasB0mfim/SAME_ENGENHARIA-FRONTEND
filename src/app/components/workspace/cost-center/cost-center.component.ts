@@ -371,15 +371,25 @@ export class CostCenterComponent implements OnInit {
     }
   }
 
-  // ALTERA A COR DO SALDO
-  isSaldoPositive(): boolean {
+  // ALTERA A COR DO CARD INDIVIDUALMENTE
+  isSaldoPositive(type: 'faturamento' | 'gasto' | 'saldo'): boolean {
     if (this.centroCustoField === 'Geral') {
       const totalGeral = this.indicators.reduce((sum, indicator) => {
         const totalReceber = this.formateValue(indicator.total_receber);
         const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
         const totalPagoServico = this.formateValue(indicator.total_pago_servico);
         const folhaPagamento = this.formateValue(indicator.folha_pagamento);
-        return sum + (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento);
+
+        switch (type) {
+          case 'faturamento':
+            return sum + totalReceber;
+          case 'gasto':
+            return sum - (totalPagoMaterial + totalPagoServico + folhaPagamento);
+          case 'saldo':
+            return sum + (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento);
+          default:
+            return sum;
+        }
       }, 0);
       return totalGeral >= 0;
     } else {
@@ -393,7 +403,16 @@ export class CostCenterComponent implements OnInit {
       const totalPagoServico = this.formateValue(indicator.total_pago_servico);
       const folhaPagamento = this.formateValue(indicator.folha_pagamento);
 
-      return (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento) >= 0;
+      switch (type) {
+        case 'faturamento':
+          return totalReceber >= 0;
+        case 'gasto':
+          return (totalPagoMaterial + totalPagoServico + folhaPagamento) >= 0;
+        case 'saldo':
+          return (totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento) >= 0;
+        default:
+          return true;
+      }
     }
   }
 

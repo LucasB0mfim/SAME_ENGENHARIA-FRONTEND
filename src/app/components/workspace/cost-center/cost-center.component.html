@@ -14,10 +14,10 @@
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
 
-    <!-- A RECEBER -->
+    <!-- FATURAMENTO -->
     <div class="filter">
       <label>FATURAMENTO</label>
-      <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
+      <span [class.positive]="isSaldoPositive('faturamento')" [class.negative]="!isSaldoPositive('faturamento')">
         R$ {{ calculateFaturamento() }}
       </span>
     </div>
@@ -25,7 +25,7 @@
     <!-- GASTO -->
     <div class="filter">
       <label>GASTO</label>
-      <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
+      <span [class.positive]="isSaldoPositive('gasto')" [class.negative]="!isSaldoPositive('gasto')">
         R$ {{ calculateGasto() }}
       </span>
     </div>
@@ -33,7 +33,7 @@
     <!-- SALDO -->
     <div class="filter">
       <label>SALDO</label>
-      <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
+      <span [class.positive]="isSaldoPositive('saldo')" [class.negative]="!isSaldoPositive('saldo')">
         R$ {{ calculateSaldo() }}
       </span>
     </div>
