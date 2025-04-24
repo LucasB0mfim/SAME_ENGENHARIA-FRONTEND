@@ -14,11 +14,27 @@
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
 
-    <!-- SALDO DA OBRA -->
+    <!-- A RECEBER -->
+    <div class="filter">
+      <label>FATURAMENTO</label>
+      <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
+        R$ {{ calculateFaturamento() }}
+      </span>
+    </div>
+
+    <!-- GASTO -->
+    <div class="filter">
+      <label>GASTO</label>
+      <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
+        R$ {{ calculateGasto() }}
+      </span>
+    </div>
+
+    <!-- SALDO -->
     <div class="filter">
       <label>SALDO</label>
       <span [class.positive]="isSaldoPositive()" [class.negative]="!isSaldoPositive()">
-        R$ {{ calculateFaturamento() }}
+        R$ {{ calculateSaldo() }}
       </span>
     </div>
   </div>

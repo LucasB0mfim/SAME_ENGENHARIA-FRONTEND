@@ -257,8 +257,80 @@ export class CostCenterComponent implements OnInit {
     return parseFloat(addDecimal) || 0;
   }
 
-  // CALCULO O SALDO TOTAL DE UMA OBRA
+  // CALCULA O FATURAMENTO TOTAL (RECEITA)
   calculateFaturamento(): string {
+    if (this.centroCustoField === 'Geral') {
+      let totalGeral = 0;
+
+      this.indicators.forEach(indicator => {
+        const totalReceber = this.formateValue(indicator.total_receber);
+        totalGeral += totalReceber;
+      });
+
+      return totalGeral.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    } else {
+      const indicator = this.indicatorsCopie.find(
+        (item) => item.nome_centro_custo === this.centroCustoField
+      );
+
+      if (!indicator) {
+        return '0,00';
+      }
+
+      const totalReceber = this.formateValue(indicator.total_receber);
+
+      return totalReceber.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+  }
+
+  // CALCULA O GASTO TOTAL
+  calculateGasto(): string {
+    if (this.centroCustoField === 'Geral') {
+      let totalGeral = 0;
+
+      this.indicators.forEach(indicator => {
+        const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+        const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+        const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+
+        const gastoTotal = totalPagoMaterial + totalPagoServico + folhaPagamento;
+        totalGeral += gastoTotal;
+      });
+
+      return totalGeral.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    } else {
+      const indicator = this.indicatorsCopie.find(
+        (item) => item.nome_centro_custo === this.centroCustoField
+      );
+
+      if (!indicator) {
+        return '0,00';
+      }
+
+      const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
+      const totalPagoServico = this.formateValue(indicator.total_pago_servico);
+      const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+
+      const total = totalPagoMaterial + totalPagoServico + folhaPagamento;
+
+      return total.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+  }
+
+  // CALCULO O SALDO TOTAL DE UMA OBRA
+  calculateSaldo(): string {
     if (this.centroCustoField === 'Geral') {
       let totalGeral = 0;
 
