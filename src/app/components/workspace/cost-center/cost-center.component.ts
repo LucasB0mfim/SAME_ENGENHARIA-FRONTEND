@@ -299,7 +299,7 @@ export class CostCenterComponent implements OnInit {
         const totalPagoServico = this.formateValue(indicator.total_pago_servico);
         const folhaPagamento = this.formateValue(indicator.folha_pagamento);
 
-        const gastoTotal = totalPagoMaterial - totalPagoServico - folhaPagamento;
+        const gastoTotal = - totalPagoMaterial - totalPagoServico - folhaPagamento;
         totalGeral -= gastoTotal;
       });
 
