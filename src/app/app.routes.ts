@@ -58,7 +58,6 @@ export const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
-      { path: 'time-sheet', component: TimeSheetComponent },
       { path: 'order', component: OrderComponent },
       { path: 'order-delivered', component: OrderDeliveredComponent },
       {
@@ -73,6 +72,11 @@ export const routes: Routes = [
       {
         path: 'human-resources',
         component: HumanResourcesComponent
+      },
+      {
+        path: 'human-resources/time-sheet',
+        component: TimeSheetComponent,
+        canActivate: [humanResourcesGuard]
       },
       {
         path: 'human-resources/upload-timesheet',
