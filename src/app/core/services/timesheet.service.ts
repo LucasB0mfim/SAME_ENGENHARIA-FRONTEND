@@ -29,4 +29,9 @@ export class TimesheetService {
     const headers = this._createHeaders();
     return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/csv', formData, {headers})
   }
+
+  uploadExtraDay(formData: FormData): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/extra-day', formData, {headers})
+  }
 }

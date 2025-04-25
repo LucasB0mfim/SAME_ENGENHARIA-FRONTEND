@@ -9,18 +9,17 @@ import { TitleService } from '../../../core/services/title.service';
 import { TimesheetService } from '../../../core/services/timesheet.service';
 
 @Component({
-  selector: 'app-upload-timesheet',
-  standalone: true,
+  selector: 'app-upload-extra-day',
   imports: [
     FormsModule,
     CommonModule,
     MatProgressSpinnerModule,
     MatIconModule
   ],
-  templateUrl: './upload-timesheet.component.html',
-  styleUrl: './upload-timesheet.component.scss'
+  templateUrl: './upload-extra-day.component.html',
+  styleUrl: './upload-extra-day.component.scss'
 })
-export class UploadTimesheetComponent implements OnInit {
+export class UploadExtraDayComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   loading: boolean = false;
@@ -37,7 +36,7 @@ export class UploadTimesheetComponent implements OnInit {
   showSuccess: boolean = false;
 
   ngOnInit(): void {
-    this._title.setTitle('Importar Folha de Ponto');
+    this._title.setTitle('Importar Dia Extra');
   }
 
   /**
@@ -150,7 +149,7 @@ export class UploadTimesheetComponent implements OnInit {
     formData.append('folha_ponto', this.file, this.file.name);
 
     // Enviar o arquivo para o serviço
-    this._timesheetService.upload(formData)
+    this._timesheetService.uploadExtraDay(formData)
       .pipe(
         // Finalizar o loading independentemente do resultado
         finalize(() => {

@@ -14,6 +14,7 @@
       <select formControlName="status" (mousedown)="toggleSelect()" (blur)="resetSelectIcon()">
         <option value="Geral">Geral</option>
         <option value="Férias">Férias</option>
+        <option value="Dia extra">Dia Extra</option>
         <option value="Gestor decibiu abonar">Abono</option>
         <option value="Atestado Médico">Atestado Médico</option>
         <option value="Justificado">Falta Justificada</option>
@@ -78,6 +79,11 @@
           <div class="card__text">
             <div class="card__subtitle">ABONOS: </div>
             <div class="card__title">{{ abonoCounter(data.key) }}</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">DIAS EXTRAS: </div>
+            <div class="card__title">{{ extraDayCounter(data.key) }}</div>
           </div>
         </div>
       </div>

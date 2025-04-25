@@ -23,6 +23,7 @@ import { authGuard } from './core/guard/auth.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
+import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
 
 export const routes: Routes = [
   {
@@ -76,6 +77,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/upload-timesheet',
         component: UploadTimesheetComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/upload-extraDay',
+        component: UploadExtraDayComponent,
         canActivate: [humanResourcesGuard]
       },
       {

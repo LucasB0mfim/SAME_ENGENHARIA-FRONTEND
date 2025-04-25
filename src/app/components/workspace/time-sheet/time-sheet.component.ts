@@ -124,6 +124,14 @@ export class TimeSheetComponent implements OnInit {
     ).length
   }
 
+  // CALCULAR TOTAL DE DIAS EXTRAS //
+
+  extraDayCounter(employeeName: string): number {
+    return this.employeeHistory[employeeName].records.filter(item =>
+      item.evento_abono === 'Dia extra'
+    ).length
+  }
+
   // FORMATAR DATA //
 
   formateDate(date: string): String {
