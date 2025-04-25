@@ -124,6 +124,13 @@ export class TimeSheetComponent implements OnInit {
     ).length
   }
 
+  // FORMATAR DATA //
+
+  formateDate(date: string): String {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`
+  }
+
   // MÉTODO PARA PESQUISAR COM FILTRO //
 
   onSearch() {
