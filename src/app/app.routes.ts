@@ -24,6 +24,8 @@ import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
 import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
+import { TiComponent } from './components/workspace/ti/ti.component';
+import { OpenCallComponent } from './components/workspace/open-call/open-call.component';
 
 export const routes: Routes = [
   {
@@ -96,7 +98,15 @@ export const routes: Routes = [
         path: 'indicators/cost-center',
         component: CostCenterComponent,
         canActivate: [indicatorsGuard]
-      }
+      },
+      {
+        path: 'ti',
+        component: TiComponent,
+      },
+      {
+        path: 'ti/open-call',
+        component: OpenCallComponent,
+      },
     ]
   },
   {
