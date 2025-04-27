@@ -1,0 +1,238 @@
+.container {
+  height: 100%;
+  gap: 2vw;
+  display: grid;
+  grid-template-rows: 10% auto;
+}
+
+.filter__container {
+  padding: 0.7vw;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.filter {
+  gap: 5px;
+  display: flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: var(--text-color);
+  box-shadow: var(--box-shadow);
+  background: var(--secondary-color);
+  transition: all ease 0.3s;
+
+  span,
+  mat-icon {
+    width: 100%;
+    height: 100%;
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+  }
+
+  mat-icon {
+    margin-top: 0.4%;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+
+// CONTAINER DO CARD
+.card__container {
+  gap: 30px;
+  padding: 0.7vw;
+  height: 100%;
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #f93f03;
+  }
+}
+
+// CARD
+.card {
+  display: flex;
+  border-radius: 4px;
+  flex-direction: column;
+  box-shadow: var(--box-shadow);
+  background-color: var(--secondary-color);
+  transition: all ease 0.3s;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  // TIPOGRAFIA DO CARD
+  &__title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+  }
+
+  &__subtitle {
+    font-weight: 500;
+    color: var(--gray-color);
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+
+    &--info {
+      padding: 10px 10px 10px 0;
+    }
+  }
+
+  // CABEÇALHO DO CARD
+  &__header {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-left: 5px solid var(--orange-color);
+    transition: border-radius 1s ease;
+  }
+
+  &:has(.card__body.show) .card__header {
+    border-bottom-left-radius: 0;
+  }
+
+  &__header.header-expanded {
+    border-bottom-left-radius: 0;
+  }
+
+  &__primary {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__top,
+  &__bottom {
+    gap: 8px;
+    display: flex;
+  }
+
+  &__secondary {
+    gap: 8px;
+    display: flex;
+  }
+
+  &__text {
+    gap: 8px;
+    display: flex;
+  }
+
+  // CORPO DO CARD
+  &__body {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &.show {
+      max-height: 1000px;
+      overflow: visible;
+      border-top: 2px solid var(--primary-color);
+    }
+  }
+
+  &__details {
+    gap: 2vw;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// CARD DE AVISO SE NÃO HOUVER CARDS NA API
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+}
+
+// CARD LOAGING PARA CARREGAR OS CARDS DA API
+.loading {
+  height: 85%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// SCRIPT PARA APARECER O LOADING
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
+}
+
+.ticket__message {
+  position: absolute;
+  top: 7%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 30%;
+  padding: 10px 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  animation: slideDown 0.3s ease-in-out;
+  z-index: 10;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &--error {
+    background-color: rgba(255, 87, 87, 0.1);
+    color: #ff5757;
+    border: 1px solid #ff5757;
+  }
+
+  &--success {
+    background-color: rgba(75, 210, 143, 0.1);
+    color: #4bd28f;
+    border: 1px solid #4bd28f;
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

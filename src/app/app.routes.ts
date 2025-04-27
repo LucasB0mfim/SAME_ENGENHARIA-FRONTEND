@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { UpdateComponent } from './pages/update/update.component';
+import { TiComponent } from './components/workspace/ti/ti.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { OrderComponent } from './components/workspace/order/order.component';
 import { FirstLoginComponent } from './pages/first-login/first-login.component';
@@ -12,20 +13,21 @@ import { TrackingComponent } from './components/workspace/tracking/tracking.comp
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
 import { IndicatorsComponent } from './components/workspace/indicators/indicators.component';
+import { OpenTicketComponent } from './components/workspace/open-ticket/open-ticket.component';
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
 import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { ConstructionComponent } from './components/workspace/construction/construction.component';
+import { ManageTicketComponent } from './components/workspace/manage-ticket/manage-ticket.component';
 import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
+import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 
+import { tiGuard } from './core/guard/ti.guard';
 import { authGuard } from './core/guard/auth.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
-import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
-import { TiComponent } from './components/workspace/ti/ti.component';
-import { OpenCallComponent } from './components/workspace/open-call/open-call.component';
 
 export const routes: Routes = [
   {
@@ -104,8 +106,13 @@ export const routes: Routes = [
         component: TiComponent,
       },
       {
-        path: 'ti/open-call',
-        component: OpenCallComponent,
+        path: 'ti/open-ticket',
+        component: OpenTicketComponent,
+      },
+      {
+        path: 'ti/manage-ticket',
+        component: ManageTicketComponent,
+        canActivate: [tiGuard]
       },
     ]
   },

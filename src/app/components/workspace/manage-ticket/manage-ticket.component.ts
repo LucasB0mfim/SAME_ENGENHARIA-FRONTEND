@@ -9,29 +9,22 @@ import { DashboardService } from '../../../core/services/dashboard.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-open-call',
+  selector: 'app-manage-ticket',
   imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatProgressSpinnerModule],
-  templateUrl: './open-call.component.html',
-  styleUrl: './open-call.component.scss'
+  templateUrl: './manage-ticket.component.html',
+  styleUrl: './manage-ticket.component.scss'
 })
-export class OpenCallComponent implements OnInit {
-
+export class ManageTicketComponent {
   // INJEÇÃO DE DEPENDÊNCIAS //
   private _titleService = inject(TitleService);
   private readonly _tiService = inject(TiService);
   private readonly _dashboardService = inject(DashboardService);
-
-  // VARIÁVEL PARA MOSTRAR A TELA DE CRIAÇÃO
-  isCreate: boolean = false;
 
   // VARIÁVEL PARA ABRIR O CORPO DO CARD
   index: number | null = null;
 
   // VARIÁVEL PARA ARMAZENAR OS DADOS DA API
   item: any[] = [];
-
-  // VARIÁVEL PARA ARMAZENAR O SETOR DO COLABORADOR
-  role: string = '';
 
   // VARIÁVEL PARA ARMAZENAR O EMAIL DO COLABORADOR
   email: string = '';
@@ -42,9 +35,6 @@ export class OpenCallComponent implements OnInit {
   // CARREGANDO
   isLoading: boolean = true;
 
-  // GERENCIAR BOTÃO DE ENVIAR
-  isSend: boolean = false;
-
   // MENSAGEM DE SUCESSO
   errorMessage: string = '';
   showError: boolean = false;
@@ -53,25 +43,18 @@ export class OpenCallComponent implements OnInit {
   successMessage: string = '';
   showSuccess: boolean = false;
 
-  // FORMULÁRIO //
-  ticketForm: FormGroup = new FormGroup({
-    subject: new FormControl(''),
-    description: new FormControl('')
-  })
-
   // HOOK DE CICLO //
 
   ngOnInit() {
-    this._titleService.setTitle('Abrir Chamado');
+    this._titleService.setTitle('Gerenciar Chamado');
 
     this._dashboardService.findAll().subscribe({
       next: (data) => {
         this.email = data.employee.email;
-        this.role = data.employee.role;
         this.getTickets();
       },
       error: (error) => {
-        console.log('Não foi possível carregar as informações do colaborador: ', error);
+        console.log('Não foi possível carregar os tickets: ', error);
         this.isLoading = false;
       }
     });
@@ -82,7 +65,7 @@ export class OpenCallComponent implements OnInit {
   getTickets() {
     this._tiService.getTicket().subscribe({
       next: (data) => {
-        this.item = data.tickets.filter((item: { applicant_email: string }) => item.applicant_email === this.email);
+        this.item = data.tickets.filter((item: { status: string }) => item.status === 'ABERTO');
         this.isLoading = false;
         this.isEmpty = this.item.length === 0;
       },
@@ -103,15 +86,6 @@ export class OpenCallComponent implements OnInit {
       this.index = null;
     } else {
       this.index = cardIndex;
-    }
-  }
-
-  // MÉTODO PARA ABRIR A MODAL //
-
-  manageModal() {
-    this.isCreate = !this.isCreate;
-    if (this.isCreate === true) {
-      this.isEmpty = false
     }
   }
 
@@ -139,40 +113,10 @@ export class OpenCallComponent implements OnInit {
     }, 5000);
   }
 
-  // MÉTODO PARA ENVIAR O TICKET //
+  // MÉTODO PARA ATUALIZAR O TICKET //
 
-  sendTicket() {
-    const request = {
-      subject: this.ticketForm.value.subject,
-      description: this.ticketForm.value.description,
-      role: this.role,
-      applicant_email: this.email
-    }
+  updateTicket() {
 
-    if (request.subject.length <= 4) {
-      this.setErrorMessage('Digite o assunto do seu chamdo.');
-      return;
-    } else if (request.description.length === 0) {
-      this.setErrorMessage('Digite a descrição do seu chamado.');
-      return;
-    }
-
-    this.isSend = true;
-
-    this._tiService.sendTicket(request).subscribe({
-      next: () => {
-        this.setSuccessMessage('Ticket enviado com sucesso.');
-        this.isSend = false;
-        this.ticketForm.reset();
-        this.getTickets();
-        this.isCreate = false;
-      },
-      error: (error) => {
-        this.setErrorMessage('Não foi possível enviar o ticket.')
-        console.error('Não foi possível enviar o ticket: ', error);
-        this.isSend = false;
-      }
-    })
   }
 
   // MÉTODO PARA FORMATAR A DATA //
