@@ -124,11 +124,8 @@ export class ManageTicketComponent {
   // MÉTODO PARA ATUALIZAR O TICKET //
 
   updateTicket() {
+    if (this.index === null) return;
 
-    if (this.index === null) {
-      this.setErrorMessage('Nenhum ticket selecionado.');
-      return;
-    }
     const today = new Date();
     const selectedTicket = this.item[this.index];
 
@@ -147,10 +144,10 @@ export class ManageTicketComponent {
 
     this._tiService.updateTicket(request).subscribe({
       next: () => {
-        this.setSuccessMessage('Resposta enviada com sucesso.');
         this.getTickets();
         this.index === null;
         this.ticketForm.reset();
+        this.setSuccessMessage('Resposta enviada com sucesso.');
       },
       error: (error) => {
         console.error('Falha ao enviar resposta: ', error);
