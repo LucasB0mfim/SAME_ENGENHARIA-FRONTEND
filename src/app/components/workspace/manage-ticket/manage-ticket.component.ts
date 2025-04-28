@@ -142,27 +142,34 @@ export class ManageTicketComponent {
       return;
     }
 
+    this.isSend = true;
+
     this._tiService.updateTicket(request).subscribe({
       next: () => {
         this.getTickets();
         this.index === null;
         this.ticketForm.reset();
         this.setSuccessMessage('Resposta enviada com sucesso.');
+        this.isSend = false;
       },
       error: (error) => {
         console.error('Falha ao enviar resposta: ', error);
         this.setErrorMessage('Não foi possível enviar a resposta.');
+        this.isSend = false;
       }
     })
   }
 
   // MÉTODO PARA FORMATAR A DATA //
+
   formateDate(date: string) {
     if (date === null) return;
     const fullDate = date.split('T')[0];
     const [year, month, day] = fullDate.split('-');
     return `${day}/${month}/${year}`;
   }
+
+  // MÉTODO PARA FORMATAR O NOME DO COLABORADOR //
 
   formateName(email: string) {
     const employee = email.split('@')[0];
