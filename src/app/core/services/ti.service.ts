@@ -24,4 +24,9 @@ export class TiService {
     const headers = this._createHeaders();
     return this._httpClient.post<any>(this._apiUrl, request, {headers});
   }
+
+  updateTicket(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>(this._apiUrl, request, {headers});
+  }
 }

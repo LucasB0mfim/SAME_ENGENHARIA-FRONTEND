@@ -35,6 +35,9 @@ export class ManageTicketComponent {
   // CARREGANDO
   isLoading: boolean = true;
 
+  // ANIMAÇÃO DO BOTÃO AO ENVIAR
+  isSend: boolean = false;
+
   // MENSAGEM DE SUCESSO
   errorMessage: string = '';
   showError: boolean = false;
@@ -42,6 +45,11 @@ export class ManageTicketComponent {
   // MENSAGEM DE ERRO
   successMessage: string = '';
   showSuccess: boolean = false;
+
+  // FORMULÁRIO //
+  ticketForm: FormGroup = new FormGroup({
+    resolution: new FormControl('')
+  })
 
   // HOOK DE CICLO //
 
@@ -117,6 +125,38 @@ export class ManageTicketComponent {
 
   updateTicket() {
 
+    if (this.index === null) {
+      this.setErrorMessage('Nenhum ticket selecionado.');
+      return;
+    }
+    const today = new Date();
+    const selectedTicket = this.item[this.index];
+
+    const request = {
+      id: selectedTicket.id,
+      closing_date: today,
+      responsible_technician: this.email,
+      resolution: this.ticketForm.value.resolution,
+      status: 'FECHADO'
+    }
+
+    if (request.resolution.length <= 2) {
+      this.setErrorMessage('Digite uma resposta antes de enviar.')
+      return;
+    }
+
+    this._tiService.updateTicket(request).subscribe({
+      next: () => {
+        this.setSuccessMessage('Resposta enviada com sucesso.');
+        this.getTickets();
+        this.index === null;
+        this.ticketForm.reset();
+      },
+      error: (error) => {
+        console.error('Falha ao enviar resposta: ', error);
+        this.setErrorMessage('Não foi possível enviar a resposta.');
+      }
+    })
   }
 
   // MÉTODO PARA FORMATAR A DATA //
@@ -125,5 +165,10 @@ export class ManageTicketComponent {
     const fullDate = date.split('T')[0];
     const [year, month, day] = fullDate.split('-');
     return `${day}/${month}/${year}`;
+  }
+
+  formateName(email: string) {
+    const employee = email.split('@')[0];
+    return employee;
   }
 }

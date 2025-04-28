@@ -27,14 +27,16 @@
 
         <!-- LADO ESQUEDO DO CARD -->
         <div class="card__primary">
+
+          <!-- PARTE SUPERIOR -->
           <div class="card__top">
-            <div class="card__subtitle">ID: </div>
-            <div class="card__title">{{ data.value.id || 'N/A' }}</div>
+            <div class="card__subtitle">{{ formateName(data.value.applicant_email) || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ data.value.role || 'N/A' }}</div>
           </div>
 
-          <!-- Parte inferiro do cabeçalho -->
+          <!-- PARTE INFERIOR -->
           <div class="card__bottom">
-            <div class="card__subtitle">ASSUNTO: </div>
             <div class="card__title">{{ data.value.subject || 'N/A' }}</div>
           </div>
         </div>
@@ -44,18 +46,6 @@
           <div class="card__text">
             <div class="card__subtitle">ABERTURA: </div>
             <div class="card__title">{{ formateDate(data.value.opening_date) || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">FECHAMENTO: </div>
-            <div class="card__title">{{ formateDate(data.value.closing_date) || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">STATUS: </div>
-            <div class="card__title">{{ data.value.status || 'ABERTO' }}</div>
           </div>
         </div>
       </div>
@@ -64,20 +54,35 @@
       <div class="card__body" [class.show]="index === i">
 
         <!-- DETALHES DO CARD -->
-        <div class="card__details">
-
-          <!-- ASSUNTO -->
-          <div class="card__info">
-            <div class="card__title">ASSUNTO</div>
-            <div class="card__subtitle card__subtitle--info">{{ data.value.subject || 'N/A' }}</div>
-          </div>
+        <form [formGroup]="ticketForm" (ngSubmit)="updateTicket()" class="card__details">
 
           <!-- DESCRIÇÃO -->
           <div class="card__info">
             <div class="card__title">DESCRIÇÃO</div>
-            <div class="card__subtitle card__subtitle--info">{{ data.value.description || 'N/A'}}</div>
+            <div class="card__subtitle">{{ data.value.description || 'N/A'}}</div>
           </div>
-        </div>
+
+          <!-- RESPOSTA -->
+          <div class="card__info">
+            <div class="card__title">RESPOSTA</div>
+            <textarea class="card__response" formControlName="resolution"></textarea>
+          </div>
+
+          <!-- RESPOSTA -->
+          <div class="card__info">
+            <button type="submit">
+              @if (!isSend) {
+              <span>ENVIAR</span>
+              } @else {
+              <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              }
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
