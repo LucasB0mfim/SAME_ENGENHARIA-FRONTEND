@@ -1,15 +1,15 @@
 .container {
+  gap: 2vw;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 10% 90%;
 }
 
 // CONTAINER DOS FILTROS
 .filter__container {
   gap: 2%;
-  height: 15%;
   width: 100%;
+  padding: 0 0.7vw;
   display: grid;
   align-items: end;
   grid-template-columns: 12% 12% 12% 12% 12% 12%;
@@ -69,7 +69,7 @@
   mat-icon {
     position: absolute;
     right: 12px;
-    top: 47px;
+    top: 69%;
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--text-color);
@@ -110,10 +110,9 @@
 
 .card__container {
   gap: 30px;
-  height: 80%;
   display: flex;
   overflow-y: auto;
-  padding: 0 1vw 2vw 0;
+  padding: 0 1vw 2vw 0.7vw;
   flex-direction: column;
 
   &::-webkit-scrollbar {

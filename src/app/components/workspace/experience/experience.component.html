@@ -1,18 +1,19 @@
-<div class="experience">
-  <div class="experience__top-section">
-    <div class="filters">
+<div class="container">
+  <div class="filter__container">
+    
+    <div class="filter">
       <label for="name">COLABORADOR</label>
       <input type="text" id="name" placeholder="Ex: Lucas Bomfim" [(ngModel)]="employeeName"
         (ngModelChange)="searchEmployee()">
     </div>
 
-    <div class="filters">
+    <div class="filter">
       <label for="centroCusco">CENTRO DE CUSTO</label>
       <input type="text" id="centroCusco" placeholder="Ex: BRK" [(ngModel)]="centroCustoName"
         (ngModelChange)="searchCentroCusto()">
     </div>
 
-    <div class="filters">
+    <div class="filter">
       <label>STATUS</label>
       <select [(ngModel)]="experienceFilter" (change)="filters()" (mousedown)="toggleSelect()"
         (blur)="resetSelectIcon()" #situacaoSelect>

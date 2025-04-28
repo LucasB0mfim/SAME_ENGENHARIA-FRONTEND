@@ -1,26 +1,25 @@
-.experience {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+// CONTAINER
+.container {
+  gap: 2vw;
   height: 100%;
-  width: 100%;
-
-  &__top-section {
-    gap: 2%;
-    height: 15%;
-    display: grid;
-    grid-template-columns: 20% 20% 20%;
-  }
-
-  &__main-section {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 80%;
-  }
+  display: grid;
+  grid-template-rows: 10% 90%;
+  overflow-y: hidden;
 }
 
-.filters {
+// CONTAINER DOS FILTROS
+.filter__container {
+  gap: 2%;
+  width: 100%;
+  padding: 0 0.7vw;
+  display: grid;
+  align-items: end;
+  grid-template-columns: 12% 12% 12%;
+}
+
+// FILTROS INDIVIDUAIS
+.filter {
+  width: 100%;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -43,6 +42,7 @@
     background: var(--secondary-color);
     transition: all 0.2s ease;
     box-shadow: var(--box-shadow);
+    font-size: clamp(0.6rem, 0.80vw, 0.9rem);
 
     &::placeholder {
       color: var(--gray-color);
@@ -71,7 +71,7 @@
   mat-icon {
     position: absolute;
     right: 12px;
-    top: 45px;
+    top: 69%;
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--text-color);
@@ -88,8 +88,6 @@
   display: flex;
   flex-direction: column;
   border-collapse: collapse;
-  width: 100%;
-  height: auto;
 
   &__head {
     display: flex;
