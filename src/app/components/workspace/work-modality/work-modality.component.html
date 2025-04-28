@@ -1,0 +1,64 @@
+<!-- CONTAINER DA PAG -->
+<div class="container">
+
+  <!-- CONTAINER DOS FILTROS -->
+  <div class="filter__container">
+
+    <!-- FUNCIONARIO -->
+    <div class="filter">
+      <label>FUNCIONÁRIO</label>
+      <input type="text" placeholder="Ex: JOÃO" />
+    </div>
+
+    <!-- CENTRO DE CUSTO -->
+    <div class="filter">
+      <label>CENTRO DE CUSTO</label>
+      <input type="text" placeholder="Ex: BRK" />
+    </div>
+
+  </div>
+
+  <!-- CONTAINER DO CARD -->
+  <div class="card__container">
+
+    <!-- CARD IND -->
+    <div class="card" *ngFor="let data of item | keyvalue; let i = index">
+
+      <!-- CABEÇALHO DO CARD -->
+      <div class="card__header">
+
+        <!-- LADO ESQUERDO DO CARD -->
+        <div class="card__primary">
+
+          <!-- PARTE SUPERIOR DO LADO ESQUEDO DO CARD -->
+          <div class="card__top">
+            <div class="card__title">CHAPA: {{ data.value.chapa }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ data.value.centro_custo }}</div>
+          </div>
+
+          <!-- PARTE INFERIOR DO LADO ESQUEDO DO CARD -->
+          <div class="card__bottom">
+            <div class="card__title">{{ data.value.funcionario }}</div>
+          </div>
+        </div>
+
+        <!-- LADO DIREITO DO CARD -->
+        <div class="card__secondary">
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA VAZIA -->
+    <div class="empty" *ngIf="isEmpty">
+      <span>Nenhum registro encontrado</span>
+      <mat-icon>search</mat-icon>
+    </div>
+
+    <!-- CARREGANDO LISTA -->
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>
+</div>

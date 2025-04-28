@@ -78,9 +78,9 @@ export class ManageTicketComponent {
         this.isEmpty = this.item.length === 0;
       },
       error: (error) => {
-        console.error('Não foi possível buscar os tickets: ', error);
+        this.isEmpty = true;
         this.isLoading = false;
-        this.isEmpty = this.item.length === 0;
+        console.error('Não foi possível buscar os tickets: ', error);
       }
     })
   }

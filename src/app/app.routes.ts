@@ -17,6 +17,7 @@ import { OpenTicketComponent } from './components/workspace/open-ticket/open-tic
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
 import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { ConstructionComponent } from './components/workspace/construction/construction.component';
+import { WorkModalityComponent } from './components/workspace/work-modality/work-modality.component';
 import { ManageTicketComponent } from './components/workspace/manage-ticket/manage-ticket.component';
 import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
@@ -90,6 +91,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/upload-extraDay',
         component: UploadExtraDayComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/work-modality',
+        component: WorkModalityComponent,
         canActivate: [humanResourcesGuard]
       },
       {
