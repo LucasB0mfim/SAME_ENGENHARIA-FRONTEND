@@ -21,4 +21,9 @@ export class ExperienceService {
     const headers = this._createHeaders();
     return this._httpClient.get<IExperienceResponse>(this._apiUrl, {headers});
   }
+
+  updateModality(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>(this._apiUrl, request, {headers});
+  }
 }

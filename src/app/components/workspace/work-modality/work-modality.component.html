@@ -1,6 +1,22 @@
 <!-- CONTAINER DA PAG -->
 <div class="container">
 
+  <!-- MENSAGEM DE SUCESSO -->
+  @if (showError) {
+    <div class="card__message card__message--error">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+    }
+  
+    <!-- MENSAGEM DE ERRO -->
+    @if (showSuccess) {
+    <div class="card__message card__message--success">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ successMessage }}</span>
+    </div>
+    }
+
   <!-- CONTAINER DOS FILTROS -->
   <div class="filter__container">
 
@@ -22,12 +38,12 @@
   <div class="card__container">
 
     <!-- CARD IND -->
-    <div class="card" *ngFor="let data of item | keyvalue; let i = index">
+    <div class="card" *ngFor="let data of item | keyvalue">
 
       <!-- CABEÇALHO DO CARD -->
       <div class="card__header">
 
-        <!-- LADO ESQUERDO DO CARD -->
+        <!-- PRIMEIRA DIV -->
         <div class="card__primary">
 
           <!-- PARTE SUPERIOR DO LADO ESQUEDO DO CARD -->
@@ -44,9 +60,36 @@
         </div>
 
         <!-- LADO DIREITO DO CARD -->
-        <div class="card__secondary">
+        <form [formGroup]="modalityForm(data.value)" (ngSubmit)="updateModality(data.value)" class="card__secondary">
 
-        </div>
+          <!-- DISPONIBILIDADE PARA VIAJAR -->
+          <div class="card__update">
+            <div class="card__subtitle">VIAJAR:</div>
+            <select formControlName="viajar">
+              <option value="SIM" >SIM</option>
+              <option value="NÃO">NÃO</option>
+            </select>
+          </div>
+
+          <!-- TIPO DE SERVIÇO -->
+          <div class="card__update">
+            <div class="card__subtitle">SEGMENTO:</div>
+            <select formControlName="segmento">
+              <option value="BLOCO">BLOCO</option>
+              <option value="CHAPISCO">TIJOLO</option>
+              <option value="CHAPISCO">ARMADOR</option>
+              <option value="CHAPISCO">CHAPISCO</option>
+              <option value="CHAPISCO">CARPINTEIRO</option>
+              <option value="CHAPISCO">REVESTIMENTO</option>
+            </select>
+          </div>
+
+          <div class="card__update">
+            <button type="submit">
+              <mat-icon>save</mat-icon>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
