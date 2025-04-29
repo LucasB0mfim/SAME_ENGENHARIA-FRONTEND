@@ -23,13 +23,13 @@
     <!-- FUNCIONARIO -->
     <div class="filter">
       <label>FUNCIONÁRIO</label>
-      <input type="text" placeholder="Ex: JOÃO" />
+      <input type="text" placeholder="Ex: JOÃO" [(ngModel)]="employee" (input)="applyFilters()" />
     </div>
 
     <!-- CENTRO DE CUSTO -->
     <div class="filter">
       <label>CENTRO DE CUSTO</label>
-      <input type="text" placeholder="Ex: BRK" />
+      <input type="text" placeholder="Ex: BRK" [(ngModel)]="costCenter" (input)="applyFilters()" />
     </div>
 
   </div>
