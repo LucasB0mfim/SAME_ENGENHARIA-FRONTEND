@@ -110,6 +110,10 @@
   background-color: var(--secondary-color);
   transition: all ease 0.3s;
 
+  &:hover {
+    transform: translateY(-4px);
+  }
+
   // Card Header
   &__header {
     width: 100%;
