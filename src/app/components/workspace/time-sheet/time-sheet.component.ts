@@ -25,6 +25,7 @@ export class TimeSheetComponent implements OnInit {
 
   // CRIANDO UM FORMULÁRIO PARA ENVIAR OS FILTROS
   filterForm: FormGroup = new FormGroup({
+    costCenter: new FormControl('Geral'),
     status: new FormControl('Geral'),
     startDate: new FormControl(''),
     endDate: new FormControl(''),
@@ -39,6 +40,7 @@ export class TimeSheetComponent implements OnInit {
 
   // VARIÁVEL PARA ARMAZENAR OS REGISTROS
   item: any[] = [];
+  costCenter: string[] = [];
 
   // VARIÁVEL PARA ARMAZENAR OS REGISTROS PELO NOME
   employeeHistory: Record<string, ICommonData> = {};
@@ -66,6 +68,8 @@ export class TimeSheetComponent implements OnInit {
         this.employeeFilter = [...this.item];
 
         this.groupByEmployee();
+        this.removeDuplicate();
+
         this.isLoading = false;
         if (this.item.length === 0) this.isVoid = true;
       },
@@ -152,6 +156,7 @@ export class TimeSheetComponent implements OnInit {
     this.employeeHistory = {};
 
     const request = {
+      costCenter: this.filterForm.value.costCenter,
       status: this.filterForm.value.status,
       startDate: this.filterForm.value.startDate,
       endDate: this.filterForm.value.endDate
@@ -186,6 +191,7 @@ export class TimeSheetComponent implements OnInit {
     this.employeeHistory = {};
 
     this.filterForm.reset({
+      costCenter: 'Geral',
       status: 'Geral',
       startDate: '',
       endDate: ''
@@ -228,6 +234,24 @@ export class TimeSheetComponent implements OnInit {
     } else {
       this.index = cardIndex;
     }
+  }
+
+  // REMOVE CENTRO DE CUSTOS DUPLICADOS //
+
+  removeDuplicate(): void {
+    const costCenterSet = new Set<string>();
+
+    this.item.forEach(item => {
+      if (item.centro_custo &&
+          item.centro_custo.trim() !== '' &&
+          item.centro_custo !== 'NÃO CONSTA') {
+        costCenterSet.add(item.centro_custo);
+      }
+    });
+
+    this.costCenter = Array.from(costCenterSet).sort();
+
+    console.log(this.costCenter);
   }
 
   // REINICIAR SETA DO SELECT //

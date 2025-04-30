@@ -8,6 +8,16 @@
       <input type="text" placeholder="Ex: JOÃOZINHO" formControlName="employee" (input)="applyFilters()">
     </div>
 
+    <!-- CENTRO DE CUSTO -->
+    <div class="filter">
+      <label>CENTRO DE CUSTO</label>
+      <select formControlName="costCenter" (mousedown)="toggleSelect()" (blur)="resetSelectIcon()">
+        <option value="Geral">Geral</option>
+        <option *ngFor="let centro of costCenter" [value]="centro">{{ centro }}</option>
+      </select>
+      <mat-icon [class.rotated]="statusArrow">arrow_drop_down</mat-icon>
+    </div>
+
     <!-- STATUS -->
     <div class="filter">
       <label>STATUS</label>
