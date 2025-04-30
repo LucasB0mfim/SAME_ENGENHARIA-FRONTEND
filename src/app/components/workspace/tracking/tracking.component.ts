@@ -43,7 +43,9 @@ export class TrackingComponent implements OnInit {
       next: (data) => {
         this.originalOrder = data.tracking;
         this.order = [...this.originalOrder];
+
         this.removeDuplicate();
+
         this.isLoading = false;
         if (this.order.length === 0) this.isVoid = true;
       },
