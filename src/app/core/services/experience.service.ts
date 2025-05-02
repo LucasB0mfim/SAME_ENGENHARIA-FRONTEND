@@ -9,7 +9,7 @@ import { IExperienceResponse } from '../interfaces/experience-response.interface
 })
 export class ExperienceService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/experience';
+  private readonly _apiUrl = 'http://54.146.211.211:3000/same-engenharia/api/reports/experience';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

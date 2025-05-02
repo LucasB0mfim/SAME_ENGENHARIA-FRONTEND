@@ -9,7 +9,7 @@ import { IOrderResponse } from '../interfaces/order-response.interface';
 })
 export class OrderService {
   private readonly _httpClient = inject(HttpClient);
-  private _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/request';
+  private _apiUrl = 'http://54.146.211.211:3000/same-engenharia/api/reports/request';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -29,7 +29,7 @@ export class OrderService {
 
   updateStatus(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('http://192.168.10.17:3000/same-engenharia/api/order/update', request, {headers})
+    return this._httpClient.put<any>('http://54.146.211.211:3000/same-engenharia/api/order/update', request, {headers})
   }
 
   managerOrder(request: any): Observable<IOrderResponse> {
