@@ -15,32 +15,48 @@
   }
 
   <div class="filter__container">
-    <button (click)="manageModal()" class="filter">
-      @if (isCreate) {
-      <mat-icon>close</mat-icon>
-      <span>Fechar</span>
-      } @else {
-      <mat-icon>add</mat-icon>
-      <span>Novo</span>
-      }
-    </button>
+
+    <div class="filter">
+      <label>MÊS</label>
+      <input type="date">
+    </div>
+
+    <button class="button">BUSCAR</button>
+    <button class="button">NOVO COLABORADOR</button>
   </div>
 
   <!-- CONTAINER DOS CARDS -->
   <div class="card__container">
-    
-    @if (isCreate) {
-    <form class="modal" [formGroup]="ticketForm" (ngSubmit)="sendTicket()">
-      <!-- ASSUNTO DO TICKET -->
+
+    @if (addEmployee) {
+    <form class="modal">
+
       <div class="subject">
-        <label>Assunto</label>
-        <input type="text" placeholder="Digite o assunto do chamado" formControlName="subject">
+        <label>Nome Completo</label>
+        <input type="text" placeholder="Digite o nome completo do colaborador">
       </div>
 
-      <!-- DESCRIÇÃO DO TICKET -->
-      <div class="description">
-        <label>Descrição</label>
-        <textarea placeholder="Descreva seu problema em detalhes" formControlName="description"></textarea>
+      <div class="subject">
+        <label>Tipo Contrato</label>
+        <select>
+          <option value="CLT">CLT</option>
+          <option value="CONTRATO">CONTRATO</option>
+        </select>
+      </div>
+
+      <div class="subject">
+        <label>Valor do VA</label>
+        <input placeholder="Digite o valor do VA">
+      </div>
+
+      <div class="subject">
+        <label>Valor do VT</label>
+        <input placeholder="Digite o valor do VT">
+      </div>
+
+      <div class="subject">
+        <label>Valor do VC</label>
+        <input placeholder="Digite o valor do VC">
       </div>
 
       <!-- ENVIAR TICKET -->

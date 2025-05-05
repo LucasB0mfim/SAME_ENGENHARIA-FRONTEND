@@ -71,7 +71,7 @@ export class ManageOrderComponent implements OnInit {
       next: (data) => {
         // Salvar os dados originais para filtragem posterior
         this.originalOrder = data.order.filter((item: { status: string }) =>
-          item.status !== 'PENDENTE' && item.status !== 'ENTREGUE'
+          item.status === 'PARCIALMENTE ENTREGUE' || item.status === 'NÃO ENTREGUE'
         );
 
         // Inicializar order com os dados originais

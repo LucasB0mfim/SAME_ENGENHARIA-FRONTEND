@@ -29,6 +29,7 @@ import { authGuard } from './core/guard/auth.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
+import { PerifericoComponent } from './components/workspace/periferico/periferico.component';
 
 export const routes: Routes = [
   {
@@ -96,6 +97,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/work-modality',
         component: WorkModalityComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/perifericos',
+        component: PerifericoComponent,
         canActivate: [humanResourcesGuard]
       },
       {
