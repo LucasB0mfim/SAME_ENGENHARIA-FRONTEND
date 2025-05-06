@@ -9,6 +9,7 @@ import { OrderComponent } from './components/workspace/order/order.component';
 import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
+import { BenefitComponent } from './components/workspace/benefit/benefit.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
@@ -29,7 +30,6 @@ import { authGuard } from './core/guard/auth.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
-import { PerifericoComponent } from './components/workspace/periferico/periferico.component';
 
 export const routes: Routes = [
   {
@@ -100,8 +100,8 @@ export const routes: Routes = [
         canActivate: [humanResourcesGuard]
       },
       {
-        path: 'human-resources/perifericos',
-        component: PerifericoComponent,
+        path: 'human-resources/benefit',
+        component: BenefitComponent,
         canActivate: [humanResourcesGuard]
       },
       {

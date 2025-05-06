@@ -1,0 +1,156 @@
+<div class="container">
+  <div class="filter__container">
+
+    <div class="filter__left">
+      <div class="filter">
+        <button [class.active]="activeButton === 'geral'" (click)="activeButton = 'geral'; showGeral()"
+          class="filter__btn">GERAL</button>
+      </div>
+
+      <div class="filter">
+        <button [class.active]="activeButton === 'records'" (click)="activeButton = 'records'; showRecords()"
+          class="filter__btn">REGISTROS</button>
+      </div>
+
+      <div class="filter">
+        <button [class.active]="activeButton === 'employees'" (click)="activeButton = 'employees'; showEmployees()"
+          class="filter__btn">COLABORADORES</button>
+      </div>
+    </div>
+
+    <form [formGroup]="recordForm" (ngSubmit)="getRecordByDate()" class="filter__right">
+      <div class="filter" *ngIf="recordsSection || geralSection">
+        <input type="date" formControlName="date">
+      </div>
+
+      <div class="filter" *ngIf="recordsSection || geralSection">
+        <button type="submit" class="filter__btn">BUSCAR</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="grafic__container" *ngIf="geralSection">
+    <div class="grafic__card">
+      <h2 class="grafic__title">Vale Refeição</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(totalVR) }}</span>
+          <span class="label">Total Mensal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grafic__card">
+      <h2 class="grafic__title">Vale Transporte</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(totalVT) }}</span>
+          <span class="label">Total Mensal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grafic__card">
+      <h2 class="grafic__title">Vale Combustível</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(totalVC) }}</span>
+          <span class="label">Total Mensal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card__container" *ngIf="recordsSection">
+    <div *ngFor="let item of items" class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.tipo_contrato || 'N/A' }}</div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">DIAS DE TRABALHO: </div>
+            <div class="card__title">{{ item.dias_uteis || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__subtitle">DIAS EXTRAS: </div>
+            <div class="card__title">{{ item.dias_extras || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__subtitle">FALTAS: </div>
+            <div class="card__title">{{ item.faltas || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__subtitle">ATESTADOS: </div>
+            <div class="card__title">{{ item.atestados || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__content">
+          <div>
+            <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
+            <div class="card__title">R$ {{ item.vale_refeicao_dia || '0' }}</div>
+          </div>
+          <div>
+            <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
+            <div class="card__title">R$ {{ totalMonth(item.dias_trabalho, item.vale_refeicao_dia) || '0' }}</div>
+          </div>
+          <div>
+            <div class="card__subtitle">VALE TRANSPORTE DIA</div>
+            <div class="card__title">R$ {{ item.vale_transporte_dia || '0' }}</div>
+          </div>
+          <div>
+            <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
+            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vale_transporte_dia) || '0' }}</div>
+          </div>
+          <div>
+            <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
+            <div class="card__title">R$ {{ item.vale_combustivel_dia || '0' }}</div>
+          </div>
+          <div>
+            <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
+            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vale_combustivel_dia) || '0' }}</div>
+          </div>
+          <div>
+            <div class="card__subtitle">VALOR TOTAL</div>
+            <div class="card__title">R$ {{ totalExpense(item.dias_uteis, item.vale_refeicao_dia,
+              item.vale_transporte_dia, item.vale_combustivel_dia) || '0' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card__empty" *ngIf="isAlert">
+      <mat-icon>calendar_month</mat-icon>
+      <span>Selecione a data que deseja visualizar :)</span>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>
+
+  <div class="employees__container" *ngIf="employeesSection">
+    <div class="employees" *ngFor="let employee of employees">
+      <div class="employees__title">{{ employee.nome || 'N/A'}}</div>
+    </div>
+
+    <div class="loading loading--employees" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>
+</div>
