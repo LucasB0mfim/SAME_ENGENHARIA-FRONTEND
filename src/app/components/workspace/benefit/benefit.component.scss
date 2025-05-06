@@ -94,10 +94,11 @@
   display: grid;
   align-items: center;
   justify-content: center;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .grafic__card {
+  cursor: pointer;
   padding: 2vw;
   display: flex;
   border-radius: 8px;
@@ -105,7 +106,10 @@
   flex-direction: column;
   transition: all 0.3s ease;
   background-color: var(--secondary-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .grafic__card:hover {
@@ -198,6 +202,10 @@
   border-color: rgba(255, 86, 48, 0.3);
 }
 
+.grafic__card:nth-child(4) .grafic__circle {
+  border-color: rgba(179, 48, 255, 0.3);
+}
+
 .grafic__card:nth-child(1) .value {
   color: #36B37E;
 }
@@ -208,6 +216,10 @@
 
 .grafic__card:nth-child(3) .value {
   color: #FF5630;
+}
+
+.grafic__card:nth-child(4) .value {
+  color: #a230ff;
 }
 
 // CONTAINER DO CARD
@@ -231,14 +243,15 @@
 
 // CARD
 .card {
+  cursor: pointer;
   display: flex;
   border-radius: 4px;
   flex-direction: column;
-  box-shadow: var(--box-shadow);
   background-color: var(--secondary-color);
   transition: all ease 0.3s;
 
   &:hover {
+    box-shadow: var(--box-shadow);
     transform: translateY(-4px);
   }
 

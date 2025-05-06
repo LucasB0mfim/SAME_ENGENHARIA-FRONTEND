@@ -8,7 +8,7 @@ import { inject, Injectable } from '@angular/core';
 export class BenefitService {
 
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/reports/benefit';
+  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/benefit';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

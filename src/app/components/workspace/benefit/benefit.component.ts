@@ -36,6 +36,7 @@ export class BenefitComponent implements OnInit {
   totalVR: number = 0;
   totalVT: number = 0;
   totalVC: number = 0;
+  totalCost: number = 0;
 
   // INJEÇÃO DE DEPENDÊNCIAS
   private _titleService = inject(TitleService);
@@ -96,21 +97,24 @@ export class BenefitComponent implements OnInit {
   }
 
   // CALCULAR TOTAIS GERAIS //
+
   calculateTotals() {
     this.totalVR = 0;
     this.totalVT = 0;
     this.totalVC = 0;
+    this.totalCost = 0;
 
     if (this.items && this.items.length > 0) {
       this.items.forEach(item => {
-        const diasUteis = item.dias_uteis || 0;
-        const vr = item.vale_refeicao_dia || 0;
-        const vt = item.vale_transporte_dia || 0;
-        const vc = item.vale_combustivel_dia || 0;
+        const diasUteis = item.dias_uteis;
+        const vr = item.vale_refeicao_dia;
+        const vt = item.vale_transporte_dia;
+        const vc = item.vale_combustivel_dia;
 
         this.totalVR += vr * diasUteis;
         this.totalVT += vt * diasUteis;
         this.totalVC += vc * diasUteis;
+        this.totalCost = this.totalVR + this.totalVT + this.totalVC;
       });
     }
   }
@@ -156,7 +160,7 @@ export class BenefitComponent implements OnInit {
     if (workDays) {
       return (benefit * workDays).toFixed(2);
     } else {
-      return '0';
+      return '0.00';
     }
   }
 
@@ -166,13 +170,7 @@ export class BenefitComponent implements OnInit {
     if (workDays) {
       return (vr * workDays + vt * workDays + vc * workDays).toFixed(2);
     } else {
-      return '0';
+      return '0.00';
     }
-  }
-
-  // FORMATAR VALOR MONETÁRIO //
-  formatCurrency(value: number): string {
-    // Formata o número com 2 casas decimais e troca ponto por vírgula
-    return value.toFixed(2).replace('.', ',');
   }
 }

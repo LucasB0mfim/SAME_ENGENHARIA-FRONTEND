@@ -17,21 +17,21 @@ export class TimesheetService {
 
   findAll(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get('http://54.146.211.211:3000/same-engenharia/api/reports/timesheets', {headers})
+    return this._httpClient.get('http://192.168.10.17:3000/same-engenharia/api/reports/timesheets', {headers})
   }
 
   findByFilter(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post('http://54.146.211.211:3000/same-engenharia/api/reports/timesheet/filters', request, {headers})
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/timesheet/filters', request, {headers})
   }
 
   upload(formData: FormData): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post('http://54.146.211.211:3000/same-engenharia/api/reports/csv', formData, {headers})
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/csv', formData, {headers})
   }
 
   uploadExtraDay(formData: FormData): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post('http://54.146.211.211:3000/same-engenharia/api/reports/extra-day', formData, {headers})
+    return this._httpClient.post('http://192.168.10.17:3000/same-engenharia/api/reports/extra-day', formData, {headers})
   }
 }
