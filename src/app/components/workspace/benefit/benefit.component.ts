@@ -26,7 +26,7 @@ export class BenefitComponent implements OnInit {
   recordsSection: boolean = false;
   employeesSection: boolean = false;
 
-  // VARIÁVEL DE CARREGAMENTO CARREGAMENTO
+  // VARIÁVEL DE CARREGAMENTO
   isLoading: boolean = false;
 
   // VARIÁVEL PARA AVISO
@@ -119,9 +119,18 @@ export class BenefitComponent implements OnInit {
     }
   }
 
+  // FORMATAR PREÇO //
+
+  formatCurrency(value: number): string {
+    return value.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
   // MOSTRAR SEÇÃO GERAL //
 
-  showGeral():void {
+  showGeral(): void {
     this.recordsSection = false;
     this.employeesSection = false;
     this.geralSection = true;
