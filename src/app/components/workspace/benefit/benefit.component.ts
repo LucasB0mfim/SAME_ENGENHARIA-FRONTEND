@@ -66,7 +66,11 @@ export class BenefitComponent implements OnInit {
   createRecordSection: boolean = false;
 
   isAlert: boolean = true;
+  isFind: boolean = false;
+  isCreating: boolean = false;
   isLoading: boolean = false;
+  isDeleting: boolean = false;
+  isUpdating: boolean = false;
 
   addEmployee: boolean = false;
   editEmployee: boolean = false;
@@ -82,6 +86,7 @@ export class BenefitComponent implements OnInit {
   totalVT: number = 0;
   totalVC: number = 0;
   totalVEM: number = 0;
+  totalCAJU: number = 0;
   totalCost: number = 0;
 
   // ========== HOOK ========== //
@@ -107,6 +112,8 @@ export class BenefitComponent implements OnInit {
   }
 
   createEmployee(): void {
+    this.isCreating = true;
+
     const request = {
       nome: this.createEmployeeForm.value.nome,
       posicao: this.createEmployeeForm.value.posicao,
@@ -126,19 +133,23 @@ export class BenefitComponent implements OnInit {
 
     this._benefitService.createEmployee(request).subscribe({
       next: () => {
-        this.setSuccessMessage('Colaborador criado.');
+        this.setSuccessMessage('Colaborador criado com sucesso.');
         this.addEmployee = false;
         this.resetForm();
         this.findEmployee();
+        this.isCreating = false;
       },
       error: (error) => {
         console.error(error);
         this.setErrorMessage('Erro ao criar.');
+        this.isCreating = false;
       }
     })
   }
 
   updateEmployee(): void {
+    this.isUpdating = true;
+
     const request = {
       id: this.updateEmployeeForm.value.id,
       nome: this.updateEmployeeForm.value.nome,
@@ -159,36 +170,43 @@ export class BenefitComponent implements OnInit {
 
     this._benefitService.updateEmployee(request).subscribe({
       next: () => {
-        this.setSuccessMessage('Colaborador atualizado.');
+        this.setSuccessMessage('Colaborador atualizado com sucesso.');
         this.editEmployee = false;
         this.updateEmployeeForm.reset();
         this.findEmployee();
+        this.isUpdating = false;
       },
       error: (error) => {
         console.error(error);
         this.setErrorMessage('Erro ao atualizar.');
+        this.isUpdating = false;
       }
     })
   }
 
   deleteEmployee(): void {
+    this.isDeleting = true;
+
     const id = this.updateEmployeeForm.value.id;
 
     this._benefitService.deleteEmployee(id).subscribe({
       next: () => {
-        this.setSuccessMessage('Colaborador Deletado.');
+        this.setSuccessMessage('Colaborador deletado com sucesso.');
         this.editEmployee = false;
         this.updateEmployeeForm.reset();
         this.findEmployee();
+        this.isDeleting = false;
       },
       error: (error) => {
         console.error(error);
         this.setErrorMessage('Erro ao deletar.');
+        this.isDeleting = false;
       }
     })
   }
 
   findRecord(): void {
+    this.isFind = true;
 
     const request = {
       data: this.recordForm.value.data
@@ -198,17 +216,21 @@ export class BenefitComponent implements OnInit {
       next: (data) => {
         this.items = data.result;
         this.calculateTotals();
-        this.isAlert = this.items.length === 0
+        this.isAlert = this.items.length === 0;
+        this.isFind = false;
       },
       error: (error) => {
         this.isAlert = true;
         console.error(error);
         this.setErrorMessage('Erro ao buscar os registros.');
+        this.isFind = false;
       }
     })
   }
 
   createRecord(): void {
+    this.isCreating = true;
+
     const request = {
       ano_mes: this.createRecordForm.value.ano_mes,
       dias_uteis: this.createRecordForm.value.dias_uteis
@@ -224,10 +246,12 @@ export class BenefitComponent implements OnInit {
         this.setSuccessMessage('Registro criado com sucesso.');
         this.createRecordForm.reset();
         this.createRecordSection = false;
+        this.isCreating = false;
       },
       error: (error) => {
         console.error(error);
         this.setErrorMessage('Erro ao criar registro.');
+        this.isCreating = false;
       }
     })
   }
@@ -300,6 +324,7 @@ export class BenefitComponent implements OnInit {
     this.totalVT = 0;
     this.totalVC = 0;
     this.totalVEM = 0;
+    this.totalCAJU = 0;
     this.totalCost = 0;
 
     if (this.items && this.items.length > 0) {
@@ -314,6 +339,7 @@ export class BenefitComponent implements OnInit {
         this.totalVT += vt * diasUteis;
         this.totalVC += vc * diasUteis;
         this.totalVEM += vem * diasUteis;
+        this.totalCAJU = this.totalVR + this.totalVT + this.totalVC;
         this.totalCost = this.totalVR + this.totalVT + this.totalVC + this.totalVEM;
       });
     }
