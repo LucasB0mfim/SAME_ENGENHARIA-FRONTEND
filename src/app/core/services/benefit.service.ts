@@ -8,7 +8,6 @@ import { inject, Injectable } from '@angular/core';
 export class BenefitService {
 
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/benefit';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -18,11 +17,16 @@ export class BenefitService {
 
   findAll(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>(this._apiUrl, { headers });
+    return this._httpClient.get<any>('http://192.168.10.17:3000/same-engenharia/api/reports/benefit', { headers });
   }
 
-  sendDate(request: any): Observable<any> {
+  createRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>(this._apiUrl, request, { headers });
+    return this._httpClient.post<any>('http://192.168.10.17:3000/same-engenharia/api/create/benefit-record', request, { headers });
+  }
+
+  createEmployee(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.post<any>('http://192.168.10.17:3000/same-engenharia/api/create/benefit-employee', request, { headers });
   }
 }

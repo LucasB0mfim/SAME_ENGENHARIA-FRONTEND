@@ -1,4 +1,12 @@
 <div class="container">
+
+  @if (showSuccess) {
+    <div class="message message--success">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ successMessage }}</span>
+    </div>
+    }
+
   <div class="filter__container">
 
     <div class="filter__left">
@@ -18,15 +26,21 @@
       </div>
     </div>
 
-    <form [formGroup]="recordForm" (ngSubmit)="getRecordByDate()" class="filter__right">
-      <div class="filter" *ngIf="recordsSection || geralSection">
-        <input type="date" formControlName="date">
-      </div>
+    <div class="filter__right">
+      <form [formGroup]="recordForm" (ngSubmit)="getRecordByDate()">
+        <div class="filter" *ngIf="recordsSection || geralSection">
+          <input type="date" formControlName="date">
+        </div>
 
-      <div class="filter" *ngIf="recordsSection || geralSection">
-        <button type="submit" class="filter__btn">BUSCAR</button>
+        <div class="filter" *ngIf="recordsSection || geralSection">
+          <button type="submit" class="filter__btn">BUSCAR</button>
+        </div>
+      </form>
+
+      <div class="filter" *ngIf="employeesSection">
+        <button (click)="addEmployee = true" class="filter__btn">+ Novo</button>
       </div>
-    </form>
+    </div>
   </div>
 
   <div class="grafic__container" *ngIf="geralSection">
@@ -155,6 +169,111 @@
     <div class="employees" *ngFor="let employee of employees">
       <div class="employees__title">{{ employee.nome || 'N/A'}}</div>
     </div>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="createEmployee()" *ngIf="addEmployee" class="modal-backdrop">
+      <div class="employee-form">
+        <div class="employee-form__header">
+          <h2>Adicionar Colaborador</h2>
+          <button class="close-btn" (click)="addEmployee = false">&times;</button>
+        </div>
+
+        <div class="employee-form__content">
+          <div class="form-group form-group--full">
+            <label>Nome</label>
+            <input type="text" placeholder="Nome completo" formControlName="nome">
+          </div>
+
+          <div class="form-group">
+            <label>Posição</label>
+            <select formControlName="posicao">
+              <option value="" disabled selected>Selecione uma posição</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Setor</label>
+            <select formControlName="setor">
+              <option value="" disabled selected>Selecione um setor</option>
+              <option value="T.I">T.I</option>
+              <option value="OBRA">OBRA</option>
+              <option value="COMPRAS">COMPRAS</option>
+              <option value="ORÇAMENTO">ORÇAMENTO</option>
+              <option value="QUALIDADE">QUALIDADE</option>
+              <option value="FINANCEIRO">FINANCEIRO</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
+              <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Contrato</label>
+            <select formControlName="contrato">
+              <option value="" disabled selected>Selecione um tipo</option>
+              <option value="PJ">PJ</option>
+              <option value="CLT">CLT</option>
+              <option value="ESTÁGIO">ESTÁGIO</option>
+            </select>
+          </div>
+
+          <div class="form-group form-group--full">
+            <label>Centro de Custo</label>
+            <select formControlName="centro_custo">
+              <option value="" disabled selected>Selecione um centro de custo</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="BRK HH - IMPERMEABILIZAÇAO">BRK HH - IMPERMEABILIZAÇAO</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="ETE CABANGA - COMPLEMENTO MURO">ETE CABANGA - COMPLEMENTO MURO</option>
+              <option value="ETES 02 CURADO">ETES 02 CURADO</option>
+              <option value="HEINEKEN ALAGOINHAS">HEINEKEN ALAGOINHAS</option>
+              <option value="MERCADO BOA VISTA">MERCADO BOA VISTA</option>
+              <option value="US IRMÃ DENIZE">US IRMÃ DENIZE</option>
+              <option value="US PROFESSOR ANTÔNIO FRANCISCO AREIAS">US PROFESSOR ANTÔNIO FRANCISCO AREIAS</option>
+              <option value="USF DR LUIZ WILSON">USF DR LUIZ WILSON</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Vale Refeição</label>
+            <input type="number" placeholder="0.00" formControlName="vr">
+          </div>
+
+          <div class="form-group">
+            <label>Vale Transporte</label>
+            <input type="number" placeholder="0.00" formControlName="vt">
+          </div>
+
+          <div class="form-group">
+            <label>Vale Combustível</label>
+            <input type="number" placeholder="0.00" formControlName="vc">
+          </div>
+
+          <div class="form-group">
+            <label>VEM</label>
+            <input type="number" placeholder="0.00" formControlName="vem">
+          </div>
+        </div>
+
+        <div class="employee-form__footer">
+          @if (showError) {
+          <div class="employee--message employee--message--error">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+          }
+          <button class="cancel-btn" (click)="addEmployee = false">Cancelar</button>
+          <button type="submit" class="submit-btn">Salvar</button>
+        </div>
+      </div>
+    </form>
 
     <div class="loading loading--employees" *ngIf="isLoading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>

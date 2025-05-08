@@ -32,6 +32,15 @@ export class BenefitComponent implements OnInit {
   // VARIÁVEL PARA AVISO
   isAlert: boolean = true;
 
+  // VARIÁVEL PARA GERENCIAR MODAL
+  addEmployee: boolean = false;
+
+  // VARIÁVEIS DE SUCESSO E ERRO
+  errorMessage: string = '';
+  successMessage: string = '';
+  showError: boolean = false;
+  showSuccess: boolean = false;
+
   // VARIÁVEIS PARA TOTAIS
   totalVR: number = 0;
   totalVT: number = 0;
@@ -46,6 +55,18 @@ export class BenefitComponent implements OnInit {
 
   recordForm: FormGroup = new FormGroup({
     date: new FormControl()
+  })
+
+  employeeForm: FormGroup = new FormGroup({
+    nome: new FormControl(null),
+    posicao: new FormControl(''),
+    setor: new FormControl(''),
+    contrato: new FormControl(''),
+    centro_custo: new FormControl(''),
+    vr: new FormControl(null),
+    vt: new FormControl(null),
+    vc: new FormControl(null),
+    vem: new FormControl(null)
   })
 
   // HOOK DE CICLO //
@@ -83,7 +104,7 @@ export class BenefitComponent implements OnInit {
       date: this.recordForm.value.date
     }
 
-    this._benefitService.sendDate(request).subscribe({
+    this._benefitService.createRecord(request).subscribe({
       next: (data) => {
         this.items = data.result;
         this.isLoading = false;
@@ -181,5 +202,81 @@ export class BenefitComponent implements OnInit {
     } else {
       return '0.00';
     }
+  }
+
+  // MENSAGEM DE ERRO //
+
+  setErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.showError = true;
+    this.showSuccess = false;
+
+    setTimeout(() => {
+      this.showError = false;
+    }, 5000);
+  }
+
+
+  // MENSAGEM DE SUCESSO //
+
+  setSuccessMessage(message: string): void {
+    this.successMessage = message;
+    this.showSuccess = true;
+    this.showError = false;
+
+    setTimeout(() => {
+      this.showSuccess = false;
+    }, 3000);
+  }
+
+
+  // ADICIONAR COLABORADOR //
+
+  createEmployee() {
+    const request = {
+      nome: this.employeeForm.value.nome,
+      posicao: this.employeeForm.value.posicao,
+      setor: this.employeeForm.value.setor,
+      contrato: this.employeeForm.value.contrato,
+      centro_custo: this.employeeForm.value.centro_custo,
+      vr: this.employeeForm.value.vr,
+      vt: this.employeeForm.value.vt,
+      vc: this.employeeForm.value.vc,
+      vem: this.employeeForm.value.vem
+    }
+
+    if (!request.nome || !request.posicao || !request.setor || !request.contrato || !request.centro_custo) {
+      this.setErrorMessage('Preencha todos os campos.');
+      return;
+    }
+
+    this._benefitService.createEmployee(request).subscribe({
+      next: () => {
+        this.setSuccessMessage('Colaborador criado.');
+        this.addEmployee = false;
+        this.resetEmployeeForm();
+        this.getEmployees();
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao criar.');
+      }
+    })
+  }
+
+  // RESETAR O FORMULÁRIO APÓS O ENVIO //
+
+  resetEmployeeForm(): void {
+    this.employeeForm.reset({
+      nome: null,
+      posicao: '',
+      setor: '',
+      contrato: '',
+      centro_custo: '',
+      vr: null,
+      vt: null,
+      vc: null,
+      vem: null
+    });
   }
 }
