@@ -16,49 +16,22 @@ import { BenefitService } from '../../../core/services/benefit.service';
 })
 export class BenefitComponent implements OnInit {
 
-  // VARIÁVEL PARA ARMAZENAR DADOS
-  items: any[] = [];
-  employees: any[] = [];
-
-  // VARIÁVEIS DE ESTADO
-  activeButton: string = 'geral';
-  geralSection: boolean = true;
-  recordsSection: boolean = false;
-  employeesSection: boolean = false;
-
-  // VARIÁVEL DE CARREGAMENTO
-  isLoading: boolean = false;
-
-  // VARIÁVEL PARA AVISO
-  isAlert: boolean = true;
-
-  // VARIÁVEL PARA GERENCIAR MODAL
-  addEmployee: boolean = false;
-
-  // VARIÁVEIS DE SUCESSO E ERRO
-  errorMessage: string = '';
-  successMessage: string = '';
-  showError: boolean = false;
-  showSuccess: boolean = false;
-
-  // VARIÁVEIS PARA TOTAIS
-  totalVR: number = 0;
-  totalVT: number = 0;
-  totalVC: number = 0;
-  totalCost: number = 0;
-
-  // INJEÇÃO DE DEPENDÊNCIAS
+  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _benefitService = inject(BenefitService);
 
-  // FORMULÁRIO //
-
+  // ========== FORMULÁRIOS ========== //
   recordForm: FormGroup = new FormGroup({
-    date: new FormControl()
+    data: new FormControl('')
   })
 
-  employeeForm: FormGroup = new FormGroup({
-    nome: new FormControl(null),
+  createRecordForm: FormGroup = new FormGroup({
+    ano_mes: new FormControl(''),
+    dias_uteis: new FormControl('')
+  })
+
+  createEmployeeForm: FormGroup = new FormGroup({
+    nome: new FormControl(''),
     posicao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
@@ -69,15 +42,55 @@ export class BenefitComponent implements OnInit {
     vem: new FormControl(null)
   })
 
-  // HOOK DE CICLO //
+  updateEmployeeForm: FormGroup = new FormGroup({
+    id: new FormControl(null),
+    nome: new FormControl(''),
+    posicao: new FormControl(''),
+    setor: new FormControl(''),
+    contrato: new FormControl(''),
+    centro_custo: new FormControl(''),
+    vr: new FormControl(null),
+    vt: new FormControl(null),
+    vc: new FormControl(null),
+    vem: new FormControl(null)
+  })
 
+  // ========== ESTADOS ========== //
+  items: any[] = [];
+  employees: any[] = [];
+
+  activeButton: string = 'geral';
+  geralSection: boolean = true;
+  recordSection: boolean = false;
+  employeeSection: boolean = false;
+  createRecordSection: boolean = false;
+
+  isAlert: boolean = true;
+  isLoading: boolean = false;
+
+  addEmployee: boolean = false;
+  editEmployee: boolean = false;
+
+  showError: boolean = false;
+  errorMessage: string = '';
+
+  showSuccess: boolean = false;
+  successMessage: string = '';
+
+  // ========== VALORES INICIAS DOS BENEFÍCIOS ========== //
+  totalVR: number = 0;
+  totalVT: number = 0;
+  totalVC: number = 0;
+  totalVEM: number = 0;
+  totalCost: number = 0;
+
+  // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
   }
 
-  // BUSCAR COLABORADORES //
-
-  getEmployees() {
+  // ========== API ========== //
+  findEmployee(): void {
     this.employees = [];
     this.isLoading = true;
 
@@ -93,156 +106,17 @@ export class BenefitComponent implements OnInit {
     })
   }
 
-  // BUSCAR COLABORADORES + DIAS ÚTEIS //
-
-  getRecordByDate() {
-    this.items = [];
-    this.isAlert = false;
-    this.isLoading = true;
-
+  createEmployee(): void {
     const request = {
-      date: this.recordForm.value.date
-    }
-
-    this._benefitService.createRecord(request).subscribe({
-      next: (data) => {
-        this.items = data.result;
-        this.isLoading = false;
-        this.calculateTotals(); // Calcular os totais ao receber os dados
-      },
-      error: (error) => {
-        console.error(error);
-        this.isLoading = false;
-      }
-    })
-  }
-
-  // CALCULAR TOTAIS GERAIS //
-
-  calculateTotals() {
-    this.totalVR = 0;
-    this.totalVT = 0;
-    this.totalVC = 0;
-    this.totalCost = 0;
-
-    if (this.items && this.items.length > 0) {
-      this.items.forEach(item => {
-        const diasUteis = item.dias_uteis;
-        const vr = item.vale_refeicao_dia;
-        const vt = item.vale_transporte_dia;
-        const vc = item.vale_combustivel_dia;
-
-        this.totalVR += vr * diasUteis;
-        this.totalVT += vt * diasUteis;
-        this.totalVC += vc * diasUteis;
-        this.totalCost = this.totalVR + this.totalVT + this.totalVC;
-      });
-    }
-  }
-
-  // FORMATAR PREÇO //
-
-  formatCurrency(value: number): string {
-    return value.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-  }
-
-  // MOSTRAR SEÇÃO GERAL //
-
-  showGeral(): void {
-    this.recordsSection = false;
-    this.employeesSection = false;
-    this.geralSection = true;
-    this.activeButton = 'geral';
-  }
-
-  // MOSTRAR SEÇÃO REGISTROS //
-
-  showRecords(): void {
-    this.employeesSection = false;
-    this.geralSection = false;
-    this.recordsSection = true;
-    this.activeButton = 'records';
-  }
-
-  // MOSTRAR SEÇÃO COLABORADORES //
-
-  showEmployees(): void {
-    this.recordsSection = false;
-    this.geralSection = false;
-    this.employeesSection = true;
-    this.activeButton = 'employees';
-    this.getEmployees();
-  }
-
-  // FORMATAR DATA //
-
-  formatedDate(date: Date): string {
-    const [year, month] = String(date).split('-');
-    return `${month}/${year}`;
-  }
-
-  // CALCULAR GASTO MENSAL //
-
-  totalMonth(workDays: number, benefit: number): string {
-    if (workDays) {
-      return (benefit * workDays).toFixed(2);
-    } else {
-      return '0.00';
-    }
-  }
-
-  // CALCULAR GASTO TOTAL //
-
-  totalExpense(workDays: number, vr: number, vt: number, vc: number): string {
-    if (workDays) {
-      return (vr * workDays + vt * workDays + vc * workDays).toFixed(2);
-    } else {
-      return '0.00';
-    }
-  }
-
-  // MENSAGEM DE ERRO //
-
-  setErrorMessage(message: string): void {
-    this.errorMessage = message;
-    this.showError = true;
-    this.showSuccess = false;
-
-    setTimeout(() => {
-      this.showError = false;
-    }, 5000);
-  }
-
-
-  // MENSAGEM DE SUCESSO //
-
-  setSuccessMessage(message: string): void {
-    this.successMessage = message;
-    this.showSuccess = true;
-    this.showError = false;
-
-    setTimeout(() => {
-      this.showSuccess = false;
-    }, 3000);
-  }
-
-
-  // ADICIONAR COLABORADOR //
-
-  createEmployee() {
-    const request = {
-      nome: this.employeeForm.value.nome,
-      posicao: this.employeeForm.value.posicao,
-      setor: this.employeeForm.value.setor,
-      contrato: this.employeeForm.value.contrato,
-      centro_custo: this.employeeForm.value.centro_custo,
-      vr: this.employeeForm.value.vr,
-      vt: this.employeeForm.value.vt,
-      vc: this.employeeForm.value.vc,
-      vem: this.employeeForm.value.vem
+      nome: this.createEmployeeForm.value.nome,
+      posicao: this.createEmployeeForm.value.posicao,
+      setor: this.createEmployeeForm.value.setor,
+      contrato: this.createEmployeeForm.value.contrato,
+      centro_custo: this.createEmployeeForm.value.centro_custo,
+      vr: this.createEmployeeForm.value.vr,
+      vt: this.createEmployeeForm.value.vt,
+      vc: this.createEmployeeForm.value.vc,
+      vem: this.createEmployeeForm.value.vem
     }
 
     if (!request.nome || !request.posicao || !request.setor || !request.contrato || !request.centro_custo) {
@@ -254,8 +128,8 @@ export class BenefitComponent implements OnInit {
       next: () => {
         this.setSuccessMessage('Colaborador criado.');
         this.addEmployee = false;
-        this.resetEmployeeForm();
-        this.getEmployees();
+        this.resetForm();
+        this.findEmployee();
       },
       error: (error) => {
         console.error(error);
@@ -264,10 +138,217 @@ export class BenefitComponent implements OnInit {
     })
   }
 
-  // RESETAR O FORMULÁRIO APÓS O ENVIO //
+  updateEmployee(): void {
+    const request = {
+      id: this.updateEmployeeForm.value.id,
+      nome: this.updateEmployeeForm.value.nome,
+      posicao: this.updateEmployeeForm.value.posicao,
+      setor: this.updateEmployeeForm.value.setor,
+      contrato: this.updateEmployeeForm.value.contrato,
+      centro_custo: this.updateEmployeeForm.value.centro_custo,
+      vr: this.updateEmployeeForm.value.vr,
+      vt: this.updateEmployeeForm.value.vt,
+      vc: this.updateEmployeeForm.value.vc,
+      vem: this.updateEmployeeForm.value.vem
+    }
 
-  resetEmployeeForm(): void {
-    this.employeeForm.reset({
+    if (!request.nome || !request.posicao || !request.setor || !request.contrato || !request.centro_custo) {
+      this.setErrorMessage('Preencha todos os campos.');
+      return;
+    }
+
+    this._benefitService.updateEmployee(request).subscribe({
+      next: () => {
+        this.setSuccessMessage('Colaborador atualizado.');
+        this.editEmployee = false;
+        this.updateEmployeeForm.reset();
+        this.findEmployee();
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao atualizar.');
+      }
+    })
+  }
+
+  deleteEmployee(): void {
+    const id = this.updateEmployeeForm.value.id;
+
+    this._benefitService.deleteEmployee(id).subscribe({
+      next: () => {
+        this.setSuccessMessage('Colaborador Deletado.');
+        this.editEmployee = false;
+        this.updateEmployeeForm.reset();
+        this.findEmployee();
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao deletar.');
+      }
+    })
+  }
+
+  findRecord(): void {
+
+    const request = {
+      data: this.recordForm.value.data
+    }
+
+    this._benefitService.findRecord(request).subscribe({
+      next: (data) => {
+        this.items = data.result;
+        this.calculateTotals();
+        this.isAlert = this.items.length === 0
+      },
+      error: (error) => {
+        this.isAlert = true;
+        console.error(error);
+        this.setErrorMessage('Erro ao buscar os registros.');
+      }
+    })
+  }
+
+  createRecord(): void {
+    const request = {
+      ano_mes: this.createRecordForm.value.ano_mes,
+      dias_uteis: this.createRecordForm.value.dias_uteis
+    }
+
+    if (request.dias_uteis <= 20) {
+      this.setErrorMessage('Define uma quantidade válida.');
+      return;
+    }
+
+    this._benefitService.createRecord(request).subscribe({
+      next: () => {
+        this.setSuccessMessage('Registro criado com sucesso.');
+        this.createRecordForm.reset();
+        this.createRecordSection = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao criar registro.');
+      }
+    })
+  }
+
+  // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
+  openEditEmployee(employee: any): void {
+    this.editEmployee = true;
+
+    this.updateEmployeeForm.patchValue({
+      id: employee.id,
+      nome: employee.nome,
+      posicao: employee.posicao,
+      setor: employee.setor,
+      contrato: employee.contrato,
+      centro_custo: employee.centro_custo,
+      vr: employee.vr,
+      vt: employee.vt,
+      vc: employee.vc,
+      vem: employee.vem
+    });
+  }
+
+  // ========== TROCAR ENTRE TELAS ========== //
+  showGeral(): void {
+    this.geralSection = true;
+    this.recordSection = false;
+    this.activeButton = 'geral';
+    this.employeeSection = false;
+  }
+
+  showRecord(): void {
+    this.recordSection = true;
+    this.geralSection = false;
+    this.employeeSection = false;
+    this.activeButton = 'record';
+  }
+
+  showEmployee(): void {
+    this.geralSection = false;
+    this.recordSection = false;
+    this.employeeSection = true;
+    this.activeButton = 'employee';
+    this.findEmployee();
+  }
+
+  // ========== MOSTRAR MENSAGENS ========== //
+  setErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.showError = true;
+    this.showSuccess = false;
+
+    setTimeout(() => {
+      this.showError = false;
+    }, 5000);
+  }
+
+  setSuccessMessage(message: string): void {
+    this.successMessage = message;
+    this.showSuccess = true;
+    this.showError = false;
+
+    setTimeout(() => {
+      this.showSuccess = false;
+    }, 3000);
+  }
+
+  // ========== UTILITÁRIOS ========== //
+  calculateTotals() {
+    this.totalVR = 0;
+    this.totalVT = 0;
+    this.totalVC = 0;
+    this.totalVEM = 0;
+    this.totalCost = 0;
+
+    if (this.items && this.items.length > 0) {
+      this.items.forEach(item => {
+        const diasUteis = item.dias_uteis;
+        const vr = item.vr;
+        const vt = item.vt;
+        const vc = item.vc;
+        const vem = item.vem;
+
+        this.totalVR += vr * diasUteis;
+        this.totalVT += vt * diasUteis;
+        this.totalVC += vc * diasUteis;
+        this.totalVEM += vem * diasUteis;
+        this.totalCost = this.totalVR + this.totalVT + this.totalVC + this.totalVEM;
+      });
+    }
+  }
+
+  formatCurrency(value: number): string {
+    return value.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  formatedDate(date: Date): string {
+    const [year, month] = String(date).split('-');
+    return `${month}/${year}`;
+  }
+
+  totalMonth(workDays: number, benefit: number): string {
+    if (workDays) {
+      return (benefit * workDays).toFixed(2);
+    } else {
+      return '0.00';
+    }
+  }
+
+  totalExpense(workDays: number, vr: number, vt: number, vc: number): string {
+    if (workDays) {
+      return (vr * workDays + vt * workDays + vc * workDays).toFixed(2);
+    } else {
+      return '0.00';
+    }
+  }
+
+  resetForm():void {
+    this.createEmployeeForm.reset({
       nome: null,
       posicao: '',
       setor: '',
@@ -277,6 +358,6 @@ export class BenefitComponent implements OnInit {
       vt: null,
       vc: null,
       vem: null
-    });
+    })
   }
 }

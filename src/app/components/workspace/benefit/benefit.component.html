@@ -1,50 +1,49 @@
 <div class="container">
-
   @if (showSuccess) {
     <div class="message message--success">
       <mat-icon>check_circle</mat-icon>
       <span>{{ successMessage }}</span>
     </div>
-    }
+  }
 
-  <div class="filter__container">
-
+  <section class="filter__container">
     <div class="filter__left">
       <div class="filter">
-        <button [class.active]="activeButton === 'geral'" (click)="activeButton = 'geral'; showGeral()"
-          class="filter__btn">GERAL</button>
+        <button [class.active]="activeButton === 'geral'" (click)="activeButton = 'geral'; showGeral()" class="btn btn--secondary">GERAL</button>
       </div>
-
       <div class="filter">
-        <button [class.active]="activeButton === 'records'" (click)="activeButton = 'records'; showRecords()"
-          class="filter__btn">REGISTROS</button>
+        <button [class.active]="activeButton === 'record'" (click)="activeButton = 'record'; showRecord()" class="btn btn--secondary">REGISTROS</button>
       </div>
-
       <div class="filter">
-        <button [class.active]="activeButton === 'employees'" (click)="activeButton = 'employees'; showEmployees()"
-          class="filter__btn">COLABORADORES</button>
+        <button [class.active]="activeButton === 'employee'" (click)="activeButton = 'employee'; showEmployee()" class="btn btn--secondary">COLABORADORES</button>
+      </div>
+      <div class="filter">
+        <button (click)="createRecordSection = true" class="btn btn--secondary">GERAR REGISTRO</button>
       </div>
     </div>
 
     <div class="filter__right">
-      <form [formGroup]="recordForm" (ngSubmit)="getRecordByDate()">
-        <div class="filter" *ngIf="recordsSection || geralSection">
-          <input type="date" formControlName="date">
-        </div>
-
-        <div class="filter" *ngIf="recordsSection || geralSection">
-          <button type="submit" class="filter__btn">BUSCAR</button>
-        </div>
+      <form [formGroup]="recordForm" (ngSubmit)="findRecord()">
+        @if (recordSection || geralSection) {
+          <div class="filter">
+            <input type="month" formControlName="data" class="btn btn--tertiary">
+          </div>
+          <div class="filter">
+            <button type="submit" class="btn btn--primary">BUSCAR</button>
+          </div>
+        }
       </form>
 
-      <div class="filter" *ngIf="employeesSection">
-        <button (click)="addEmployee = true" class="filter__btn">+ Novo</button>
-      </div>
+      @if (employeeSection) {
+        <div class="filter">
+          <button (click)="addEmployee = true" class="btn btn--primary">+ Novo</button>
+        </div>
+      }
     </div>
-  </div>
+  </section>
 
-  <div class="grafic__container" *ngIf="geralSection">
-    <div class="grafic__card">
+  <section class="grafic__container" *ngIf="geralSection">
+    <article class="grafic__card">
       <h2 class="grafic__title">Vale Refeição</h2>
       <div class="grafic__circle">
         <div class="circle-content">
@@ -52,9 +51,8 @@
           <span class="value">{{ formatCurrency(totalVR) }}</span>
         </div>
       </div>
-    </div>
-
-    <div class="grafic__card">
+    </article>
+    <article class="grafic__card">
       <h2 class="grafic__title">Vale Transporte</h2>
       <div class="grafic__circle">
         <div class="circle-content">
@@ -62,9 +60,8 @@
           <span class="value">{{ formatCurrency(totalVT) }}</span>
         </div>
       </div>
-    </div>
-
-    <div class="grafic__card">
+    </article>
+    <article class="grafic__card">
       <h2 class="grafic__title">Vale Combustível</h2>
       <div class="grafic__circle">
         <div class="circle-content">
@@ -72,9 +69,17 @@
           <span class="value">{{ formatCurrency(totalVC) }}</span>
         </div>
       </div>
-    </div>
-
-    <div class="grafic__card">
+    </article>
+    <article class="grafic__card">
+      <h2 class="grafic__title">Valor VEM</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(totalVEM) }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="grafic__card">
       <h2 class="grafic__title">Valor Total</h2>
       <div class="grafic__circle">
         <div class="circle-content">
@@ -82,20 +87,20 @@
           <span class="value">{{ formatCurrency(totalCost) }}</span>
         </div>
       </div>
-    </div>
-  </div>
+    </article>
+  </section>
 
-  <div class="card__container" *ngIf="recordsSection">
-    <div *ngFor="let item of items" class="card">
+  <section class="card__container" *ngIf="recordSection">
+    <article *ngFor="let item of items" class="card">
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
             <div class="card__title">{{ item.nome || 'N/A' }}</div>
             <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.tipo_contrato || 'N/A' }}</div>
+            <div class="card__subtitle">{{ item.contrato || 'N/A' }}</div>
           </div>
           <div class="card__bottom">
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">{{ item.setor || 'N/A' }}</div>
           </div>
         </div>
         <div class="card__secondary">
@@ -124,68 +129,69 @@
         <div class="card__content">
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
-            <div class="card__title">R$ {{ item.vale_refeicao_dia || '0' }}</div>
+            <div class="card__title">R$ {{ item.vr || '0' }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
-            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vale_refeicao_dia) || '0' }}</div>
+            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vr) || '0' }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE DIA</div>
-            <div class="card__title">R$ {{ item.vale_transporte_dia || '0' }}</div>
+            <div class="card__title">R$ {{ item.vt || '0' }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vale_transporte_dia) || '0' }}</div>
+            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vt) || '0' }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
-            <div class="card__title">R$ {{ item.vale_combustivel_dia || '0' }}</div>
+            <div class="card__title">R$ {{ item.vc || '0' }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
-            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vale_combustivel_dia) || '0' }}</div>
+            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, item.vc) || '0' }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">R$ {{ totalExpense(item.dias_uteis, item.vale_refeicao_dia,
-              item.vale_transporte_dia, item.vale_combustivel_dia) || '0' }}</div>
+            <div class="card__title">R$ {{ totalExpense(item.dias_uteis, item.vr, item.vt, item.vc) || '0' }}</div>
           </div>
         </div>
       </div>
-    </div>
+    </article>
 
-    <div class="card__empty" *ngIf="isAlert">
-      <mat-icon>calendar_month</mat-icon>
-      <span>Selecione o mês que deseja visualizar :)</span>
-    </div>
+    @if (isAlert) {
+      <div class="card__empty">
+        <mat-icon>calendar_month</mat-icon>
+        <span>Selecione o mês que deseja visualizar :)</span>
+      </div>
+    }
 
-    <div class="loading" *ngIf="isLoading">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-  </div>
+    @if (isLoading) {
+      <div class="loading">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
+  </section>
 
-  <div class="employees__container" *ngIf="employeesSection">
-    <div class="employees" *ngFor="let employee of employees">
-      <div class="employees__title">{{ employee.nome || 'N/A'}}</div>
-    </div>
+  <section class="employees__container" *ngIf="employeeSection">
+    <article *ngFor="let employee of employees" (click)="openEditEmployee(employee)" class="employees">
+      <div class="employees__title">{{ employee.nome || 'N/A' }}</div>
+    </article>
 
-    <form [formGroup]="employeeForm" (ngSubmit)="createEmployee()" *ngIf="addEmployee" class="modal-backdrop">
-      <div class="employee-form">
-        <div class="employee-form__header">
-          <h2>Adicionar Colaborador</h2>
-          <button class="close-btn" (click)="addEmployee = false">&times;</button>
+    <form [formGroup]="createEmployeeForm" (ngSubmit)="createEmployee()" *ngIf="addEmployee" class="modal__backdrop" role="dialog" aria-labelledby="add-employee-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="add-employee-title">Adicionar Colaborador</h2>
+          <button type="button" class="btn btn--icon" (click)="addEmployee = false" aria-label="Fechar modal">&times;</button>
         </div>
-
-        <div class="employee-form__content">
-          <div class="form-group form-group--full">
-            <label>Nome</label>
-            <input type="text" placeholder="Nome completo" formControlName="nome">
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label for="nome">Nome</label>
+            <input id="nome" type="text" placeholder="Nome completo" formControlName="nome" class="form__input">
           </div>
-
-          <div class="form-group">
-            <label>Posição</label>
-            <select formControlName="posicao">
+          <div class="form__group">
+            <label for="posicao">Posição</label>
+            <select id="posicao" formControlName="posicao" class="form__select">
               <option value="" disabled selected>Selecione uma posição</option>
               <option value="DIRETOR">DIRETOR</option>
               <option value="SERVENTE">SERVENTE</option>
@@ -195,10 +201,9 @@
               <option value="COORDENADOR">COORDENADOR</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label>Setor</label>
-            <select formControlName="setor">
+          <div class="form__group">
+            <label for="setor">Setor</label>
+            <select id="setor" formControlName="setor" class="form__select">
               <option value="" disabled selected>Selecione um setor</option>
               <option value="T.I">T.I</option>
               <option value="OBRA">OBRA</option>
@@ -211,20 +216,18 @@
               <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label>Contrato</label>
-            <select formControlName="contrato">
+          <div class="form__group">
+            <label for="contrato">Contrato</label>
+            <select id="contrato" formControlName="contrato" class="form__select">
               <option value="" disabled selected>Selecione um tipo</option>
               <option value="PJ">PJ</option>
               <option value="CLT">CLT</option>
               <option value="ESTÁGIO">ESTÁGIO</option>
             </select>
           </div>
-
-          <div class="form-group form-group--full">
-            <label>Centro de Custo</label>
-            <select formControlName="centro_custo">
+          <div class="form__group form__group--full">
+            <label for="centro_custo">Centro de Custo</label>
+            <select id="centro_custo" formControlName="centro_custo" class="form__select">
               <option value="" disabled selected>Selecione um centro de custo</option>
               <option value="ESCRITÓRIO">ESCRITÓRIO</option>
               <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
@@ -240,43 +243,155 @@
               <option value="USF DR LUIZ WILSON">USF DR LUIZ WILSON</option>
             </select>
           </div>
-
-          <div class="form-group">
-            <label>Vale Refeição</label>
-            <input type="number" placeholder="0.00" formControlName="vr">
+          <div class="form__group">
+            <label for="vr">Vale Refeição</label>
+            <input id="vr" type="number" placeholder="0.00" formControlName="vr" class="form__input">
           </div>
-
-          <div class="form-group">
-            <label>Vale Transporte</label>
-            <input type="number" placeholder="0.00" formControlName="vt">
+          <div class="form__group">
+            <label for="vt">Vale Transporte</label>
+            <input id="vt" type="number" placeholder="0.00" formControlName="vt" class="form__input">
           </div>
-
-          <div class="form-group">
-            <label>Vale Combustível</label>
-            <input type="number" placeholder="0.00" formControlName="vc">
+          <div class="form__group">
+            <label for="vc">Vale Combustível</label>
+            <input id="vc" type="number" placeholder="0.00" formControlName="vc" class="form__input">
           </div>
-
-          <div class="form-group">
-            <label>VEM</label>
-            <input type="number" placeholder="0.00" formControlName="vem">
+          <div class="form__group">
+            <label for="vem">VEM</label>
+            <input id="vem" type="number" placeholder="0.00" formControlName="vem" class="form__input">
           </div>
         </div>
-
-        <div class="employee-form__footer">
+        <div class="form__footer">
           @if (showError) {
-          <div class="employee--message employee--message--error">
-            <mat-icon>error</mat-icon>
-            <span>{{ errorMessage }}</span>
-          </div>
+            <div class="form__message form__message--error">
+              <mat-icon>error</mat-icon>
+              <span>{{ errorMessage }}</span>
+            </div>
           }
-          <button class="cancel-btn" (click)="addEmployee = false">Cancelar</button>
-          <button type="submit" class="submit-btn">Salvar</button>
+          <button type="button" class="btn btn--quaternary" (click)="addEmployee = false">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Salvar</button>
         </div>
       </div>
     </form>
 
-    <div class="loading loading--employees" *ngIf="isLoading">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-  </div>
+    <form [formGroup]="updateEmployeeForm" (ngSubmit)="updateEmployee()" *ngIf="editEmployee" class="modal__backdrop" role="dialog" aria-labelledby="edit-employee-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="edit-employee-title">Editar Colaborador</h2>
+          <button type="button" class="btn btn--icon" (click)="editEmployee = false" aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label for="edit-nome">Nome</label>
+            <input id="edit-nome" type="text" placeholder="Nome completo" formControlName="nome" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-posicao">Posição</label>
+            <select id="edit-posicao" formControlName="posicao" class="form__select">
+              <option value="" disabled>Selecione uma posição</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="edit-setor">Setor</label>
+            <select id="edit-setor" formControlName="setor" class="form__select">
+              <option value="" disabled>Selecione um setor</option>
+              <option value="T.I">T.I</option>
+              <option value="OBRA">OBRA</option>
+              <option value="COMPRAS">COMPRAS</option>
+              <option value="ORÇAMENTO">ORÇAMENTO</option>
+              <option value="QUALIDADE">QUALIDADE</option>
+              <option value="FINANCEIRO">FINANCEIRO</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
+              <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="edit-contrato">Contrato</label>
+            <select id="edit-contrato" formControlName="contrato" class="form__select">
+              <option value="" disabled>Selecione um tipo</option>
+              <option value="PJ">PJ</option>
+              <option value="CLT">CLT</option>
+              <option value="ESTÁGIO">ESTÁGIO</option>
+            </select>
+          </div>
+          <div class="form__group form__group--full">
+            <label for="edit-centro_custo">Centro de Custo</label>
+            <select id="edit-centro_custo" formControlName="centro_custo" class="form__select">
+              <option value="" disabled>Selecione um centro de custo</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="BRK HH - IMPERMEABILIZAÇAO">BRK HH - IMPERMEABILIZAÇAO</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="ETE CABANGA - COMPLEMENTO MURO">ETE CABANGA - COMPLEMENTO MURO</option>
+              <option value="ETES 02 CURADO">ETES 02 CURADO</option>
+              <option value="HEINEKEN ALAGOINHAS">HEINEKEN ALAGOINHAS</option>
+              <option value="MERCADO BOA VISTA">MERCADO BOA VISTA</option>
+              <option value="US IRMÃ DENIZE">US IRMÃ DENIZE</option>
+              <option value="US PROFESSOR ANTÔNIO FRANCISCO AREIAS">US PROFESSOR ANTÔNIO FRANCISCO AREIAS</option>
+              <option value="USF DR LUIZ WILSON">USF DR LUIZ WILSON</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="edit-vr">Vale Refeição</label>
+            <input id="edit-vr" type="number" placeholder="0.00" formControlName="vr" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-vt">Vale Transporte</label>
+            <input id="edit-vt" type="number" placeholder="0.00" formControlName="vt" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-vc">Vale Combustível</label>
+            <input id="edit-vc" type="number" placeholder="0.00" formControlName="vc" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-vem">VEM</label>
+            <input id="edit-vem" type="number" placeholder="0.00" formControlName="vem" class="form__input">
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--danger" (click)="deleteEmployee()">Deletar</button>
+          <button type="button" class="btn btn--quaternary" (click)="editEmployee = false">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Atualizar</button>
+        </div>
+      </div>
+    </form>
+
+    @if (isLoading) {
+      <div class="loading loading--employees">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
+  </section>
+
+  <section class="record__container" *ngIf="createRecordSection">
+    <form [formGroup]="createRecordForm" (ngSubmit)="createRecord()" class="modal__backdrop" role="dialog" aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Gerar Registro</h2>
+          <button type="button" class="btn btn--icon" (click)="createRecordSection = false" aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label for="ano-mes">Mês e Ano</label>
+            <input id="ano-mes" type="month" formControlName="ano_mes" class="form__input">
+          </div>
+          <div class="form__group form__group--full">
+            <label for="dias_uteis">Dias Úteis</label>
+            <input id="dias_uteis" type="number" placeholder="Número de dias úteis" formControlName="dias_uteis" class="form__input">
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--quaternary" (click)="createRecordSection = false">Cancelar</button>
+          <button type="submit" class="btn btn--primary">Gerar</button>
+        </div>
+      </div>
+    </form>
+  </section>
 </div>
