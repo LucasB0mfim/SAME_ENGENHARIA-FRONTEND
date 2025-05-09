@@ -361,7 +361,6 @@ export class BenefitComponent implements OnInit {
         const vt_caju = item.vt_caju;
         const vt_vem = item.vt_vem;
 
-
         this.total_vr += (vr_caju * dias_uteis) + (vr_vr * dias_uteis);
         this.total_vc += (vc_caju * dias_uteis) + (vc_vr * dias_uteis);
         this.total_vt += (vt_caju * dias_uteis) + (vt_vem * dias_uteis);
@@ -369,7 +368,7 @@ export class BenefitComponent implements OnInit {
         this.vr_card += (vr_vr * dias_uteis) + (vc_vr * dias_uteis);
         this.caju_card += (vr_caju * dias_uteis) + (vc_caju * dias_uteis) + (vt_caju * dias_uteis);
 
-        this.all_expenses += this.vr_card + this.caju_card;
+        this.all_expenses = this.vr_card + this.caju_card;
       });
     }
   }
