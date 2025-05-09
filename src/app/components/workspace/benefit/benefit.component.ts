@@ -32,7 +32,7 @@ export class BenefitComponent implements OnInit {
 
   createEmployeeForm: FormGroup = new FormGroup({
     nome: new FormControl(''),
-    posicao: new FormControl(''),
+    funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
@@ -45,7 +45,7 @@ export class BenefitComponent implements OnInit {
   updateEmployeeForm: FormGroup = new FormGroup({
     id: new FormControl(null),
     nome: new FormControl(''),
-    posicao: new FormControl(''),
+    funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
@@ -116,7 +116,7 @@ export class BenefitComponent implements OnInit {
 
     const request = {
       nome: this.createEmployeeForm.value.nome,
-      posicao: this.createEmployeeForm.value.posicao,
+      funcao: this.createEmployeeForm.value.funcao,
       setor: this.createEmployeeForm.value.setor,
       contrato: this.createEmployeeForm.value.contrato,
       centro_custo: this.createEmployeeForm.value.centro_custo,
@@ -126,7 +126,7 @@ export class BenefitComponent implements OnInit {
       vem: this.createEmployeeForm.value.vem
     }
 
-    if (!request.nome || !request.posicao || !request.setor || !request.contrato || !request.centro_custo) {
+    if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
       this.setErrorMessage('Preencha todos os campos.');
       return;
     }
@@ -153,7 +153,7 @@ export class BenefitComponent implements OnInit {
     const request = {
       id: this.updateEmployeeForm.value.id,
       nome: this.updateEmployeeForm.value.nome,
-      posicao: this.updateEmployeeForm.value.posicao,
+      funcao: this.updateEmployeeForm.value.funcao,
       setor: this.updateEmployeeForm.value.setor,
       contrato: this.updateEmployeeForm.value.contrato,
       centro_custo: this.updateEmployeeForm.value.centro_custo,
@@ -163,7 +163,7 @@ export class BenefitComponent implements OnInit {
       vem: this.updateEmployeeForm.value.vem
     }
 
-    if (!request.nome || !request.posicao || !request.setor || !request.contrato || !request.centro_custo) {
+    if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
       this.setErrorMessage('Preencha todos os campos.');
       return;
     }
