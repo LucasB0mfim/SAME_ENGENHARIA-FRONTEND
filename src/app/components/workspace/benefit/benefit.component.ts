@@ -86,13 +86,15 @@ export class BenefitComponent implements OnInit {
   successMessage: string = '';
 
   // ========== VALORES INICIAS DOS BENEFÍCIOS ========== //
+  vr_caju: number = 0;
+  vr_vr: number = 0;
+  vt_caju: number = 0;
+  vt_vem: number = 0;
+  vc_caju: number = 0;
+  vc_vr: number = 0;
+  total_caju: number = 0;
   total_vr: number = 0;
-  total_vt: number = 0;
-  total_vc: number = 0;
-
-  vr_card: number = 0;
-  caju_card: number = 0;
-  all_expenses: number = 0;
+  total_expense: number = 0;
 
   // ========== HOOK ========== //
   ngOnInit(): void {
@@ -340,13 +342,15 @@ export class BenefitComponent implements OnInit {
 
   // ========== UTILITÁRIOS ========== //
   calculateTotals() {
+    this.vr_caju = 0;
+    this.vr_vr = 0;
+    this.vt_caju = 0;
+    this.vt_vem = 0;
+    this.vc_caju = 0;
+    this.vc_vr = 0;
+    this.total_caju = 0;
     this.total_vr = 0;
-    this.total_vt = 0;
-    this.total_vc = 0;
-
-    this.vr_card = 0;
-    this.caju_card = 0;
-    this.all_expenses = 0;
+    this.total_expense = 0;
 
     if (this.items && this.items.length > 0) {
       this.items.forEach(item => {
@@ -361,14 +365,19 @@ export class BenefitComponent implements OnInit {
         const vt_caju = item.vt_caju;
         const vt_vem = item.vt_vem;
 
-        this.total_vr += (vr_caju * dias_uteis) + (vr_vr * dias_uteis);
-        this.total_vc += (vc_caju * dias_uteis) + (vc_vr * dias_uteis);
-        this.total_vt += (vt_caju * dias_uteis) + (vt_vem * dias_uteis);
+        this.vr_caju += (vr_caju * dias_uteis);
+        this.vr_vr += (vr_vr * dias_uteis);
 
-        this.vr_card += (vr_vr * dias_uteis) + (vc_vr * dias_uteis);
-        this.caju_card += (vr_caju * dias_uteis) + (vc_caju * dias_uteis) + (vt_caju * dias_uteis);
+        this.vt_caju += (vt_caju * dias_uteis);
+        this.vt_vem += (vt_vem * dias_uteis);
 
-        this.all_expenses = this.vr_card + this.caju_card;
+        this.vc_caju += (vc_caju * dias_uteis);
+        this.vc_vr += (vc_vr * dias_uteis)
+
+        this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
+        this.total_vr = this.vr_vr + this.vc_vr;
+
+        this.total_expense = this.total_caju + this.total_vr;
       });
     }
   }

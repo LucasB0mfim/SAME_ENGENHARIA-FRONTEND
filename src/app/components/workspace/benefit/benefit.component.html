@@ -57,29 +57,56 @@
 
   <section class="grafic__container" *ngIf="geralSection">
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Refeição</h2>
+      <h2 class="grafic__title">Vale Refeição (CAJU)</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(total_vr) }}</span>
+          <span class="value">{{ formatCurrency(vr_caju) }}</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Transporte</h2>
+      <h2 class="grafic__title">Vale Refeição (VR)</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(total_vt) }}</span>
+          <span class="value">{{ formatCurrency(vr_vr) }}</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Combustível</h2>
+      <h2 class="grafic__title">Vale Transporte (CAJU)</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(total_vc) }}</span>
+          <span class="value">{{ formatCurrency(vt_caju) }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="grafic__card">
+      <h2 class="grafic__title">Vale Transporte (VEM)</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(vt_vem) }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="grafic__card">
+      <h2 class="grafic__title">Vale Combustível (CAJU)</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(vc_caju) }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="grafic__card">
+      <h2 class="grafic__title">Vale Combustível (VR)</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(vc_vr) }}</span>
         </div>
       </div>
     </article>
@@ -88,7 +115,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(caju_card) }}</span>
+          <span class="value">{{ formatCurrency(total_caju) }}</span>
         </div>
       </div>
     </article>
@@ -97,7 +124,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vr_card) }}</span>
+          <span class="value">{{ formatCurrency(total_vr) }}</span>
         </div>
       </div>
     </article>
@@ -106,7 +133,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(all_expenses) }}</span>
+          <span class="value">{{ formatCurrency(total_expense) }}</span>
         </div>
       </div>
     </article>
