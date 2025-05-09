@@ -36,10 +36,12 @@ export class BenefitComponent implements OnInit {
     setor: new FormControl(''),
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
-    vr: new FormControl(null),
-    vt: new FormControl(null),
-    vc: new FormControl(null),
-    vem: new FormControl(null)
+    vr_caju: new FormControl(null),
+    vr_vr: new FormControl(null),
+    vc_caju: new FormControl(null),
+    vc_vr: new FormControl(null),
+    vt_caju: new FormControl(null),
+    vt_vem: new FormControl(null)
   })
 
   updateEmployeeForm: FormGroup = new FormGroup({
@@ -49,10 +51,12 @@ export class BenefitComponent implements OnInit {
     setor: new FormControl(''),
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
-    vr: new FormControl(null),
-    vt: new FormControl(null),
-    vc: new FormControl(null),
-    vem: new FormControl(null)
+    vr_caju: new FormControl(null),
+    vr_vr: new FormControl(null),
+    vc_caju: new FormControl(null),
+    vc_vr: new FormControl(null),
+    vt_caju: new FormControl(null),
+    vt_vem: new FormControl(null)
   })
 
   // ========== ESTADOS ========== //
@@ -82,12 +86,13 @@ export class BenefitComponent implements OnInit {
   successMessage: string = '';
 
   // ========== VALORES INICIAS DOS BENEFÍCIOS ========== //
-  totalVR: number = 0;
-  totalVT: number = 0;
-  totalVC: number = 0;
-  totalVEM: number = 0;
-  totalCAJU: number = 0;
-  totalCost: number = 0;
+  total_vr: number = 0;
+  total_vt: number = 0;
+  total_vc: number = 0;
+
+  vr_card: number = 0;
+  caju_card: number = 0;
+  all_expenses: number = 0;
 
   // ========== HOOK ========== //
   ngOnInit(): void {
@@ -120,14 +125,17 @@ export class BenefitComponent implements OnInit {
       setor: this.createEmployeeForm.value.setor,
       contrato: this.createEmployeeForm.value.contrato,
       centro_custo: this.createEmployeeForm.value.centro_custo,
-      vr: this.createEmployeeForm.value.vr,
-      vt: this.createEmployeeForm.value.vt,
-      vc: this.createEmployeeForm.value.vc,
-      vem: this.createEmployeeForm.value.vem
+      vr_caju: this.createEmployeeForm.value.vr_caju || 0,
+      vr_vr: this.createEmployeeForm.value.vr_vr || 0,
+      vc_caju: this.createEmployeeForm.value.vc_caju || 0,
+      vc_vr: this.createEmployeeForm.value.vc_vr || 0,
+      vt_caju: this.createEmployeeForm.value.vt_caju || 0,
+      vt_vem: this.createEmployeeForm.value.vt_vem || 0
     }
 
     if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
       this.setErrorMessage('Preencha todos os campos.');
+      this.isCreating = false;
       return;
     }
 
@@ -157,14 +165,19 @@ export class BenefitComponent implements OnInit {
       setor: this.updateEmployeeForm.value.setor,
       contrato: this.updateEmployeeForm.value.contrato,
       centro_custo: this.updateEmployeeForm.value.centro_custo,
-      vr: this.updateEmployeeForm.value.vr,
-      vt: this.updateEmployeeForm.value.vt,
-      vc: this.updateEmployeeForm.value.vc,
-      vem: this.updateEmployeeForm.value.vem
+      vr_caju: this.updateEmployeeForm.value.vr_caju || 0,
+      vr_vr: this.updateEmployeeForm.value.vr_vr || 0,
+      vc_caju: this.updateEmployeeForm.value.vc_caju || 0,
+      vc_vr: this.updateEmployeeForm.value.vc_vr || 0,
+      vt_caju: this.updateEmployeeForm.value.vt_caju || 0,
+      vt_vem: this.updateEmployeeForm.value.vt_vem || 0
     }
+
+    console.log(request)
 
     if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
       this.setErrorMessage('Preencha todos os campos.');
+      this.isUpdating = false;
       return;
     }
 
@@ -263,14 +276,16 @@ export class BenefitComponent implements OnInit {
     this.updateEmployeeForm.patchValue({
       id: employee.id,
       nome: employee.nome,
-      posicao: employee.posicao,
+      funcao: employee.funcao,
       setor: employee.setor,
       contrato: employee.contrato,
       centro_custo: employee.centro_custo,
-      vr: employee.vr,
-      vt: employee.vt,
-      vc: employee.vc,
-      vem: employee.vem
+      vr_caju: employee.vr_caju,
+      vr_vr: employee.vr_vr,
+      vc_caju: employee.vc_caju,
+      vc_vr: employee.vc_vr,
+      vt_caju: employee.vt_caju,
+      vt_vem: employee.vt_vem
     });
   }
 
@@ -297,6 +312,11 @@ export class BenefitComponent implements OnInit {
     this.findEmployee();
   }
 
+  cancelCreateEmployee(): void {
+    this.addEmployee = false;
+    this.resetForm();
+  }
+
   // ========== MOSTRAR MENSAGENS ========== //
   setErrorMessage(message: string): void {
     this.errorMessage = message;
@@ -320,27 +340,36 @@ export class BenefitComponent implements OnInit {
 
   // ========== UTILITÁRIOS ========== //
   calculateTotals() {
-    this.totalVR = 0;
-    this.totalVT = 0;
-    this.totalVC = 0;
-    this.totalVEM = 0;
-    this.totalCAJU = 0;
-    this.totalCost = 0;
+    this.total_vr = 0;
+    this.total_vt = 0;
+    this.total_vc = 0;
+
+    this.vr_card = 0;
+    this.caju_card = 0;
+    this.all_expenses = 0;
 
     if (this.items && this.items.length > 0) {
       this.items.forEach(item => {
-        const diasUteis = item.dias_uteis;
-        const vr = item.vr;
-        const vt = item.vt;
-        const vc = item.vc;
-        const vem = item.vem;
+        const dias_uteis = item.dias_uteis;
 
-        this.totalVR += vr * diasUteis;
-        this.totalVT += vt * diasUteis;
-        this.totalVC += vc * diasUteis;
-        this.totalVEM += vem * diasUteis;
-        this.totalCAJU = this.totalVR + this.totalVT + this.totalVC;
-        this.totalCost = this.totalVR + this.totalVT + this.totalVC + this.totalVEM;
+        const vr_caju = item.vr_caju;
+        const vr_vr = item.vr_vr;
+
+        const vc_caju = item.vc_caju;
+        const vc_vr = item.vc_vr;
+
+        const vt_caju = item.vt_caju;
+        const vt_vem = item.vt_vem;
+
+
+        this.total_vr += (vr_caju * dias_uteis) + (vr_vr * dias_uteis);
+        this.total_vc += (vc_caju * dias_uteis) + (vc_vr * dias_uteis);
+        this.total_vt += (vt_caju * dias_uteis) + (vt_vem * dias_uteis);
+
+        this.vr_card += (vr_vr * dias_uteis) + (vc_vr * dias_uteis);
+        this.caju_card += (vr_caju * dias_uteis) + (vc_caju * dias_uteis) + (vt_caju * dias_uteis);
+
+        this.all_expenses += this.vr_card + this.caju_card;
       });
     }
   }
@@ -373,17 +402,19 @@ export class BenefitComponent implements OnInit {
     }
   }
 
-  resetForm():void {
+  resetForm(): void {
     this.createEmployeeForm.reset({
       nome: null,
-      posicao: '',
+      funcao: '',
       setor: '',
       contrato: '',
       centro_custo: '',
-      vr: null,
-      vt: null,
-      vc: null,
-      vem: null
+      vr_caju: null,
+      vr_vr: null,
+      vc_caju: null,
+      vc_vr: null,
+      vt_caju: null,
+      vt_vem: null
     })
   }
 }

@@ -61,7 +61,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalVR) }}</span>
+          <span class="value">{{ formatCurrency(total_vr) }}</span>
         </div>
       </div>
     </article>
@@ -70,7 +70,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalVT) }}</span>
+          <span class="value">{{ formatCurrency(total_vt) }}</span>
         </div>
       </div>
     </article>
@@ -79,7 +79,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalVC) }}</span>
+          <span class="value">{{ formatCurrency(total_vc) }}</span>
         </div>
       </div>
     </article>
@@ -88,16 +88,16 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalCAJU) }}</span>
+          <span class="value">{{ formatCurrency(caju_card) }}</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">VEM</h2>
+      <h2 class="grafic__title">VR</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalVEM) }}</span>
+          <span class="value">{{ formatCurrency(vr_card) }}</span>
         </div>
       </div>
     </article>
@@ -106,7 +106,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalCost) }}</span>
+          <span class="value">{{ formatCurrency(all_expenses) }}</span>
         </div>
       </div>
     </article>
@@ -269,20 +269,28 @@
             </select>
           </div>
           <div class="form__group">
-            <label for="vr">Vale Refeição</label>
-            <input id="vr" type="number" placeholder="0.00" formControlName="vr" class="form__input">
+            <label for="vr_caju">Vale Refeição (CAJU)</label>
+            <input id="vr_caju" type="number" placeholder="0.00" formControlName="vr_caju" class="form__input">
           </div>
           <div class="form__group">
-            <label for="vt">Vale Transporte</label>
-            <input id="vt" type="number" placeholder="0.00" formControlName="vt" class="form__input">
+            <label for="vr_vr">Vale Refeição (VR)</label>
+            <input id="vr_vr" type="number" placeholder="0.00" formControlName="vr_vr" class="form__input">
           </div>
           <div class="form__group">
-            <label for="vc">Vale Combustível</label>
-            <input id="vc" type="number" placeholder="0.00" formControlName="vc" class="form__input">
+            <label for="vc_caju">Vale Combustível (CAJU)</label>
+            <input id="vc_caju" type="number" placeholder="0.00" formControlName="vc_caju" class="form__input">
           </div>
           <div class="form__group">
-            <label for="vem">VEM</label>
-            <input id="vem" type="number" placeholder="0.00" formControlName="vem" class="form__input">
+            <label for="vc_vr">Vale Combustível (VR)</label>
+            <input id="vc_vr" type="number" placeholder="0.00" formControlName="vc_vr" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="vt_caju">Vale Transporte (CAJU)</label>
+            <input id="vt_caju" type="number" placeholder="0.00" formControlName="vt_caju" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="vt_vem">Vale Transporte (VEM)</label>
+            <input id="vt_vem" type="number" placeholder="0.00" formControlName="vt_vem" class="form__input">
           </div>
         </div>
         <div class="form__footer">
@@ -292,7 +300,7 @@
             <span>{{ errorMessage }}</span>
           </div>
           }
-          <button type="button" class="btn btn--quaternary" (click)="addEmployee = false">Cancelar</button>
+          <button type="button" class="btn btn--quaternary" (click)="cancelCreateEmployee()">Cancelar</button>
           <button type="submit" class="btn btn--primary">
             @if (isCreating) {
             <div class="loading-dots">
@@ -377,23 +385,37 @@
             </select>
           </div>
           <div class="form__group">
-            <label for="edit-vr">Vale Refeição</label>
-            <input id="edit-vr" type="number" placeholder="0.00" formControlName="vr" class="form__input">
+            <label for="edit-vr_caju">Vale Refeição (CAJU)</label>
+            <input id="edit-vr_caju" type="number" placeholder="0.00" formControlName="vr_caju" class="form__input">
           </div>
           <div class="form__group">
-            <label for="edit-vt">Vale Transporte</label>
-            <input id="edit-vt" type="number" placeholder="0.00" formControlName="vt" class="form__input">
+            <label for="edit-vr_vr">Vale Refeição (VR)</label>
+            <input id="edit-vr_vr" type="number" placeholder="0.00" formControlName="vr_vr" class="form__input">
           </div>
           <div class="form__group">
-            <label for="edit-vc">Vale Combustível</label>
-            <input id="edit-vc" type="number" placeholder="0.00" formControlName="vc" class="form__input">
+            <label for="edit-vc_caju">Vale Combustível (CAJU)</label>
+            <input id="edit-vc_caju" type="number" placeholder="0.00" formControlName="vc_caju" class="form__input">
           </div>
           <div class="form__group">
-            <label for="edit-vem">VEM</label>
-            <input id="edit-vem" type="number" placeholder="0.00" formControlName="vem" class="form__input">
+            <label for="edit-vc_vr">Vale Combustível (VR)</label>
+            <input id="edit-vc_vr" type="number" placeholder="0.00" formControlName="vc_vr" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-vt_caju">Vale Transporte (CAJU)</label>
+            <input id="edit-vt_caju" type="number" placeholder="0.00" formControlName="vt_caju" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-vt_vem">Vale Transporte (VEM)</label>
+            <input id="edit-vt_vem" type="number" placeholder="0.00" formControlName="vt_vem" class="form__input">
           </div>
         </div>
         <div class="form__footer">
+          @if (showError) {
+            <div class="form__message form__message--error">
+              <mat-icon>error</mat-icon>
+              <span>{{ errorMessage }}</span>
+            </div>
+            }
           <button type="button" class="btn btn--danger" (click)="deleteEmployee()">
             @if (isDeleting) {
             <div class="loading-dots">
