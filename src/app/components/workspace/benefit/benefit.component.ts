@@ -27,7 +27,8 @@ export class BenefitComponent implements OnInit {
 
   createRecordForm: FormGroup = new FormGroup({
     ano_mes: new FormControl(''),
-    dias_uteis: new FormControl('')
+    dias_uteis: new FormControl(''),
+    dias_nao_uteis: new FormControl(''),
   })
 
   createEmployeeForm: FormGroup = new FormGroup({
@@ -41,8 +42,7 @@ export class BenefitComponent implements OnInit {
     vc_caju: new FormControl(null),
     vc_vr: new FormControl(null),
     vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null),
-    extra: new FormControl(null),
+    vt_vem: new FormControl(null)
   })
 
   updateEmployeeForm: FormGroup = new FormGroup({
@@ -57,8 +57,7 @@ export class BenefitComponent implements OnInit {
     vc_caju: new FormControl(null),
     vc_vr: new FormControl(null),
     vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null),
-    extra: new FormControl(null),
+    vt_vem: new FormControl(null)
   })
 
   // ========== ESTADOS ========== //
@@ -101,6 +100,10 @@ export class BenefitComponent implements OnInit {
   total_vr: number = 0;
   total_expense: number = 0;
 
+  vr: number = 0;
+  vt: number = 0;
+  vc: number = 0;
+
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
@@ -138,8 +141,7 @@ export class BenefitComponent implements OnInit {
       vc_caju: this.createEmployeeForm.value.vc_caju || 0,
       vc_vr: this.createEmployeeForm.value.vc_vr || 0,
       vt_caju: this.createEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.createEmployeeForm.value.vt_vem || 0,
-      extra: this.createEmployeeForm.value.extra || 0
+      vt_vem: this.createEmployeeForm.value.vt_vem || 0
     }
 
     if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
@@ -179,8 +181,7 @@ export class BenefitComponent implements OnInit {
       vc_caju: this.updateEmployeeForm.value.vc_caju || 0,
       vc_vr: this.updateEmployeeForm.value.vc_vr || 0,
       vt_caju: this.updateEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.updateEmployeeForm.value.vt_vem || 0,
-      extra: this.updateEmployeeForm.value.extra || 0
+      vt_vem: this.updateEmployeeForm.value.vt_vem || 0
     }
 
     console.log(request)
@@ -256,10 +257,16 @@ export class BenefitComponent implements OnInit {
 
     const request = {
       ano_mes: this.createRecordForm.value.ano_mes,
-      dias_uteis: this.createRecordForm.value.dias_uteis
+      dias_uteis: this.createRecordForm.value.dias_uteis,
+      dias_nao_uteis: this.createRecordForm.value.dias_nao_uteis
     }
 
-    if (request.dias_uteis <= 20) {
+    if (request.dias_uteis < 20) {
+      this.setErrorMessage('Define uma quantidade válida.');
+      return;
+    }
+
+    if (request.dias_nao_uteis < 7) {
       this.setErrorMessage('Define uma quantidade válida.');
       return;
     }
@@ -295,8 +302,7 @@ export class BenefitComponent implements OnInit {
       vc_caju: employee.vc_caju,
       vc_vr: employee.vc_vr,
       vt_caju: employee.vt_caju,
-      vt_vem: employee.vt_vem,
-      extra: employee.extra
+      vt_vem: employee.vt_vem
     });
   }
 
@@ -365,7 +371,6 @@ export class BenefitComponent implements OnInit {
 
   // ========== UTILITÁRIOS ========== //
   calculateTotals() {
-    // Zera os acumuladores
     this.vr_caju = 0;
     this.vr_vr = 0;
     this.vt_caju = 0;
@@ -376,15 +381,21 @@ export class BenefitComponent implements OnInit {
     this.total_vr = 0;
     this.total_expense = 0;
 
+    this.vr = 0;
+    this.vt = 0;
+    this.vc = 0;
+
     if (!this.items || this.items.length === 0) return;
 
     this.items.forEach(item => {
-      const { dias_uteis, vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
+      const { dias_uteis, dias_nao_uteis, vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
 
       if (vr_caju > 50) this.vr_caju += vr_caju;
+      if (vr_caju > 25 && vr_caju < 35) this.vr_caju = + vr_caju * dias_nao_uteis;
       else this.vr_caju += vr_caju * dias_uteis;
 
       if (vr_vr > 50) this.vr_vr += vr_vr;
+      if (vr_vr > 25 && vr_caju < 35) this.vr_vr += vr_vr * dias_nao_uteis;
       else this.vr_vr += vr_vr * dias_uteis;
 
       if (vc_caju > 50) this.vc_caju += vc_caju;
@@ -398,6 +409,10 @@ export class BenefitComponent implements OnInit {
 
       if (vt_vem > 50) this.vt_vem += vt_vem;
       else this.vt_vem += vt_vem * dias_uteis;
+
+      this.vr = this.vr_caju + this.vc_vr;
+      this.vt = this.vt_caju + this.vt_caju + this.vt_vem;
+      this.vc = this.vc_caju + this.vc_vr;
     });
 
     this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
