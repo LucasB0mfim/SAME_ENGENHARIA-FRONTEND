@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
@@ -10,7 +10,7 @@ import { BenefitService } from '../../../core/services/benefit.service';
 
 @Component({
   selector: 'app-benefit',
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './benefit.component.html',
   styleUrl: './benefit.component.scss'
 })
@@ -41,7 +41,8 @@ export class BenefitComponent implements OnInit {
     vc_caju: new FormControl(null),
     vc_vr: new FormControl(null),
     vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null)
+    vt_vem: new FormControl(null),
+    extra: new FormControl(null),
   })
 
   updateEmployeeForm: FormGroup = new FormGroup({
@@ -56,12 +57,14 @@ export class BenefitComponent implements OnInit {
     vc_caju: new FormControl(null),
     vc_vr: new FormControl(null),
     vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null)
+    vt_vem: new FormControl(null),
+    extra: new FormControl(null),
   })
 
   // ========== ESTADOS ========== //
   items: any[] = [];
   employees: any[] = [];
+  filteredItem: any[] = [];
 
   activeButton: string = 'geral';
   geralSection: boolean = true;
@@ -75,6 +78,8 @@ export class BenefitComponent implements OnInit {
   isLoading: boolean = false;
   isDeleting: boolean = false;
   isUpdating: boolean = false;
+
+  employee: string = '';
 
   addEmployee: boolean = false;
   editEmployee: boolean = false;
@@ -109,6 +114,7 @@ export class BenefitComponent implements OnInit {
     this._benefitService.findAll().subscribe({
       next: (data) => {
         this.employees = data.result;
+        this.filteredItem = [...this.employees];
         this.isLoading = false;
       },
       error: (error) => {
@@ -122,7 +128,7 @@ export class BenefitComponent implements OnInit {
     this.isCreating = true;
 
     const request = {
-      nome: this.createEmployeeForm.value.nome,
+      nome: this.upperCase(this.createEmployeeForm.value.nome),
       funcao: this.createEmployeeForm.value.funcao,
       setor: this.createEmployeeForm.value.setor,
       contrato: this.createEmployeeForm.value.contrato,
@@ -132,7 +138,8 @@ export class BenefitComponent implements OnInit {
       vc_caju: this.createEmployeeForm.value.vc_caju || 0,
       vc_vr: this.createEmployeeForm.value.vc_vr || 0,
       vt_caju: this.createEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.createEmployeeForm.value.vt_vem || 0
+      vt_vem: this.createEmployeeForm.value.vt_vem || 0,
+      extra: this.createEmployeeForm.value.extra || 0
     }
 
     if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
@@ -162,7 +169,7 @@ export class BenefitComponent implements OnInit {
 
     const request = {
       id: this.updateEmployeeForm.value.id,
-      nome: this.updateEmployeeForm.value.nome,
+      nome: this.upperCase(this.updateEmployeeForm.value.nome),
       funcao: this.updateEmployeeForm.value.funcao,
       setor: this.updateEmployeeForm.value.setor,
       contrato: this.updateEmployeeForm.value.contrato,
@@ -172,7 +179,8 @@ export class BenefitComponent implements OnInit {
       vc_caju: this.updateEmployeeForm.value.vc_caju || 0,
       vc_vr: this.updateEmployeeForm.value.vc_vr || 0,
       vt_caju: this.updateEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.updateEmployeeForm.value.vt_vem || 0
+      vt_vem: this.updateEmployeeForm.value.vt_vem || 0,
+      extra: this.updateEmployeeForm.value.extra || 0
     }
 
     console.log(request)
@@ -287,8 +295,23 @@ export class BenefitComponent implements OnInit {
       vc_caju: employee.vc_caju,
       vc_vr: employee.vc_vr,
       vt_caju: employee.vt_caju,
-      vt_vem: employee.vt_vem
+      vt_vem: employee.vt_vem,
+      extra: employee.extra
     });
+  }
+
+  // ========== BUSCAR COLABORADOR ========== //
+  applyFilters() {
+    let data = [...this.filteredItem];
+
+    if (this.employee) {
+      const inputValue = this.employee.toUpperCase();
+      data = data.filter(data =>
+        data.nome.toUpperCase().includes(inputValue)
+      );
+    }
+
+    this.employees = data;
   }
 
   // ========== TROCAR ENTRE TELAS ========== //
@@ -342,6 +365,7 @@ export class BenefitComponent implements OnInit {
 
   // ========== UTILITÁRIOS ========== //
   calculateTotals() {
+    // Zera os acumuladores
     this.vr_caju = 0;
     this.vr_vr = 0;
     this.vt_caju = 0;
@@ -352,35 +376,35 @@ export class BenefitComponent implements OnInit {
     this.total_vr = 0;
     this.total_expense = 0;
 
-    if (this.items && this.items.length > 0) {
-      this.items.forEach(item => {
-        const dias_uteis = item.dias_uteis;
+    if (!this.items || this.items.length === 0) return;
 
-        const vr_caju = item.vr_caju;
-        const vr_vr = item.vr_vr;
+    this.items.forEach(item => {
+      const { dias_uteis, vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
 
-        const vc_caju = item.vc_caju;
-        const vc_vr = item.vc_vr;
+      if (vr_caju > 50) this.vr_caju += vr_caju;
+      else this.vr_caju += vr_caju * dias_uteis;
 
-        const vt_caju = item.vt_caju;
-        const vt_vem = item.vt_vem;
+      if (vr_vr > 50) this.vr_vr += vr_vr;
+      else this.vr_vr += vr_vr * dias_uteis;
 
-        this.vr_caju += (vr_caju * dias_uteis);
-        this.vr_vr += (vr_vr * dias_uteis);
+      if (vc_caju > 50) this.vc_caju += vc_caju;
+      else this.vc_caju += vc_caju * dias_uteis;
 
-        this.vt_caju += (vt_caju * dias_uteis);
-        this.vt_vem += (vt_vem * dias_uteis);
+      if (vc_vr > 50) this.vc_vr += vc_vr;
+      else this.vc_vr += vc_vr * dias_uteis;
 
-        this.vc_caju += (vc_caju * dias_uteis);
-        this.vc_vr += (vc_vr * dias_uteis)
+      if (vt_caju > 50) this.vt_caju += vt_caju;
+      else this.vt_caju += vt_caju * dias_uteis;
 
-        this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
-        this.total_vr = this.vr_vr + this.vc_vr;
+      if (vt_vem > 50) this.vt_vem += vt_vem;
+      else this.vt_vem += vt_vem * dias_uteis;
+    });
 
-        this.total_expense = this.total_caju + this.total_vr;
-      });
-    }
+    this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
+    this.total_vr = this.vr_vr + this.vc_vr;
+    this.total_expense = this.total_caju + this.total_vr + this.vt_vem;
   }
+
 
   formatCurrency(value: number): string {
     return value.toLocaleString('pt-BR', {
@@ -408,6 +432,10 @@ export class BenefitComponent implements OnInit {
     } else {
       return '0.00';
     }
+  }
+
+  upperCase(string: string): string {
+    return string.toUpperCase().trim();
   }
 
   resetForm(): void {

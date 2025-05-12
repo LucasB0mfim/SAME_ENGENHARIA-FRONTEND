@@ -20,7 +20,7 @@
         <button [class.active]="activeButton === 'employee'" (click)="activeButton = 'employee'; showEmployee()"
           class="btn btn--secondary">COLABORADORES</button>
       </div>
-      <div class="filter">
+      <div class="filter" *ngIf="employeeSection">
         <button (click)="createRecordSection = true" class="btn btn--secondary">GERAR REGISTRO</button>
       </div>
     </div>
@@ -49,6 +49,10 @@
 
       @if (employeeSection) {
       <div class="filter">
+        <input type="text" class="btn btn--secondary" placeholder="BUSCAR" [(ngModel)]="employee"
+          (input)="applyFilters()">
+      </div>
+      <div class="filter">
         <button (click)="addEmployee = true" class="btn btn--primary">+ NOVO</button>
       </div>
       }
@@ -75,24 +79,6 @@
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Transporte (CAJU)</h2>
-      <div class="grafic__circle">
-        <div class="circle-content">
-          <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vt_caju) }}</span>
-        </div>
-      </div>
-    </article>
-    <article class="grafic__card">
-      <h2 class="grafic__title">Vale Transporte (VEM)</h2>
-      <div class="grafic__circle">
-        <div class="circle-content">
-          <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vt_vem) }}</span>
-        </div>
-      </div>
-    </article>
-    <article class="grafic__card">
       <h2 class="grafic__title">Vale Combustível (CAJU)</h2>
       <div class="grafic__circle">
         <div class="circle-content">
@@ -107,6 +93,24 @@
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vc_vr) }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="grafic__card">
+      <h2 class="grafic__title">Vale Transporte (CAJU)</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(vt_caju) }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="grafic__card">
+      <h2 class="grafic__title">Vale Transporte (VEM)</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(vt_vem) }}</span>
         </div>
       </div>
     </article>
@@ -236,7 +240,7 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-          <div class="form__group form__group--full">
+          <div class="form__group">
             <label for="nome">Nome</label>
             <input id="nome" type="text" placeholder="Nome completo" formControlName="nome" class="form__input">
           </div>
@@ -244,14 +248,20 @@
             <label for="funcao">Função</label>
             <select id="funcao" formControlName="funcao" class="form__select">
               <option value="" disabled selected>Selecione uma função</option>
+              <option value="ARMADOR">ARMADOR</option>
               <option value="DIRETOR">DIRETOR</option>
               <option value="SERVENTE">SERVENTE</option>
               <option value="PEDREIRO">PEDREIRO</option>
               <option value="AUXILIAR">AUXILIAR</option>
               <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
               <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
               <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
               <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
             </select>
           </div>
           <div class="form__group">
@@ -282,19 +292,16 @@
             <label for="centro_custo">Centro de Custo</label>
             <select id="centro_custo" formControlName="centro_custo" class="form__select">
               <option value="" disabled selected>Selecione um centro de custo</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
               <option value="BRK - OS">BRK - OS</option>
-              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="BRK HH - IMPERMEABILIZAÇAO">BRK HH - IMPERMEABILIZAÇAO</option>
+              <option value="BRK - HH">BRK - HH</option>
               <option value="EMLURB">EMLURB</option>
-              <option value="ETE CABANGA - COMPLEMENTO MURO">ETE CABANGA - COMPLEMENTO MURO</option>
-              <option value="ETES 02 CURADO">ETES 02 CURADO</option>
-              <option value="HEINEKEN ALAGOINHAS">HEINEKEN ALAGOINHAS</option>
-              <option value="MERCADO BOA VISTA">MERCADO BOA VISTA</option>
-              <option value="US IRMÃ DENIZE">US IRMÃ DENIZE</option>
-              <option value="US PROFESSOR ANTÔNIO FRANCISCO AREIAS">US PROFESSOR ANTÔNIO FRANCISCO AREIAS</option>
-              <option value="USF DR LUIZ WILSON">USF DR LUIZ WILSON</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
             </select>
           </div>
           <div class="form__group">
@@ -320,6 +327,10 @@
           <div class="form__group">
             <label for="vt_vem">Vale Transporte (VEM)</label>
             <input id="vt_vem" type="number" placeholder="0.00" formControlName="vt_vem" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="extra">Extra</label>
+            <input id="extra" type="number" placeholder="0.00" formControlName="extra" class="form__input">
           </div>
         </div>
         <div class="form__footer">
@@ -354,7 +365,7 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-          <div class="form__group form__group--full">
+          <div class="form__group">
             <label for="edit-nome">Nome</label>
             <input id="edit-nome" type="text" placeholder="Nome completo" formControlName="nome" class="form__input">
           </div>
@@ -362,14 +373,20 @@
             <label for="edit-funcao">Função</label>
             <select id="edit-funcao" formControlName="funcao" class="form__select">
               <option value="" disabled>Selecione uma função</option>
+              <option value="ARMADOR">ARMADOR</option>
               <option value="DIRETOR">DIRETOR</option>
               <option value="SERVENTE">SERVENTE</option>
               <option value="PEDREIRO">PEDREIRO</option>
               <option value="AUXILIAR">AUXILIAR</option>
               <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
               <option value="ENGENHEIRO">ENGENHEIRO</option>
-              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
               <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
             </select>
           </div>
           <div class="form__group">
@@ -400,19 +417,16 @@
             <label for="edit-centro_custo">Centro de Custo</label>
             <select id="edit-centro_custo" formControlName="centro_custo" class="form__select">
               <option value="" disabled>Selecione um centro de custo</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
               <option value="BRK - OS">BRK - OS</option>
-              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="BRK HH - IMPERMEABILIZAÇAO">BRK HH - IMPERMEABILIZAÇAO</option>
+              <option value="BRK - HH">BRK - HH</option>
               <option value="EMLURB">EMLURB</option>
-              <option value="ETE CABANGA - COMPLEMENTO MURO">ETE CABANGA - COMPLEMENTO MURO</option>
-              <option value="ETES 02 CURADO">ETES 02 CURADO</option>
-              <option value="HEINEKEN ALAGOINHAS">HEINEKEN ALAGOINHAS</option>
-              <option value="MERCADO BOA VISTA">MERCADO BOA VISTA</option>
-              <option value="US IRMÃ DENIZE">US IRMÃ DENIZE</option>
-              <option value="US PROFESSOR ANTÔNIO FRANCISCO AREIAS">US PROFESSOR ANTÔNIO FRANCISCO AREIAS</option>
-              <option value="USF DR LUIZ WILSON">USF DR LUIZ WILSON</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
             </select>
           </div>
           <div class="form__group">
@@ -439,14 +453,18 @@
             <label for="edit-vt_vem">Vale Transporte (VEM)</label>
             <input id="edit-vt_vem" type="number" placeholder="0.00" formControlName="vt_vem" class="form__input">
           </div>
+          <div class="form__group">
+            <label for="edit-extra">Extra</label>
+            <input id="edit-extra" type="number" placeholder="0.00" formControlName="extra" class="form__input">
+          </div>
         </div>
         <div class="form__footer">
           @if (showError) {
-            <div class="form__message form__message--error">
-              <mat-icon>error</mat-icon>
-              <span>{{ errorMessage }}</span>
-            </div>
-            }
+          <div class="form__message form__message--error">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+          }
           <button type="button" class="btn btn--danger" (click)="deleteEmployee()">
             @if (isDeleting) {
             <div class="loading-dots">
