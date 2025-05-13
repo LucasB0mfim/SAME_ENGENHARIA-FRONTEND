@@ -26,6 +26,11 @@
     </div>
 
     <div class="filter__right">
+      <div class="filter">
+        <input type="text" class="btn btn--secondary" placeholder="BUSCAR" [(ngModel)]="employee"
+          (input)="applyFilters()">
+      </div>
+
       <form [formGroup]="recordForm" (ngSubmit)="findRecord()">
         @if (recordSection || geralSection) {
         <div class="filter">
@@ -48,10 +53,6 @@
       </form>
 
       @if (employeeSection) {
-      <div class="filter">
-        <input type="text" class="btn btn--secondary" placeholder="BUSCAR" [(ngModel)]="employee"
-          (input)="applyFilters()">
-      </div>
       <div class="filter">
         <button (click)="addEmployee = true" class="btn btn--primary">+ NOVO</button>
       </div>
@@ -182,31 +183,31 @@
         <div class="card__content">
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
-            <div class="card__title">R$ {{ vr || '0' }}</div>
+            <div class="card__title">{{ calculateDay(item.dias_uteis, item.vr_caju, item.vr_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
-            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, vr) || '0' }}</div>
+            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_nao_uteis, item.vr_caju, item.vr_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE DIA</div>
-            <div class="card__title">R$ {{ vt || '0' }}</div>
+            <div class="card__title">{{ calculateDay(item.dias_uteis, item.vt_caju, item.vt_vem) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, vt) || '0' }}</div>
+            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_nao_uteis, item.vt_caju, item.vt_vem) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
-            <div class="card__title">R$ {{ vc || '0' }}</div>
+            <div class="card__title">{{ calculateDay(item.dias_uteis, item.vc_caju, item.vc_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
-            <div class="card__title">R$ {{ totalMonth(item.dias_uteis, vc) || '0' }}</div>
+            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_nao_uteis, item.vc_caju, item.vc_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">R$ {{ totalExpense(item.dias_uteis, vr, vt, vc) || '0' }}</div>
+            <div class="card__title">{{totalExpense(item.dias_uteis, item.dias_nao_uteis, item.vr_caju, item.vr_vr, item.vt_caju, item.vt_vem, item.vc_caju, item.vc_vr)}}</div>
           </div>
         </div>
       </div>

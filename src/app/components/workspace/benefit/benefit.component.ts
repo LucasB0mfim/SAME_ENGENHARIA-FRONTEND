@@ -100,10 +100,6 @@ export class BenefitComponent implements OnInit {
   total_vr: number = 0;
   total_expense: number = 0;
 
-  vr: number = 0;
-  vt: number = 0;
-  vc: number = 0;
-
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
@@ -240,6 +236,7 @@ export class BenefitComponent implements OnInit {
       next: (data) => {
         this.items = data.result;
         this.calculateTotals();
+        this.filteredItem = [...this.items];
         this.isAlert = this.items.length === 0;
         this.isFind = false;
       },
@@ -318,6 +315,7 @@ export class BenefitComponent implements OnInit {
     }
 
     this.employees = data;
+    this.items = data;
   }
 
   // ========== TROCAR ENTRE TELAS ========== //
@@ -381,10 +379,6 @@ export class BenefitComponent implements OnInit {
     this.total_vr = 0;
     this.total_expense = 0;
 
-    this.vr = 0;
-    this.vt = 0;
-    this.vc = 0;
-
     if (!this.items || this.items.length === 0) return;
 
     this.items.forEach(item => {
@@ -409,10 +403,6 @@ export class BenefitComponent implements OnInit {
 
       if (vt_vem > 50) this.vt_vem += vt_vem;
       else this.vt_vem += vt_vem * dias_uteis;
-
-      this.vr = this.vr_caju + this.vc_vr;
-      this.vt = this.vt_caju + this.vt_caju + this.vt_vem;
-      this.vc = this.vc_caju + this.vc_vr;
     });
 
     this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
@@ -433,20 +423,48 @@ export class BenefitComponent implements OnInit {
     return `${month}/${year}`;
   }
 
-  totalMonth(workDays: number, benefit: number): string {
-    if (workDays) {
-      return (benefit * workDays).toFixed(2);
-    } else {
-      return '0.00';
-    }
+  calculateDay(workingDays: number, card1: number, card2: number): string {
+    let day = 0;
+    const addCards = card1 + card2;
+
+    if (card1 > 50 || card2 > 50) day = addCards / workingDays;
+    else day = addCards;
+
+    return `R$ ${day.toFixed(2)}`;
   }
 
-  totalExpense(workDays: number, vr: number, vt: number, vc: number): string {
-    if (workDays) {
-      return (vr * workDays + vt * workDays + vc * workDays).toFixed(2);
-    } else {
-      return '0.00';
-    }
+  calculateMonthly(workingDays: number, nonWorkingDays: number, card1: number, card2: number): string {
+    let vr_month = 0;
+    const addCards = card1 + card2;
+
+    if ((card1 > 25 && card1 < 35) || (card2 > 25 && card2 < 35)) vr_month = (addCards * workingDays) + (addCards * nonWorkingDays);
+    else if (card1 > 50 || card2 > 50) vr_month = addCards;
+    else vr_month = addCards * workingDays;
+
+    return `R$ ${vr_month.toFixed(2)}`;
+  }
+
+  totalExpense(workingDays: number, nonWorkingDays: number, vr_caju: number, vr_vr: number, vt_caju: number, vt_vem: number, vc_caju: number, vc_vr: number): string {
+    let vr = vr_caju + vr_vr;
+    let monthVr = 0;
+    let vt = vt_caju + vt_vem;
+    let monthVt = 0;
+    let vc = vc_caju + vc_vr;
+    let monthVc = 0;
+
+    if (vr > 50) monthVr = vr;
+    else if (vr > 25 && vr < 35) monthVr = (vr * workingDays) + (vr * nonWorkingDays)
+    else monthVr = vr * workingDays;
+
+    if (vt > 50) monthVt = vt;
+    else if (vt > 25 && vt < 35) monthVt = (vt * workingDays) + (vt * nonWorkingDays)
+    else monthVt = vt * workingDays;
+
+    if (vc > 50) monthVc = vc;
+    else if (vc > 25 && vc < 35) monthVc = (vc * workingDays) + (vc * nonWorkingDays)
+    else monthVc = vc * workingDays;
+
+    return `R$ ${(monthVr + monthVt + monthVc).toFixed(2)}`
   }
 
   upperCase(string: string): string {
