@@ -26,7 +26,7 @@
     </div>
 
     <div class="filter__right">
-      <div class="filter">
+      <div class="filter" *ngIf="recordSection || employeeSection">
         <input type="text" class="btn btn--secondary" placeholder="BUSCAR" [(ngModel)]="employee"
           (input)="applyFilters()">
       </div>
@@ -160,22 +160,22 @@
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__subtitle">DIAS DE TRABALHO: </div>
-            <div class="card__title">{{ item.dias_uteis || 'N/A' }}</div>
+            <div class="card__title">{{ item.dias_uteis + item.dias_extras - item.faltas || 0 }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">DIAS EXTRAS: </div>
-            <div class="card__title">{{ item.dias_extras || 'N/A' }}</div>
+            <div class="card__title">{{ item.dias_extras || 0 }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">FALTAS: </div>
-            <div class="card__title">{{ item.faltas || 'N/A' }}</div>
+            <div class="card__title">{{ item.faltas || 0 }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">ATESTADOS: </div>
-            <div class="card__title">{{ item.atestados || 'N/A' }}</div>
+            <div class="card__title">{{ item.atestados || 0 }}</div>
           </div>
         </div>
       </div>
@@ -183,31 +183,38 @@
         <div class="card__content">
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
-            <div class="card__title">{{ calculateDay(item.dias_uteis, item.vr_caju, item.vr_vr) }}</div>
+            <div class="card__title">{{ calculateDay(item.dias_uteis, item.dias_extras, item.faltas, item.vr_caju,
+              item.vr_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
-            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_nao_uteis, item.vr_caju, item.vr_vr) }}</div>
+            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_extras, item.faltas, item.vr_caju,
+              item.vr_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE DIA</div>
-            <div class="card__title">{{ calculateDay(item.dias_uteis, item.vt_caju, item.vt_vem) }}</div>
+            <div class="card__title">{{ calculateDay(item.dias_uteis, item.dias_extras, item.faltas, item.vt_caju,
+              item.vt_vem) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_nao_uteis, item.vt_caju, item.vt_vem) }}</div>
+            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_extras, item.faltas, item.vt_caju,
+              item.vt_vem) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
-            <div class="card__title">{{ calculateDay(item.dias_uteis, item.vc_caju, item.vc_vr) }}</div>
+            <div class="card__title">{{ calculateDay(item.dias_uteis, item.dias_extras, item.faltas, item.vc_caju,
+              item.vc_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
-            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_nao_uteis, item.vc_caju, item.vc_vr) }}</div>
+            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_extras, item.faltas, item.vc_caju,
+              item.vc_vr) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">{{totalExpense(item.dias_uteis, item.dias_nao_uteis, item.vr_caju, item.vr_vr, item.vt_caju, item.vt_vem, item.vc_caju, item.vc_vr)}}</div>
+            <div class="card__title">{{ totalExpense(item.dias_uteis, item.dias_extras, item.faltas, item.vr_caju,
+              item.vr_vr, item.vt_caju, item.vt_vem, item.vc_caju, item.vc_vr) }}</div>
           </div>
         </div>
       </div>

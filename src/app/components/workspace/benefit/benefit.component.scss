@@ -370,9 +370,10 @@
 
 .employees {
   width: calc(25% - 1vw);
-  height: 3vw;
+  padding: 1vw;
   box-sizing: border-box;
   display: flex;
+  text-align: center;
   align-items: center;
   justify-content: center;
   border-radius: 4px;

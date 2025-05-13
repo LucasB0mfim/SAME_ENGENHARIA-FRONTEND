@@ -7,7 +7,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TitleService } from '../../../core/services/title.service';
 import { BenefitService } from '../../../core/services/benefit.service';
 
-
 @Component({
   selector: 'app-benefit',
   imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
@@ -64,6 +63,7 @@ export class BenefitComponent implements OnInit {
   items: any[] = [];
   employees: any[] = [];
   filteredItem: any[] = [];
+  timesheet: any[] = [];
 
   activeButton: string = 'geral';
   geralSection: boolean = true;
@@ -230,11 +230,36 @@ export class BenefitComponent implements OnInit {
 
     const request = {
       data: this.recordForm.value.data
-    }
+    };
 
     this._benefitService.findRecord(request).subscribe({
-      next: (data) => {
-        this.items = data.result;
+      next: (data: any) => {
+        this.items = data.result.map((item: any) => {
+          const dias_extras = item.timesheet.filter(
+            (ts: any) => ts.evento_abono === 'Dia extra'
+          ).length;
+
+          const faltas = item.timesheet.filter(
+            (ts: any) =>
+              ts.falta === 'SIM' &&
+              ts.evento_abono === 'NÃO CONSTA' &&
+              (ts.jornada_realizada
+                ? Number(ts.jornada_realizada.split(':')[0]) <= 3
+                : false)
+          ).length;
+
+          const atestados = item.timesheet.filter(
+            (ts: any) => ts.evento_abono === 'Atestado Médico'
+          ).length;
+
+          return {
+            ...item,
+            dias_extras,
+            faltas,
+            atestados
+          };
+        });
+
         this.calculateTotals();
         this.filteredItem = [...this.items];
         this.isAlert = this.items.length === 0;
@@ -246,7 +271,7 @@ export class BenefitComponent implements OnInit {
         this.setErrorMessage('Erro ao buscar os registros.');
         this.isFind = false;
       }
-    })
+    });
   }
 
   createRecord(): void {
@@ -368,6 +393,11 @@ export class BenefitComponent implements OnInit {
   }
 
   // ========== UTILITÁRIOS ========== //
+  private getWorkedDays(workingDays: number, extraDays: number, absences: number): number {
+    const workedDays = workingDays + extraDays - absences;
+    return workedDays >= 0 ? workedDays : 0;
+  }
+
   calculateTotals() {
     this.vr_caju = 0;
     this.vr_vr = 0;
@@ -382,34 +412,38 @@ export class BenefitComponent implements OnInit {
     if (!this.items || this.items.length === 0) return;
 
     this.items.forEach(item => {
-      const { dias_uteis, dias_nao_uteis, vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
+      const workedDays = this.getWorkedDays(item.dias_uteis, item.dias_extras, item.faltas);
+      const { vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
 
+      // Vale Refeição (CAJU)
       if (vr_caju > 50) this.vr_caju += vr_caju;
-      if (vr_caju > 25 && vr_caju < 35) this.vr_caju = + vr_caju * dias_nao_uteis;
-      else this.vr_caju += vr_caju * dias_uteis;
+      else this.vr_caju += vr_caju * workedDays;
 
+      // Vale Refeição (VR)
       if (vr_vr > 50) this.vr_vr += vr_vr;
-      if (vr_vr > 25 && vr_caju < 35) this.vr_vr += vr_vr * dias_nao_uteis;
-      else this.vr_vr += vr_vr * dias_uteis;
+      else this.vr_vr += vr_vr * workedDays;
 
+      // Vale Combustível (CAJU)
       if (vc_caju > 50) this.vc_caju += vc_caju;
-      else this.vc_caju += vc_caju * dias_uteis;
+      else this.vc_caju += vc_caju * workedDays;
 
+      // Vale Combustível (VR)
       if (vc_vr > 50) this.vc_vr += vc_vr;
-      else this.vc_vr += vc_vr * dias_uteis;
+      else this.vc_vr += vc_vr * workedDays;
 
+      // Vale Transporte (CAJU)
       if (vt_caju > 50) this.vt_caju += vt_caju;
-      else this.vt_caju += vt_caju * dias_uteis;
+      else this.vt_caju += vt_caju * workedDays;
 
+      // Vale Transporte (VEM)
       if (vt_vem > 50) this.vt_vem += vt_vem;
-      else this.vt_vem += vt_vem * dias_uteis;
+      else this.vt_vem += vt_vem * workedDays;
     });
 
     this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
     this.total_vr = this.vr_vr + this.vc_vr;
     this.total_expense = this.total_caju + this.total_vr + this.vt_vem;
   }
-
 
   formatCurrency(value: number): string {
     return value.toLocaleString('pt-BR', {
@@ -423,48 +457,51 @@ export class BenefitComponent implements OnInit {
     return `${month}/${year}`;
   }
 
-  calculateDay(workingDays: number, card1: number, card2: number): string {
-    let day = 0;
+  calculateDay(workingDays: number, extraDays: number, absences: number, card1: number, card2: number): string {
     const addCards = card1 + card2;
-
-    if (card1 > 50 || card2 > 50) day = addCards / workingDays;
-    else day = addCards;
-
-    return `R$ ${day.toFixed(2)}`;
+    return `R$ ${addCards.toFixed(2)}`;
   }
 
-  calculateMonthly(workingDays: number, nonWorkingDays: number, card1: number, card2: number): string {
-    let vr_month = 0;
+  calculateMonthly(workingDays: number, extraDays: number, absences: number, card1: number, card2: number): string {
+    const workedDays = this.getWorkedDays(workingDays, extraDays, absences);
     const addCards = card1 + card2;
 
-    if ((card1 > 25 && card1 < 35) || (card2 > 25 && card2 < 35)) vr_month = (addCards * workingDays) + (addCards * nonWorkingDays);
-    else if (card1 > 50 || card2 > 50) vr_month = addCards;
-    else vr_month = addCards * workingDays;
+    let vr_month = 0;
+    if (card1 > 50 || card2 > 50) {
+      vr_month = addCards; // Valor fixo mensal
+    } else {
+      vr_month = addCards * workedDays; // Proporcional aos dias trabalhados
+    }
 
     return `R$ ${vr_month.toFixed(2)}`;
   }
 
-  totalExpense(workingDays: number, nonWorkingDays: number, vr_caju: number, vr_vr: number, vt_caju: number, vt_vem: number, vc_caju: number, vc_vr: number): string {
-    let vr = vr_caju + vr_vr;
-    let monthVr = 0;
-    let vt = vt_caju + vt_vem;
-    let monthVt = 0;
-    let vc = vc_caju + vc_vr;
-    let monthVc = 0;
+  totalExpense(
+    workingDays: number,
+    extraDays: number,
+    absences: number,
+    vr_caju: number,
+    vr_vr: number,
+    vt_caju: number,
+    vt_vem: number,
+    vc_caju: number,
+    vc_vr: number
+  ): string {
+    const workedDays = this.getWorkedDays(workingDays, extraDays, absences);
 
-    if (vr > 50) monthVr = vr;
-    else if (vr > 25 && vr < 35) monthVr = (vr * workingDays) + (vr * nonWorkingDays)
-    else monthVr = vr * workingDays;
+    // Vale Refeição
+    const vr = vr_caju + vr_vr;
+    let monthVr = vr > 50 ? vr : vr * workedDays;
 
-    if (vt > 50) monthVt = vt;
-    else if (vt > 25 && vt < 35) monthVt = (vt * workingDays) + (vt * nonWorkingDays)
-    else monthVt = vt * workingDays;
+    // Vale Transporte
+    const vt = vt_caju + vt_vem;
+    let monthVt = vt > 50 ? vt : vt * workedDays;
 
-    if (vc > 50) monthVc = vc;
-    else if (vc > 25 && vc < 35) monthVc = (vc * workingDays) + (vc * nonWorkingDays)
-    else monthVc = vc * workingDays;
+    // Vale Combustível
+    const vc = vc_caju + vc_vr;
+    let monthVc = vc > 50 ? vc : vc * workedDays;
 
-    return `R$ ${(monthVr + monthVt + monthVc).toFixed(2)}`
+    return `R$ ${(monthVr + monthVt + monthVc).toFixed(2)}`;
   }
 
   upperCase(string: string): string {
@@ -484,6 +521,6 @@ export class BenefitComponent implements OnInit {
       vc_vr: null,
       vt_caju: null,
       vt_vem: null
-    })
+    });
   }
 }
