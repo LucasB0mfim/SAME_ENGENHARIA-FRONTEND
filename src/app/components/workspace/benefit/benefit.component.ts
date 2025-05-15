@@ -103,8 +103,6 @@ export class BenefitComponent implements OnInit {
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
-    console.log(this.isWeekend('2025-05-17')); // true (sábado)
-    console.log(this.isWeekend('2025-04-07')); // false (quinta)
   }
 
   // ========== API ========== //
