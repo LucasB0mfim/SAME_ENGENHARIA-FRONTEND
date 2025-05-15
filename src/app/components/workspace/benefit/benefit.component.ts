@@ -103,6 +103,8 @@ export class BenefitComponent implements OnInit {
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
+    console.log(this.isWeekend('2025-05-17')); // true (sábado)
+    console.log(this.isWeekend('2025-04-07')); // false (quinta)
   }
 
   // ========== API ========== //
@@ -234,31 +236,7 @@ export class BenefitComponent implements OnInit {
 
     this._benefitService.findRecord(request).subscribe({
       next: (data: any) => {
-        this.items = data.result.map((item: any) => {
-          const dias_extras = item.timesheet.filter(
-            (ts: any) => ts.evento_abono === 'Dia extra'
-          ).length;
-
-          const faltas = item.timesheet.filter(
-            (ts: any) =>
-              ts.falta === 'SIM' &&
-              ts.evento_abono === 'NÃO CONSTA' &&
-              (ts.jornada_realizada
-                ? Number(ts.jornada_realizada.split(':')[0]) <= 3
-                : false)
-          ).length;
-
-          const atestados = item.timesheet.filter(
-            (ts: any) => ts.evento_abono === 'Atestado Médico'
-          ).length;
-
-          return {
-            ...item,
-            dias_extras,
-            faltas,
-            atestados
-          };
-        });
+        this.items = data.result;
 
         this.calculateTotals();
         this.filteredItem = [...this.items];
@@ -306,6 +284,14 @@ export class BenefitComponent implements OnInit {
         this.isCreating = false;
       }
     })
+  }
+
+  getStateHolidays(city: string, year: string): void {
+
+  }
+
+  getCityHolidays(state: string, city: string, year: string): void {
+
   }
 
   // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
@@ -392,12 +378,7 @@ export class BenefitComponent implements OnInit {
     }, 3000);
   }
 
-  // ========== UTILITÁRIOS ========== //
-  private getWorkedDays(workingDays: number, extraDays: number, absences: number): number {
-    const workedDays = workingDays + extraDays - absences;
-    return workedDays >= 0 ? workedDays : 0;
-  }
-
+  // ========== GRÁFICO ========== //
   calculateTotals() {
     this.vr_caju = 0;
     this.vr_vr = 0;
@@ -412,7 +393,7 @@ export class BenefitComponent implements OnInit {
     if (!this.items || this.items.length === 0) return;
 
     this.items.forEach(item => {
-      const workedDays = this.getWorkedDays(item.dias_uteis, item.dias_extras, item.faltas);
+      const workedDays = 20;
       const { vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
 
       // Vale Refeição (CAJU)
@@ -452,61 +433,103 @@ export class BenefitComponent implements OnInit {
     });
   }
 
-  formatedDate(date: Date): string {
-    const [year, month] = String(date).split('-');
-    return `${month}/${year}`;
-  }
+  // ========== CALCULAR BENEFÍCIOS ========== //
+  calculateVrDay(item: any): number {
+    const vr = item.vr_caju + item.vr_vr;
 
-  calculateDay(workingDays: number, extraDays: number, absences: number, card1: number, card2: number): string {
-    const addCards = card1 + card2;
-    return `R$ ${addCards.toFixed(2)}`;
-  }
-
-  calculateMonthly(workingDays: number, extraDays: number, absences: number, card1: number, card2: number): string {
-    const workedDays = this.getWorkedDays(workingDays, extraDays, absences);
-    const addCards = card1 + card2;
-
-    let vr_month = 0;
-    if (card1 > 50 || card2 > 50) {
-      vr_month = addCards; // Valor fixo mensal
+    if (vr > 50) {
+      return vr / item.dias_uteis;
     } else {
-      vr_month = addCards * workedDays; // Proporcional aos dias trabalhados
+      return vr;
     }
-
-    return `R$ ${vr_month.toFixed(2)}`;
   }
 
-  totalExpense(
-    workingDays: number,
-    extraDays: number,
-    absences: number,
-    vr_caju: number,
-    vr_vr: number,
-    vt_caju: number,
-    vt_vem: number,
-    vc_caju: number,
-    vc_vr: number
-  ): string {
-    const workedDays = this.getWorkedDays(workingDays, extraDays, absences);
+  calculateVrMonth(item: any): number {
+    const vrDay = this.calculateVrDay(item);
 
-    // Vale Refeição
-    const vr = vr_caju + vr_vr;
-    let monthVr = vr > 50 ? vr : vr * workedDays;
-
-    // Vale Transporte
-    const vt = vt_caju + vt_vem;
-    let monthVt = vt > 50 ? vt : vt * workedDays;
-
-    // Vale Combustível
-    const vc = vc_caju + vc_vr;
-    let monthVc = vc > 50 ? vc : vc * workedDays;
-
-    return `R$ ${(monthVr + monthVt + monthVc).toFixed(2)}`;
+    if (item.contrato === 'ESTÁGIO') {
+      return vrDay * item.dias_uteis;
+    } else if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    } else {
+      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
   }
 
+  calculateVtDay(item: any): number {
+    const vtDay = item.vt_caju + item.vt_vem;
+
+    if (vtDay > 50) {
+      return vtDay / item.dias_uteis;
+    } else {
+      return vtDay;
+    }
+  }
+
+  calculateVtMonth(item: any): number {
+    const vrDay = this.calculateVrDay(item);
+    const vtDay = this.calculateVtDay(item);
+
+    if (item.contrato === 'ESTÁGIO') {
+      return vtDay * item.dias_uteis;
+    } else if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    } else {
+      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
+  }
+
+  calculateVcDay(item: any): number {
+    const vcDay = item.vc_caju + item.vc_vr;
+
+    if (vcDay > 50) {
+      return vcDay / item.dias_uteis;
+    } else {
+      return vcDay;
+    }
+  }
+
+  calculateVcMonth(item: any): number {
+    const vcDay = this.calculateVcDay(item);
+    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+  }
+
+  calculateBenefits(item: any): number {
+    return parseFloat((this.calculateVtMonth(item) + this.calculateVrMonth(item) + this.calculateVcMonth(item)).toFixed(2));
+  }
+
+  // ========== CALCULAR STATUS ========== //
+  daysWorked(businessDays: number, timesheet: any[]): number {
+    return businessDays + this.extraDaysCounter(timesheet) - this.absenceCounter(timesheet) - this.medicalCertificateCounter(timesheet);
+  }
+
+  extraDaysCounter(timesheet: any[]): number {
+    return timesheet.filter(value => value.evento?.abono === 'Dia extra').length;
+  }
+
+  absenceCounter(timesheet: any[]): number {
+    return timesheet.filter(value =>
+      value.evento_abono === 'NÃO CONSTA' &&
+      parseInt(value.jornada_realizada?.split(':')[0]) <= 3
+    ).length;
+  }
+
+  medicalCertificateCounter(timesheet: any[]): number {
+    return timesheet.filter(value => value.evento_abono === 'Atestado Médico' && !this.isWeekend(value.periodo)).length;
+  }
+
+  // ========== UTILITÁRIOS ========== //
   upperCase(string: string): string {
     return string.toUpperCase().trim();
   }
+
+  isWeekend(dateStr: string): boolean {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // mês começa em 0 no JS!
+    const dayOfWeek = date.getDay(); // 0 = Domingo, 6 = Sábado
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  }
+
 
   resetForm(): void {
     this.createEmployeeForm.reset({

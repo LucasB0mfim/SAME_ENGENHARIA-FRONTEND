@@ -44,4 +44,28 @@ export class BenefitService {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('http://192.168.10.17:3000/same-engenharia/api/benefit/create-report', request, { headers });
   }
+
+  stateHolidays(state: string, year: string): Observable<any> {
+    return this._httpClient.get<any>(
+      `https://feriados-brasileiros1.p.rapidapi.com/read_uf?estado=${state}&ano=${year}`,
+      {
+        headers: {
+          'x-rapidapi-key': '2166c88048msh1f7f56a1376afa1p1c65c8jsn21a0af250681',
+          'x-rapidapi-host': 'feriados-brasileiros1.p.rapidapi.com'
+        }
+      }
+    );
+  }
+
+  cityHolidays(city: string, state: string, year: string): Observable<any> {
+    return this._httpClient.get<any>(
+      `https://feriados-brasileiros1.p.rapidapi.com/read?cidade=${city}&estado=${state}&ano=${year}`,
+      {
+        headers: {
+          'x-rapidapi-key': '2166c88048msh1f7f56a1376afa1p1c65c8jsn21a0af250681',
+          'x-rapidapi-host': 'feriados-brasileiros1.p.rapidapi.com'
+        }
+      }
+    );
+  }
 }

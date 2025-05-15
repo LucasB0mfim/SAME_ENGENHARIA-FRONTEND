@@ -225,6 +225,22 @@
   transition: all 0.3s ease;
 }
 
+.label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.grafic__card:nth-child(1) .label { color: #FF6384; }
+.grafic__card:nth-child(2) .label { color: #36A2EB; }
+.grafic__card:nth-child(3) .label { color: #FFCE56; }
+.grafic__card:nth-child(4) .label { color: #4BC0C0; }
+.grafic__card:nth-child(5) .label { color: #9966FF; }
+.grafic__card:nth-child(6) .label { color: #FF9F40;}
+.grafic__card:nth-child(7) .label { color: #00C853; }
+.grafic__card:nth-child(8) .label { color: #E91E63; }
+.grafic__card:nth-child(9) .label { color: #00BCD4; }
+
 .grafic__card:nth-child(1) .grafic__circle { border-color: rgba(255, 99, 132, 0.3); }
 .grafic__card:nth-child(2) .grafic__circle { border-color: rgba(54, 162, 235, 0.3); }
 .grafic__card:nth-child(3) .grafic__circle { border-color: rgba(255, 206, 86, 0.3); }

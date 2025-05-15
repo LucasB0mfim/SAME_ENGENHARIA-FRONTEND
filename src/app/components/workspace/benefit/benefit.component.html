@@ -62,61 +62,67 @@
 
   <section class="grafic__container" *ngIf="geralSection">
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Refeição (CAJU)</h2>
+      <h2 class="grafic__title">REFEIÇÃO</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vr_caju) }}</span>
+          <span class="label">CAJU</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Refeição (VR)</h2>
+      <h2 class="grafic__title">REFEIÇÃO</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vr_vr) }}</span>
+          <span class="label">VR</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Combustível (CAJU)</h2>
+      <h2 class="grafic__title">COMBUSTÍVEL</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vc_caju) }}</span>
+          <span class="label">CAJU</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Combustível (VR)</h2>
+      <h2 class="grafic__title">COMBUSTÍVEL</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vc_vr) }}</span>
+          <span class="label">VR</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Transporte (CAJU)</h2>
+      <h2 class="grafic__title">TRANSPORTE</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vt_caju) }}</span>
+          <span class="label">CAJU</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Vale Transporte (VEM)</h2>
+      <h2 class="grafic__title">TRANSPORTE</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
           <span class="value">{{ formatCurrency(vt_vem) }}</span>
+          <span class="label">VEM</span>
         </div>
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Caju</h2>
+      <h2 class="grafic__title">CAJU</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
@@ -134,7 +140,7 @@
       </div>
     </article>
     <article class="grafic__card">
-      <h2 class="grafic__title">Valor Total</h2>
+      <h2 class="grafic__title">TOTAL</h2>
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
@@ -160,22 +166,22 @@
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__subtitle">DIAS DE TRABALHO: </div>
-            <div class="card__title">{{ item.dias_uteis + item.dias_extras - item.faltas || 0 }}</div>
+            <div class="card__title">{{ daysWorked(item.dias_uteis, item.timesheet) }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">DIAS EXTRAS: </div>
-            <div class="card__title">{{ item.dias_extras || 0 }}</div>
+            <div class="card__title">{{ extraDaysCounter(item.timesheet) }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">FALTAS: </div>
-            <div class="card__title">{{ item.faltas || 0 }}</div>
+            <div class="card__title">{{ absenceCounter(item.timesheet) }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">ATESTADOS: </div>
-            <div class="card__title">{{ item.atestados || 0 }}</div>
+            <div class="card__title">{{ medicalCertificateCounter(item.timesheet) }}</div>
           </div>
         </div>
       </div>
@@ -183,38 +189,31 @@
         <div class="card__content">
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
-            <div class="card__title">{{ calculateDay(item.dias_uteis, item.dias_extras, item.faltas, item.vr_caju,
-              item.vr_vr) }}</div>
+            <div class="card__title">R$ {{ calculateVrDay(item) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
-            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_extras, item.faltas, item.vr_caju,
-              item.vr_vr) }}</div>
+            <div class="card__title">R$ {{ calculateVrMonth(item) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE DIA</div>
-            <div class="card__title">{{ calculateDay(item.dias_uteis, item.dias_extras, item.faltas, item.vt_caju,
-              item.vt_vem) }}</div>
+            <div class="card__title">R$ {{ calculateVtDay(item) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_extras, item.faltas, item.vt_caju,
-              item.vt_vem) }}</div>
+            <div class="card__title">R$ {{ calculateVtMonth(item) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
-            <div class="card__title">{{ calculateDay(item.dias_uteis, item.dias_extras, item.faltas, item.vc_caju,
-              item.vc_vr) }}</div>
+            <div class="card__title">R$ {{ calculateVcDay(item) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
-            <div class="card__title">{{ calculateMonthly(item.dias_uteis, item.dias_extras, item.faltas, item.vc_caju,
-              item.vc_vr) }}</div>
+            <div class="card__title">R$ {{ calculateVcMonth(item) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">{{ totalExpense(item.dias_uteis, item.dias_extras, item.faltas, item.vr_caju,
-              item.vr_vr, item.vt_caju, item.vt_vem, item.vc_caju, item.vc_vr) }}</div>
+            <div class="card__title">R$ {{ calculateBenefits(item) }}</div>
           </div>
         </div>
       </div>
