@@ -34,6 +34,21 @@
       <form [formGroup]="recordForm" (ngSubmit)="findRecord()">
         @if (recordSection || geralSection) {
         <div class="filter">
+          <select formControlName="centro_custo" class="btn btn--tertiary">
+            <option value="" selected>GERAL</option>
+              <option value="BRK - OS">BRK - OS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>F
+          </select>
+        </div>
+        <div class="filter">
           <input type="month" formControlName="data" class="btn btn--tertiary">
         </div>
         <div class="filter">

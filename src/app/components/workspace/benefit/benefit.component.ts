@@ -21,7 +21,8 @@ export class BenefitComponent implements OnInit {
 
   // ========== FORMULÁRIOS ========== //
   recordForm: FormGroup = new FormGroup({
-    data: new FormControl('')
+    data: new FormControl(''),
+    centro_custo: new FormControl('')
   })
 
   createRecordForm: FormGroup = new FormGroup({
@@ -218,7 +219,8 @@ export class BenefitComponent implements OnInit {
     this.isFind = true;
 
     const request = {
-      data: this.recordForm.value.data
+      data: this.recordForm.value.data,
+      centro_custo: this.recordForm.value.centro_custo,
     };
 
     this._benefitService.findRecord(request).subscribe({
@@ -578,7 +580,7 @@ export class BenefitComponent implements OnInit {
     const vtDay = item.vt_caju + item.vt_vem;
 
     if (vtDay > 50) {
-      return vtDay / item.dias_uteis;
+      return parseFloat((vtDay / item.dias_uteis).toFixed(2));
     } else {
       return vtDay;
     }
@@ -587,9 +589,12 @@ export class BenefitComponent implements OnInit {
   calculateVtMonth(item: any): number {
     const vrDay = this.calculateVrDay(item);
     const vtDay = this.calculateVtDay(item);
+    const vtFixed = item.vt_caju + item.vt_vem;
 
     if (item.contrato === 'ESTÁGIO') {
       return vtDay * item.dias_uteis;
+    } else if (vtFixed > 50) {
+      return vtFixed;
     } else if (vrDay > 25 && vrDay < 35) {
       return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
     } else {
@@ -601,7 +606,7 @@ export class BenefitComponent implements OnInit {
     const vcDay = item.vc_caju + item.vc_vr;
 
     if (vcDay > 50) {
-      return vcDay / item.dias_uteis;
+      return parseFloat((vcDay / item.dias_uteis).toFixed(2));
     } else {
       return vcDay;
     }
@@ -609,7 +614,12 @@ export class BenefitComponent implements OnInit {
 
   calculateVcMonth(item: any): number {
     const vcDay = this.calculateVcDay(item);
-    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+
+    if (vcDay > 50) {
+      return vcDay;
+    } else {
+      return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
   }
 
   calculateBenefits(item: any): number {
