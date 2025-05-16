@@ -125,7 +125,7 @@ export class OrderDeliveredComponent implements OnInit {
 
   // MÉTODO PARA REDIRECIONAR O USUÁRIO PARA A NOTA FISCAL
   goToNotaFiscal(nf: string) {
-    window.open(`http://192.168.10.17:3000/same-engenharia/api/notas_fiscais/${nf}`, '_blank');
+    window.open(`http://44.203.74.199:3000/same-engenharia/api/notas_fiscais/${nf}`, '_blank');
   }
 
   // MÉTODO PARA FORMATAR A DATA DE ENTREGA

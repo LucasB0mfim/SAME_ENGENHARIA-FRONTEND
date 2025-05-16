@@ -9,7 +9,7 @@ import { ITrackingResponse } from '../interfaces/tracking-response.interface';
 })
 export class TrackingService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://192.168.10.17:3000/same-engenharia/api/reports/tracking';
+  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/reports/tracking';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

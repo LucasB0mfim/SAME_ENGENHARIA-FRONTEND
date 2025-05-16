@@ -17,32 +17,32 @@ export class BenefitService {
 
   findAll(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('http://192.168.10.17:3000/same-engenharia/api/benefit/employee', { headers });
+    return this._httpClient.get<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/employee', { headers });
   }
 
   createEmployee(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://192.168.10.17:3000/same-engenharia/api/benefit/employee', request, { headers });
+    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/employee', request, { headers });
   }
 
   updateEmployee(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('http://192.168.10.17:3000/same-engenharia/api/benefit/employee', request, { headers });
+    return this._httpClient.put<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/employee', request, { headers });
   }
 
   deleteEmployee(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`http://192.168.10.17:3000/same-engenharia/api/benefit/employee/${id}`, { headers });
+    return this._httpClient.delete<any>(`http://44.203.74.199:3000/same-engenharia/api/benefit/employee/${id}`, { headers });
   }
 
   findRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://192.168.10.17:3000/same-engenharia/api/benefit/find-report', request, { headers });
+    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/find-report', request, { headers });
   }
 
   createRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://192.168.10.17:3000/same-engenharia/api/benefit/create-report', request, { headers });
+    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/create-report', request, { headers });
   }
 
   stateHolidays(state: string, year: string): Observable<any> {
