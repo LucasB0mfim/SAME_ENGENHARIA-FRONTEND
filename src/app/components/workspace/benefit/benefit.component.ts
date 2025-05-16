@@ -89,17 +89,6 @@ export class BenefitComponent implements OnInit {
   showSuccess: boolean = false;
   successMessage: string = '';
 
-  // ========== VALORES INICIAS DOS BENEFÍCIOS ========== //
-  vr_caju: number = 0;
-  vr_vr: number = 0;
-  vt_caju: number = 0;
-  vt_vem: number = 0;
-  vc_caju: number = 0;
-  vc_vr: number = 0;
-  total_caju: number = 0;
-  total_vr: number = 0;
-  total_expense: number = 0;
-
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
@@ -235,8 +224,6 @@ export class BenefitComponent implements OnInit {
     this._benefitService.findRecord(request).subscribe({
       next: (data: any) => {
         this.items = data.result;
-
-        this.calculateTotals();
         this.filteredItem = [...this.items];
         this.isAlert = this.items.length === 0;
         this.isFind = false;
@@ -282,14 +269,6 @@ export class BenefitComponent implements OnInit {
         this.isCreating = false;
       }
     })
-  }
-
-  getStateHolidays(city: string, year: string): void {
-
-  }
-
-  getCityHolidays(state: string, city: string, year: string): void {
-
   }
 
   // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
@@ -377,51 +356,192 @@ export class BenefitComponent implements OnInit {
   }
 
   // ========== GRÁFICO ========== //
-  calculateTotals() {
-    this.vr_caju = 0;
-    this.vr_vr = 0;
-    this.vt_caju = 0;
-    this.vt_vem = 0;
-    this.vc_caju = 0;
-    this.vc_vr = 0;
-    this.total_caju = 0;
-    this.total_vr = 0;
-    this.total_expense = 0;
+  vrCajuIndicator(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVrCajuMonth(value);
+    }, 0)
 
-    if (!this.items || this.items.length === 0) return;
+    return parseFloat(total.toFixed(2));
+  }
 
-    this.items.forEach(item => {
-      const workedDays = 20;
-      const { vr_caju, vr_vr, vc_caju, vc_vr, vt_caju, vt_vem } = item;
+  vrVrIndicator() {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVrVrMonth(value);
+    }, 0)
 
-      // Vale Refeição (CAJU)
-      if (vr_caju > 50) this.vr_caju += vr_caju;
-      else this.vr_caju += vr_caju * workedDays;
+    return parseFloat(total.toFixed(2));
+  }
 
-      // Vale Refeição (VR)
-      if (vr_vr > 50) this.vr_vr += vr_vr;
-      else this.vr_vr += vr_vr * workedDays;
+  vtCajuIndicator(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVtCajuMonth(value);
+    }, 0)
 
-      // Vale Combustível (CAJU)
-      if (vc_caju > 50) this.vc_caju += vc_caju;
-      else this.vc_caju += vc_caju * workedDays;
+    return parseFloat(total.toFixed(2));
+  }
 
-      // Vale Combustível (VR)
-      if (vc_vr > 50) this.vc_vr += vc_vr;
-      else this.vc_vr += vc_vr * workedDays;
+  vtVemIndicator(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVtVemMonth(value);
+    }, 0)
 
-      // Vale Transporte (CAJU)
-      if (vt_caju > 50) this.vt_caju += vt_caju;
-      else this.vt_caju += vt_caju * workedDays;
+    return parseFloat(total.toFixed(2));
+  }
 
-      // Vale Transporte (VEM)
-      if (vt_vem > 50) this.vt_vem += vt_vem;
-      else this.vt_vem += vt_vem * workedDays;
-    });
+  totalCaju(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVrCajuMonth(value) + this.calculateVtCajuMonth(value) + this.calculateVcCajuMonth(value);
+    }, 0)
 
-    this.total_caju = this.vr_caju + this.vt_caju + this.vc_caju;
-    this.total_vr = this.vr_vr + this.vc_vr;
-    this.total_expense = this.total_caju + this.total_vr + this.vt_vem;
+    return parseFloat(total.toFixed(2));
+  }
+
+  totalVr(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVrVrMonth(value) + this.calculateVcVrMonth(value);
+    }, 0)
+
+    return parseFloat(total.toFixed(2));
+  }
+
+  total(): number {
+    return parseFloat((this.totalCaju() + this.totalVr() + this.vtVemIndicator()).toFixed(2));
+  }
+
+  vcCajuIndicator(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVcCajuMonth(value);
+    }, 0)
+
+    return parseFloat(total.toFixed(2));
+  }
+
+  vcVrIndicator(): number {
+    const total = this.items.reduce((count: number, value: any) => {
+      return count + this.calculateVcVrMonth(value);
+    }, 0)
+
+    return parseFloat(total.toFixed(2));
+  }
+
+  calculateVrCajuDay(item: any): number {
+    const vr = item.vr_caju;
+
+    if (vr > 50) {
+      return vr / item.dias_uteis;
+    } else {
+      return vr;
+    }
+  }
+
+  calculateVrVrDay(item: any): number {
+    const vr = item.vr_vr;
+
+    if (vr > 50) {
+      return vr / item.dias_uteis;
+    } else {
+      return vr;
+    }
+  }
+
+  calculateVrCajuMonth(item: any): number {
+    const vrDay = this.calculateVrCajuDay(item);
+
+    if (item.contrato === 'ESTÁGIO') {
+      return vrDay * item.dias_uteis;
+    } else if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    } else {
+      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
+  }
+
+  calculateVrVrMonth(item: any): number {
+    const vrDay = this.calculateVrVrDay(item);
+
+    if (item.contrato === 'ESTÁGIO') {
+      return vrDay * item.dias_uteis;
+    } else if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    } else {
+      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
+  }
+
+  calculateVtCajuDay(item: any): number {
+    const vtDay = item.vt_caju;
+
+    if (vtDay > 50) {
+      return vtDay / item.dias_uteis;
+    } else {
+      return vtDay;
+    }
+  }
+
+  calculateVtVemDay(item: any): number {
+    const vtDay = item.vt_vem;
+
+    if (vtDay > 50) {
+      return vtDay / item.dias_uteis;
+    } else {
+      return vtDay;
+    }
+  }
+
+  calculateVtCajuMonth(item: any): number {
+    const vrDay = this.calculateVrCajuDay(item);
+    const vtDay = this.calculateVtCajuDay(item);
+
+    if (item.contrato === 'ESTÁGIO') {
+      return vtDay * item.dias_uteis;
+    } else if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    } else {
+      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
+  }
+
+  calculateVtVemMonth(item: any): number {
+    const vrDay = this.calculateVrDay(item);
+    const vtDay = this.calculateVtVemDay(item);
+
+    if (item.contrato === 'ESTÁGIO') {
+      return vtDay * item.dias_uteis;
+    } else if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    } else {
+      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    }
+  }
+
+  calculateVcCajuDay(item: any): number {
+    const vcDay = item.vc_caju;
+
+    if (vcDay > 50) {
+      return vcDay / item.dias_uteis;
+    } else {
+      return vcDay;
+    }
+  }
+
+  calculateVcVrDay(item: any): number {
+    const vcDay = item.vc_vr;
+
+    if (vcDay > 50) {
+      return vcDay / item.dias_uteis;
+    } else {
+      return vcDay;
+    }
+  }
+
+  calculateVcCajuMonth(item: any): number {
+    const vcDay = this.calculateVcCajuDay(item);
+    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+  }
+
+  calculateVcVrMonth(item: any): number {
+    const vcDay = this.calculateVcVrDay(item);
+    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
   }
 
   formatCurrency(value: number): string {
