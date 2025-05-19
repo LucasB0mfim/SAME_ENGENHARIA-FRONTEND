@@ -45,6 +45,11 @@ export class BenefitService {
     return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/create-report', request, { headers });
   }
 
+  updateRecord(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.post<any>('http://localhost:3000/same-engenharia/api/benefit/update', request, { headers });
+  }
+
   stateHolidays(state: string, year: string): Observable<any> {
     return this._httpClient.get<any>(
       `https://feriados-brasileiros1.p.rapidapi.com/read_uf?estado=${state}&ano=${year}`,

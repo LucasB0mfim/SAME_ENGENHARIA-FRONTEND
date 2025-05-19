@@ -31,6 +31,13 @@ export class BenefitComponent implements OnInit {
     dias_nao_uteis: new FormControl(''),
   })
 
+  updateRecordForm: FormGroup = new FormGroup({
+    nome: new FormControl(''),
+    data: new FormControl(''),
+    dias_uteis: new FormControl(''),
+    dias_nao_uteis: new FormControl(''),
+  })
+
   createEmployeeForm: FormGroup = new FormGroup({
     nome: new FormControl(''),
     funcao: new FormControl(''),
@@ -71,6 +78,7 @@ export class BenefitComponent implements OnInit {
   recordSection: boolean = false;
   employeeSection: boolean = false;
   createRecordSection: boolean = false;
+  updateRecordSection: boolean = false;
 
   isAlert: boolean = true;
   isFind: boolean = false;
@@ -273,6 +281,42 @@ export class BenefitComponent implements OnInit {
     })
   }
 
+  updateRecord(): void {
+    this.isUpdating = true;
+
+    const request = {
+      nome: this.removeSpace(this.updateRecordForm.value.nome),
+      data: this.updateRecordForm.value.data,
+      dias_uteis: this.updateRecordForm.value.dias_uteis,
+      dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis
+    }
+
+    if (request.dias_uteis < 0) {
+      this.setErrorMessage('Quantidade de dias trabalhados inválida.');
+      this.isUpdating = false;
+      return;
+    }
+
+    if (request.dias_nao_uteis < 0) {
+      this.setErrorMessage('Quantidade de dias não trabalhados inválida.');
+      this.isUpdating = false;
+      return;
+    }
+
+    this._benefitService.updateRecord(request).subscribe({
+      next: () => {
+        this.setSuccessMessage('Registro atualizado com sucesso.');
+        this.isUpdating = false;
+        this.updateRecordSection = false;
+      },
+      error: (error) => {
+        this.isUpdating = false;
+        console.log('Erro ao atualizar colaborador.', error);
+        this.isUpdating = false;
+      }
+    })
+  }
+
   // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
   openEditEmployee(employee: any): void {
     this.editEmployee = true;
@@ -290,6 +334,17 @@ export class BenefitComponent implements OnInit {
       vc_vr: employee.vc_vr,
       vt_caju: employee.vt_caju,
       vt_vem: employee.vt_vem
+    });
+  }
+
+  openEditRecord(employee: any): void {
+    this.updateRecordSection = true;
+
+    this.updateRecordForm.patchValue({
+      nome: employee.nome,
+      data: employee.data,
+      dias_uteis: employee.dias_uteis,
+      dias_nao_uteis: employee.dias_nao_uteis,
     });
   }
 
@@ -658,6 +713,9 @@ export class BenefitComponent implements OnInit {
     return dayOfWeek === 0 || dayOfWeek === 6;
   }
 
+  removeSpace(value: string): string {
+    return value.trim();
+  }
 
   resetForm(): void {
     this.createEmployeeForm.reset({

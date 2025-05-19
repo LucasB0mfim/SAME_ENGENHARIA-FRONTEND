@@ -36,16 +36,16 @@
         <div class="filter">
           <select formControlName="centro_custo" class="btn btn--tertiary">
             <option value="" selected>GERAL</option>
-              <option value="BRK - OS">BRK - OS</option>
-              <option value="BRK - HH">BRK - HH</option>
-              <option value="EMLURB">EMLURB</option>
-              <option value="MÁQUINAS">MÁQUINAS</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-              <option value="LUIZ WILSON">LUIZ WILSON</option>
-              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>F
+            <option value="BRK - OS">BRK - OS</option>
+            <option value="BRK - HH">BRK - HH</option>
+            <option value="EMLURB">EMLURB</option>
+            <option value="MÁQUINAS">MÁQUINAS</option>
+            <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+            <option value="LUIZ WILSON">LUIZ WILSON</option>
+            <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+            <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+            <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+            <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>F
           </select>
         </div>
         <div class="filter">
@@ -166,7 +166,7 @@
   </section>
 
   <section class="card__container" *ngIf="recordSection">
-    <article *ngFor="let item of items" class="card">
+    <article *ngFor="let item of items" (click)="openEditRecord(item)"  class="card">
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
@@ -549,6 +549,52 @@
             </div>
             } @else {
             Gerar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="record__container" *ngIf="updateRecordSection">
+    <form [formGroup]="updateRecordForm" (ngSubmit)="updateRecord()" class="modal__backdrop" role="dialog" aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Atualizar Registro</h2>
+          <button type="button" class="btn btn--icon" (click)="updateRecordSection = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label>Nome</label>
+            <input type="text" formControlName="nome" readonly placeholder="Nome Completo" class="form__input">
+          </div>
+          <div class="form__group">
+            <label>Dias Trabalhados</label>
+            <input type="number" placeholder="0" formControlName="dias_uteis" class="form__input">
+          </div>
+          <div class="form__group">
+            <label>Dias Extras</label>
+            <input type="number" placeholder="0" formControlName="dias_nao_uteis" class="form__input">
+          </div>
+        </div>
+        <div class="form__footer">
+          @if (showError) {
+          <div class="form__message form__message--error">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+          }
+          <button type="button" class="btn btn--quaternary" (click)="updateRecordSection = false">Cancelar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isUpdating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Atualizar
             }
           </button>
         </div>
