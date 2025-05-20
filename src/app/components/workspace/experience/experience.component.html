@@ -1,6 +1,6 @@
 <div class="container">
   <div class="filter__container">
-    
+
     <div class="filter">
       <label for="name">COLABORADOR</label>
       <input type="text" id="name" placeholder="Ex: Lucas Bomfim" [(ngModel)]="employeeName"
@@ -22,6 +22,20 @@
         <option value="withoutExperience">Sem experiência</option>
       </select>
       <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
+    </div>
+
+    <div class="filter">
+      <button type="button" (click)="downloadExcel()">
+        @if (isLoading) {
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        } @else {
+          GERAR EXCEL
+        }
+      </button>
     </div>
   </div>
 

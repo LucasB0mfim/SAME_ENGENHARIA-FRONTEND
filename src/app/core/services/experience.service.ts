@@ -9,7 +9,7 @@ import { IExperienceResponse } from '../interfaces/experience-response.interface
 })
 export class ExperienceService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/reports/experience';
+  private readonly _apiUrl = 'http://http://44.203.74.199:3000/same-engenharia/api/reports/experience';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -19,11 +19,17 @@ export class ExperienceService {
 
   find(): Observable<IExperienceResponse> {
     const headers = this._createHeaders();
-    return this._httpClient.get<IExperienceResponse>(this._apiUrl, {headers});
+    return this._httpClient.get<IExperienceResponse>(this._apiUrl, { headers });
   }
 
   updateModality(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>(this._apiUrl, request, {headers});
+    return this._httpClient.put<any>(this._apiUrl, request, { headers });
+  }
+
+  getExcel(): Observable<Blob> {
+    return this._httpClient.get('http://http://44.203.74.199:3000/same-engenharia/api/download/experience', {
+      responseType: 'blob' as 'blob'
+    });
   }
 }

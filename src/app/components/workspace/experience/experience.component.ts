@@ -1,7 +1,7 @@
-import { differenceInCalendarDays } from 'date-fns';
-
+import { saveAs } from 'file-saver';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { differenceInCalendarDays } from 'date-fns';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 
@@ -24,7 +24,9 @@ export class ExperienceComponent implements OnInit {
   isSelectOpen: boolean = false;
   experienceFilter: string = 'all';
   records: IExperienceRecord[] = [];
-  allRecords: IExperienceRecord[] = []; // Armazena todos os registros originais
+  allRecords: IExperienceRecord[] = [];
+  isLoading: boolean = false;
+
   private readonly _experienceService = inject(ExperienceService);
   private readonly _titleService = inject(TitleService);
   @ViewChild('situacaoSelect') situacaoSelect: ElementRef | undefined;
@@ -41,6 +43,14 @@ export class ExperienceComponent implements OnInit {
         this.allRecords = [...data.records];
       },
       error: (error) => { console.error(error); }
+    });
+  }
+
+  downloadExcel(): void {
+    this.isLoading = true;
+    this._experienceService.getExcel().subscribe((blob: Blob) => {
+      saveAs(blob, 'experiência.xlsx');
+      this.isLoading = false;
     });
   }
 
