@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { differenceInCalendarDays } from 'date-fns';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 import { TitleService } from '../../../core/services/title.service';
@@ -13,59 +14,82 @@ import { IExperienceRecord } from '../../../core/interfaces/experience-response.
 @Component({
   selector: 'app-experience',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss'
 })
 export class ExperienceComponent implements OnInit {
 
-  employeeName: string = '';
-  centroCustoName: string = '';
-  isSelectOpen: boolean = false;
+  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
+  private _titleService = inject(TitleService);
+  private readonly _service = inject(ExperienceService);
+
+
+  // ========== ESTADOS ========== //
+  items: any[] = [];
+  filteredItem: any[] = [];
+
+  employee: string = '';
+  cost_center: string = '';
   experienceFilter: string = 'all';
-  records: IExperienceRecord[] = [];
-  allRecords: IExperienceRecord[] = [];
+
   isLoading: boolean = false;
+  isEmpty: boolean = false;
 
-  private readonly _experienceService = inject(ExperienceService);
-  private readonly _titleService = inject(TitleService);
-  @ViewChild('situacaoSelect') situacaoSelect: ElementRef | undefined;
-
-  ngOnInit() {
-    this.load();
+  // ========== HOOK ========== //
+  ngOnInit(): void {
     this._titleService.setTitle('Experiência');
+    this.getData();
   }
 
-  load() {
-    this._experienceService.find().subscribe({
+  // ========== API ========== //
+  getData(): void {
+    this.isLoading = true;
+
+    this._service.find().subscribe({
       next: (data) => {
-        this.records = data.records;
-        this.allRecords = [...data.records];
+        this.items = data.records;
+        this.filteredItem = [...this.items];
+        this.isLoading = false;
+        if (this.filteredItem.length === 0) this.isEmpty = true;
       },
-      error: (error) => { console.error(error); }
-    });
+      error: (error) => {
+        console.error('Erro ao buscar dados.', error);
+        this.isLoading = false;
+        this.isEmpty = true;
+      }
+    })
   }
 
   downloadExcel(): void {
-    this.isLoading = true;
-    this._experienceService.getExcel().subscribe((blob: Blob) => {
+    this._service.getExcel().subscribe((blob: Blob) => {
       saveAs(blob, 'experiência.xlsx');
-      this.isLoading = false;
     });
   }
 
-  // Função auxiliar para converter data no formato brasileiro (DD/MM/YYYY) para Date
-  parseBrazilianDate(dateString: string): Date {
-    const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day); // month - 1 porque o Date usa 0-11 para meses
+  // ========== BUSCAR COLABORADOR ========== //
+  applyFilters(): void {
+    this.filteredItem = this.items.filter((item) => {
+      const matchEmployee = this.employee
+        ? item.funcionario?.toLowerCase().includes(this.employee.toLowerCase())
+        : true;
+
+      const matchCostCenter = this.cost_center
+        ? item.centro_custo?.toLowerCase().includes(this.cost_center.toLowerCase())
+        : true;
+
+      const matchStatus = this.experienceFilter === 'all' ||
+        (this.experienceFilter === 'withExperience' && item.primeiro_periodo) ||
+        (this.experienceFilter === 'withoutExperience' && !item.primeiro_periodo);
+
+      return matchEmployee && matchCostCenter && matchStatus;
+    });
+
+    this.isEmpty = this.filteredItem.length === 0;
   }
 
-  experienceTime(experienceDate: string): number {
-    const today = new Date();
-    const period = this.parseBrazilianDate(experienceDate);
-    return differenceInCalendarDays(period, today) + 1;
-  }
 
+  // ========== UTILITÁRIOS ========== //
   borderExperience(firstExperience: string, secondExperience: string) {
     const firstDate = this.experienceTime(firstExperience);
     const secondDate = this.experienceTime(secondExperience);
@@ -74,69 +98,27 @@ export class ExperienceComponent implements OnInit {
       if ((firstDate > 0 && firstDate <= 10) || (secondDate > 0 && secondDate <= 10)) {
         return 'red';
       } else {
-        return 'greenLight';
+        return 'green';
       }
     } else {
-      return 'blue';
+      return 'orange';
     }
+  }
+
+  experienceTime(experienceDate: string): number {
+    const today = new Date();
+    const period = this.parseBrazilianDate(experienceDate);
+    return differenceInCalendarDays(period, today) + 1;
+  }
+
+  parseBrazilianDate(dateString: string): Date {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day);
   }
 
   isInExperience(data: IExperienceRecord): boolean {
     const firstDate = this.experienceTime(data.primeiro_periodo);
     const secondDate = this.experienceTime(data.segundo_periodo);
     return firstDate > 0 || secondDate > 0;
-  }
-
-  filters() {
-    let filteredRecords = [...this.allRecords];
-
-    // Busca por nome
-    if (this.employeeName) {
-      const inputValue = this.employeeName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.funcionario.toLowerCase().includes(inputValue)
-      );
-    }
-
-    // Busca por Centro de Custo
-    if (this.centroCustoName) {
-      const inputValue = this.centroCustoName.toLowerCase();
-      filteredRecords = filteredRecords.filter(data =>
-        data.centro_custo.toLowerCase().includes(inputValue)
-      );
-    }
-
-    // Busca por experiência
-    if (this.experienceFilter === 'withExperience') {
-      filteredRecords = filteredRecords.filter(data => this.isInExperience(data));
-    } else if (this.experienceFilter === 'withoutExperience') {
-      filteredRecords = filteredRecords.filter(data => !this.isInExperience(data));
-    }
-
-    this.records = filteredRecords;
-
-    // Quando um item é selecionado, o select fecha
-    this.isSelectOpen = false;
-  }
-
-  searchEmployee() {
-    this.filters();
-  }
-
-  searchCentroCusto() {
-    this.filters();
-  }
-
-  toggleSelect() {
-    // O mousedown ocorre antes do select realmente abrir ou fechar
-    // Então invertemos o estado atual
-    setTimeout(() => {
-      this.isSelectOpen = !this.isSelectOpen;
-    }, 0);
-  }
-
-  resetSelectIcon() {
-    // Quando o select perde o foco (clique fora), o ícone retorna à posição original
-    this.isSelectOpen = false;
   }
 }

@@ -1,31 +1,28 @@
 <div class="container">
   <div class="filter__container">
-
     <div class="filter">
-      <label for="name">COLABORADOR</label>
-      <input type="text" id="name" placeholder="Ex: Lucas Bomfim" [(ngModel)]="employeeName"
-        (ngModelChange)="searchEmployee()">
+      <label class="filter__label">COLABORADOR</label>
+      <input type="text" placeholder="Ex: Lucas Bomfim" [(ngModel)]="employee" (input)="applyFilters()"
+        class="filter__input">
     </div>
 
     <div class="filter">
-      <label for="centroCusco">CENTRO DE CUSTO</label>
-      <input type="text" id="centroCusco" placeholder="Ex: BRK" [(ngModel)]="centroCustoName"
-        (ngModelChange)="searchCentroCusto()">
+      <label class="filter__label">CENTRO DE CUSTO</label>
+      <input type="text" placeholder="Ex: BRK" [(ngModel)]="cost_center" (input)="applyFilters()" class="filter__input">
     </div>
 
     <div class="filter">
-      <label>STATUS</label>
-      <select [(ngModel)]="experienceFilter" (change)="filters()" (mousedown)="toggleSelect()"
-        (blur)="resetSelectIcon()" #situacaoSelect>
+      <label class="filter__label">STATUS</label>
+      <select [(ngModel)]="experienceFilter" (change)="applyFilters()" class="filter__input">
         <option value="all">Todos</option>
         <option value="withExperience">Em experiência</option>
         <option value="withoutExperience">Sem experiência</option>
       </select>
-      <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
     </div>
 
     <div class="filter">
-      <button type="button" (click)="downloadExcel()">
+      <label class="filter__label">GERAR EXCEL</label>
+      <button type="button" (click)="downloadExcel()" class="filter__button">
         @if (isLoading) {
         <div class="loading-dots">
           <div class="dot"></div>
@@ -33,51 +30,68 @@
           <div class="dot"></div>
         </div>
         } @else {
-          GERAR EXCEL
+        <mat-icon>download</mat-icon>
         }
       </button>
     </div>
   </div>
+  <div class="card__container">
 
-  <div class="experience__main-section">
-    <table class="table">
-      <thead class="table__head">
-        <tr class="table__head-row">
-          <th class="table__header table__header-small">CHAPA</th>
-          <th class="table__header table__header-small">STATUS</th>
-          <th class="table__header table__header-small">ESTADO</th>
-          <th class="table__header table__header-medium">CENTRO DE CUSTO</th>
-          <th class="table__header table__header-medium">FUNÇÃO</th>
-          <th class="table__header table__header-large">FUNCIONARIO</th>
-          <th class="table__header table__header-medium">DATA ADMISSÃO</th>
-          <th class="table__header table__header-medium">PRIMEIRO PERÍODO</th>
-          <th class="table__header table__header-medium">SEGUNDO PERÍODO</th>
-          <th class="table__header table__header-small">VIAJAR</th>
-          <th class="table__header table__header-small">SEGMENTO</th>
-        </tr>
-      </thead>
-    </table>
+    <!-- CARD -->
+    <div class="card" *ngFor="let item of filteredItem">
+      <div class="card__header" [ngClass]="borderExperience(item.primeiro_periodo, item.segundo_periodo)">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">CHAPA: {{ item.chapa || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__title">{{ item.funcionario || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">-</div>
+            <div class="card__subtitle">{{ item.estado || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__title">ADMISSÃO:</div>
+            <div class="card__subtitle">{{ item.admissao || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__title">1º PERIODO:</div>
+            <div class="card__subtitle">{{ item.primeiro_periodo || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__title">2º PERIODO:</div>
+            <div class="card__subtitle">{{ item.segundo_periodo || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__title">SEGMENTO:</div>
+            <div class="card__subtitle">{{ item.segmento || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__title">PODE VIAJAR:</div>
+            <div class="card__subtitle">{{ item.viajar || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="table__body-container">
-      <table class="table">
-        <tbody class="table__body">
-          <tr class="table__body-row" *ngFor="let data of records">
-            <td class="table__data table__data-border"
-              [ngClass]="borderExperience(data.primeiro_periodo, data.segundo_periodo)"></td>
-            <td class="table__data table__data-small">{{ data.chapa }}</td>
-            <td class="table__data table__data-small">{{ data.status }}</td>
-            <td class="table__data table__data-small">{{ data.estado }}</td>
-            <td class="table__data table__data-medium">{{ data.centro_custo }}</td>
-            <td class="table__data table__data-medium">{{ data.funcao }}</td>
-            <td class="table__data table__data-large">{{ data.funcionario }}</td>
-            <td class="table__data table__data-medium">{{ data.admissao }}</td>
-            <td class="table__data table__data-medium">{{ data.primeiro_periodo }}</td>
-            <td class="table__data table__data-medium">{{ data.segundo_periodo }}</td>
-            <td class="table__data table__data-small">{{ data.viajar }}</td>
-            <td class="table__data table__data-small">{{ data.segmento }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- LISTA VAZIA -->
+    <div class="empty" *ngIf="isEmpty">
+      <span>Nenhum registro encontrado</span>
+      <mat-icon>search</mat-icon>
+    </div>
+
+    <!-- CARREGANDO LISTA -->
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
   </div>
 </div>
