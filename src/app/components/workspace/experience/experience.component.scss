@@ -61,8 +61,11 @@
     color: var(--white-color);
     background-color: var(--orange-color);
     box-shadow: var(--box-shadow);
+    transition: all ease 0.2s;
 
-    mat-icon {}
+    &:active {
+      transform: translateY(-4px);
+    }
   }
 }
 
@@ -189,4 +192,45 @@
 :host ::ng-deep mat-progress-spinner circle {
   stroke: var(--orange-color);
   stroke-width: 8%;
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--white-color);
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

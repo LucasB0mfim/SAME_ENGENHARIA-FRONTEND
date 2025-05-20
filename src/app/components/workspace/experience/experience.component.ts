@@ -34,6 +34,7 @@ export class ExperienceComponent implements OnInit {
   experienceFilter: string = 'all';
 
   isLoading: boolean = false;
+  isGenerating: boolean = false;
   isEmpty: boolean = false;
 
   // ========== HOOK ========== //
@@ -62,8 +63,11 @@ export class ExperienceComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    this.isGenerating = true;
+
     this._service.getExcel().subscribe((blob: Blob) => {
       saveAs(blob, 'experiência.xlsx');
+      this.isGenerating = false;
     });
   }
 

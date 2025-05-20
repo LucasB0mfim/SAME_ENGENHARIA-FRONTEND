@@ -2,13 +2,13 @@
   <div class="filter__container">
     <div class="filter">
       <label class="filter__label">COLABORADOR</label>
-      <input type="text" placeholder="Ex: Lucas Bomfim" [(ngModel)]="employee" (input)="applyFilters()"
+      <input type="text" placeholder="BUSCAR" [(ngModel)]="employee" (input)="applyFilters()"
         class="filter__input">
     </div>
 
     <div class="filter">
       <label class="filter__label">CENTRO DE CUSTO</label>
-      <input type="text" placeholder="Ex: BRK" [(ngModel)]="cost_center" (input)="applyFilters()" class="filter__input">
+      <input type="text" placeholder="BUSCAR" [(ngModel)]="cost_center" (input)="applyFilters()" class="filter__input">
     </div>
 
     <div class="filter">
@@ -23,7 +23,7 @@
     <div class="filter">
       <label class="filter__label">GERAR EXCEL</label>
       <button type="button" (click)="downloadExcel()" class="filter__button">
-        @if (isLoading) {
+        @if (isGenerating) {
         <div class="loading-dots">
           <div class="dot"></div>
           <div class="dot"></div>
@@ -36,7 +36,6 @@
     </div>
   </div>
   <div class="card__container">
-
     <!-- CARD -->
     <div class="card" *ngFor="let item of filteredItem">
       <div class="card__header" [ngClass]="borderExperience(item.primeiro_periodo, item.segundo_periodo)">
