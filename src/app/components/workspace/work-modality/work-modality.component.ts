@@ -92,7 +92,7 @@ export class WorkModalityComponent implements OnInit {
   getEmployees() {
     this._experienceService.find().subscribe({
       next: (data) => {
-        this.item = data.records.filter(item => item.funcao === 'SERVENTE' || item.funcao === 'PEDREIRO');
+        this.item = data.records.filter((item: { funcao: string; }) => item.funcao === 'SERVENTE' || item.funcao === 'PEDREIRO');
         this.filteredItem = [...this.item];
         this.isLoading = false;
         this.isEmpty = this.item.length === 0;

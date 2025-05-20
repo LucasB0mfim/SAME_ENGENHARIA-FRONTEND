@@ -9,8 +9,6 @@ import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { TitleService } from '../../../core/services/title.service';
 import { ExperienceService } from '../../../core/services/experience.service';
 
-import { IExperienceRecord } from '../../../core/interfaces/experience-response.interface';
-
 @Component({
   selector: 'app-experience',
   standalone: true,
@@ -72,24 +70,30 @@ export class ExperienceComponent implements OnInit {
   }
 
   // ========== BUSCAR COLABORADOR ========== //
-  applyFilters(): void {
-    this.filteredItem = this.items.filter((item) => {
-      const matchEmployee = this.employee
-        ? item.funcionario?.toLowerCase().includes(this.employee.toLowerCase())
-        : true;
+  applyFilters() {
+    let data = [...this.filteredItem];
 
-      const matchCostCenter = this.cost_center
-        ? item.centro_custo?.toLowerCase().includes(this.cost_center.toLowerCase())
-        : true;
+    if (this.employee) {
+      const inputValue = this.employee.toLowerCase();
+      data = data.filter(data =>
+        data.funcionario.toLowerCase().includes(inputValue)
+      );
+    }
 
-      const matchStatus = this.experienceFilter === 'all' ||
-        (this.experienceFilter === 'withExperience' && item.primeiro_periodo) ||
-        (this.experienceFilter === 'withoutExperience' && !item.primeiro_periodo);
+    if (this.cost_center) {
+      const inputValue = this.cost_center.toLowerCase();
+      data = data.filter(data =>
+        data.centro_custo.toLowerCase().includes(inputValue)
+      );
+    }
 
-      return matchEmployee && matchCostCenter && matchStatus;
-    });
+    if (this.experienceFilter === 'withExperience') {
+      data = data.filter(data => this.isInExperience(data));
+    } else if (this.experienceFilter === 'withoutExperience') {
+      data = data.filter(data => !this.isInExperience(data));
+    }
 
-    this.isEmpty = this.filteredItem.length === 0;
+    this.items = data;
   }
 
 
@@ -120,7 +124,7 @@ export class ExperienceComponent implements OnInit {
     return new Date(year, month - 1, day);
   }
 
-  isInExperience(data: IExperienceRecord): boolean {
+  isInExperience(data: any): boolean {
     const firstDate = this.experienceTime(data.primeiro_periodo);
     const secondDate = this.experienceTime(data.segundo_periodo);
     return firstDate > 0 || secondDate > 0;

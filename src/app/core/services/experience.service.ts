@@ -2,14 +2,12 @@ import { Observable } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { IExperienceResponse } from '../interfaces/experience-response.interface';
-
 @Injectable({
   providedIn: 'root'
 })
 export class ExperienceService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/reports/experience';
+  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/reports/experience';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -17,9 +15,9 @@ export class ExperienceService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  find(): Observable<IExperienceResponse> {
+  find(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<IExperienceResponse>(this._apiUrl, { headers });
+    return this._httpClient.get<any>(this._apiUrl, { headers });
   }
 
   updateModality(request: any): Observable<any> {
