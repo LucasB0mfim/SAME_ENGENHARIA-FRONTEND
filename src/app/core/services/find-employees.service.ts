@@ -2,14 +2,12 @@ import { Observable } from 'rxjs';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { IEmployeesResponse } from '../interfaces/employees-response.interface';
-
 @Injectable({
   providedIn: 'root'
 })
 export class FindEmployeesService {
   private readonly _htppClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/employees';
+  private readonly _apiUrl = 'http://localhost:3000/same-engenharia/api/employees';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -17,8 +15,8 @@ export class FindEmployeesService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findEmployees(): Observable<IEmployeesResponse> {
+  findEmployees(): Observable<any> {
     const headers = this._createHeaders();
-    return this._htppClient.get<IEmployeesResponse>(this._apiUrl, {headers});
+    return this._htppClient.get<any>(this._apiUrl, {headers});
   }
 }

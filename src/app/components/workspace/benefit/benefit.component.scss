@@ -370,8 +370,8 @@
   flex-wrap: wrap;
   padding: 0.7vw 1vw 1vw 0.7vw;
   overflow-y: auto;
-  align-content: flex-start; /* Added to control vertical spacing */
-  min-height: 0; /* Allow container to shrink */
+  align-content: flex-start;
+  min-height: 0;
 
   &::-webkit-scrollbar {
     width: 5px;

@@ -12,5 +12,6 @@ export interface IEmployeeResponse {
     created_at: string,
     updated_at: string,
     avatar: string,
+    birthday: string,
   }
 }

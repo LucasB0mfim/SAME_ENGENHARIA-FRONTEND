@@ -1,122 +1,71 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { Component, OnInit, inject } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../core/services/title.service';
+import { GeneralService } from '../../../core/services/general.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
-
-interface DashboardData {
-  employee: {
-    username: string;
-  };
-}
-
-interface BirthdayPerson {
-  name: string;
-  avatarUrl?: string;
-}
-
-interface Notice {
-  title: string;
-  content: string;
-}
-
-enum DayPeriod {
-  MORNING,
-  AFTERNOON,
-  EVENING
-}
+import { FindEmployeesService } from '../../../core/services/find-employees.service';
 
 @Component({
   selector: 'app-general',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    RouterModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
   templateUrl: './general.component.html',
   styleUrl: './general.component.scss'
 })
 export class GeneralComponent implements OnInit {
-  // Propriedades públicas
-  ilustration = 'assets/images/peoples.png';
+
+  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
+  private readonly _titleService = inject(TitleService);
+  private readonly _generalService = inject(GeneralService);
+  private readonly _dashboardService = inject(DashboardService);
+  private readonly _employeeService = inject(FindEmployeesService);
+
+  // ========== FORMULÁRIOS ========== //
+  commentForm: FormGroup = new FormGroup({
+    comment: new FormControl('')
+  })
+
+  // ========== ESTADOS ========== //
+  notices: any[] = [];
+  comments: any[] = [];
+  birthdays: any[] = [];
+  employee: any = {}
+
+  loadingNotice: boolean = false;
+  loadingbirthdays: boolean = false;
+
+  isSendComment: boolean = false;
+
   username = 'Carregando...';
-  backgroundStyle = '';
-  textColor = '';
+  ilustration = 'assets/images/ilustration-night.gif';
 
-  // Dados mockados (ideal seria vir do serviço)
-  birthdayPeople: BirthdayPerson[] = [
-    { name: 'Anthonny' },
-    { name: 'Giovanna' },
-    { name: 'Francisco' },
-    { name: 'Ailton' }
-  ];
-
-  notices: Notice[] = [
-    {
-      title: 'Sexta Feira - 04/04/2025',
-      content: 'Agenda semanal para alinhamento de projetos e metas. Prepare seus relatórios de progresso e venha com ideias para o sprint seguinte.'
-    },
-    {
-      title: 'Segunda Feira - 31/03/2025',
-      content: 'Workshop de capacitação sobre as novas ferramentas da plataforma. Todos os colaboradores devem trazer seus notebooks para a parte prática.'
-    },
-    {
-      title: 'Pagamento do caju - 31/03/2025',
-      content: 'O benefício flexível do Caju será creditado até as 18h no app. Confira seu saldo e aproveite os parceiros da rede!'
-    },
-    {
-      title: 'Pagamento do salário - 31/03/2025',
-      content: 'A folha de pagamento será processada até o final do dia útil. Verifique sua conta corrente ou plataforma de pagamento digital.'
-    }
-  ];
-
-  // Quick access links
-  quickAccessLinks = [
-    {
-      route: '/dashboard/experience',
-      icon: 'date_range',
-      label: 'Experiência'
-    },
-    {
-      route: '/dashboard/tracking',
-      icon: 'edit_document',
-      label: 'OC\'S'
-    },
-    {
-      route: '/dashboard/request',
-      icon: 'local_shipping',
-      label: 'Meus Pedidos'
-    }
-  ];
-
-  // Serviços injetados
-  private readonly dashboardService = inject(DashboardService);
-  private readonly titleService = inject(TitleService);
-
+  // ========== HOOK ========== //
   ngOnInit(): void {
-    this.applyDayPeriodStyle();
-    this.loadEmployeeData();
-    this.titleService.setTitle('Dashboard');
+    this.getEmployee();
+    this._titleService.setTitle('Dashboard');
   }
 
-  getGreeting(): string {
-    const period = this.getCurrentDayPeriod();
-
-    switch (period) {
-      case DayPeriod.MORNING:
-        return 'Bom dia';
-      case DayPeriod.AFTERNOON:
-        return 'Boa tarde';
-      case DayPeriod.EVENING:
-        return 'Boa noite';
-      default:
-        return 'Olá';
-    }
-  }
-
-  private loadEmployeeData(): void {
-    this.dashboardService.findAll().subscribe({
-      next: (response: DashboardData) => {
-        this.username = response.employee.username;
+  // ========== API ========== //
+  getEmployee(): void {
+    this._dashboardService.findAll().subscribe({
+      next: (data) => {
+        this.username = data.employee.username;
+        this.employee = data.employee;
+        this.getNotice();
+        this.getComment();
+        this.getBirthdays();
       },
       error: (error) => {
         console.error('Erro ao carregar dados do colaborador:', error);
@@ -125,34 +74,85 @@ export class GeneralComponent implements OnInit {
     });
   }
 
-  private getCurrentDayPeriod(): DayPeriod {
+  getNotice(): void {
+    this.loadingNotice = true;
+
+    this._generalService.findNotice().subscribe({
+      next: (data) => {
+        this.notices = data.records;
+        this.loadingNotice = false;
+      },
+      error: (error) => {
+        console.error('Erro ao buscar as notícias.', error);
+        this.loadingNotice = false;
+      }
+    })
+  }
+
+  getComment(): void {
+    this._generalService.findComment().subscribe({
+      next: (data) => {
+        this.comments = data.records;
+      },
+      error: (error) => {
+        console.error('Erro ao buscar as notícias.', error);
+      }
+    })
+  }
+
+  getBirthdays(): void {
+    this.loadingbirthdays = true;
+
+    this._employeeService.findEmployees().subscribe({
+      next: (data) => {
+        const currentMonth = new Date().getMonth();
+
+        this.birthdays = data.employees.filter((employee: any) => {
+          const birthday = new Date(employee.birthday);
+          return birthday.getMonth() === currentMonth;
+        });
+
+        this.loadingbirthdays = false;
+      },
+      error: (error) => {
+        console.error('Erro ao buscar aniversariantes.', error);
+        this.loadingbirthdays = false;
+      }
+    });
+  }
+
+  sendComment(): void {
+    this.isSendComment = true;
+
+    const request = {
+      comment: this.commentForm.value.comment,
+      username: this.employee.username,
+      avatar: this.employee.avatar,
+    }
+
+    this._generalService.sendComment(request).subscribe({
+      next: () => {
+        this.getComment();
+        this.isSendComment = false;
+        this.commentForm.reset;
+      },
+      error: (error) => {
+        console.log('Erro ao enviar comentário.', error);
+        this.isSendComment = false;
+      }
+    })
+  }
+
+  // ========== UTILITÁRIOS ========== //
+  getHours(): string {
     const hour = new Date().getHours();
 
     if (hour < 12) {
-      return DayPeriod.MORNING;
+      return 'Bom dia';
     } else if (hour < 18) {
-      return DayPeriod.AFTERNOON;
+      return 'Boa tarde';
     } else {
-      return DayPeriod.EVENING;
-    }
-  }
-
-  private applyDayPeriodStyle(): void {
-    const period = this.getCurrentDayPeriod();
-
-    switch (period) {
-      case DayPeriod.MORNING:
-        this.backgroundStyle = 'linear-gradient(to right, #FFFAE3, #D9E8FF)';
-        this.textColor = '#3b3b3b';
-        break;
-      case DayPeriod.AFTERNOON:
-        this.backgroundStyle = 'linear-gradient(to right, #FFB547, #FFD97D)';
-        this.textColor = '#3b3b3b';
-        break;
-      case DayPeriod.EVENING:
-        this.backgroundStyle = 'linear-gradient(to right, #4A6D8C, #2C3E50)';
-        this.textColor = '#FFF';
-        break;
+      return 'Boa noite';
     }
   }
 }

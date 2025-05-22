@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  logo: string = '/assets/images/logo.png';
+  logo: string = '/assets/images/logo-orange.png';
   inhire: string = 'https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia'
 }

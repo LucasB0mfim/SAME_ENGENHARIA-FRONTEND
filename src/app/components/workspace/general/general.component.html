@@ -1,55 +1,92 @@
-<div class="dashboard">
-  <!-- Seção Superior -->
-  <div class="dashboard__left">
-    <!-- Cartão de Boas-vindas -->
-    <div class="welcome-card" [ngStyle]="{ 'background': backgroundStyle, 'color': textColor }">
-      <div class="welcome-card__text">
-        <h1 class="welcome-card__title">{{ getGreeting() }}, {{ username }}!</h1>
-        <span class="welcome-card__subtitle">Espero que você tenha um ótimo dia.</span>
+<div class="container">
+  <div class="left__section">
+    <div class="birthday-card">
+      <div class="birthday-card__header">
+        <mat-icon>celebration</mat-icon>
+        <span class="birthday-card__title">Aniversariantes do mês</span>
       </div>
-      <div class="welcome-card__illustration">
-        <img [src]="ilustration" alt="Ilustração de boas-vindas">
-      </div>
-    </div>
-
-    <!-- Aniversariantes do Mês -->
-    <div class="birthday">
-      <h1 class="birthday__title">Aniversariantes do Mês</h1>
-      <div class="birthday__columns">
-        <div *ngFor="let person of birthdayPeople" class="birthday__column">
-          <mat-icon class="birthday__icon">person</mat-icon>
-          <span class="birthday__text">{{ person.name }}</span>
+      <div class="birthday-card__list">
+        <div class="birthday-card__item" *ngFor="let birthday of birthdays">
+          <img src="{{ birthday.avatar }}" class="birthday-card__avatar" />
+          <div class="birthday-card__info">
+            <span class="birthday-card__name">{{ birthday.username }}</span>
+            <span class="birthday-card__date">{{ birthday.birthday | date:'dd/MM' }}</span>
+          </div>
+        </div>
+        <div class="birthday__loading" *ngIf="loadingbirthdays">
+          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
         </div>
       </div>
     </div>
 
-    <!-- Acesso Rápido -->
-    <div class="quick-access">
-      <h4 class="quick-access__title">Acesso Rápido</h4>
-      <div class="quick-access__columns">
-        <a
-          *ngFor="let link of quickAccessLinks"
-          class="quick-access__column"
-          [routerLink]="link.route">
-          <mat-icon class="quick-access__icon">{{ link.icon }}</mat-icon>
-          <span class="quick-access__text">{{ link.label }}</span>
-        </a>
+    <div class="access-card">
+      <div class="access-card__header">
+        <mat-icon>bolt</mat-icon>
+        <span class="access-card__title">Acesso rápido</span>
+      </div>
+      <div class="access-card__list">
+        <div class="access-card__item" routerLink="/dashboard/experience">
+          <mat-icon>date_range</mat-icon>
+          <div>Experiência</div>
+        </div>
+        <div class="access-card__item" routerLink="/dashboard/tracking">
+          <mat-icon>edit_document</mat-icon>
+          <div>Ratrear pedido</div>
+        </div>
+        <div class="access-card__item" routerLink="/dashboard/human-resources/upload-timesheet">
+          <mat-icon>download</mat-icon>
+          <div>Importar ponto</div>
+        </div>
+        <div class="access-card__item" routerLink="/dashboard/human-resources/time-sheet">
+          <mat-icon>work_history</mat-icon>
+          <div>Monitorar ponto</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Seção Principal -->
-  <div class="dashboard__right">
-    <!-- Mural de Avisos -->
-    <div class="notices">
-      <h1 class="notices__title">Mural de Avisos</h1>
-      <div class="notices__columns">
-        <div *ngFor="let notice of notices" class="notices__column">
-          <h4 class="notices__text--big">{{ notice.title }}</h4>
-          <span class="notices__text--small">
-            {{ notice.content }}
-          </span>
+  <div class="main__section">
+    <div class="welcome" [ngStyle]="{ 'background-image': 'url(' + ilustration + ')' }">
+      <span class="welcome__title">{{ getHours() }}, {{ username }}!</span>
+      <span class="welcome__subtitle">Espero que você tenha um ótimo dia.</span>
+    </div>
+
+    <form [formGroup]="commentForm" (ngSubmit)="sendComment()" class="create-comment">
+      <textarea class="create-comment__textarea" placeholder="No que você está pensando?" formControlName="comment"></textarea>
+      <button class="create-comment__button" type="submit">
+        @if (isSendComment) {
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
+        } @else {
+        Enviar
+        }
+      </button>
+    </form>
+
+    <div class="comment-card" *ngFor="let comment of comments">
+      <div class="comment-card__header">
+        <img src="{{ comment.avatar }}" class="comment-card__avatar" />
+        <div class="comment-card__username">{{ comment.username }}</div>
+      </div>
+      <div class="comment-card__comment">{{ comment.comment }}</div>
+    </div>
+  </div>
+
+  <div class="right__section">
+    <div class="notice">
+      <div class="notice__card" *ngFor="let notice of notices">
+        <h3 class="notice__title">{{ notice.title }}</h3>
+        <p class="notice__description">{{ notice.description }}</p>
+        <div class="notice__meta">
+          <span>{{ notice.creator }}</span>
+          <span class="date">{{ notice.created_at | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+      <div class="notice__loading" *ngIf="loadingNotice">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
       </div>
     </div>
   </div>
