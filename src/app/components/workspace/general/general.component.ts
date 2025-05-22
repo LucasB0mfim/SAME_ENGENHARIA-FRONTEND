@@ -134,7 +134,7 @@ export class GeneralComponent implements OnInit {
       next: () => {
         this.getComment();
         this.isSendComment = false;
-        this.commentForm.reset;
+        this.commentForm.reset();
       },
       error: (error) => {
         console.log('Erro ao enviar comentário.', error);
