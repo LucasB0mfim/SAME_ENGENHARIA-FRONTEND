@@ -7,7 +7,7 @@
       </div>
       <div class="birthday-card__list">
         <div class="birthday-card__item" *ngFor="let birthday of birthdays">
-          <img src="{{ birthday.avatar }}" class="birthday-card__avatar" />
+          <img src="{{ birthday.avatar || avatar }}" class="birthday-card__avatar" />
           <div class="birthday-card__info">
             <span class="birthday-card__name">{{ birthday.username }}</span>
             <span class="birthday-card__date">{{ birthday.birthday | date:'dd/MM' }}</span>

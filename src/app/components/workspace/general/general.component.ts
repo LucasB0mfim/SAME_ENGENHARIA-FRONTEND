@@ -50,6 +50,8 @@ export class GeneralComponent implements OnInit {
 
   username = 'Carregando...';
   ilustration = 'assets/images/ilustration-night.gif';
+  avatar: string = 'assets/images/avatarIconDark.png';
+
 
   // ========== HOOK ========== //
   ngOnInit(): void {

@@ -17,7 +17,7 @@ import { ILoginRequest } from '../../core/interfaces/login-request.interface';
 })
 export class FirstLoginComponent {
   logo = 'assets/images/banner-logo.png';
-  backgroundImageUrl = 'assets/images/wallpaper-login.jpg';
+  backgroundImageUrl = 'assets/images/login-banner.gif';
 
   loading: boolean = false;
   loginError: string = '';

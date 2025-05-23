@@ -26,8 +26,7 @@ export class UpdateComponent {
   currentPasswordIcon: 'lock' | 'visibility' | 'visibility_off' = 'lock';
   newPasswordIcon: 'lock' | 'visibility' | 'visibility_off' = 'lock';
 
-  logo = 'assets/images/banner-logo.png';
-  backgroundImageUrl = 'assets/images/wallpaper-login.jpg';
+  backgroundImageUrl = 'assets/images/login-banner.gif';
 
   passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   passwordRequirements = {
