@@ -4,13 +4,8 @@ $primary-light: #FF9800;
 $primary-dark: #E65100;
 $text-brand: #FF6F00;
 
-$text-dark: #333333;
-$text-light: #777777;
 $background-color: #f5f5f5;
 $white: #ffffff;
-$error-color: #e74c3c;
-$border-color: #eeeeee;
-$shadow-color: rgba(0, 0, 0, 0.1);
 
 // Container principal
 .container {
@@ -101,7 +96,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.5s ease-out;
 
     &-error {
-      color: $error-color;
+      color: #FF4444;
       font-size: 0.85rem;
       text-align: center;
     }
@@ -139,7 +134,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: $text-light;
+    color: #777777;
     font-size: 1.2rem;
     pointer-events: none;
     transition: color 0.3s ease;
@@ -150,7 +145,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: $text-light;
+    color: #777777;
     cursor: pointer;
     pointer-events: all;
 
@@ -169,7 +164,7 @@ $shadow-color: rgba(0, 0, 0, 0.1);
   margin-top: 1rem;
   text-align: center;
   font-size: 0.85rem;
-  color: $text-light;
+  color: #777777;
 
   .login__link {
     color: $primary-color;
@@ -180,6 +175,50 @@ $shadow-color: rgba(0, 0, 0, 0.1);
     &:hover {
       color: $primary-dark;
       text-decoration: underline;
+    }
+  }
+}
+
+.password-requirements {
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid #1E1E1E;
+  animation: fadeIn 0.5s ease-out;
+
+  .requirements__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-color);
+    margin-bottom: 0.8rem;
+  }
+
+  .requirements__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--gray-color);
+      margin-bottom: 0.5rem;
+      padding: 0.3rem 0;
+      transition: all 0.3s ease;
+
+      .mat-icon {
+        font-size: 1rem;
+        height: 1rem;
+        width: 1rem;
+        margin-right: 0.5rem;
+        color: #FF4444;
+      }
+
+      &.requirement-met {
+        .mat-icon {
+          color: #00CC66;
+        }
+      }
     }
   }
 }

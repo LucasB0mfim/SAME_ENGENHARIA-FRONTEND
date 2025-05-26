@@ -42,6 +42,7 @@
     transition: all 0.2s ease;
     box-shadow: var(--box-shadow);
     font-size: clamp(0.6rem, 0.80vw, 0.9rem);
+    text-overflow: ellipsis;
 
     &::placeholder {
       color: var(--gray-color);
