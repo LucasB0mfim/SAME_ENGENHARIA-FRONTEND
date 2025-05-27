@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-  logo: string = '/assets/images/logo.png';
+  logo: string = '/assets/images/logo-orange.png';
   instagram: string = '/assets/images/instagram.png';
   linkedin: string = '/assets/images/linkedin.png';
   whatsapp: string = '/assets/images/whatsapp.png';
