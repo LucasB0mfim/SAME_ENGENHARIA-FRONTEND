@@ -504,24 +504,20 @@ export class BenefitComponent implements OnInit {
   calculateVrCajuMonth(item: any): number {
     const vrDay = this.calculateVrCajuDay(item);
 
-    if (item.contrato === 'ESTÁGIO') {
-      return vrDay * item.dias_uteis;
-    } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
     } else {
-      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
   calculateVrVrMonth(item: any): number {
     const vrDay = this.calculateVrVrDay(item);
 
-    if (item.contrato === 'ESTÁGIO') {
-      return vrDay * item.dias_uteis;
-    } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
     } else {
-      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
@@ -549,12 +545,10 @@ export class BenefitComponent implements OnInit {
     const vrDay = this.calculateVrCajuDay(item);
     const vtDay = this.calculateVtCajuDay(item);
 
-    if (item.contrato === 'ESTÁGIO') {
-      return vtDay * item.dias_uteis;
-    } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
     } else {
-      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
@@ -562,12 +556,10 @@ export class BenefitComponent implements OnInit {
     const vrDay = this.calculateVrDay(item);
     const vtDay = this.calculateVtVemDay(item);
 
-    if (item.contrato === 'ESTÁGIO') {
-      return vtDay * item.dias_uteis;
-    } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
     } else {
-      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
@@ -593,12 +585,12 @@ export class BenefitComponent implements OnInit {
 
   calculateVcCajuMonth(item: any): number {
     const vcDay = this.calculateVcCajuDay(item);
-    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
   }
 
   calculateVcVrMonth(item: any): number {
     const vcDay = this.calculateVcVrDay(item);
-    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
   }
 
   formatCurrency(value: number): string {
@@ -622,12 +614,10 @@ export class BenefitComponent implements OnInit {
   calculateVrMonth(item: any): number {
     const vrDay = this.calculateVrDay(item);
 
-    if (item.contrato === 'ESTÁGIO') {
-      return vrDay * item.dias_uteis;
-    } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+    if (vrDay > 25 && vrDay < 35) {
+      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
     } else {
-      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
@@ -646,14 +636,12 @@ export class BenefitComponent implements OnInit {
     const vtDay = this.calculateVtDay(item);
     const vtFixed = item.vt_caju + item.vt_vem;
 
-    if (item.contrato === 'ESTÁGIO') {
-      return vtDay * item.dias_uteis;
-    } else if (vtFixed > 50) {
+    if (vtFixed > 50) {
       return vtFixed;
     } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet) + item.dias_nao_uteis)).toFixed(2));
+      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
     } else {
-      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
@@ -673,7 +661,7 @@ export class BenefitComponent implements OnInit {
     if (vcDay > 50) {
       return vcDay;
     } else {
-      return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet)).toFixed(2));
+      return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
     }
   }
 
@@ -682,12 +670,16 @@ export class BenefitComponent implements OnInit {
   }
 
   // ========== CALCULAR STATUS ========== //
-  daysWorked(businessDays: number, timesheet: any[]): number {
-    return businessDays + this.extraDaysCounter(timesheet) - this.absenceCounter(timesheet) - this.medicalCertificateCounter(timesheet);
+  daysWorked(businessDays: number, timesheet: any[], contract: string): number {
+    if (contract === 'ESTÁGIO') {
+      return businessDays - this.medicalCertificateCounter(timesheet);
+    } else {
+      return businessDays + this.extraDaysCounter(timesheet) - this.absenceCounter(timesheet) - this.medicalCertificateCounter(timesheet);
+    }
   }
 
   extraDaysCounter(timesheet: any[]): number {
-    return timesheet.filter(value => value.evento?.abono === 'Dia extra').length;
+    return timesheet.filter(value => value.evento_abono === 'Dia extra').length;
   }
 
   absenceCounter(timesheet: any[]): number {

@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ExperienceService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/reports/experience';
+  private readonly _apiUrl = 'https://sameengenharia.com.br/api/reports/experience';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -26,7 +26,7 @@ export class ExperienceService {
   }
 
   getExcel(): Observable<Blob> {
-    return this._httpClient.get('http://44.203.74.199:3000/same-engenharia/api/download/experience', {
+    return this._httpClient.get('https://sameengenharia.com.br/api/download/experience', {
       responseType: 'blob' as 'blob'
     });
   }

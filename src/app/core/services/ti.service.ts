@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class TiService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/ti/tickets';
+  private readonly _apiUrl = 'https://sameengenharia.com.br/api/ti/tickets';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

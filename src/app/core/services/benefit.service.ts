@@ -17,37 +17,37 @@ export class BenefitService {
 
   findAll(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/employee', { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee', { headers });
   }
 
   createEmployee(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/employee', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/employee', request, { headers });
   }
 
   updateEmployee(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/employee', request, { headers });
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/benefit/employee', request, { headers });
   }
 
   deleteEmployee(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`http://44.203.74.199:3000/same-engenharia/api/benefit/employee/${id}`, { headers });
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/${id}`, { headers });
   }
 
   findRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/find-report', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/find-report', request, { headers });
   }
 
   createRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/create-report', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/create-report', request, { headers });
   }
 
   updateRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/benefit/update', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/update', request, { headers });
   }
 
   stateHolidays(state: string, year: string): Observable<any> {

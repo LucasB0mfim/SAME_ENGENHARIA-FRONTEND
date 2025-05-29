@@ -16,16 +16,16 @@ export class GeneralService {
 
   findNotice(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('http://44.203.74.199:3000/same-engenharia/api/notice', { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/notice', { headers });
   }
 
   findComment(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('http://44.203.74.199:3000/same-engenharia/api/comment', { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/comment', { headers });
   }
 
   sendComment(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://44.203.74.199:3000/same-engenharia/api/comment', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/comment', request, { headers });
   }
 }

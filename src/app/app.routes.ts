@@ -35,8 +35,7 @@ import { constructionAccessGuard } from './core/guard/construction-access.guard'
 export const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'home'
+    component: HomeComponent
   },
   {
     path: 'home',
@@ -133,9 +132,5 @@ export const routes: Routes = [
         canActivate: [tiGuard]
       },
     ]
-  },
-  {
-    path: '**',
-    redirectTo: 'home'
   }
 ];

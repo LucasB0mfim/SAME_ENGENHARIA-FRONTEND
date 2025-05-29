@@ -11,7 +11,7 @@ import { IUpdateResponse } from '../interfaces/update-response.interface';
 export class UpdateService {
 
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'http://44.203.74.199:3000/same-engenharia/api/employee';
+  private readonly _apiUrl = 'https://sameengenharia.com.br/api/employee';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
