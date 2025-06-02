@@ -51,6 +51,7 @@
     width: 6vw;
     background: var(--orange-color);
     color: var(--white-color);
+
     &:hover {
       background: var(--orange-color);
       transform: translateY(-2px);
@@ -62,6 +63,7 @@
     height: 100%;
     background: var(--orange-color);
     color: var(--white-color);
+
     &:hover {
       background: var(--orange-color);
       transform: translateY(-2px);
@@ -71,10 +73,12 @@
   &--secondary {
     background: var(--secondary-color);
     color: var(--text-color);
+
     &:hover {
       color: var(--orange-color);
       transform: translateY(-2px);
     }
+
     &.active {
       background: var(--orange-color);
       color: var(--white-color);
@@ -90,6 +94,7 @@
     width: 6vw;
     background: var(--primary-color);
     color: var(--text-color);
+
     &:hover {
       color: var(--orange-color);
       transform: translateY(-2px);
@@ -100,6 +105,7 @@
     width: 6vw;
     background: #ff5757;
     color: var(--white-color);
+
     &:hover {
       background: #ff5757;
       transform: translateY(-2px);
@@ -112,6 +118,7 @@
     color: var(--gray-color);
     font-size: 1.5rem;
     padding: 0;
+
     &:hover {
       color: var(--orange-color);
       transform: scale(1.1);
@@ -145,14 +152,14 @@
 
 .grafic__container {
   gap: 1vw;
-  padding: 0vw 0.7vw 0.7vw 0.7vw;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  align-items: stretch;
-  justify-content: center;
-  overflow: visible;
-  height: 100%;
+  padding: 0vw 0.7vw 0.7vw 0.7vw;
+  grid-template-columns: repeat(4, 1fr);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
 }
 
 .grafic__card {
@@ -166,12 +173,14 @@
   border-radius: 8px;
   background: var(--secondary-color);
   transition: all 0.3s ease;
-  min-height: 180px;
-  height: auto;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  &:last-child {
+    grid-column: -1/1;
   }
 }
 
@@ -195,8 +204,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .circle-content {
@@ -208,8 +222,15 @@
 }
 
 @keyframes countUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .currency {
@@ -231,35 +252,161 @@
   text-align: center;
 }
 
-.grafic__card:nth-child(1) .label { color: #FF6384; }
-.grafic__card:nth-child(2) .label { color: #36A2EB; }
-.grafic__card:nth-child(3) .label { color: #FFCE56; }
-.grafic__card:nth-child(4) .label { color: #4BC0C0; }
-.grafic__card:nth-child(5) .label { color: #9966FF; }
-.grafic__card:nth-child(6) .label { color: #FF9F40;}
-.grafic__card:nth-child(7) .label { color: #00C853; }
-.grafic__card:nth-child(8) .label { color: #E91E63; }
-.grafic__card:nth-child(9) .label { color: #00BCD4; }
+.grafic__card:nth-child(1) .label {
+  color: #FF9F40;
+}
 
-.grafic__card:nth-child(1) .grafic__circle { border-color: rgba(255, 99, 132, 0.3); }
-.grafic__card:nth-child(2) .grafic__circle { border-color: rgba(54, 162, 235, 0.3); }
-.grafic__card:nth-child(3) .grafic__circle { border-color: rgba(255, 206, 86, 0.3); }
-.grafic__card:nth-child(4) .grafic__circle { border-color: rgba(75, 192, 192, 0.3); }
-.grafic__card:nth-child(5) .grafic__circle { border-color: rgba(153, 102, 255, 0.3); }
-.grafic__card:nth-child(6) .grafic__circle { border-color: rgba(255, 159, 64, 0.3); }
-.grafic__card:nth-child(7) .grafic__circle { border-color: rgba(0, 200, 83, 0.3); }
-.grafic__card:nth-child(8) .grafic__circle { border-color: rgba(233, 30, 99, 0.3); }
-.grafic__card:nth-child(9) .grafic__circle { border-color: rgba(0, 188, 212, 0.3); }
+.grafic__card:nth-child(2) .label {
+  color: #FF9F40;
+}
 
-.grafic__card:nth-child(1) .value { color: #FF6384; }
-.grafic__card:nth-child(2) .value { color: #36A2EB; }
-.grafic__card:nth-child(3) .value { color: #FFCE56; }
-.grafic__card:nth-child(4) .value { color: #4BC0C0; }
-.grafic__card:nth-child(5) .value { color: #9966FF; }
-.grafic__card:nth-child(6) .value { color: #FF9F40; }
-.grafic__card:nth-child(7) .value { color: #00C853; }
-.grafic__card:nth-child(8) .value { color: #E91E63; }
-.grafic__card:nth-child(9) .value { color: #00BCD4; }
+.grafic__card:nth-child(3) .label {
+  color: #FF9F40;
+}
+
+.grafic__card:nth-child(4) .label {
+  color: #FF9F40;
+}
+
+.grafic__card:nth-child(5) .label {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(6) .label {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(7) .label {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(8) .label {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(9) .label {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(10) .label {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(11) .label {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(12) .label {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(13) .label {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(1) .grafic__circle {
+  border-color: rgba(255, 159, 64, 0.3);
+}
+
+.grafic__card:nth-child(2) .grafic__circle {
+  border-color: rgba(255, 159, 64, 0.3);
+}
+
+.grafic__card:nth-child(3) .grafic__circle {
+  border-color: rgba(255, 159, 64, 0.3);
+}
+
+.grafic__card:nth-child(4) .grafic__circle {
+  border-color: rgba(255, 159, 64, 0.3);
+}
+
+.grafic__card:nth-child(5) .grafic__circle {
+  border-color: rgba(0, 200, 83, 0.3);
+}
+
+.grafic__card:nth-child(6) .grafic__circle {
+  border-color: rgba(0, 200, 83, 0.3);
+}
+
+.grafic__card:nth-child(7) .grafic__circle {
+  border-color: rgba(0, 200, 83, 0.3);
+}
+
+.grafic__card:nth-child(8) .grafic__circle {
+  border-color: rgba(0, 200, 83, 0.3);
+}
+
+.grafic__card:nth-child(9) .grafic__circle {
+  border-color: rgba(0, 188, 212, 0.3);
+}
+
+.grafic__card:nth-child(10) .grafic__circle {
+  border-color: rgba(0, 188, 212, 0.3);
+}
+
+.grafic__card:nth-child(11) .grafic__circle {
+  border-color: rgba(0, 188, 212, 0.3);
+}
+
+.grafic__card:nth-child(12) .grafic__circle {
+  border-color: rgba(0, 188, 212, 0.3);
+}
+
+.grafic__card:nth-child(13) .grafic__circle {
+  border-color: rgba(0, 188, 212, 0.3);
+}
+
+.grafic__card:nth-child(1) .value {
+  color: #FF9F40;
+}
+
+.grafic__card:nth-child(2) .value {
+  color: #FF9F40;
+}
+
+.grafic__card:nth-child(3) .value {
+  color: #FF9F40;
+}
+
+.grafic__card:nth-child(4) .value {
+  color: #FF9F40;
+}
+
+.grafic__card:nth-child(5) .value {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(6) .value {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(7) .value {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(8) .value {
+  color: #00C853;
+}
+
+.grafic__card:nth-child(9) .value {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(10) .value {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(11) .value {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(12) .value {
+  color: #2c7be5;
+}
+
+.grafic__card:nth-child(13) .value {
+  color: #2c7be5;
+}
 
 .card__container {
   gap: 2vw;
@@ -436,8 +583,15 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form__header {
@@ -598,6 +752,7 @@
 }
 
 @keyframes bounce {
+
   0%,
   80%,
   100% {

@@ -465,6 +465,25 @@ export class BenefitComponent implements OnInit {
     return parseFloat((this.totalCaju() + this.totalVr() + this.vtVemIndicator()).toFixed(2));
   }
 
+  totalEmployees() {
+    return this.items.length
+  }
+
+  mediaVR() {
+    if (this.totalEmployees() <= 0) return 0;
+    return (this.vrCajuIndicator() + this.vrVrIndicator()) / this.totalEmployees();
+  }
+
+  mediaVT() {
+    if (this.totalEmployees() <= 0) return 0;
+    return (this.vtCajuIndicator() + this.vtVemIndicator()) / this.totalEmployees();
+  }
+
+  mediaVC() {
+    if (this.totalEmployees() <= 0) return 0;
+    return (this.vcCajuIndicator() + this.vcVrIndicator()) / this.totalEmployees();
+  }
+
   vcCajuIndicator(): number {
     const total = this.items.reduce((count: number, value: any) => {
       return count + this.calculateVcCajuMonth(value);

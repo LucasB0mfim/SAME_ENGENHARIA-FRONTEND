@@ -10,15 +10,15 @@ import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { ThemeService } from '../../../core/services/theme.service.js';
 
 interface CostCenterIndicator {
-  nome_centro_custo: string;
-  total_receber: string;
-  total_pago_material: string;
-  material_pago: string;
-  material_apagar: string;
-  total_pago_servico: string;
-  servico_pago: string;
-  servico_apagar: string;
-  folha_pagamento: string;
+  centro_custo: string;
+  total_receber: number;
+  total_material: number;
+  material_pago: number;
+  material_apagar: number;
+  total_servico: number;
+  servico_pago: number;
+  servico_apagar: number;
+  folha_pagamento: number;
 }
 
 @Component({
@@ -68,7 +68,7 @@ export class CostCenterComponent implements OnInit {
     this._indicatorService.findCostCenter().subscribe({
       next: (data) => {
         this.indicators = data.result.filter((item: CostCenterIndicator) =>
-          item.nome_centro_custo !== 'Outro Centro de Custo'
+          item.centro_custo !== 'Outro Centro de Custo'
         );
         this.indicatorsCopie = [...this.indicators];
         this.removeDuplicate();
@@ -148,42 +148,42 @@ export class CostCenterComponent implements OnInit {
   // DEFINI OS DADOS DO GRÁFICO
   createSpecificChart() {
     const indicator = this.indicatorsCopie.find(
-      (item) => item.nome_centro_custo === this.centroCustoField
+      (item) => item.centro_custo === this.centroCustoField
     );
 
     if (!indicator) return;
 
     const labels = [
       'Total a Receber',
-      'Total Pago Material',
+      'Total Material',
       'Material Pago',
       'Material a Pagar',
-      'Total Pago Serviço',
+      'Total Serviço',
       'Serviço Pago',
       'Serviço a Pagar',
       'Folha de Pagamento'
     ];
 
     const data = [
-      this.formateValue(indicator.total_receber),
-      this.formateValue(indicator.total_pago_material),
-      this.formateValue(indicator.material_pago),
-      this.formateValue(indicator.material_apagar),
-      this.formateValue(indicator.total_pago_servico),
-      this.formateValue(indicator.servico_pago),
-      this.formateValue(indicator.servico_apagar),
-      this.formateValue(indicator.folha_pagamento)
+      indicator.total_receber,
+      indicator.total_material,
+      indicator.material_pago,
+      indicator.material_apagar,
+      indicator.total_servico,
+      indicator.servico_pago,
+      indicator.servico_apagar,
+      indicator.folha_pagamento
     ];
 
-    this.createBarChart(labels, data, indicator.nome_centro_custo);
+    this.createBarChart(labels, data, indicator.centro_custo);
   }
 
   // CONFIGURAÇÃO DO GRÁFICO 'GERAL'
   createGeneralChart() {
     const labels = this.uniqueCostCenter;
     const data = this.uniqueCostCenter.map(centro => {
-      const indicator = this.indicators.find(item => item.nome_centro_custo === centro);
-      return indicator ? this.formateValue(indicator.total_receber) : 0;
+      const indicator = this.indicators.find(item => item.centro_custo === centro);
+      return indicator ? indicator.total_receber : 0;
     });
 
     this.createBarChart(labels, data, 'Total a Receber');
@@ -263,7 +263,7 @@ export class CostCenterComponent implements OnInit {
       let totalGeral = 0;
 
       this.indicators.forEach(indicator => {
-        const totalReceber = this.formateValue(indicator.total_receber);
+        const totalReceber = indicator.total_receber;
         totalGeral += totalReceber;
       });
 
@@ -273,14 +273,14 @@ export class CostCenterComponent implements OnInit {
       });
     } else {
       const indicator = this.indicatorsCopie.find(
-        (item) => item.nome_centro_custo === this.centroCustoField
+        (item) => item.centro_custo === this.centroCustoField
       );
 
       if (!indicator) {
         return '0,00';
       }
 
-      const totalReceber = this.formateValue(indicator.total_receber);
+      const totalReceber = indicator.total_receber;
 
       return totalReceber.toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
@@ -295,9 +295,9 @@ export class CostCenterComponent implements OnInit {
       let totalGeral = 0;
 
       this.indicators.forEach(indicator => {
-        const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
-        const totalPagoServico = this.formateValue(indicator.total_pago_servico);
-        const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+        const totalPagoMaterial = indicator.total_material;
+        const totalPagoServico = indicator.total_servico;
+        const folhaPagamento = indicator.folha_pagamento;
 
         // Acumula os valores diretamente como negativos
         totalGeral -= (totalPagoMaterial + totalPagoServico + folhaPagamento);
@@ -310,16 +310,16 @@ export class CostCenterComponent implements OnInit {
       });
     } else {
       const indicator = this.indicatorsCopie.find(
-        (item) => item.nome_centro_custo === this.centroCustoField
+        (item) => item.centro_custo === this.centroCustoField
       );
 
       if (!indicator) {
         return '0,00';
       }
 
-      const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
-      const totalPagoServico = this.formateValue(indicator.total_pago_servico);
-      const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+      const totalPagoMaterial = indicator.total_material;
+      const totalPagoServico = indicator.total_servico;
+      const folhaPagamento = indicator.folha_pagamento;
 
       const total = totalPagoMaterial + totalPagoServico + folhaPagamento;
 
@@ -337,10 +337,10 @@ export class CostCenterComponent implements OnInit {
       let totalGeral = 0;
 
       this.indicators.forEach(indicator => {
-        const totalReceber = this.formateValue(indicator.total_receber);
-        const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
-        const totalPagoServico = this.formateValue(indicator.total_pago_servico);
-        const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+        const totalReceber = indicator.total_receber;
+        const totalPagoMaterial = indicator.total_material;
+        const totalPagoServico = indicator.total_servico;
+        const folhaPagamento = indicator.folha_pagamento;
 
         const saldoObra = totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento;
         totalGeral += saldoObra;
@@ -352,17 +352,17 @@ export class CostCenterComponent implements OnInit {
       });
     } else {
       const indicator = this.indicatorsCopie.find(
-        (item) => item.nome_centro_custo === this.centroCustoField
+        (item) => item.centro_custo === this.centroCustoField
       );
 
       if (!indicator) {
         return '0,00';
       }
 
-      const totalReceber = this.formateValue(indicator.total_receber);
-      const totalPagoMaterial = this.formateValue(indicator.total_pago_material);
-      const totalPagoServico = this.formateValue(indicator.total_pago_servico);
-      const folhaPagamento = this.formateValue(indicator.folha_pagamento);
+      const totalReceber = indicator.total_receber;
+      const totalPagoMaterial = indicator.total_material;
+      const totalPagoServico = indicator.total_servico;
+      const folhaPagamento = indicator.folha_pagamento;
 
       const total = totalReceber - totalPagoMaterial - totalPagoServico - folhaPagamento;
 
@@ -391,7 +391,7 @@ export class CostCenterComponent implements OnInit {
       this.indicatorsCopie = [...this.indicators];
     } else {
       this.indicatorsCopie = this.indicators.filter(
-        (item) => item.nome_centro_custo === this.centroCustoField
+        (item) => item.centro_custo === this.centroCustoField
       );
     }
     this.startChart();
@@ -401,8 +401,8 @@ export class CostCenterComponent implements OnInit {
   removeDuplicate(): void {
     const constCenterArray = new Set<string>();
     this.indicators.forEach((item) => {
-      if (item.nome_centro_custo && item.nome_centro_custo.trim() !== '') {
-        constCenterArray.add(item.nome_centro_custo);
+      if (item.centro_custo && item.centro_custo.trim() !== '') {
+        constCenterArray.add(item.centro_custo);
       }
     });
     this.uniqueCostCenter = Array.from(constCenterArray).sort();
