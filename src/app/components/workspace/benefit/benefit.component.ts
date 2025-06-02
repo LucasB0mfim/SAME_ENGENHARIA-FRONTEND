@@ -476,12 +476,14 @@ export class BenefitComponent implements OnInit {
 
   mediaVT() {
     if (this.totalEmployees() <= 0) return 0;
-    return (this.vtCajuIndicator() + this.vtVemIndicator()) / this.totalEmployees();
+    const vr = this.vtCajuIndicator() + this.vtVemIndicator();
+    const vc = this.vcCajuIndicator() + this.vcVrIndicator();
+    return (vr + vc) / this.totalEmployees();
   }
 
-  mediaVC() {
+  mediaGeral() {
     if (this.totalEmployees() <= 0) return 0;
-    return (this.vcCajuIndicator() + this.vcVrIndicator()) / this.totalEmployees();
+    return ((this.vtCajuIndicator() + this.vtVemIndicator()) + (this.vcCajuIndicator() + this.vcVrIndicator())) / this.totalEmployees();
   }
 
   vcCajuIndicator(): number {
