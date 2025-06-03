@@ -2,13 +2,15 @@
   <div class="filter__container">
     <div class="filter">
       <label class="filter__label">COLABORADOR</label>
-      <input type="text" placeholder="BUSCAR" [(ngModel)]="employee" (input)="applyFilters()"
-        class="filter__input">
+      <input type="text" placeholder="BUSCAR" [(ngModel)]="employeeFilter" (input)="applyFilters()" class="filter__input">
     </div>
 
     <div class="filter">
       <label class="filter__label">CENTRO DE CUSTO</label>
-      <input type="text" placeholder="BUSCAR" [(ngModel)]="cost_center" (input)="applyFilters()" class="filter__input">
+      <select [(ngModel)]="costCenterFilter" (change)="applyFilters()" class="filter__input">
+        <option value="">Todos</option>
+        <option *ngFor="let constCenter of costCenter" [value]="constCenter">{{ constCenter }}</option>
+      </select>
     </div>
 
     <div class="filter">
@@ -41,16 +43,16 @@
       <div class="card__header" [ngClass]="borderExperience(item.primeiro_periodo, item.segundo_periodo)">
         <div class="card__primary">
           <div class="card__top">
-            <div class="card__title">CHAPA: {{ item.chapa || 'N/A' }}</div>
+            <div class="card__subtitle">CHAPA: {{ item.chapa || 'N/A' }}</div>
             <div class="card__subtitle">|</div>
             <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.estado || 'N/A' }}</div>
           </div>
           <div class="card__bottom">
             <div class="card__title">{{ item.funcionario || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
-            <div class="card__subtitle">-</div>
-            <div class="card__subtitle">{{ item.estado || 'N/A' }}</div>
           </div>
         </div>
         <div class="card__secondary">

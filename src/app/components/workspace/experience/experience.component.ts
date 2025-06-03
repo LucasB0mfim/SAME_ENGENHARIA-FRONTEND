@@ -26,9 +26,10 @@ export class ExperienceComponent implements OnInit {
   // ========== ESTADOS ========== //
   items: any[] = [];
   filteredItem: any[] = [];
+  costCenter: any[] = [];
 
-  employee: string = '';
-  cost_center: string = '';
+  employeeFilter: string = '';
+  costCenterFilter: string = '';
   experienceFilter: string = 'all';
 
   isLoading: boolean = false;
@@ -49,6 +50,7 @@ export class ExperienceComponent implements OnInit {
       next: (data) => {
         this.items = data.records;
         this.filteredItem = [...this.items];
+        this.removeDuplicates();
         this.isLoading = false;
         if (this.filteredItem.length === 0) this.isEmpty = true;
       },
@@ -73,15 +75,15 @@ export class ExperienceComponent implements OnInit {
   applyFilters() {
     let data = [...this.filteredItem];
 
-    if (this.employee) {
-      const inputValue = this.employee.toLowerCase();
+    if (this.employeeFilter) {
+      const inputValue = this.employeeFilter.toLowerCase();
       data = data.filter(data =>
         data.funcionario.toLowerCase().includes(inputValue)
       );
     }
 
-    if (this.cost_center) {
-      const inputValue = this.cost_center.toLowerCase();
+    if (this.costCenterFilter) {
+      const inputValue = this.costCenterFilter.toLowerCase();
       data = data.filter(data =>
         data.centro_custo.toLowerCase().includes(inputValue)
       );
@@ -128,5 +130,17 @@ export class ExperienceComponent implements OnInit {
     const firstDate = this.experienceTime(data.primeiro_periodo);
     const secondDate = this.experienceTime(data.segundo_periodo);
     return firstDate > 0 || secondDate > 0;
+  }
+
+  removeDuplicates(): void {
+    const costCenterUnique = new Set<string>();
+
+    this.items.forEach((item) => {
+      if (item.centro_custo) {
+        costCenterUnique.add(item.centro_custo)
+      }
+    })
+
+    this.costCenter = Array.from(costCenterUnique).sort();
   }
 }

@@ -64,8 +64,8 @@
     box-shadow: var(--box-shadow);
     transition: all ease 0.2s;
 
-    &:active {
-      transform: translateY(-4px);
+    &:hover {
+      transform: translateY(-2px);
     }
   }
 }
