@@ -1,6 +1,48 @@
-<div class="container">
-  <app-header></app-header>
-  <app-banner></app-banner>
-  <app-whatsapp-botao></app-whatsapp-botao>
-  <app-footer></app-footer>
-</div>
+<header class="header">
+  <nav class="nav" [class.active]="menuAtivo" #nav>
+    <img [src]="logo" alt="Logo" class="logo">
+    <button class="hamburger" (click)="toggleMenu()"></button>
+    <ul class="nav-list">
+      <div>
+        <li>
+          <a href="#">
+            <div>
+              <h2 class="nav-title">Novidades</h2>
+              <span class="nav-subtitle">Veja nossos empreendimentos</span>
+            </div>
+            <span class="nav-arrow">></span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div>
+              <h2 class="nav-title">Quem Somos</h2>
+              <span class="nav-subtitle">Saiba um pouco sobre nós</span>
+            </div>
+            <span class="nav-arrow">></span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div>
+              <h2 class="nav-title">Contatos</h2>
+              <span class="nav-subtitle">Entre em contato através das nossas redes</span>
+            </div>
+            <div class="nav-arrow">></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div>
+              <h2 class="nav-title">Vagas</h2>
+              <span class="nav-subtitle">Venha fazer parte do nosso time!</span>
+            </div>
+            <span class="nav-arrow">></span>
+          </a>
+        </li>
+      </div>
+      <button class="colaborador-btn">Sou Colaborador</button>
+    </ul>
+  </nav>
+</header>
+<main class="hero"></main>
