@@ -1,48 +1,147 @@
 <header class="header">
   <nav class="nav" [class.active]="menuAtivo" #nav>
-    <img [src]="logo" alt="Logo" class="logo">
-    <button class="hamburger" (click)="toggleMenu()"></button>
-    <ul class="nav-list">
-      <div>
-        <li>
-          <a href="#">
-            <div>
-              <h2 class="nav-title">Novidades</h2>
-              <span class="nav-subtitle">Veja nossos empreendimentos</span>
-            </div>
-            <span class="nav-arrow">></span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <div>
-              <h2 class="nav-title">Quem Somos</h2>
-              <span class="nav-subtitle">Saiba um pouco sobre nós</span>
-            </div>
-            <span class="nav-arrow">></span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <div>
-              <h2 class="nav-title">Contatos</h2>
-              <span class="nav-subtitle">Entre em contato através das nossas redes</span>
-            </div>
-            <div class="nav-arrow">></div>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <div>
-              <h2 class="nav-title">Vagas</h2>
-              <span class="nav-subtitle">Venha fazer parte do nosso time!</span>
-            </div>
-            <span class="nav-arrow">></span>
-          </a>
-        </li>
-      </div>
-      <button class="colaborador-btn">Sou Colaborador</button>
+    <img [src]="logo" alt="Logo" class="nav__logo">
+    <ul class="nav__links">
+      <li class="nav__link">
+        <a href="#" class="nav__a">
+          <div class="nav__text">
+            <h2 class="nav__title">Novidades</h2>
+            <span class="nav__subtitle">Veja nossos empreendimentos</span>
+          </div>
+          <span class="nav__arrow">></span>
+        </a>
+      </li>
+      <li class="nav__link">
+        <a href="#" class="nav__a">
+          <div class="nav__text">
+            <h2 class="nav__title">Quem Somos</h2>
+            <span class="nav__subtitle">Saiba um pouco sobre nós</span>
+          </div>
+          <span class="nav__arrow">></span>
+        </a>
+      </li>
+      <li class="nav__link">
+        <a href="#" class="nav__a">
+          <div class="nav__text">
+            <h2 class="nav__title">Contatos</h2>
+            <span class="nav__subtitle">Entre em contato através das nossas redes</span>
+          </div>
+          <div class="nav__arrow">></div>
+        </a>
+      </li>
+      <li class="nav__link">
+        <a href="#" class="nav__a">
+          <div class="nav__text">
+            <h2 class="nav__title">Vagas</h2>
+            <span class="nav__subtitle">Venha fazer parte do nosso time!</span>
+          </div>
+          <span class="nav__arrow">></span>
+        </a>
+      </li>
+      <button class="btn btn--mobile">Sou Colaborador</button>
     </ul>
+    <button class="btn" routerLink="/login">Sou Colaborador</button>
+    <button class="hamburger" (click)="toggleMenu()"></button>
   </nav>
 </header>
-<main class="hero"></main>
+
+<div class="hero">
+  <div class="hero__container">
+    <div class="hero__text">
+      <h1 class="hero__title">ELEGÂNCIA</h1>
+      <h1 class="hero__title">&</h1>
+      <h1 class="hero__title">CONFORTO</h1>
+    </div>
+    <div class="hero__text hero__text--mobile">
+      <h1 class="hero__title">Sua ideia.<br>Nossa missão.</h1>
+    </div>
+    <span class="hero__row"></span>
+    <span class="hero__subtitle">NOVO LANÇAMENTO</span>
+    <div class="hero__highlights">
+      <div class="hero__highlight">
+        <div class="highlight__box"></div>
+        <div class="highlight__text">Detalhe premium</div>
+      </div>
+      <div class="hero__highlight">
+        <div class="highlight__box"></div>
+        <div class="highlight__text">Espaço harmonioso</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="real-estate">
+  <div class="real-estate__container">
+    <div class="real-estate__text">
+      <h2 class="real-estate__title">Imobiliária</h2>
+      <span class="real-estate__row"></span>
+      <h3 class="real-estate__subtitle">Em breve, novos horizontes... </h3>
+      <p class="real-estate__paragraph">Em breve, a SAME Engenharia vai além da construção e agora também estará
+        presente
+        no mercado imobiliário. Com a
+        mesma excelência e compromisso que você já conhece, estamos trazendo novidades para oferecer soluções completas
+        para quem busca o lar dos sonhos.</p>
+    </div>
+    <div class="real-estate__images">
+      <div class="real-estate__images-container">
+        <img [src]="realEstateImage2" alt="Artium Hall" class="real-estate__image">
+        <div class="real-estate__images-overlay">
+          <div class="real-estate__images-title">Artium Hall</div>
+          <div class="real-estate__images-subtitle">Boa Viagem</div>
+        </div>
+      </div>
+      <div class="real-estate__images-container">
+        <img [src]="realEstateImage1" alt="Sunset Beach Hall" class="real-estate__image">
+        <div class="real-estate__images-overlay">
+          <div class="real-estate__images-title">Sunset Beach Hall</div>
+          <div class="real-estate__images-subtitle">Tamandaré</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__info">
+    <div class="footer__text">
+      <h3 class="footer__title">Carreiras</h3>
+      <a [href]="inhireUrl" target="_blank" class="footer__subtitle">Trabalhe com a gente</a>
+    </div>
+
+    <div class="footer__text">
+      <h3 class="footer__title">Seja um fornecedor</h3>
+      <span class="footer__subtitle">anthony.gabriel&#64;sameengenharia.com.br</span>
+    </div>
+
+    <div class="footer__text">
+      <h3 class="footer__title">Fale com a gente</h3>
+      <span class="footer__subtitle">81 8215 9926</span>
+    </div>
+
+    <div class="footer__text">
+      <h3 class="footer__title">Ouvidoria</h3>
+      <span class="footer__subtitle">ouvidoria.same&#64;sameengenharia.com.br</span>
+    </div>
+
+    <div class="footer__text">
+      <h3 class="footer__title">Redes Socias</h3>
+      <div class="footer__social-media">
+        <a [href]="linkedinUrl" aria-label="LinkedIn da Same Engenharia" target="_blank">
+          <img [src]="linkedin" alt="LinkedIn">
+        </a>
+        <a [href]="instagramUrl" aria-label="Instagram da Same Engenharia" target="_blank">
+          <img [src]="instagram" alt="Instagram">
+        </a>
+        <a [href]="whatsappUrl" aria-label="WhatsApp da Same Engenharia" target="_blank">
+          <img [src]="whatsapp" alt="WhatsApp">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__copyright">
+    <img [src]="logoWhite" alt="Same Engenharia" class="footer__logo">
+    <p>&copy; {{ anoAtual }} Same Construtora LTDA. 23.187.835/0001-06. Rua Arthur Lopes, 218 - Recife, PE - 51200180
+    </p>
+  </div>
+</footer>
