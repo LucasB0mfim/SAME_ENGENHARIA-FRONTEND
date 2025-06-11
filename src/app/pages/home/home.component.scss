@@ -260,39 +260,6 @@
   }
 }
 
-.about {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &__container {
-    max-width: 1280px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__text {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__title {
-    color: #525252;
-  }
-
-  &__row {
-    background-color: var(--orange-color);
-  }
-
-  &__paragraph {
-    color: #525252;
-  }
-
-  &__subtitle {
-    color: var(--orange-color);
-  }
-}
-
 .footer {
   background-color: #121212;
 
@@ -559,33 +526,6 @@
     }
   }
 
-  .about {
-    height: 100vh;
-
-    &__container {}
-
-    &__text {
-      gap: 20px;
-    }
-
-    &__title {
-      font-size: 3.3rem;
-    }
-
-    &__row {
-      width: 5vw;
-      height: 2px;
-    }
-
-    &__paragraph {
-      font-size: 1.1rem;
-    }
-
-    &__subtitle {
-      font-size: 1.2rem;
-    }
-  }
-
   .footer {
     padding-top: 80px;
     display: flex;
@@ -757,7 +697,6 @@
     height: calc(50vh - 70px);
     border-bottom-left-radius: 28px;
     border-bottom-right-radius: 28px;
-    background-color: #f9f9f9;
     background: center / cover no-repeat url("../../../../public/assets/images/wallpaper.jpg");
 
     &__container {
@@ -888,6 +827,7 @@
   .industrial {
     height: auto;
     padding: 3rem 1rem;
+    background-color: #FFFFFF;
 
     &__container {
       grid-template-rows: repeat(2, 1fr);
@@ -966,37 +906,6 @@
       &-subtitle {
         font-size: 16px;
       }
-    }
-  }
-
-  .about {
-    height: auto;
-    padding: 3rem 1rem;
-
-    &__container {}
-
-    &__text {
-      gap: 20px;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-    }
-
-    &__title {
-      font-size: 1.5rem;
-    }
-
-    &__row {
-      width: 60px;
-      height: 2px;
-    }
-
-    &__paragraph {
-      font-size: 14px;
-    }
-
-    &__subtitle {
-      font-size: 1.2rem;
     }
   }
 

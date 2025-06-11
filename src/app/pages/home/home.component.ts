@@ -18,7 +18,7 @@ export class HomeComponent {
   linkedin: string = '/assets/images/linkedin.png';
   whatsapp: string = '/assets/images/whatsapp.png';
 
-  inhireUrl: string = 'https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia';
+  inhireUrl: string = 'https://same-engenharia.inhire.app/vagas';
   linkedinUrl: string = 'https://www.linkedin.com/company/same-engenharia/';
   instagramUrl: string = 'https://www.instagram.com/sameengenharia/';
   whatsappUrl: string = 'https://contate.me/sameengenharia/';
@@ -35,5 +35,9 @@ export class HomeComponent {
 
   toggleMenu() {
     this.menuAtivo = !this.menuAtivo;
+  }
+
+  closeMenu():void {
+    this.menuAtivo = false;
   }
 }

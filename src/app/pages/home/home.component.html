@@ -3,7 +3,7 @@
     <img [src]="logo" alt="Logo" class="nav__logo">
     <ul class="nav__links">
       <li class="nav__link">
-        <a href="#real-estate" class="nav__a">
+        <a href="#real-estate" (click)="closeMenu()" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Novidades</h2>
             <span class="nav__subtitle">Veja nossos empreendimentos</span>
@@ -12,7 +12,7 @@
         </a>
       </li>
       <li class="nav__link">
-        <a href="#about" class="nav__a">
+        <a href="#about" (click)="closeMenu()" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Quem Somos</h2>
             <span class="nav__subtitle">Saiba um pouco sobre nós</span>
@@ -21,7 +21,7 @@
         </a>
       </li>
       <li class="nav__link">
-        <a href="#footer" class="nav__a">
+        <a href="#footer" (click)="closeMenu()" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Contatos</h2>
             <span class="nav__subtitle">Entre em contato através das nossas redes</span>
@@ -30,7 +30,7 @@
         </a>
       </li>
       <li class="nav__link">
-        <a [href]="inhireUrl" target="_blank" class="nav__a">
+        <a [href]="inhireUrl" target="_blank" (click)="closeMenu()" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Vagas</h2>
             <span class="nav__subtitle">Venha fazer parte do nosso time!</span>
@@ -97,35 +97,6 @@
           <div class="real-estate__images-subtitle">Em breve</div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section id="about" class="about">
-  <div class="about__container">
-    <div class="about__text">
-      <h3 class="about__title">Para construir o futuro,<br>precisamos desconstruir o presente.</h3>
-      <span class="about__row"></span>
-      <p class="about__paragraph">
-        Na Same Engenharia, estamos há mais de 9 anos fazendo a diferença no mercado, transformando desafios em soluções
-        e sonhos em realidade. Somos uma empresa especializada em obras industriais e imobiliária, comprometida com a
-        excelência, inovação e sustentabilidade em cada etapa dos nossos projetos.
-      </p>
-      <p class="about__paragraph">
-        Nossa missão vai além de construir estruturas — buscamos criar espaços que inspirem, conectem e transformem
-        vidas. Com uma equipe altamente qualificada e uma visão futurista, entregamos não apenas obras, mas legados que
-        refletem qualidade, confiança e comprometimento.
-      </p>
-
-      <p class="about__paragraph">
-        Na Same Engenharia, acreditamos que o sucesso de um projeto está na capacidade de unir tecnologia, criatividade
-        e sustentabilidade. Por isso, cada obra é planejada com cuidado, respeitando prazos, orçamentos e,
-        principalmente, as expectativas dos nossos clientes.
-      </p>
-      <span class="about__row"></span>
-      <h4 class="about__subtitle">
-        Same Engenharia, desconstruindo o presente.
-      </h4>
     </div>
   </div>
 </section>
