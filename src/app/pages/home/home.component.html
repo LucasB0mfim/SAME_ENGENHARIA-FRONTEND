@@ -3,7 +3,7 @@
     <img [src]="logo" alt="Logo" class="nav__logo">
     <ul class="nav__links">
       <li class="nav__link">
-        <a href="#" class="nav__a">
+        <a href="#real-estate" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Novidades</h2>
             <span class="nav__subtitle">Veja nossos empreendimentos</span>
@@ -12,7 +12,7 @@
         </a>
       </li>
       <li class="nav__link">
-        <a href="#" class="nav__a">
+        <a href="#about" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Quem Somos</h2>
             <span class="nav__subtitle">Saiba um pouco sobre nós</span>
@@ -21,7 +21,7 @@
         </a>
       </li>
       <li class="nav__link">
-        <a href="#" class="nav__a">
+        <a href="#footer" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Contatos</h2>
             <span class="nav__subtitle">Entre em contato através das nossas redes</span>
@@ -30,7 +30,7 @@
         </a>
       </li>
       <li class="nav__link">
-        <a href="#" class="nav__a">
+        <a [href]="inhireUrl" target="_blank" class="nav__a">
           <div class="nav__text">
             <h2 class="nav__title">Vagas</h2>
             <span class="nav__subtitle">Venha fazer parte do nosso time!</span>
@@ -70,38 +70,122 @@
   </div>
 </div>
 
-<section class="real-estate">
+<section id="real-estate" class="real-estate">
   <div class="real-estate__container">
     <div class="real-estate__text">
       <h2 class="real-estate__title">Imobiliária</h2>
       <span class="real-estate__row"></span>
       <h3 class="real-estate__subtitle">Em breve, novos horizontes... </h3>
-      <p class="real-estate__paragraph">Em breve, a SAME Engenharia vai além da construção e agora também estará
+      <p class="real-estate__paragraph">
+        Em breve, a SAME Engenharia vai além da construção e agora também estará
         presente
         no mercado imobiliário. Com a
         mesma excelência e compromisso que você já conhece, estamos trazendo novidades para oferecer soluções completas
-        para quem busca o lar dos sonhos.</p>
+        para quem busca o lar dos sonhos.
+      </p>
     </div>
     <div class="real-estate__images">
       <div class="real-estate__images-container">
         <img [src]="realEstateImage2" alt="Artium Hall" class="real-estate__image">
         <div class="real-estate__images-overlay">
-          <div class="real-estate__images-title">Artium Hall</div>
-          <div class="real-estate__images-subtitle">Boa Viagem</div>
+          <div class="real-estate__images-subtitle">Em breve</div>
         </div>
       </div>
       <div class="real-estate__images-container">
         <img [src]="realEstateImage1" alt="Sunset Beach Hall" class="real-estate__image">
         <div class="real-estate__images-overlay">
-          <div class="real-estate__images-title">Sunset Beach Hall</div>
-          <div class="real-estate__images-subtitle">Tamandaré</div>
+          <div class="real-estate__images-subtitle">Em breve</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="footer">
+<section id="about" class="about">
+  <div class="about__container">
+    <div class="about__text">
+      <h3 class="about__title">Para construir o futuro,<br>precisamos desconstruir o presente.</h3>
+      <span class="about__row"></span>
+      <p class="about__paragraph">
+        Na Same Engenharia, estamos há mais de 9 anos fazendo a diferença no mercado, transformando desafios em soluções
+        e sonhos em realidade. Somos uma empresa especializada em obras industriais e imobiliária, comprometida com a
+        excelência, inovação e sustentabilidade em cada etapa dos nossos projetos.
+      </p>
+      <p class="about__paragraph">
+        Nossa missão vai além de construir estruturas — buscamos criar espaços que inspirem, conectem e transformem
+        vidas. Com uma equipe altamente qualificada e uma visão futurista, entregamos não apenas obras, mas legados que
+        refletem qualidade, confiança e comprometimento.
+      </p>
+
+      <p class="about__paragraph">
+        Na Same Engenharia, acreditamos que o sucesso de um projeto está na capacidade de unir tecnologia, criatividade
+        e sustentabilidade. Por isso, cada obra é planejada com cuidado, respeitando prazos, orçamentos e,
+        principalmente, as expectativas dos nossos clientes.
+      </p>
+      <span class="about__row"></span>
+      <h4 class="about__subtitle">
+        Same Engenharia, desconstruindo o presente.
+      </h4>
+    </div>
+  </div>
+</section>
+
+<section id="industrial" class="industrial">
+  <div class="industrial__container">
+    <div class="industrial__text">
+      <h3 class="industrial__title">Industrial</h3>
+      <span class="industrial__row"></span>
+      <p class="industrial__paragraph">
+        A Same atua em todo o território nacional, oferecendo soluções de alta qualidade
+        para o setor privado em obras industriais e fast construction. Destaque no mercado, cumprimos prazos, normas
+        legais e superamos as expectativas dos clientes, garantindo resultados que impulsionam negócios.
+      </p>
+      <div class="industrial__benefits">
+        <div class="industrial__benefit">
+          <span class="industrial__benefit-icon">🏗️</span>
+          <span class="industrial__benefit-title">Obras industriais</span>
+        </div>
+        <div class="industrial__benefit">
+          <span class="industrial__benefit-icon">⚡</span>
+          <span class="industrial__benefit-title">Construção rápida</span>
+        </div>
+        <div class="industrial__benefit">
+          <span class="industrial__benefit-icon">📅</span>
+          <span class="industrial__benefit-title">Cumprimento de prazos</span>
+        </div>
+        <div class="industrial__benefit">
+          <span class="industrial__benefit-icon">✅</span>
+          <span class="industrial__benefit-title">Superação de expectativas</span>
+        </div>
+      </div>
+    </div>
+    <div class="industrial__images">
+      <div class="industrial__image-container">
+        <img [src]="franciscoAreias" alt="Artium Hall" class="industrial__image">
+        <div class="industrial__image-overlay">
+          <div class="industrial__image-title">Francisco Areias</div>
+          <div class="industrial__image-subtitle">2025</div>
+        </div>
+      </div>
+      <div class="industrial__image-container">
+        <img [src]="irmaDenize" alt="Sunset Beach Hall" class="industrial__image">
+        <div class="industrial__image-overlay">
+          <div class="industrial__image-title">Irmã Denize</div>
+          <div class="industrial__image-subtitle">2026</div>
+        </div>
+      </div>
+      <div class="industrial__image-container">
+        <img [src]="brk" alt="Sunset Beach Hall" class="industrial__image">
+        <div class="industrial__image-overlay">
+          <div class="industrial__image-title">BRK</div>
+          <div class="industrial__image-subtitle">2027</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="footer" class="footer">
   <div class="footer__info">
     <div class="footer__text">
       <h3 class="footer__title">Carreiras</h3>

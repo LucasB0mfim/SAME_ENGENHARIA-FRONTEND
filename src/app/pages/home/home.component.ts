@@ -26,6 +26,11 @@ export class HomeComponent {
   realEstateImage1: string = 'assets/images/trator1.jpg';
   realEstateImage2: string = 'assets/images/trator2.jpg';
 
+
+  brk: string = 'assets/images/obra_brk.jpg';
+  franciscoAreias: string = 'assets/images/obra_francisco-areias.jpg';
+  irmaDenize: string = 'assets/images/obra_irma-denize.jpg';
+
   readonly anoAtual = new Date().getFullYear();
 
   toggleMenu() {
