@@ -415,7 +415,7 @@ export class BenefitComponent implements OnInit {
   // ========== GRÁFICO ========== //
   vrCajuIndicator(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVrCajuMonth(value);
+      return count + value.vr_caju_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -423,7 +423,7 @@ export class BenefitComponent implements OnInit {
 
   vrVrIndicator() {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVrVrMonth(value);
+      return count + value.vr_vr_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -431,7 +431,7 @@ export class BenefitComponent implements OnInit {
 
   vtCajuIndicator(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVtCajuMonth(value);
+      return count + value.vt_caju_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -439,7 +439,7 @@ export class BenefitComponent implements OnInit {
 
   vtVemIndicator(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVtVemMonth(value);
+      return count + value.vt_vem_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -447,7 +447,7 @@ export class BenefitComponent implements OnInit {
 
   totalCaju(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVrCajuMonth(value) + this.calculateVtCajuMonth(value) + this.calculateVcCajuMonth(value);
+      return count + value.vr_caju_month + value.vt_caju_month + value.vc_caju_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -455,7 +455,7 @@ export class BenefitComponent implements OnInit {
 
   totalVr(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVrVrMonth(value) + this.calculateVcVrMonth(value);
+      return count + value.vr_vr_month + value.vc_vr_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -488,7 +488,7 @@ export class BenefitComponent implements OnInit {
 
   vcCajuIndicator(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVcCajuMonth(value);
+      return count + value.vc_caju_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
@@ -496,122 +496,10 @@ export class BenefitComponent implements OnInit {
 
   vcVrIndicator(): number {
     const total = this.items.reduce((count: number, value: any) => {
-      return count + this.calculateVcVrMonth(value);
+      return count + value.vc_vr_month;
     }, 0)
 
     return parseFloat(total.toFixed(2));
-  }
-
-  calculateVrCajuDay(item: any): number {
-    const vr = item.vr_caju;
-
-    if (vr > 50) {
-      return vr / item.dias_uteis;
-    } else {
-      return vr;
-    }
-  }
-
-  calculateVrVrDay(item: any): number {
-    const vr = item.vr_vr;
-
-    if (vr > 50) {
-      return vr / item.dias_uteis;
-    } else {
-      return vr;
-    }
-  }
-
-  calculateVrCajuMonth(item: any): number {
-    const vrDay = this.calculateVrCajuDay(item);
-
-    if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
-    } else {
-      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateVrVrMonth(item: any): number {
-    const vrDay = this.calculateVrVrDay(item);
-
-    if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
-    } else {
-      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateVtCajuDay(item: any): number {
-    const vtDay = item.vt_caju;
-
-    if (vtDay > 50) {
-      return vtDay / item.dias_uteis;
-    } else {
-      return vtDay;
-    }
-  }
-
-  calculateVtVemDay(item: any): number {
-    const vtDay = item.vt_vem;
-
-    if (vtDay > 50) {
-      return vtDay / item.dias_uteis;
-    } else {
-      return vtDay;
-    }
-  }
-
-  calculateVtCajuMonth(item: any): number {
-    const vrDay = this.calculateVrCajuDay(item);
-    const vtDay = this.calculateVtCajuDay(item);
-
-    if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
-    } else {
-      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateVtVemMonth(item: any): number {
-    const vrDay = this.calculateVrDay(item);
-    const vtDay = this.calculateVtVemDay(item);
-
-    if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
-    } else {
-      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateVcCajuDay(item: any): number {
-    const vcDay = item.vc_caju;
-
-    if (vcDay > 50) {
-      return vcDay / item.dias_uteis;
-    } else {
-      return vcDay;
-    }
-  }
-
-  calculateVcVrDay(item: any): number {
-    const vcDay = item.vc_vr;
-
-    if (vcDay > 50) {
-      return vcDay / item.dias_uteis;
-    } else {
-      return vcDay;
-    }
-  }
-
-  calculateVcCajuMonth(item: any): number {
-    const vcDay = this.calculateVcCajuDay(item);
-    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-  }
-
-  calculateVcVrMonth(item: any): number {
-    const vcDay = this.calculateVcVrDay(item);
-    return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
   }
 
   formatCurrency(value: number): string {
@@ -621,109 +509,9 @@ export class BenefitComponent implements OnInit {
     });
   }
 
-  // ========== CALCULAR BENEFÍCIOS ========== //
-  calculateVrDay(item: any): number {
-    const vr = item.vr_caju + item.vr_vr;
-
-    if (vr > 50) {
-      return vr / item.dias_uteis;
-    } else {
-      return vr;
-    }
-  }
-
-  calculateVrMonth(item: any): number {
-    const vrDay = this.calculateVrDay(item);
-
-    if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vrDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
-    } else {
-      return parseFloat((vrDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateVtDay(item: any): number {
-    const vtDay = item.vt_caju + item.vt_vem;
-
-    if (vtDay > 50) {
-      return parseFloat((vtDay / item.dias_uteis).toFixed(2));
-    } else {
-      return vtDay;
-    }
-  }
-
-  calculateVtMonth(item: any): number {
-    const vrDay = this.calculateVrDay(item);
-    const vtDay = this.calculateVtDay(item);
-    const vtFixed = item.vt_caju + item.vt_vem;
-
-    if (vtFixed > 50) {
-      return vtFixed;
-    } else if (vrDay > 25 && vrDay < 35) {
-      return parseFloat((vtDay * (this.daysWorked(item.dias_uteis, item.timesheet, item.contrato) + item.dias_nao_uteis)).toFixed(2));
-    } else {
-      return parseFloat((vtDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateVcDay(item: any): number {
-    const vcDay = item.vc_caju + item.vc_vr;
-
-    if (vcDay > 50) {
-      return parseFloat((vcDay / item.dias_uteis).toFixed(2));
-    } else {
-      return vcDay;
-    }
-  }
-
-  calculateVcMonth(item: any): number {
-    const vcDay = this.calculateVcDay(item);
-
-    if (vcDay > 50) {
-      return vcDay;
-    } else {
-      return parseFloat((vcDay * this.daysWorked(item.dias_uteis, item.timesheet, item.contrato)).toFixed(2));
-    }
-  }
-
-  calculateBenefits(item: any): number {
-    return parseFloat((this.calculateVtMonth(item) + this.calculateVrMonth(item) + this.calculateVcMonth(item)).toFixed(2));
-  }
-
-  // ========== CALCULAR STATUS ========== //
-  daysWorked(businessDays: number, timesheet: any[], contract: string): number {
-    if (contract === 'ESTÁGIO') {
-      return businessDays - this.medicalCertificateCounter(timesheet);
-    } else {
-      return businessDays + this.extraDaysCounter(timesheet) - this.absenceCounter(timesheet) - this.medicalCertificateCounter(timesheet);
-    }
-  }
-
-  extraDaysCounter(timesheet: any[]): number {
-    return timesheet.filter(value => value.evento_abono === 'Dia extra').length;
-  }
-
-  absenceCounter(timesheet: any[]): number {
-    return timesheet.filter(value =>
-      value.evento_abono === 'NÃO CONSTA' &&
-      parseInt(value.jornada_realizada?.split(':')[0]) <= 3
-    ).length;
-  }
-
-  medicalCertificateCounter(timesheet: any[]): number {
-    return timesheet.filter(value => value.evento_abono === 'Atestado Médico' && !this.isWeekend(value.periodo)).length;
-  }
-
   // ========== UTILITÁRIOS ========== //
   upperCase(string: string): string {
     return string.toUpperCase().trim();
-  }
-
-  isWeekend(dateStr: string): boolean {
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // mês começa em 0 no JS!
-    const dayOfWeek = date.getDay(); // 0 = Domingo, 6 = Sábado
-    return dayOfWeek === 0 || dayOfWeek === 6;
   }
 
   removeSpace(value: string): string {

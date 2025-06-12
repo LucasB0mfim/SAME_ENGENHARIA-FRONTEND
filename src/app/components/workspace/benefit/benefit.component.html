@@ -238,22 +238,22 @@
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__subtitle">DIAS DE TRABALHO: </div>
-            <div class="card__title">{{ daysWorked(item.dias_uteis, item.timesheet, item.contrato) }}</div>
+            <div class="card__title">{{ item.days_worked }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">DIAS EXTRAS: </div>
-            <div class="card__title">{{ extraDaysCounter(item.timesheet) }}</div>
+            <div class="card__title">{{ item.extra_days }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">FALTAS: </div>
-            <div class="card__title">{{ absenceCounter(item.timesheet) }}</div>
+            <div class="card__title">{{ item.absences }}</div>
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
             <div class="card__subtitle">ATESTADOS: </div>
-            <div class="card__title">{{ medicalCertificateCounter(item.timesheet) }}</div>
+            <div class="card__title">{{ item.medical_certificates }}</div>
           </div>
         </div>
       </div>
@@ -261,31 +261,31 @@
         <div class="card__content">
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
-            <div class="card__title">R$ {{ calculateVrDay(item) }}</div>
+            <div class="card__title">R$ {{ item.vr_day }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
-            <div class="card__title">R$ {{ calculateVrMonth(item) }}</div>
+            <div class="card__title">R$ {{ item.vr_month }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE DIA</div>
-            <div class="card__title">R$ {{ calculateVtDay(item) }}</div>
+            <div class="card__title">R$ {{ item.vt_day }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">R$ {{ calculateVtMonth(item) }}</div>
+            <div class="card__title">R$ {{ item.vr_month }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
-            <div class="card__title">R$ {{ calculateVcDay(item) }}</div>
+            <div class="card__title">R$ {{ item.vc_day }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
-            <div class="card__title">R$ {{ calculateVcMonth(item) }}</div>
+            <div class="card__title">R$ {{ item.vc_month }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">R$ {{ calculateBenefits(item) }}</div>
+            <div class="card__title">R$ {{ item.total }}</div>
           </div>
         </div>
       </div>
