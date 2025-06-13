@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
@@ -317,6 +319,17 @@ export class BenefitComponent implements OnInit {
     })
   }
 
+  downloadTxt(): void {
+
+    const request = {
+      data: '2025-06'
+    }
+
+    this._benefitService.getTxt(request).subscribe((blob: Blob) => {
+      saveAs(blob, 'layoutVR.txt');
+    });
+  }
+
   // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
   openEditEmployee(employee: any): void {
     this.editEmployee = true;
@@ -483,7 +496,7 @@ export class BenefitComponent implements OnInit {
 
   mediaGeral(): number {
     if (this.totalEmployees() <= 0) return 0;
-    return  this.total() / this.totalEmployees();
+    return this.total() / this.totalEmployees();
   }
 
   vcCajuIndicator(): number {

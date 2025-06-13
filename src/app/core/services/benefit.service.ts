@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 @Injectable({
@@ -48,6 +48,12 @@ export class BenefitService {
   updateRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/update', request, { headers });
+  }
+
+  getTxt(request: any): Observable<Blob> {
+    return this._httpClient.post('http://localhost:3000/benefit/txt', request, {
+      responseType: 'blob' as 'blob'
+    });
   }
 
   stateHolidays(state: string, year: string): Observable<any> {
