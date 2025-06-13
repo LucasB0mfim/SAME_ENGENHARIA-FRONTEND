@@ -51,7 +51,7 @@ export class BenefitService {
   }
 
   getTxt(request: any): Observable<Blob> {
-    return this._httpClient.post('http://localhost:3000/benefit/txt', request, {
+    return this._httpClient.post('https://sameengenharia.com.br/api/benefit/txt', request, {
       responseType: 'blob' as 'blob'
     });
   }
