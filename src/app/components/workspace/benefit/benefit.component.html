@@ -90,7 +90,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalCaju()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.total_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -101,7 +101,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vrCajuIndicator()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vr_caju_total) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -112,7 +112,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vcCajuIndicator()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vc_caju_total) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -123,7 +123,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vtCajuIndicator()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vt_caju_total) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -134,7 +134,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(totalVr()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.total_vr) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -145,7 +145,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vrVrIndicator()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vr_vr_total) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -156,7 +156,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vcVrIndicator()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vr_caju_total) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -167,19 +167,8 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(vtVemIndicator()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vt_vem_total) }}</span>
           <span class="label">VEM</span>
-        </div>
-      </div>
-    </article>
-
-    <article class="grafic__card">
-      <h2 class="grafic__title">RESUMO</h2>
-      <div class="grafic__circle">
-        <div class="circle-content">
-          <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(total()) }}</span>
-          <span class="label">TOTAL</span>
         </div>
       </div>
     </article>
@@ -189,7 +178,18 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(mediaGeral()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.total_geral) }}</span>
+          <span class="label">TOTAL</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="grafic__card">
+      <h2 class="grafic__title">RESUMO</h2>
+      <div class="grafic__circle">
+        <div class="circle-content">
+          <span class="currency">R$</span>
+          <span class="value">{{ formatCurrency(grafic.total_media) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -200,7 +200,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(mediaVR()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vr_media) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -211,7 +211,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(mediaVT()) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vt_media) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -220,7 +220,7 @@
     <article class="grafic__card">
       <h2 class="grafic__title">CALOBORADORES</h2>
       <div class="circle-content">
-        <span class="value">{{ totalEmployees() }}</span>
+        <span class="value">{{ grafic.employees || 0 }}</span>
       </div>
     </article>
   </section>
@@ -276,7 +276,7 @@
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">R$ {{ item.vr_month }}</div>
+            <div class="card__title">R$ {{ item.vt_month }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
@@ -288,7 +288,7 @@
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">R$ {{ item.total }}</div>
+            <div class="card__title">R$ {{ item.total_benefit }}</div>
           </div>
         </div>
       </div>

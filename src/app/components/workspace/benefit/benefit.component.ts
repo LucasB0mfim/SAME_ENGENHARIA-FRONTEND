@@ -74,6 +74,7 @@ export class BenefitComponent implements OnInit {
   employees: any[] = [];
   filteredItem: any[] = [];
   timesheet: any[] = [];
+  grafic: any = {};
 
   activeButton: string = 'geral';
   geralSection: boolean = true;
@@ -247,6 +248,31 @@ export class BenefitComponent implements OnInit {
         this.isFind = false;
       }
     });
+
+    this._benefitService.getBenefitMedia(request).subscribe({
+      next: (data) => {
+        const response = data.result;
+
+        this.grafic = {
+          employees: response.employees,
+          total_vr: response.total_vr,
+          total_caju: response.total_caju,
+          total_geral: response.total_geral,
+          vr_vr_total: response.vr_vr_total,
+          vr_caju_total: response.vr_caju_total,
+          vc_vr_total: response.vc_vr_total,
+          vc_caju_total: response.vc_caju_total,
+          vt_vem_total: response.vt_vem_total,
+          vt_caju_total: response.vt_caju_total,
+          total_media: response.total_media,
+          vr_media: response.vr_media,
+          vt_media: response.vt_media
+        }
+      },
+      error: (error) => {
+        console.error(error)
+      }
+    })
   }
 
   createRecord(): void {
@@ -426,100 +452,15 @@ export class BenefitComponent implements OnInit {
   }
 
   // ========== GRÁFICO ========== //
-  vrCajuIndicator(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vr_caju_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  vrVrIndicator() {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vr_vr_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  vtCajuIndicator(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vt_caju_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  vtVemIndicator(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vt_vem_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  totalCaju(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vr_caju_month + value.vt_caju_month + value.vc_caju_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  totalVr(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vr_vr_month + value.vc_vr_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  total(): number {
-    return parseFloat((this.totalCaju() + this.totalVr() + this.vtVemIndicator()).toFixed(2));
-  }
-
-  totalEmployees(): number {
-    return this.items.length
-  }
-
-  mediaVR(): number {
-    if (this.totalEmployees() <= 0) return 0;
-    return (this.vrCajuIndicator() + this.vrVrIndicator()) / this.totalEmployees();
-  }
-
-  mediaVT(): number {
-    if (this.totalEmployees() <= 0) return 0;
-    const vr = this.vtCajuIndicator() + this.vtVemIndicator();
-    const vc = this.vcCajuIndicator() + this.vcVrIndicator();
-    return (vr + vc) / this.totalEmployees();
-  }
-
-  mediaGeral(): number {
-    if (this.totalEmployees() <= 0) return 0;
-    return this.total() / this.totalEmployees();
-  }
-
-  vcCajuIndicator(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vc_caju_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
-  vcVrIndicator(): number {
-    const total = this.items.reduce((count: number, value: any) => {
-      return count + value.vc_vr_month;
-    }, 0)
-
-    return parseFloat(total.toFixed(2));
-  }
-
   formatCurrency(value: number): string {
-    return value.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+    if (!value) {
+      return '0,00'
+    } else {
+      return value.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
   }
 
   // ========== UTILITÁRIOS ========== //
