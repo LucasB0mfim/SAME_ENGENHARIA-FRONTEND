@@ -19,23 +19,16 @@
   gap: 2vw;
 }
 
-.filter__left {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-}
-
 .filter__right form {
   display: flex;
   gap: 2vw;
 }
 
-.filter {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
+.filter {}
 
 .btn {
+  width: auto;
+  height: 40px;
   border: none;
   outline: none;
   cursor: pointer;
@@ -48,7 +41,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &--primary {
-    width: 6vw;
+    width: auto;
     background: var(--orange-color);
     color: var(--white-color);
 
@@ -59,8 +52,6 @@
   }
 
   &--find {
-    width: 6vw;
-    height: 100%;
     background: var(--orange-color);
     color: var(--white-color);
 
@@ -86,12 +77,13 @@
   }
 
   &--tertiary {
+    width: 115px;
+    text-overflow: ellipsis;
     background: var(--secondary-color);
     color: var(--text-color);
   }
 
   &--quaternary {
-    width: 6vw;
     background: var(--primary-color);
     color: var(--text-color);
 
@@ -102,7 +94,6 @@
   }
 
   &--danger {
-    width: 6vw;
     background: #ff5757;
     color: var(--white-color);
 
@@ -112,7 +103,7 @@
     }
   }
 
-  &--icon {
+  &--close {
     background: none;
     box-shadow: none;
     color: var(--gray-color);
@@ -122,6 +113,19 @@
     &:hover {
       color: var(--orange-color);
       transform: scale(1.1);
+    }
+  }
+
+  &--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--orange-color);
+    color: var(--white-color);
+
+    &:hover {
+      background: var(--orange-color);
+      transform: translateY(-2px);
     }
   }
 }
@@ -281,7 +285,7 @@
 }
 
 .grafic__card:nth-child(8) .label {
-  color: #00C853;
+  color: #c8bb00;
 }
 
 .grafic__card:nth-child(9) .label {
@@ -333,7 +337,7 @@
 }
 
 .grafic__card:nth-child(8) .grafic__circle {
-  border-color: rgba(0, 200, 83, 0.3);
+  border-color: rgba(200, 180, 0, 0.3);
 }
 
 .grafic__card:nth-child(9) .grafic__circle {
@@ -385,7 +389,7 @@
 }
 
 .grafic__card:nth-child(8) .value {
-  color: #00C853;
+  color: #c8aa00;
 }
 
 .grafic__card:nth-child(9) .value {

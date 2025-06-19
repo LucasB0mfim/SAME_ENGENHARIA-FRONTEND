@@ -1,4 +1,5 @@
 <div class="container">
+
   @if (showSuccess) {
   <div class="message message--success">
     <mat-icon>check_circle</mat-icon>
@@ -10,29 +11,33 @@
     <div class="filter__left">
       <div class="filter">
         <button [class.active]="activeButton === 'geral'" (click)="activeButton = 'geral'; showGeral()"
-          class="btn btn--secondary">GERAL</button>
+          class="btn btn--secondary">
+          GERAL
+        </button>
       </div>
       <div class="filter">
         <button [class.active]="activeButton === 'record'" (click)="activeButton = 'record'; showRecord()"
-          class="btn btn--secondary">REGISTROS</button>
+          class="btn btn--secondary">
+          REGISTROS
+        </button>
       </div>
       <div class="filter">
         <button [class.active]="activeButton === 'employee'" (click)="activeButton = 'employee'; showEmployee()"
-          class="btn btn--secondary">COLABORADORES</button>
-      </div>
-      <div class="filter" *ngIf="employeeSection">
-        <button (click)="createRecordSection = true" class="btn btn--secondary">GERAR REGISTRO</button>
+          class="btn btn--secondary">
+          COLABORADORES
+        </button>
       </div>
     </div>
 
     <div class="filter__right">
       <div class="filter" *ngIf="recordSection || employeeSection">
-        <input type="text" class="btn btn--secondary" placeholder="BUSCAR" [(ngModel)]="employee"
+        <input type="text" class="btn btn--tertiary" placeholder="BUSCAR" [(ngModel)]="employee"
           (input)="applyFilters()">
       </div>
 
+      @if (recordSection || geralSection) {
       <form [formGroup]="recordForm" (ngSubmit)="findRecord()">
-        @if (recordSection || geralSection) {
+
         <div class="filter">
           <select formControlName="centro_custo" class="btn btn--tertiary">
             <option value="" selected>GERAL</option>
@@ -54,9 +59,11 @@
             <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
           </select>
         </div>
+
         <div class="filter">
           <input type="month" formControlName="data" class="btn btn--tertiary">
         </div>
+
         <div class="filter">
           <button type="submit" class="btn btn--find">
             @if (isFind) {
@@ -70,17 +77,18 @@
             }
           </button>
         </div>
-        }
       </form>
+      }
 
-      @if (employeeSection) {
-      <div class="filter">
+      <div class="filter" *ngIf="employeeSection">
         <button (click)="addEmployee = true" class="btn btn--primary">+ NOVO</button>
       </div>
+
       <div class="filter">
-        <button type="button" (click)="downloadTxt()" class="btn btn--primary">GERAR TXT</button>
+        <button (click)="settingSection = true" class="btn btn--icon">
+          <mat-icon>settings</mat-icon>
+        </button>
       </div>
-      }
     </div>
   </section>
 
@@ -101,7 +109,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vr_caju_total) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vr_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -112,7 +120,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vc_caju_total) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vc_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -123,7 +131,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vt_caju_total) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vt_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -145,7 +153,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vr_vr_total) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vr_vr) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -156,7 +164,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vr_caju_total) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vc_vr) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -167,7 +175,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vt_vem_total) }}</span>
+          <span class="value">{{ formatCurrency(grafic.vt_vem) }}</span>
           <span class="label">VEM</span>
         </div>
       </div>
@@ -178,7 +186,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.total_geral) }}</span>
+          <span class="value">{{ formatCurrency(grafic.sum_all) }}</span>
           <span class="label">TOTAL</span>
         </div>
       </div>
@@ -189,7 +197,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.total_media) }}</span>
+          <span class="value">{{ formatCurrency(grafic.media_all) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -200,7 +208,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vr_media) }}</span>
+          <span class="value">{{ formatCurrency(grafic.media_vr) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -211,7 +219,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vt_media) }}</span>
+          <span class="value">{{ formatCurrency(grafic.media_vt) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -318,7 +326,7 @@
       <div class="form__container">
         <div class="form__header">
           <h2 id="add-employee-title">Adicionar Colaborador</h2>
-          <button type="button" class="btn btn--icon" (click)="addEmployee = false"
+          <button type="button" class="btn btn--close" (click)="addEmployee = false"
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
@@ -445,7 +453,7 @@
       <div class="form__container">
         <div class="form__header">
           <h2 id="edit-employee-title">Editar Colaborador</h2>
-          <button type="button" class="btn btn--icon" (click)="editEmployee = false"
+          <button type="button" class="btn btn--close" (click)="editEmployee = false"
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
@@ -589,8 +597,8 @@
       aria-labelledby="create-record-title">
       <div class="form__container">
         <div class="form__header">
-          <h2 id="create-record-title">Gerar Registro</h2>
-          <button type="button" class="btn btn--icon" (click)="createRecordSection = false"
+          <h2 id="create-record-title">Gerar Novo Mês</h2>
+          <button type="button" class="btn btn--close" (click)="createRecordSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
@@ -610,7 +618,7 @@
           </div>
         </div>
         <div class="form__footer">
-          <button type="button" class="btn btn--quaternary" (click)="createRecordSection = false">Cancelar</button>
+          <button type="button" class="btn btn--quaternary" (click)="createRecordSection = false; settingSection = true">Voltar</button>
           <button type="submit" class="btn btn--primary">
             @if (isCreating) {
             <div class="loading-dots">
@@ -633,7 +641,7 @@
       <div class="form__container">
         <div class="form__header">
           <h2 id="create-record-title">Atualizar Registro</h2>
-          <button type="button" class="btn btn--icon" (click)="updateRecordSection = false"
+          <button type="button" class="btn btn--close" (click)="updateRecordSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
@@ -667,6 +675,97 @@
             </div>
             } @else {
             Atualizar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="record__container" *ngIf="settingSection">
+    <div [formGroup]="createRecordForm" (ngSubmit)="createRecord()" class="modal__backdrop" role="dialog"
+      aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Mais Opções</h2>
+          <button type="button" class="btn btn--close" (click)="settingSection = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group">
+            <button (click)="createRecordSection = true; settingSection = false" class="btn btn--quaternary">
+              GERAR NOVO MÊS
+            </button>
+          </div>
+          <div (click)="layoutVrSection = true; settingSection = false" class="form__group">
+            <button class="btn btn--quaternary">
+              GERAR LAYOUT VR
+            </button>
+          </div>
+          <div class="form__group">
+            <button class="btn btn--quaternary">
+              GERAR LAYOUT CAJU
+            </button>
+          </div>
+          <div class="form__group">
+            <button class="btn btn--quaternary">
+              GERAR LAYOUT VEM
+            </button>
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--quaternary" (click)="settingSection = false">Sair</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="record__container" *ngIf="layoutVrSection">
+    <form [formGroup]="createLayoutVrForm" (ngSubmit)="downloadLayoutVr()" class="modal__backdrop" role="dialog" aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Gerar Layout VR</h2>
+          <button type="button" class="btn btn--close" (click)="layoutVrSection = false" aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label for="data">Mês e Ano</label>
+            <input id="data" type="month" formControlName="data" class="form__input">
+          </div>
+          <div class="form__group form__group--full">
+            <label for="dias_uteis">Centro de Custo</label>
+            <select id="centro_custo" formControlName="centro_custo" class="form__input">
+              <option value="" disabled selected>DEFINA EM CENTRO DE CUSTO</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="BRK - CABO">BRK - CABO</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="BRK - CURADO">BRK - CURADO</option>
+              <option value="BRK - GOIANA">BRK - GOIANA</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - CABANGA">BRK - CABANGA</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+            </select>
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--quaternary" (click)="layoutVrSection = false; settingSection = true">Voltar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isCreating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Gerar
             }
           </button>
         </div>

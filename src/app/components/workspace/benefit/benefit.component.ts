@@ -40,6 +40,11 @@ export class BenefitComponent implements OnInit {
     dias_nao_uteis: new FormControl(''),
   })
 
+  createLayoutVrForm: FormGroup = new FormGroup({
+    data: new FormControl(''),
+    centro_custo: new FormControl('')
+  })
+
   createEmployeeForm: FormGroup = new FormGroup({
     nome: new FormControl(''),
     funcao: new FormControl(''),
@@ -81,6 +86,8 @@ export class BenefitComponent implements OnInit {
   recordSection: boolean = false;
   employeeSection: boolean = false;
   createRecordSection: boolean = false;
+  settingSection: boolean = false;
+  layoutVrSection: boolean = false;
   updateRecordSection: boolean = false;
 
   isAlert: boolean = true;
@@ -255,18 +262,22 @@ export class BenefitComponent implements OnInit {
 
         this.grafic = {
           employees: response.employees,
-          total_vr: response.total_vr,
+          vr_caju: response.vr_caju,
+          vr_vr: response.vr_vr,
+          vc_caju: response.vc_caju,
+          vc_vr: response.vc_vr,
+          vt_caju: response.vt_caju,
+          vt_vem: response.vt_vem,
+          sum_vr: response.sum_vr,
+          sum_vc: response.sum_vc,
+          sum_vt: response.sum_vt,
           total_caju: response.total_caju,
-          total_geral: response.total_geral,
-          vr_vr_total: response.vr_vr_total,
-          vr_caju_total: response.vr_caju_total,
-          vc_vr_total: response.vc_vr_total,
-          vc_caju_total: response.vc_caju_total,
-          vt_vem_total: response.vt_vem_total,
-          vt_caju_total: response.vt_caju_total,
-          total_media: response.total_media,
-          vr_media: response.vr_media,
-          vt_media: response.vt_media
+          total_vr: response.total_vr_card,
+          sum_cards: response.sum_cards,
+          sum_all: response.sum_all,
+          media_all: response.media_all,
+          media_vr: response.media_vr,
+          media_vt: response.media_vt
         }
       },
       error: (error) => {
@@ -345,14 +356,24 @@ export class BenefitComponent implements OnInit {
     })
   }
 
-  downloadTxt(): void {
+  downloadLayoutVr(): void {
+    this.isCreating = true;
 
     const request = {
-      data: '2025-06'
-    }
+      data: this.createLayoutVrForm.value.data,
+      centro_custo: this.createLayoutVrForm.value.centro_custo
+    };
 
-    this._benefitService.getTxt(request).subscribe((blob: Blob) => {
-      saveAs(blob, 'layoutVR.txt');
+    this._benefitService.donwloadLayoutVr(request).subscribe({
+      next: (blob: Blob) => {
+        this.isCreating = false;
+        saveAs(blob, 'layoutVR.txt');
+        this.resetLayoutVrForm();
+      },
+      error: (error) => {
+        console.error(error);
+        this.isCreating = false;
+      }
     });
   }
 
@@ -408,6 +429,7 @@ export class BenefitComponent implements OnInit {
     this.recordSection = false;
     this.activeButton = 'geral';
     this.employeeSection = false;
+    this.employee = '';
   }
 
   showRecord(): void {
@@ -415,6 +437,7 @@ export class BenefitComponent implements OnInit {
     this.geralSection = false;
     this.employeeSection = false;
     this.activeButton = 'record';
+    this.employee = '';
   }
 
   showEmployee(): void {
@@ -422,6 +445,7 @@ export class BenefitComponent implements OnInit {
     this.recordSection = false;
     this.employeeSection = true;
     this.activeButton = 'employee';
+    this.employee = '';
     this.findEmployee();
   }
 
@@ -485,6 +509,13 @@ export class BenefitComponent implements OnInit {
       vc_vr: null,
       vt_caju: null,
       vt_vem: null
+    });
+  }
+
+  resetLayoutVrForm(): void {
+    this.createLayoutVrForm.reset({
+      data: null,
+      centro_custo: ''
     });
   }
 }

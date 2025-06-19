@@ -17,47 +17,49 @@ export class BenefitService {
 
   findAll(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('http://localhost:3000/benefit/employee', { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee', { headers });
   }
 
   createEmployee(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://localhost:3000/benefit/employee', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/employee', request, { headers });
   }
 
   updateEmployee(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('http://localhost:3000/benefit/employee', request, { headers });
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/benefit/employee', request, { headers });
   }
 
   deleteEmployee(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`http://localhost:3000/benefit/employee/${id}`, { headers });
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/${id}`, { headers });
   }
 
   findRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://localhost:3000/benefit/find-report', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/find-report', request, { headers });
   }
 
   getBenefitMedia(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://localhost:3000/test', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/medias', request, { headers });
   }
 
   createRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://localhost:3000/benefit/create-report', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/create-report', request, { headers });
   }
 
   updateRecord(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('http://localhost:3000/benefit/update', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/update', request, { headers });
   }
 
-  getTxt(request: any): Observable<Blob> {
-    return this._httpClient.post('http://localhost:3000/benefit/txt', request, {
-      responseType: 'blob' as 'blob'
+  donwloadLayoutVr(request: any): Observable<Blob> {
+    const headers = this._createHeaders();
+    return this._httpClient.post('https://sameengenharia.com.br/api/benefit/donwload/layout-vr', request, {
+      responseType: 'blob' as 'blob',
+      headers
     });
   }
 
