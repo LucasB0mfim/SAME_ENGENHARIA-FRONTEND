@@ -48,6 +48,7 @@
             <option value="ESCRITÓRIO">ESCRITÓRIO</option>
             <option value="LUIZ WILSON">LUIZ WILSON</option>
             <option value="BRK - HH 03">BRK - HH 03</option>
+            <option value="BRK - REDES">BRK - REDES</option>
             <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
             <option value="BRK - CURADO">BRK - CURADO</option>
             <option value="BRK - GOIANA">BRK - GOIANA</option>
@@ -295,6 +296,10 @@
             <div class="card__title">R$ {{ item.vc_month }}</div>
           </div>
           <div>
+            <div class="card__subtitle">REEMBOLSO</div>
+            <div class="card__title">R$ {{ item.reembolso }}</div>
+          </div>
+          <div>
             <div class="card__subtitle">VALOR TOTAL</div>
             <div class="card__title">R$ {{ item.total_benefit }}</div>
           </div>
@@ -343,6 +348,7 @@
               <option value="SERVENTE">SERVENTE</option>
               <option value="PEDREIRO">PEDREIRO</option>
               <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
               <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
               <option value="ALMOXARIFE">ALMOXARIFE</option>
               <option value="ENGENHEIRO">ENGENHEIRO</option>
@@ -387,9 +393,11 @@
               <option value="BRK - HH">BRK - HH</option>
               <option value="BRK - CABO">BRK - CABO</option>
               <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - REDES">BRK - REDES</option>
               <option value="LUIZ WILSON">LUIZ WILSON</option>
               <option value="BRK - HH 03">BRK - HH 03</option>
               <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
               <option value="BRK - CURADO">BRK - CURADO</option>
               <option value="BRK - GOIANA">BRK - GOIANA</option>
               <option value="PLANEJAMENTO">PLANEJAMENTO</option>
@@ -470,6 +478,7 @@
               <option value="SERVENTE">SERVENTE</option>
               <option value="PEDREIRO">PEDREIRO</option>
               <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
               <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
               <option value="ALMOXARIFE">ALMOXARIFE</option>
               <option value="ENGENHEIRO">ENGENHEIRO</option>
@@ -513,9 +522,11 @@
               <option value="BRK - HH">BRK - HH</option>
               <option value="BRK - CABO">BRK - CABO</option>
               <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - REDES">BRK - REDES</option>
               <option value="LUIZ WILSON">LUIZ WILSON</option>
               <option value="BRK - HH 03">BRK - HH 03</option>
               <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
               <option value="BRK - CURADO">BRK - CURADO</option>
               <option value="BRK - GOIANA">BRK - GOIANA</option>
               <option value="PLANEJAMENTO">PLANEJAMENTO</option>
@@ -618,7 +629,8 @@
           </div>
         </div>
         <div class="form__footer">
-          <button type="button" class="btn btn--quaternary" (click)="createRecordSection = false; settingSection = true">Voltar</button>
+          <button type="button" class="btn btn--quaternary"
+            (click)="createRecordSection = false; settingSection = true">Voltar</button>
           <button type="submit" class="btn btn--primary">
             @if (isCreating) {
             <div class="loading-dots">
@@ -645,9 +657,13 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-          <div class="form__group form__group--full">
+          <div class="form__group">
             <label>Nome</label>
             <input type="text" formControlName="nome" readonly placeholder="Nome Completo" class="form__input">
+          </div>
+          <div class="form__group">
+            <label>Reembolso</label>
+            <input type="number" placeholder="0" formControlName="reembolso" class="form__input">
           </div>
           <div class="form__group">
             <label>Dias Trabalhados</label>
@@ -666,6 +682,17 @@
           </div>
           }
           <button type="button" class="btn btn--quaternary" (click)="updateRecordSection = false">Cancelar</button>
+          <button type="button" class="btn btn--danger" (click)="deleteRecord()">
+            @if (isDeleting) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Deletar
+            }
+          </button>
           <button type="submit" class="btn btn--primary">
             @if (isUpdating) {
             <div class="loading-dots">
@@ -721,11 +748,13 @@
   </section>
 
   <section class="record__container" *ngIf="layoutVrSection">
-    <form [formGroup]="createLayoutVrForm" (ngSubmit)="downloadLayoutVr()" class="modal__backdrop" role="dialog" aria-labelledby="create-record-title">
+    <form [formGroup]="createLayoutVrForm" (ngSubmit)="downloadLayoutVr()" class="modal__backdrop" role="dialog"
+      aria-labelledby="create-record-title">
       <div class="form__container">
         <div class="form__header">
           <h2 id="create-record-title">Gerar Layout VR</h2>
-          <button type="button" class="btn btn--close" (click)="layoutVrSection = false" aria-label="Fechar modal">&times;</button>
+          <button type="button" class="btn btn--close" (click)="layoutVrSection = false"
+            aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
           <div class="form__group form__group--full">
@@ -743,7 +772,9 @@
               <option value="ESCRITÓRIO">ESCRITÓRIO</option>
               <option value="LUIZ WILSON">LUIZ WILSON</option>
               <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="BRK - REDES">BRK - REDES</option>
               <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
               <option value="BRK - CURADO">BRK - CURADO</option>
               <option value="BRK - GOIANA">BRK - GOIANA</option>
               <option value="PLANEJAMENTO">PLANEJAMENTO</option>
@@ -756,7 +787,8 @@
           </div>
         </div>
         <div class="form__footer">
-          <button type="button" class="btn btn--quaternary" (click)="layoutVrSection = false; settingSection = true">Voltar</button>
+          <button type="button" class="btn btn--quaternary"
+            (click)="layoutVrSection = false; settingSection = true">Voltar</button>
           <button type="submit" class="btn btn--primary">
             @if (isCreating) {
             <div class="loading-dots">

@@ -41,7 +41,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &--primary {
-    width: auto;
+    width: 6rem;
     background: var(--orange-color);
     color: var(--white-color);
 
@@ -52,6 +52,7 @@
   }
 
   &--find {
+    width: 6rem;
     background: var(--orange-color);
     color: var(--white-color);
 
@@ -77,7 +78,7 @@
   }
 
   &--tertiary {
-    width: 115px;
+    width: auto;
     text-overflow: ellipsis;
     background: var(--secondary-color);
     color: var(--text-color);
@@ -94,6 +95,7 @@
   }
 
   &--danger {
+    width: 6rem;
     background: #ff5757;
     color: var(--white-color);
 
@@ -494,7 +496,7 @@
     gap: 5px;
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
   }
 }
 

@@ -34,10 +34,12 @@ export class BenefitComponent implements OnInit {
   })
 
   updateRecordForm: FormGroup = new FormGroup({
+    id: new FormControl(''),
     nome: new FormControl(''),
     data: new FormControl(''),
     dias_uteis: new FormControl(''),
     dias_nao_uteis: new FormControl(''),
+    reembolso: new FormControl('')
   })
 
   createLayoutVrForm: FormGroup = new FormGroup({
@@ -327,7 +329,8 @@ export class BenefitComponent implements OnInit {
       nome: this.removeSpace(this.updateRecordForm.value.nome),
       data: this.updateRecordForm.value.data,
       dias_uteis: this.updateRecordForm.value.dias_uteis,
-      dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis
+      dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis,
+      reembolso: this.updateRecordForm.value.reembolso
     }
 
     if (request.dias_uteis < 0) {
@@ -352,6 +355,26 @@ export class BenefitComponent implements OnInit {
         this.isUpdating = false;
         console.log('Erro ao atualizar colaborador.', error);
         this.isUpdating = false;
+      }
+    })
+  }
+
+  deleteRecord(): void {
+    this.isDeleting = true;
+
+    const id = this.updateRecordForm.value.id;
+
+    this._benefitService.deleteEmployeeRecord(id).subscribe({
+      next: () => {
+        this.setSuccessMessage('Colaborador deletado com sucesso.');
+        this.isDeleting = false;
+        this.updateRecordSection = false;
+        this.items = this.items.filter((item) => item.id !== id);
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao deletar.');
+        this.isDeleting = false;
       }
     })
   }
@@ -401,10 +424,12 @@ export class BenefitComponent implements OnInit {
     this.updateRecordSection = true;
 
     this.updateRecordForm.patchValue({
+      id: employee.id,
       nome: employee.nome,
       data: employee.data,
       dias_uteis: employee.dias_uteis,
       dias_nao_uteis: employee.dias_nao_uteis,
+      reembolso: employee.reembolso
     });
   }
 
