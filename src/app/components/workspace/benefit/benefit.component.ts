@@ -47,6 +47,11 @@ export class BenefitComponent implements OnInit {
     centro_custo: new FormControl('')
   })
 
+  createLayoutVemForm: FormGroup = new FormGroup({
+    data: new FormControl(''),
+    centro_custo: new FormControl('')
+  })
+
   createEmployeeForm: FormGroup = new FormGroup({
     nome: new FormControl(''),
     funcao: new FormControl(''),
@@ -90,6 +95,7 @@ export class BenefitComponent implements OnInit {
   createRecordSection: boolean = false;
   settingSection: boolean = false;
   layoutVrSection: boolean = false;
+  layoutVemSection: boolean = false;
   updateRecordSection: boolean = false;
 
   isAlert: boolean = true;
@@ -391,6 +397,27 @@ export class BenefitComponent implements OnInit {
       next: (blob: Blob) => {
         this.isCreating = false;
         saveAs(blob, 'layoutVR.txt');
+        this.resetLayoutVrForm();
+      },
+      error: (error) => {
+        console.error(error);
+        this.isCreating = false;
+      }
+    });
+  }
+
+  downloadLayoutVem(): void {
+    this.isCreating = true;
+
+    const request = {
+      data: this.createLayoutVemForm.value.data,
+      centro_custo: this.createLayoutVemForm.value.centro_custo
+    };
+
+    this._benefitService.donwloadLayoutVem(request).subscribe({
+      next: (blob: Blob) => {
+        this.isCreating = false;
+        saveAs(blob, 'layoutVem.txt');
         this.resetLayoutVrForm();
       },
       error: (error) => {

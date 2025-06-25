@@ -68,6 +68,14 @@ export class BenefitService {
     });
   }
 
+  donwloadLayoutVem(request: any): Observable<Blob> {
+    const headers = this._createHeaders();
+    return this._httpClient.post('https://sameengenharia.com.br/api/benefit/donwload/layout-vem', request, {
+      responseType: 'blob' as 'blob',
+      headers
+    });
+  }
+
   stateHolidays(state: string, year: string): Observable<any> {
     return this._httpClient.get<any>(
       `https://feriados-brasileiros1.p.rapidapi.com/read_uf?estado=${state}&ano=${year}`,
