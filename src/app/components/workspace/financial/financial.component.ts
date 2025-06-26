@@ -6,18 +6,18 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TitleService } from '../../../core/services/title.service';
 
 @Component({
-  selector: 'app-indicators',
+  selector: 'app-financial',
   imports: [CommonModule, MatIconModule, RouterModule],
-  templateUrl: './indicators.component.html',
-  styleUrl: './indicators.component.scss'
+  templateUrl: './financial.component.html',
+  styleUrl: './financial.component.scss'
 })
-export class IndicatorsComponent implements OnInit {
+export class FinancialComponent implements OnInit {
 
   // INJEÇÃO DE DEPENDÊNCIA
   private _titleService = inject(TitleService);
 
   // HOOK DE CICLO
   ngOnInit() {
-    this._titleService.setTitle('Indicadores')
+    this._titleService.setTitle('Financeiro')
   }
 }

@@ -12,7 +12,7 @@ import { BenefitComponent } from './components/workspace/benefit/benefit.compone
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
-import { IndicatorsComponent } from './components/workspace/indicators/indicators.component';
+import { FinancialComponent } from './components/workspace/financial/financial.component';
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
 import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { ConstructionComponent } from './components/workspace/construction/construction.component';
@@ -21,6 +21,7 @@ import { OrderDeliveredComponent } from './components/workspace/order-delivered/
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
+import { FinancialTrackingComponent } from './components/workspace/financial-tracking/financial-tracking.component';
 
 import { authGuard } from './core/guard/auth.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
@@ -100,11 +101,16 @@ export const routes: Routes = [
         canActivate: [humanResourcesGuard]
       },
       {
-        path: 'indicators',
-        component: IndicatorsComponent
+        path: 'financial',
+        component: FinancialComponent
       },
       {
-        path: 'indicators/cost-center',
+        path: 'financial/tracking',
+        component: FinancialTrackingComponent,
+        canActivate: [indicatorsGuard]
+      },
+      {
+        path: 'financial/cost-center',
         component: CostCenterComponent,
         canActivate: [indicatorsGuard]
       }
