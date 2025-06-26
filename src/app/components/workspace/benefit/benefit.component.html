@@ -8,88 +8,81 @@
   }
 
   <section class="filter__container">
-    <div class="filter__left">
-      <div class="filter">
-        <button [class.active]="activeButton === 'geral'" (click)="activeButton = 'geral'; showGeral()"
-          class="btn btn--secondary">
-          GERAL
-        </button>
-      </div>
-      <div class="filter">
-        <button [class.active]="activeButton === 'record'" (click)="activeButton = 'record'; showRecord()"
-          class="btn btn--secondary">
-          REGISTROS
-        </button>
-      </div>
-      <div class="filter">
-        <button [class.active]="activeButton === 'employee'" (click)="activeButton = 'employee'; showEmployee()"
-          class="btn btn--secondary">
-          COLABORADORES
-        </button>
-      </div>
+    <div class="filter">
+      <button [class.active]="activeButton === 'geral'" (click)="activeButton = 'geral'; showGeral()"
+        class="btn btn--secondary">
+        GERAL
+      </button>
+    </div>
+    <div class="filter">
+      <button [class.active]="activeButton === 'record'" (click)="activeButton = 'record'; showRecord()"
+        class="btn btn--secondary">
+        REGISTROS
+      </button>
     </div>
 
-    <div class="filter__right">
-      <div class="filter" *ngIf="recordSection || employeeSection">
-        <input type="text" class="btn btn--tertiary" placeholder="BUSCAR" [(ngModel)]="employee"
-          (input)="applyFilters()">
-      </div>
+    <div class="filter input-break">
+      <button [class.active]="activeButton === 'employee'" (click)="activeButton = 'employee'; showEmployee()"
+        class="btn btn--secondary">
+        COLABORADORES
+      </button>
+    </div>
 
-      @if (recordSection || geralSection) {
-      <form [formGroup]="recordForm" (ngSubmit)="findRecord()">
+    <div class="filter" *ngIf="recordSection || employeeSection">
+      <input type="text" class="btn btn--tertiary" placeholder="BUSCAR" [(ngModel)]="employee" (input)="applyFilters()">
+    </div>
 
-        <div class="filter">
-          <select formControlName="centro_custo" class="btn btn--tertiary">
-            <option value="" selected>GERAL</option>
-            <option value="EMLURB">EMLURB</option>
-            <option value="MÁQUINAS">MÁQUINAS</option>
-            <option value="BRK - HH">BRK - HH</option>
-            <option value="BRK - CABO">BRK - CABO</option>
-            <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-            <option value="LUIZ WILSON">LUIZ WILSON</option>
-            <option value="BRK - HH 03">BRK - HH 03</option>
-            <option value="BRK - REDES">BRK - REDES</option>
-            <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-            <option value="BRK - CURADO">BRK - CURADO</option>
-            <option value="BRK - GOIANA">BRK - GOIANA</option>
-            <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-            <option value="BRK - CABANGA">BRK - CABANGA</option>
-            <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-            <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-            <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-            <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-          </select>
-        </div>
-
-        <div class="filter">
-          <input type="month" formControlName="data" class="btn btn--tertiary">
-        </div>
-
-        <div class="filter">
-          <button type="submit" class="btn btn--find">
-            @if (isFind) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            BUSCAR
-            }
-          </button>
-        </div>
-      </form>
-      }
-
-      <div class="filter" *ngIf="employeeSection">
-        <button (click)="addEmployee = true" class="btn btn--primary">+ NOVO</button>
-      </div>
-
+    @if (recordSection || geralSection) {
+    <form [formGroup]="recordForm" (ngSubmit)="findRecord()">
       <div class="filter">
-        <button (click)="settingSection = true" class="btn btn--icon">
-          <mat-icon>settings</mat-icon>
+        <select formControlName="centro_custo" class="btn btn--tertiary">
+          <option value="" selected>GERAL</option>
+          <option value="EMLURB">EMLURB</option>
+          <option value="MÁQUINAS">MÁQUINAS</option>
+          <option value="BRK - HH">BRK - HH</option>
+          <option value="BRK - CABO">BRK - CABO</option>
+          <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+          <option value="LUIZ WILSON">LUIZ WILSON</option>
+          <option value="BRK - HH 03">BRK - HH 03</option>
+          <option value="BRK - REDES">BRK - REDES</option>
+          <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+          <option value="BRK - CURADO">BRK - CURADO</option>
+          <option value="BRK - GOIANA">BRK - GOIANA</option>
+          <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+          <option value="BRK - CABANGA">BRK - CABANGA</option>
+          <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+          <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+          <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+          <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+        </select>
+      </div>
+      <div class="filter">
+        <input type="month" formControlName="data" class="btn btn--tertiary">
+      </div>
+      <div class="filter">
+        <button type="submit" class="btn btn--find">
+          @if (isFind) {
+          <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          } @else {
+          BUSCAR
+          }
         </button>
       </div>
+    </form>
+    }
+
+    <div class="filter" *ngIf="employeeSection">
+      <button (click)="addEmployee = true" class="btn btn--primary">+ NOVO</button>
+    </div>
+
+    <div class="filter">
+      <button (click)="settingSection = true" class="btn btn--icon">
+        <mat-icon>settings</mat-icon>
+      </button>
     </div>
   </section>
 
@@ -721,7 +714,12 @@
         <div class="form__content">
           <div class="form__group">
             <button (click)="createRecordSection = true; settingSection = false" class="btn btn--quaternary">
-              GERAR NOVO MÊS
+              GERAR MÊS
+            </button>
+          </div>
+          <div class="form__group">
+            <button (click)="deleteMonthSection = true; settingSection = false" class="btn btn--quaternary">
+              DELETAR MÊS
             </button>
           </div>
           <div (click)="layoutVrSection = true; settingSection = false" class="form__group">
@@ -734,7 +732,7 @@
               GERAR LAYOUT CAJU
             </button>
           </div>
-          <div class="form__group">
+          <div class="form__group form__group--full">
             <button (click)="layoutVemSection = true; settingSection = false" class="btn btn--quaternary">
               GERAR LAYOUT VEM
             </button>
@@ -856,6 +854,40 @@
             </div>
             } @else {
             Gerar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="record__container" *ngIf="deleteMonthSection">
+    <form [formGroup]="deleteMonthForm" (ngSubmit)="deleteMonth()" class="modal__backdrop" role="dialog"
+      aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Deletar Mês</h2>
+          <button type="button" class="btn btn--close" (click)="deleteMonthSection = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label for="data">Mês e Ano</label>
+            <input id="data" type="month" formControlName="data" class="form__input">
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--quaternary"
+            (click)="deleteMonthSection = false; settingSection = true">Voltar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isCreating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Deletar
             }
           </button>
         </div>

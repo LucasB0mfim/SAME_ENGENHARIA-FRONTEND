@@ -9,22 +9,17 @@
   width: 100%;
   padding: 0 0.7vw;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  gap: 2vw;
 }
 
-.filter__left,
-.filter__right {
+.filter__container form {
   display: flex;
   gap: 2vw;
 }
 
-.filter__right form {
-  display: flex;
-  gap: 2vw;
+.filter.input-break {
+  margin-right: auto;
 }
-
-.filter {}
 
 .btn {
   width: auto;
@@ -159,7 +154,7 @@
 .grafic__container {
   gap: 1vw;
   display: grid;
-  padding: 0vw 0.7vw 0.7vw 0.7vw;
+  padding: 0.7vw;
   grid-template-columns: repeat(4, 1fr);
   overflow-y: auto;
 

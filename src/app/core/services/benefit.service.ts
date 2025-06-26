@@ -32,12 +32,17 @@ export class BenefitService {
 
   deleteEmployee(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/${id}`, { headers });
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/delete/employee/${id}`, { headers });
   }
 
-  deleteEmployeeRecord(id: any): Observable<any> {
+  deleteRecord(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/delete/record/${id}`, { headers });
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/delete/record/${id}`, { headers });
+  }
+
+  deleteMonth(month: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/delete/${month}`, { headers });
   }
 
   findRecord(request: any): Observable<any> {

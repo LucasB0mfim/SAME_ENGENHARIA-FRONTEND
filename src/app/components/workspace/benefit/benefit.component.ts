@@ -42,6 +42,10 @@ export class BenefitComponent implements OnInit {
     reembolso: new FormControl('')
   })
 
+  deleteMonthForm: FormGroup = new FormGroup({
+    data: new FormControl(''),
+  })
+
   createLayoutVrForm: FormGroup = new FormGroup({
     data: new FormControl(''),
     centro_custo: new FormControl('')
@@ -91,6 +95,7 @@ export class BenefitComponent implements OnInit {
   activeButton: string = 'geral';
   geralSection: boolean = true;
   recordSection: boolean = false;
+  deleteMonthSection: boolean = false;
   employeeSection: boolean = false;
   createRecordSection: boolean = false;
   settingSection: boolean = false;
@@ -220,27 +225,6 @@ export class BenefitComponent implements OnInit {
     })
   }
 
-  deleteEmployee(): void {
-    this.isDeleting = true;
-
-    const id = this.updateEmployeeForm.value.id;
-
-    this._benefitService.deleteEmployee(id).subscribe({
-      next: () => {
-        this.setSuccessMessage('Colaborador deletado com sucesso.');
-        this.editEmployee = false;
-        this.updateEmployeeForm.reset();
-        this.findEmployee();
-        this.isDeleting = false;
-      },
-      error: (error) => {
-        console.error(error);
-        this.setErrorMessage('Erro ao deletar.');
-        this.isDeleting = false;
-      }
-    })
-  }
-
   findRecord(): void {
     this.isFind = true;
 
@@ -280,7 +264,7 @@ export class BenefitComponent implements OnInit {
           sum_vc: response.sum_vc,
           sum_vt: response.sum_vt,
           total_caju: response.total_caju,
-          total_vr: response.total_vr_card,
+          total_vr: response.total_vr,
           sum_cards: response.sum_cards,
           sum_all: response.sum_all,
           media_all: response.media_all,
@@ -365,12 +349,33 @@ export class BenefitComponent implements OnInit {
     })
   }
 
+  deleteEmployee(): void {
+    this.isDeleting = true;
+
+    const id = this.updateEmployeeForm.value.id;
+
+    this._benefitService.deleteEmployee(id).subscribe({
+      next: () => {
+        this.setSuccessMessage('Colaborador deletado com sucesso.');
+        this.editEmployee = false;
+        this.updateEmployeeForm.reset();
+        this.findEmployee();
+        this.isDeleting = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao deletar.');
+        this.isDeleting = false;
+      }
+    })
+  }
+
   deleteRecord(): void {
     this.isDeleting = true;
 
     const id = this.updateRecordForm.value.id;
 
-    this._benefitService.deleteEmployeeRecord(id).subscribe({
+    this._benefitService.deleteRecord(id).subscribe({
       next: () => {
         this.setSuccessMessage('Colaborador deletado com sucesso.');
         this.isDeleting = false;
@@ -381,6 +386,31 @@ export class BenefitComponent implements OnInit {
         console.error(error);
         this.setErrorMessage('Erro ao deletar.');
         this.isDeleting = false;
+      }
+    })
+  }
+
+  deleteMonth(): void {
+    this.isCreating = true;
+
+    const month = this.deleteMonthForm.value.data
+
+    if (!month) {
+      this.setErrorMessage('Define uma data válida.');
+      return;
+    }
+
+    this._benefitService.deleteMonth(month).subscribe({
+      next: () => {
+        this.setSuccessMessage('Mês deletado com sucesso.');
+        this.deleteMonthForm.reset();
+        this.deleteMonthSection = false;
+        this.isCreating = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.setErrorMessage('Erro ao deletar mês.');
+        this.isCreating = false;
       }
     })
   }
