@@ -21,9 +21,7 @@ import { OrderDeliveredComponent } from './components/workspace/order-delivered/
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
-import { DismissEmployeeComponent } from './components/workspace/dismiss-employee/dismiss-employee.component';
 
-import { tiGuard } from './core/guard/ti.guard';
 import { authGuard } from './core/guard/auth.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
@@ -99,11 +97,6 @@ export const routes: Routes = [
       {
         path: 'human-resources/benefit',
         component: BenefitComponent,
-        canActivate: [humanResourcesGuard]
-      },
-      {
-        path: 'human-resources/dismiss-employee',
-        component: DismissEmployeeComponent,
         canActivate: [humanResourcesGuard]
       },
       {

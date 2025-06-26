@@ -26,7 +26,9 @@ export class ExperienceService {
   }
 
   getExcel(): Observable<Blob> {
+    const headers = this._createHeaders();
     return this._httpClient.get('https://sameengenharia.com.br/api/download/experience', {
+      headers,
       responseType: 'blob' as 'blob'
     });
   }
