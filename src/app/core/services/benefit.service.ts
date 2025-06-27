@@ -73,6 +73,14 @@ export class BenefitService {
     });
   }
 
+  donwloadLayoutCaju(request: any): Observable<Blob> {
+    const headers = this._createHeaders();
+    return this._httpClient.post('https://sameengenharia.com.br/api/benefit/donwload/layout-caju', request, {
+      responseType: 'blob' as 'blob',
+      headers
+    });
+  }
+
   donwloadLayoutVem(request: any): Observable<Blob> {
     const headers = this._createHeaders();
     return this._httpClient.post('https://sameengenharia.com.br/api/benefit/donwload/layout-vem', request, {

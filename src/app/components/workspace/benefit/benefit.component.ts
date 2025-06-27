@@ -51,6 +51,11 @@ export class BenefitComponent implements OnInit {
     centro_custo: new FormControl('')
   })
 
+  createLayoutCajuForm: FormGroup = new FormGroup({
+    data: new FormControl(''),
+    centro_custo: new FormControl('')
+  })
+
   createLayoutVemForm: FormGroup = new FormGroup({
     data: new FormControl(''),
     centro_custo: new FormControl('')
@@ -100,6 +105,7 @@ export class BenefitComponent implements OnInit {
   createRecordSection: boolean = false;
   settingSection: boolean = false;
   layoutVrSection: boolean = false;
+  layoutCajuSection: boolean = false;
   layoutVemSection: boolean = false;
   updateRecordSection: boolean = false;
 
@@ -436,6 +442,27 @@ export class BenefitComponent implements OnInit {
     });
   }
 
+  downloadLayoutCaju(): void {
+    this.isCreating = true;
+
+    const request = {
+      data: this.createLayoutCajuForm.value.data,
+      centro_custo: this.createLayoutCajuForm.value.centro_custo
+    };
+
+    this._benefitService.donwloadLayoutCaju(request).subscribe({
+      next: (blob: Blob) => {
+        this.isCreating = false;
+        saveAs(blob, 'layoutCaju.txt');
+        this.resetLayoutCajuForm();
+      },
+      error: (error) => {
+        console.error(error);
+        this.isCreating = false;
+      }
+    });
+  }
+
   downloadLayoutVem(): void {
     this.isCreating = true;
 
@@ -596,6 +623,13 @@ export class BenefitComponent implements OnInit {
 
   resetLayoutVrForm(): void {
     this.createLayoutVrForm.reset({
+      data: null,
+      centro_custo: ''
+    });
+  }
+
+  resetLayoutCajuForm(): void {
+    this.createLayoutCajuForm.reset({
       data: null,
       centro_custo: ''
     });

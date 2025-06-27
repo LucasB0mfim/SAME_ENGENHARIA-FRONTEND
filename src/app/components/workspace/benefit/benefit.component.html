@@ -727,7 +727,7 @@
               GERAR LAYOUT VR
             </button>
           </div>
-          <div class="form__group">
+          <div (click)="layoutCajuSection = true; settingSection = false" class="form__group">
             <button class="btn btn--quaternary">
               GERAR LAYOUT CAJU
             </button>
@@ -787,6 +787,64 @@
         <div class="form__footer">
           <button type="button" class="btn btn--quaternary"
             (click)="layoutVrSection = false; settingSection = true">Voltar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isCreating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Gerar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="record__container" *ngIf="layoutCajuSection">
+    <form [formGroup]="createLayoutCajuForm" (ngSubmit)="downloadLayoutCaju()" class="modal__backdrop" role="dialog"
+      aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Gerar Layout Caju</h2>
+          <button type="button" class="btn btn--close" (click)="layoutCajuSection = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group form__group--full">
+            <label for="data">Mês e Ano</label>
+            <input id="data" type="month" formControlName="data" class="form__input">
+          </div>
+          <div class="form__group form__group--full">
+            <label for="dias_uteis">Centro de Custo</label>
+            <select id="centro_custo" formControlName="centro_custo" class="form__input">
+              <option value="" disabled selected>DEFINA EM CENTRO DE CUSTO</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="BRK - CABO">BRK - CABO</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="BRK - REDES">BRK - REDES</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
+              <option value="BRK - CURADO">BRK - CURADO</option>
+              <option value="BRK - GOIANA">BRK - GOIANA</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - CABANGA">BRK - CABANGA</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+            </select>
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--quaternary"
+            (click)="layoutCajuSection = false; settingSection = true">Voltar</button>
           <button type="submit" class="btn btn--primary">
             @if (isCreating) {
             <div class="loading-dots">
