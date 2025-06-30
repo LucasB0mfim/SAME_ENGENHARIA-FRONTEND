@@ -7,7 +7,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ExperienceService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'https://sameengenharia.com.br/api/reports/experience';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -17,17 +16,17 @@ export class ExperienceService {
 
   find(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>(this._apiUrl, { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/experience/reports', { headers });
   }
 
   updateModality(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>(this._apiUrl, request, { headers });
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/experience/update', request, { headers });
   }
 
   getExcel(): Observable<Blob> {
     const headers = this._createHeaders();
-    return this._httpClient.get('https://sameengenharia.com.br/api/download/experience', {
+    return this._httpClient.get('https://sameengenharia.com.br/api/experience/download', {
       headers,
       responseType: 'blob' as 'blob'
     });
