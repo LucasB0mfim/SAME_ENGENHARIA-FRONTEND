@@ -32,7 +32,7 @@ export class FinancialTrackingComponent implements OnInit {
   materialField: string = '';
 
   ngOnInit() {
-    this.__titleService.setTitle('Rastrear Pedido');
+    this.__titleService.setTitle('Rastrear ID');
     this.getID();
   }
 

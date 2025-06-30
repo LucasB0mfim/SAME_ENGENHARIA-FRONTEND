@@ -48,11 +48,13 @@ export class BenefitComponent implements OnInit {
 
   createLayoutVrForm: FormGroup = new FormGroup({
     data: new FormControl(''),
+    beneficioVr: new FormControl(''),
     centro_custo: new FormControl('')
   })
 
   createLayoutCajuForm: FormGroup = new FormGroup({
     data: new FormControl(''),
+    beneficioCaju: new FormControl(''),
     centro_custo: new FormControl('')
   })
 
@@ -426,6 +428,7 @@ export class BenefitComponent implements OnInit {
 
     const request = {
       data: this.createLayoutVrForm.value.data,
+      benefit: this.createLayoutVrForm.value.beneficioVr,
       centro_custo: this.createLayoutVrForm.value.centro_custo
     };
 
@@ -447,6 +450,7 @@ export class BenefitComponent implements OnInit {
 
     const request = {
       data: this.createLayoutCajuForm.value.data,
+      benefit: this.createLayoutCajuForm.value.beneficioCaju,
       centro_custo: this.createLayoutCajuForm.value.centro_custo
     };
 
@@ -624,6 +628,7 @@ export class BenefitComponent implements OnInit {
   resetLayoutVrForm(): void {
     this.createLayoutVrForm.reset({
       data: null,
+      beneficioVr: '',
       centro_custo: ''
     });
   }
@@ -631,6 +636,7 @@ export class BenefitComponent implements OnInit {
   resetLayoutCajuForm(): void {
     this.createLayoutCajuForm.reset({
       data: null,
+      beneficioCaju: '',
       centro_custo: ''
     });
   }

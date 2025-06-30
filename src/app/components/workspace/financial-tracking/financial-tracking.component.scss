@@ -146,12 +146,6 @@
     flex-direction: column;
   }
 
-  &__secondary {
-    height: 100%;
-    gap: 20px;
-    display: flex;
-  }
-
   &__top,
   &__bottom {
     gap: 8px;
@@ -163,17 +157,11 @@
     padding: 20px;
     display: grid;
     border-top: 2px solid var(--primary-color);
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(9, 1fr);
 
     .card__info {
       display: flex;
       flex-direction: column;
-
-      &:first-child {
-        width: 90%;
-        grid-column: 1/-1;
-        margin-bottom: 20px;
-      }
     }
   }
 }

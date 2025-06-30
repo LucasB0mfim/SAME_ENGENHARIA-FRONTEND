@@ -755,14 +755,22 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-          <div class="form__group form__group--full">
+          <div class="form__group">
             <label for="data">Mês e Ano</label>
             <input id="data" type="month" formControlName="data" class="form__input">
           </div>
+          <div class="form__group">
+            <label for="beneficioVr">Tipo de Benefício</label>
+            <select id="beneficioVr" formControlName="beneficioVr" class="form__input">
+              <option value="" disabled selected>DEFINA O BENEFÍCIO</option>
+              <option value="VR">VALE REFEIÇÃO</option>
+              <option value="VT">VALE TRANSPORTE</option>
+            </select>
+          </div>
           <div class="form__group form__group--full">
-            <label for="dias_uteis">Centro de Custo</label>
+            <label for="centro_custo">Centro de Custo</label>
             <select id="centro_custo" formControlName="centro_custo" class="form__input">
-              <option value="" disabled selected>DEFINA EM CENTRO DE CUSTO</option>
+              <option value="" disabled selected>DEFINA O CENTRO DE CUSTO</option>
               <option value="EMLURB">EMLURB</option>
               <option value="MÁQUINAS">MÁQUINAS</option>
               <option value="BRK - HH">BRK - HH</option>
@@ -813,14 +821,22 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-          <div class="form__group form__group--full">
+          <div class="form__group">
             <label for="data">Mês e Ano</label>
             <input id="data" type="month" formControlName="data" class="form__input">
           </div>
+          <div class="form__group">
+            <label for="beneficioCaju">Tipo de Benefício</label>
+            <select id="beneficioCaju" formControlName="beneficioCaju" class="form__input">
+              <option value="" disabled selected>DEFINA O BENEFÍCIO</option>
+              <option value="VR">VALE REFEIÇÃO</option>
+              <option value="VT">VALE TRANSPORTE</option>
+            </select>
+          </div>
           <div class="form__group form__group--full">
-            <label for="dias_uteis">Centro de Custo</label>
+            <label for="centro_custo">Centro de Custo</label>
             <select id="centro_custo" formControlName="centro_custo" class="form__input">
-              <option value="" disabled selected>DEFINA EM CENTRO DE CUSTO</option>
+              <option value="" disabled selected>DEFINA O CENTRO DE CUSTO</option>
               <option value="EMLURB">EMLURB</option>
               <option value="MÁQUINAS">MÁQUINAS</option>
               <option value="BRK - HH">BRK - HH</option>
