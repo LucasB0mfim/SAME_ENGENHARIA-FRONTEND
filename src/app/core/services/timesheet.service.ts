@@ -34,4 +34,12 @@ export class TimesheetService {
     const headers = this._createHeaders();
     return this._httpClient.post('https://sameengenharia.com.br/api/reports/extra-day', formData, {headers})
   }
+
+  donwloadLayoutTOTVS(request: any): Observable<Blob> {
+    const headers = this._createHeaders();
+    return this._httpClient.post('https://sameengenharia.com.br/api/timesheet/download/layout', request, {
+      responseType: 'blob' as 'blob',
+      headers
+    });
+  }
 }

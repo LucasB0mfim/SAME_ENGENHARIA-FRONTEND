@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
@@ -32,8 +34,14 @@ export class TimeSheetComponent implements OnInit {
     employee: new FormControl('')
   })
 
+  createLayoutTOTVSForm: FormGroup = new FormGroup({
+    date: new FormControl(''),
+    workingDays: new FormControl('')
+  })
+
   // VARIÁVEL DE CARREGAMENTO
   isLoading: boolean = true;
+  isCreating: boolean = false;
 
   // VARIÁVEL DE LISTA VAZIA
   isVoid: boolean = false;
@@ -53,6 +61,8 @@ export class TimeSheetComponent implements OnInit {
 
   // VARIÁVEL PARA ARMAZENAR OS ITENS FILTRADOS
   employeeFilter: any[] = [];
+
+  downloadSection: boolean = false;
 
   ngOnInit(): void {
     this.getTimesheet();
@@ -79,6 +89,27 @@ export class TimeSheetComponent implements OnInit {
         console.error('Não foi possível carregar os dados: ', error)
       }
     })
+  }
+
+  downloadLayoutTOTVS(): void {
+    this.isCreating = true;
+
+    const request = {
+      date: this.createLayoutTOTVSForm.value.date,
+      workingDays: this.createLayoutTOTVSForm.value.workingDays
+    };
+
+    this._timesheetService.donwloadLayoutTOTVS(request).subscribe({
+      next: (blob: Blob) => {
+        this.isCreating = false;
+        saveAs(blob, 'layout_ponto_totvs.txt');
+        this.resetLayoutTOTVSForm();
+      },
+      error: (error) => {
+        console.error(error);
+        this.isCreating = false;
+      }
+    });
   }
 
   // AGRUPAR POR NOME //
@@ -243,29 +274,19 @@ export class TimeSheetComponent implements OnInit {
 
     this.item.forEach(item => {
       if (item.centro_custo &&
-          item.centro_custo.trim() !== '' &&
-          item.centro_custo !== 'NÃO CONSTA') {
+        item.centro_custo.trim() !== '' &&
+        item.centro_custo !== 'NÃO CONSTA') {
         costCenterSet.add(item.centro_custo);
       }
     });
 
     this.costCenter = Array.from(costCenterSet).sort();
-
-    console.log(this.costCenter);
   }
 
-  // REINICIAR SETA DO SELECT //
-
-  resetSelectIcon(): void {
-    this.statusArrow = false;
+  resetLayoutTOTVSForm(): void {
+    this.createLayoutTOTVSForm.reset({
+      data: null,
+      workingDays: null
+    });
   }
-
-  // ANIMAR A SETA DO SELECT //
-
-  toggleSelect(): void {
-    setTimeout(() => {
-      this.statusArrow = !this.statusArrow;
-    }, 0);
-  }
-
 }
