@@ -43,6 +43,8 @@ export class TimeSheetComponent implements OnInit {
   isLoading: boolean = true;
   isCreating: boolean = false;
 
+  holidays: string[] = [];
+
   // VARIÁVEL DE LISTA VAZIA
   isVoid: boolean = false;
 
@@ -96,7 +98,8 @@ export class TimeSheetComponent implements OnInit {
 
     const request = {
       date: this.createLayoutTOTVSForm.value.date,
-      workingDays: this.createLayoutTOTVSForm.value.workingDays
+      workingDays: this.createLayoutTOTVSForm.value.workingDays,
+      holidays: this.holidays.filter(holiday => holiday !== '') // Remove datas vazias
     };
 
     this._timesheetService.donwloadLayoutTOTVS(request).subscribe({
@@ -283,10 +286,25 @@ export class TimeSheetComponent implements OnInit {
     this.costCenter = Array.from(costCenterSet).sort();
   }
 
+  addHoliday(): void {
+    this.holidays.push('');
+  }
+
+  removeHoliday(index: number): void {
+    this.holidays.splice(index, 1);
+  }
+
+  updateHoliday(index: number, event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.holidays[index] = target.value;
+  }
+
+  // Atualize o método resetLayoutTOTVSForm:
   resetLayoutTOTVSForm(): void {
     this.createLayoutTOTVSForm.reset({
-      data: null,
+      date: null,
       workingDays: null
     });
+    this.holidays = [];
   }
 }

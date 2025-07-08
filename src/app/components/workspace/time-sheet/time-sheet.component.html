@@ -165,13 +165,29 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-          <div class="form__group">
+          <div class="form__group form__group--full">
             <label for="date">Mês e Ano</label>
             <input id="date" type="month" formControlName="date" class="form__input">
           </div>
           <div class="form__group">
+            <label for="holidays">Feriados do mês</label>
+            <div class="holidays-container">
+              <div class="holiday-input-group" *ngFor="let holiday of holidays; let i = index">
+                <input type="date" [value]="holiday" (change)="updateHoliday(i, $event)"
+                  class="form__input holiday-input">
+                <button type="button" class="btn btn--danger" (click)="removeHoliday(i)">
+                  ×
+                </button>
+              </div>
+              <button type="button" class="btn btn--primary" (click)="addHoliday()" [disabled]="holidays.length >= 5">
+                + Adicionar Feriado
+              </button>
+            </div>
+          </div>
+          <div class="form__group">
             <label for="workingDays">Dias Úteis</label>
-            <input id="workingDays" type="number" placeholder="0" min="0" formControlName="workingDays" class="form__input">
+            <input id="workingDays" type="number" placeholder="0" min="0" formControlName="workingDays"
+              class="form__input">
           </div>
         </div>
         <div class="form__footer">

@@ -41,39 +41,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &--primary {
-    width: 6rem;
+    width: auto;
     background: var(--orange-color);
     color: var(--white-color);
 
     &:hover {
       background: var(--orange-color);
       transform: translateY(-2px);
-    }
-  }
-
-  &--find {
-    width: 6rem;
-    background: var(--orange-color);
-    color: var(--white-color);
-
-    &:hover {
-      background: var(--orange-color);
-      transform: translateY(-2px);
-    }
-  }
-
-  &--secondary {
-    background: var(--secondary-color);
-    color: var(--text-color);
-
-    &:hover {
-      color: var(--orange-color);
-      transform: translateY(-2px);
-    }
-
-    &.active {
-      background: var(--orange-color);
-      color: var(--white-color);
     }
   }
 
@@ -95,7 +69,7 @@
   }
 
   &--danger {
-    width: 6rem;
+    width: auto;
     background: #ff5757;
     color: var(--white-color);
 
@@ -495,4 +469,22 @@
     transform: scale(1);
     opacity: 1;
   }
+}
+
+
+.holidays-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.holiday-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.holiday-input {
+  flex: 1;
+  min-width: 0;
 }
