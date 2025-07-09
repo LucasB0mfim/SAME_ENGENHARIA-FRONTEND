@@ -61,25 +61,6 @@
     box-shadow: var(--box-shadow);
     transition: all 0.2s ease;
     cursor: pointer;
-
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
-
-  mat-icon {
-    position: absolute;
-    right: 12px;
-    top: 69%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: var(--text-color);
-    transition: transform 0.3s ease;
-    opacity: 0.7;
-
-    &.rotated {
-      transform: translateY(-50%) rotate(180deg);
-    }
   }
 }
 
@@ -157,7 +138,7 @@
     padding: 20px;
     display: grid;
     border-top: 2px solid var(--primary-color);
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 
     .card__info {
       display: flex;

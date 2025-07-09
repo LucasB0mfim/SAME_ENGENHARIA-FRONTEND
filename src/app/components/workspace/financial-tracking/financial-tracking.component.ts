@@ -24,12 +24,7 @@ export class FinancialTrackingComponent implements OnInit {
   isVoid: boolean = false;
 
   idField: string = '';
-  ocField: string = '';
-  isSelectOpen: boolean = false;
   centroCustoField: string = '';
-  fornecedorField: string = '';
-  movimentoField: string = '';
-  materialField: string = '';
 
   ngOnInit() {
     this.__titleService.setTitle('Rastrear ID');
@@ -64,59 +59,32 @@ export class FinancialTrackingComponent implements OnInit {
   }
 
   applyFilters() {
-    // Pedidos originais
     let filteredData = [...this.originalOrder];
 
-    if (this.idField && this.idField.trim() !== '') {
-      filteredData = filteredData.filter(item =>
-        item.id.toLowerCase().includes(this.idField.toLowerCase())
-      );
-    }
-
-    if (this.ocField && this.ocField.trim() !== '') {
-      filteredData = filteredData.filter(item =>
-        String(item.numero_oc).includes(this.ocField)
-      );
-    }
-
+    // Filtrar por centro de custo
     if (this.centroCustoField && this.centroCustoField.trim() !== '') {
       filteredData = filteredData.filter(item =>
         item.centro_custo === this.centroCustoField
       );
     }
 
-    if (this.fornecedorField && this.fornecedorField.trim() !== '') {
+    // Filtrar por id
+    if (this.idField && this.idField.trim() !== '') {
       filteredData = filteredData.filter(item =>
-        item.fornecedor?.toLowerCase().includes(this.fornecedorField.toLowerCase())
+        String(item.id).includes(this.idField.trim())
       );
     }
 
-    if (this.movimentoField && this.movimentoField.trim() !== '') {
-      filteredData = filteredData.filter(item =>
-        item.movimento?.toLowerCase().includes(this.movimentoField.toLowerCase())
-      );
-    }
-
-    // Filtro por material
-    if (this.materialField && this.materialField.trim() !== '') {
-      const materialFilter = this.materialField.toLowerCase();
-      filteredData = filteredData.filter(item =>
-        String(item.material).toLowerCase().includes(materialFilter)
-      );
-    }
-
-    // Atualizamos os dados filtrados
     this.order = filteredData;
     this.isVoid = this.order.length === 0;
   }
 
-  toggleSelect() {
-    setTimeout(() => {
-      this.isSelectOpen = !this.isSelectOpen;
-    }, 0);
-  }
+  formatCurrency(value: number): string {
+    if (!value) return '0,00'
 
-  resetSelectIcon() {
-    this.isSelectOpen = false;
+    return value.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
 }

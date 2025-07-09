@@ -4,43 +4,16 @@
     <!-- Centro de Custo -->
     <div class="filter">
       <label>CENTRO DE CUSTO</label>
-      <select [(ngModel)]="centroCustoField" (change)="applyFilters()" (mousedown)="toggleSelect()"
-        (blur)="resetSelectIcon()">
+      <select [(ngModel)]="centroCustoField" (change)="applyFilters()">
         <option value="">Todos</option>
         <option *ngFor="let centro of centrosCustoUnicos" [value]="centro">{{ centro }}</option>
       </select>
-      <mat-icon [class.rotated]="isSelectOpen">arrow_drop_down</mat-icon>
-    </div>
-
-    <!-- Fornecedor -->
-    <div class="filter">
-      <label for="fornecedorField">FORNECEDOR</label>
-      <input type="text" id="fornecedorField" placeholder="Ex: PAYFY" [(ngModel)]="fornecedorField"
-        (input)="applyFilters()">
-    </div>
-
-    <!-- Material -->
-    <div class="filter">
-      <label for="materialField">MATERIAL</label>
-      <input type="text" id="materialField" placeholder="Ex: CABO" [(ngModel)]="materialField" (input)="applyFilters()">
-    </div>
-
-    <!-- Movimento -->
-    <div class="filter">
-      <label for="movimentoField">MOVIMENTO</label>
-      <input type="text" id="movimentoField" placeholder="Ex: 52" [(ngModel)]="movimentoField" (input)="applyFilters()">
     </div>
 
     <!-- ID -->
     <div class="filter">
       <label for="idField">ID</label>
       <input type="text" id="idField" placeholder="Ex: 54026" [(ngModel)]="idField" (input)="applyFilters()">
-    </div>
-
-    <!-- OC -->
-    <div class="filter">
-      <label for="ocField">OC</label>
-      <input type="text" id="ocField" placeholder="Ex: 10294" [(ngModel)]="ocField" (input)="applyFilters()">
     </div>
   </div>
 
@@ -63,58 +36,34 @@
       <!-- Corpo do Card -->
       <div class="card__body">
 
-        <!-- Valor -->
+        <!-- Criador -->
         <div class="card__info">
-          <div class="card__title">VALOR</div>
-          <div class="card__subtitle">{{ data.valor || '0.00' }}</div>
-        </div>
-
-        <!-- Quantidade -->
-        <div class="card__info">
-          <div class="card__title">QUANTIDADE</div>
-          <div class="card__subtitle">N/A</div>
+          <div class="card__title">CRIADOR</div>
+          <div class="card__subtitle">{{ data.usuario_criacao || 'N/A' }}</div>
         </div>
 
         <!-- Data de Criação -->
         <div class="card__info">
           <div class="card__title">DATA CRIAÇÃO</div>
-          <div class="card__subtitle">N/A</div>
+          <div class="card__subtitle">{{ data.data_criacao || 'N/A' }}</div>
         </div>
 
         <!-- Data de Aprovação -->
         <div class="card__info">
           <div class="card__title">DATA APROVAÇÃO</div>
-          <div class="card__subtitle">N/A</div>
+          <div class="card__subtitle">{{ data.data_aprovacao || 'N/A' }}</div>
         </div>
 
-        <!-- Número OC -->
+        <!-- Valor -->
         <div class="card__info">
-          <div class="card__title">NUMERO OC</div>
-          <div class="card__subtitle">N/A</div>
+          <div class="card__title">VALOR TOTAL</div>
+          <div class="card__subtitle">R$ {{ formatCurrency(data.valor) || '0.00' }}</div>
         </div>
 
-        <!-- Criação OC -->
+        <!-- Quantidade -->
         <div class="card__info">
-          <div class="card__title">CRIAÇÃO OC</div>
-          <div class="card__subtitle">N/A</div>
-        </div>
-
-        <!-- Aprovação OC -->
-        <div class="card__info">
-          <div class="card__title">APROVAÇÃO OC</div>
-          <div class="card__subtitle">N/A</div>
-        </div>
-
-        <!-- Previsão de Entrega -->
-        <div class="card__info">
-          <div class="card__title">PREVISÃO ENTREGA</div>
-          <div class="card__subtitle">N/A</div>
-        </div>
-
-        <!-- Criador -->
-        <div class="card__info">
-          <div class="card__title">CRIADOR</div>
-          <div class="card__subtitle">N/A</div>
+          <div class="card__title">QUANTIDADE SOLICITADA</div>
+          <div class="card__subtitle">{{ data.quantidade || '0' }} UNID(S)</div>
         </div>
       </div>
     </div>
