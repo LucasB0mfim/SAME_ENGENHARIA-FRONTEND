@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
 import { BenefitService } from '../../../core/services/benefit.service';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-benefit',
@@ -20,6 +21,7 @@ export class BenefitComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _benefitService = inject(BenefitService);
+  private readonly _dashboardService = inject(DashboardService);
 
   // ========== FORMULÁRIOS ========== //
   recordForm: FormGroup = new FormGroup({
@@ -65,6 +67,7 @@ export class BenefitComponent implements OnInit {
 
   createEmployeeForm: FormGroup = new FormGroup({
     nome: new FormControl(''),
+    cpf: new FormControl(null),
     funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
@@ -80,6 +83,7 @@ export class BenefitComponent implements OnInit {
   updateEmployeeForm: FormGroup = new FormGroup({
     id: new FormControl(null),
     nome: new FormControl(''),
+    cpf: new FormControl(null),
     funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
@@ -129,6 +133,8 @@ export class BenefitComponent implements OnInit {
   showSuccess: boolean = false;
   successMessage: string = '';
 
+  userEmail = localStorage.getItem('email');
+
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
@@ -155,8 +161,15 @@ export class BenefitComponent implements OnInit {
   createEmployee(): void {
     this.isCreating = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isCreating = false;
+      return;
+    }
+
     const request = {
       nome: this.upperCase(this.createEmployeeForm.value.nome),
+      cpf: this.createEmployeeForm.value.cpf,
       funcao: this.createEmployeeForm.value.funcao,
       setor: this.createEmployeeForm.value.setor,
       contrato: this.createEmployeeForm.value.contrato,
@@ -194,9 +207,16 @@ export class BenefitComponent implements OnInit {
   updateEmployee(): void {
     this.isUpdating = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isUpdating = false;
+      return;
+    }
+
     const request = {
       id: this.updateEmployeeForm.value.id,
       nome: this.upperCase(this.updateEmployeeForm.value.nome),
+      cpf: this.updateEmployeeForm.value.cpf,
       funcao: this.updateEmployeeForm.value.funcao,
       setor: this.updateEmployeeForm.value.setor,
       contrato: this.updateEmployeeForm.value.contrato,
@@ -235,6 +255,12 @@ export class BenefitComponent implements OnInit {
 
   findRecord(): void {
     this.isFind = true;
+
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isFind = false;
+      return;
+    }
 
     const request = {
       data: this.recordForm.value.data,
@@ -289,6 +315,12 @@ export class BenefitComponent implements OnInit {
   createRecord(): void {
     this.isCreating = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isCreating = false;
+      return;
+    }
+
     const request = {
       ano_mes: this.createRecordForm.value.ano_mes,
       dias_uteis: this.createRecordForm.value.dias_uteis,
@@ -322,6 +354,12 @@ export class BenefitComponent implements OnInit {
 
   updateRecord(): void {
     this.isUpdating = true;
+
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isUpdating = false;
+      return;
+    }
 
     const request = {
       nome: this.removeSpace(this.updateRecordForm.value.nome),
@@ -360,6 +398,12 @@ export class BenefitComponent implements OnInit {
   deleteEmployee(): void {
     this.isDeleting = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isDeleting = false;
+      return;
+    }
+
     const id = this.updateEmployeeForm.value.id;
 
     this._benefitService.deleteEmployee(id).subscribe({
@@ -381,6 +425,12 @@ export class BenefitComponent implements OnInit {
   deleteRecord(): void {
     this.isDeleting = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isDeleting = false;
+      return;
+    }
+
     const id = this.updateRecordForm.value.id;
 
     this._benefitService.deleteRecord(id).subscribe({
@@ -400,6 +450,12 @@ export class BenefitComponent implements OnInit {
 
   deleteMonth(): void {
     this.isCreating = true;
+
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isCreating = false;
+      return;
+    }
 
     const month = this.deleteMonthForm.value.data
 
@@ -426,6 +482,12 @@ export class BenefitComponent implements OnInit {
   downloadLayoutVr(): void {
     this.isCreating = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isCreating = false;
+      return;
+    }
+
     const request = {
       data: this.createLayoutVrForm.value.data,
       benefit: this.createLayoutVrForm.value.beneficioVr,
@@ -448,6 +510,12 @@ export class BenefitComponent implements OnInit {
   downloadLayoutCaju(): void {
     this.isCreating = true;
 
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isCreating = false;
+      return;
+    }
+
     const request = {
       data: this.createLayoutCajuForm.value.data,
       benefit: this.createLayoutCajuForm.value.beneficioCaju,
@@ -469,6 +537,12 @@ export class BenefitComponent implements OnInit {
 
   downloadLayoutVem(): void {
     this.isCreating = true;
+
+    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
+      alert('Você não possui permissão!');
+      this.isCreating = false;
+      return;
+    }
 
     const request = {
       data: this.createLayoutVemForm.value.data,
@@ -495,6 +569,7 @@ export class BenefitComponent implements OnInit {
     this.updateEmployeeForm.patchValue({
       id: employee.id,
       nome: employee.nome,
+      cpf: employee.cpf,
       funcao: employee.funcao,
       setor: employee.setor,
       contrato: employee.contrato,
