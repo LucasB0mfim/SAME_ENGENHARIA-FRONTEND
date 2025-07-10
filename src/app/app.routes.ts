@@ -10,12 +10,13 @@ import { ReportsComponent } from './components/workspace/reports/reports.compone
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BenefitComponent } from './components/workspace/benefit/benefit.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
+import { FinancialComponent } from './components/workspace/financial/financial.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
-import { FinancialComponent } from './components/workspace/financial/financial.component';
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
 import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
 import { ConstructionComponent } from './components/workspace/construction/construction.component';
+import { AdmissionFormComponent } from './components/forms/admission-form/admission-form.component';
 import { WorkModalityComponent } from './components/workspace/work-modality/work-modality.component';
 import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
@@ -24,9 +25,11 @@ import { UploadTimesheetComponent } from './components/workspace/upload-timeshee
 import { FinancialTrackingComponent } from './components/workspace/financial-tracking/financial-tracking.component';
 
 import { authGuard } from './core/guard/auth.guard';
+import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
   {
@@ -49,6 +52,15 @@ export const routes: Routes = [
     path: 'update',
     component: UpdateComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'admission',
+    component: AdmissionFormComponent,
+    canActivate: [tempTokenGuard]
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent
   },
   {
     path: 'dashboard',

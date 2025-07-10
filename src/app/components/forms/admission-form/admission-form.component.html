@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="form">
+    <form class="form__container">
+      <header class="form__header">
+        <h1 class="form__title">
+          Parabéns!
+        </h1>
+        <p class="form__subtitle">
+          A Same Engenharia tem o prazer de informar que você foi selecionado para fazer parte do nosso time! Para
+          darmos continuidade ao processo, preencha os campos abaixo com seus dados:
+        </p>
+      </header>
+
+      <div class="form__content">
+        <div class="form__group">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" name="nome" placeholder="Nome completo" required />
+        </div>
+
+        <div class="form__group">
+          <label for="cpf">CPF</label>
+          <input type="text" id="cpf" name="cpf" placeholder="000.000.000-99" mask="000.000.000-99" required />
+        </div>
+
+        <div class="form__group">
+          <label for="data-nascimento">Data de nascimento</label>
+          <input type="text" id="data-nascimento" name="data-nascimento" placeholder="00/00/0000" mask="00/00/0000"
+            required />
+        </div>
+
+        <div class="form__group">
+          <label for="contato">Número para contato</label>
+          <input type="text" id="contato" name="contato" placeholder="(00) 00000-0000" mask="(00) 00000-0000"
+            required />
+        </div>
+      </div>
+
+      <footer class="form__footer">
+        <button type="submit" class="form__submit">Enviar</button>
+      </footer>
+    </form>
+  </div>
+</div>

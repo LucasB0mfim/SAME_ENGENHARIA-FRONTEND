@@ -1,0 +1,43 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('../../../../../public/assets/images/wallpaper.png');
+
+  &__text {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    max-width: 1024px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #2B2B2B;
+  }
+
+  &__title {
+    font-size: clamp(1.5rem, 1.2573rem + 1.0356vw, 2.5rem);
+    font-weight: 500;
+    color: var(--orange-color);
+  }
+
+  &__subtitle {
+    font-size: clamp(0.875rem, 0.8143rem + 0.2589vw, 1.125rem);
+    color: var(--white-color);
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .container {
+
+    &__text {
+      width: 80%;
+    }
+
+  }
+}
