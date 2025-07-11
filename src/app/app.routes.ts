@@ -11,6 +11,7 @@ import { GeneralComponent } from './components/workspace/general/general.compone
 import { BenefitComponent } from './components/workspace/benefit/benefit.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { FinancialComponent } from './components/workspace/financial/financial.component';
+import { AdmissionComponent } from './components/workspace/admission/admission.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
@@ -110,6 +111,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/benefit',
         component: BenefitComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/admission',
+        component: AdmissionComponent,
         canActivate: [humanResourcesGuard]
       },
       {

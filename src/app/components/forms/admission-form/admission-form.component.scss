@@ -24,9 +24,10 @@
   }
 
   &__header {
+    gap: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    padding: 0 10px 0 5px;
   }
 
   &__title {
@@ -44,7 +45,19 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-    margin-bottom: 24px;
+    overflow-y: auto;
+    max-height: 50vh;
+    padding: 0 10px 0 5px;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      cursor: pointer;
+      border-radius: 3px;
+      background: var(--orange-color);
+    }
   }
 
   &__group {
@@ -61,16 +74,18 @@
       color: var(--orange-color);
     }
 
-    input {
+    input,
+    select,
+    textarea {
       width: 100%;
       height: clamp(2.5rem, 2.3483rem + 0.6472vw, 3.125rem);
       padding-left: 10px;
       border: none;
+      resize: none;
       outline: none;
       font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
       border-radius: 8px;
       color: #F0F3FF;
-
       background-color: #1F1F1F;
 
       &:focus {
@@ -87,11 +102,54 @@
         transition: background-color 9999s ease-in-out 0s !important;
       }
     }
+
+    .form__upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1f1f1f;
+      border: 2px dashed var(--orange-color);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+
+      &:hover {
+        border-color: var(--orange-color);
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .form__upload-label {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        color: var(--white-color);
+        cursor: pointer;
+
+        mat-icon {
+          color: var(--orange-color);
+          font-size: 24px;
+        }
+
+        .form__upload-text {
+          font-size: 0.95rem;
+          font-weight: 400;
+          color: #aaa;
+        }
+      }
+    }
+
   }
 
   &__footer {
     display: flex;
     justify-content: end;
+    padding: 0 10px 0 5px;
   }
 
   &__submit {
@@ -120,7 +178,6 @@
 
     &__content {
       max-height: 30vh;
-      overflow-y: auto;
       grid-template-columns: 1fr;
     }
 
