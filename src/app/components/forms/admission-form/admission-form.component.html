@@ -1,6 +1,6 @@
 <div class="container">
   <div class="form">
-    <form class="form__container">
+    <form [formGroup]="admissionForm" class="form__container">
       <header class="form__header">
         <h1 class="form__title">
           Parabéns!
@@ -14,66 +14,71 @@
       <div class="form__content">
         <div class="form__group">
           <label for="nome">Nome completo</label>
-          <input type="text" id="nome" name="nome" placeholder="Nome completo" required />
+          <input type="text" id="nome" name="nome" formControlName="nome" placeholder="Nome completo" required />
         </div>
 
         <div class="form__group">
           <label for="cpf">CPF</label>
-          <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" mask="000.000.000-00" required />
+          <input type="text" id="cpf" name="cpf" formControlName="cpf" placeholder="000.000.000-00"
+            mask="000.000.000-00" required />
         </div>
 
         <div class="form__group">
           <label for="data-nascimento">Data de nascimento</label>
-          <input type="text" id="data-nascimento" name="data-nascimento" placeholder="00/00/0000" mask="00/00/0000"
-            required />
+          <input type="text" id="data-nascimento" name="data-nascimento" formControlName="dataNascimento"
+            placeholder="00/00/0000" mask="00/00/0000" required />
         </div>
 
         <div class="form__group">
-          <label for="contato">Número para contato</label>
-          <input type="text" id="contato" name="contato" placeholder="(00) 00000-0000" mask="(00) 00000-0000"
-            required />
+          <label for="numero-contato">Número para contato</label>
+          <input type="text" id="numero-contato" name="numero-contato" formControlName="numeroContato"
+            placeholder="(00) 00000-0000" mask="(00) 00000-0000" required />
         </div>
 
         <div class="form__group">
           <label for="rg">RG</label>
-          <input type="number" id="rg" name="rg" placeholder="00.000.000" required />
+          <input type="number" id="rg" name="rg" formControlName="rg" placeholder="00.000.000" required />
         </div>
 
         <div class="form__group">
           <label for="pis">PIS</label>
-          <input type="text" id="pis" name="pis" placeholder="00000000000" mask="00000000000" required />
+          <input type="text" id="pis" name="pis" formControlName="pis" placeholder="00000000000" mask="00000000000"
+            required />
         </div>
 
         <div class="form__group form__group--full">
           <label for="endereco">Endereço</label>
-          <input type="text" id="endereco" name="endereco" placeholder="Rua Same, 123" required />
+          <input type="text" id="endereco" name="endereco" formControlName="endereco" placeholder="Rua Same, 123"
+            required />
         </div>
 
         <div class="form__group">
           <label for="complemento">Complemento</label>
-          <input type="text" id="complemento" name="complemento" placeholder="Bloco A apt 101" required />
+          <input type="text" id="complemento" name="complemento" formControlName="complemento"
+            placeholder="Bloco A apt 101" required />
         </div>
 
         <div class="form__group">
           <label for="cep">CEP</label>
-          <input type="text" id="cep" name="cep" placeholder="000000-000" mask="000000-000" required />
+          <input type="text" id="cep" name="cep" placeholder="000000-000" formControlName="cep" mask="000000-000"
+            required />
         </div>
 
         <div class="form__group">
           <label for="tamanho-farda">Tamanho da farda</label>
-          <select type="text" id="tamanho-farda" name="tamanho-farda">
+          <select type="text" id="tamanho-farda" name="tamanho-farda" formControlName="tamanhoFarda">
             <option value="" selected disabled>Selecione o tamanho da sua farda</option>
-            <option value="">PP</option>
-            <option value="">P</option>
-            <option value="">M</option>
-            <option value="">G</option>
-            <option value="">GG</option>
+            <option value="PP">PP</option>
+            <option value="P">P</option>
+            <option value="M">M</option>
+            <option value="G">G</option>
+            <option value="GG">GG</option>
           </select>
         </div>
 
         <div class="form__group">
-          <label for="precisa-vt">Precisa de vale-transporte?</label>
-          <select id="precisa-vt" name="precisa-vt" (change)="onManageVT($event)">
+          <label for="usa-vt">Precisa de vale-transporte?</label>
+          <select id="usa-vt" name="usa-vt" (change)="onManageVT($event)" formControlName="usaVT">
             <option value="" selected disabled>Selecione uma opção</option>
             <option value="SIM">SIM (DESCONTO DE 6%)</option>
             <option value="NÃO">NÃO (SEM DESCONTO)</option>
@@ -83,46 +88,43 @@
         @if (useVT === 'SIM') {
         <div class="form__group">
           <label for="qtd-vt">Quantos vales-transporte (VT) você precisa por dia?</label>
-          <input type="text" id="qtd-vt" name="qtd-vt" placeholder="00" mask="00" />
+          <input type="text" id="qtd-vt" name="qtd-vt" formControlName="quantidadeVT" placeholder="0" mask="00" />
         </div>
         }
 
         <div class="form__group">
           <label for="funcao">Função</label>
-          <select type="text" id="setor" name="funcao">
-            <option value="" selected disabled>Selecione o sua função</option>
-            <option value="">PINTOR</option>
-            <option value="">SERVENTE</option>
-            <option value="">PEDREIRO</option>
-            <option value="">ARMADOR</option>
-            <option value="">SOLDADOR</option>
-            <option value="">BETONEIRO</option>
-            <option value="">ELETRICISTA</option>
-            <option value="">ESTÁGIARIO</option>
-            <option value="">ALMOXARIFE</option>
-            <option value="">ENGENHEIRO</option>
-            <option value="">ENCANADOR</option>
-            <option value="">SERRALHEIRO</option>
-            <option value="">CARPINTEIRO</option>
-            <option value="">ENCARREGADO</option>
-            <option value="">ADMINISTRATIVO</option>
-            <option value="">RECURSOS HUMANOS</option>
-            <option value="">TÉCNICO DE SEGURANÇA</option>
-            <option value="">OPERADOR DE MÁQUINAS</option>
-            <option value="">MOTORISTA DE CAMINHÃO</option>
+          <select id="funcao" name="funcao" (change)="onFuncaoChange($event)" formControlName="funcao">
+            <option value="" selected disabled>Selecione a sua função</option>
+            <option *ngFor="let boot of needBoot" [value]="boot">{{ boot }}</option>
+            <option value="ESTÁGIARIO">ESTÁGIARIO</option>
+            <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
           </select>
         </div>
 
-        @if (useBoot === 'SIM') {
+        @if (needBoot.includes(selectedFunction)) {
         <div class="form__group">
           <label for="tamanho-bota">Tamanho da bota</label>
-          <input type="text" id="tamanho-bota" name="tamanho-bota" placeholder="00" mask="00" required />
+          <input type="text" id="tamanho-bota" name="tamanho-bota" formControlName="tamanhoBota" placeholder="00"
+            mask="00" required />
+        </div>
+        }
+
+        @if (hapvida.includes(selectedFunction)) {
+        <div class="form__group">
+          <label for="hapvida">Deseja optar pelo plano de saúde HAPVIDA?</label>
+          <select id="hapvida" name="hapvida" formControlName="hapvida">
+            <option value="" disabled selected>Selecione uma opção</option>
+            <option value="SIM">SIM (DESCONTO DE 10%)</option>
+            <option value="NÃO">NÃO (SEM DESCONTO)</option>
+          </select>
         </div>
         }
 
         <div class="form__group">
-          <label for="hasChildren">Possui filho(s) com menos de 14 anos?</label>
-          <select id="hasChildren" name="hasChildren" (change)="onManageChildren($event)">
+          <label for="possui-filhos">Possui filho(s) com menos de 14 anos?</label>
+          <select id="possui-filhos" name="possui-filhos" (change)="onManageChildren($event)"
+            formControlName="possuiFilho">
             <option value="" disabled selected>Selecione uma opção</option>
             <option value="SIM">SIM</option>
             <option value="NÃO">NÃO</option>
@@ -130,105 +132,202 @@
         </div>
 
         @if (hasChildren === 'SIM') {
+        <div class="form__group form__group--full">
+          <label>Insira os dados dos filhos menores de 14 anos</label>
+
+          <div class="form__group form__group--children" *ngFor="let children of children; let i = index">
+
+            <div class="form__group--data">
+              <input type="text" id="nome-filho" name="nome-filho" formControlName="nomeFilho"
+                placeholder="Nome Completo" [value]="children" (change)="updateChildren(i, $event)">
+
+              <input id="cpf-filho" name="cpf-filho" type="text" formControlName="cpfFilho" placeholder="000.000.000-00"
+                mask="000.000.000-00" [value]="children" (change)="updateChildren(i, $event)">
+
+              <div class="form__upload">
+                <label class="form__upload-label" for="certidao-nascimento-filho">
+                  <mat-icon>cloud_upload</mat-icon>
+                  <span class="form__upload-text" id="certidao-nascimento-filho-nome"
+                    name="certidao-nascimento-filho">Certidão de Nascimento</span>
+                </label>
+
+                <input type="file" id="certidao-nascimento-filho" name="certidao-nascimento-filho"
+                  formControlName="certidaoNascimentoFilho" accept="image/*"
+                  onchange="document.getElementById('certidao-nascimento-filho-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
+              </div>
+
+              <div class="form__upload">
+                <label class="form__upload-label" for="cpf-filho-foto">
+                  <mat-icon>cloud_upload</mat-icon>
+                  <span class="form__upload-text" id="cpf-filho-foto-nome">CPF</span>
+                </label>
+
+                <input type="file" id="cpf-filho-foto" name="cpf-filho-foto" formControlName="cpfFilhoFoto"
+                  accept="image/*"
+                  onchange="document.getElementById('cpf-filho-foto-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
+              </div>
+            </div>
+
+            <button type="button" class="form__remove" (click)="removeChildren(i)">×</button>
+          </div>
+
+          <button type="button" class="form__add" (click)="addChildren()">
+            + Adicionar Filho
+          </button>
+        </div>
+        }
+
         <div class="form__group">
-          <label for="nome-criancas">Digite o nome completo dele(s)</label>
-          <textarea id="nome-criancas" name="nome-criancas" placeholder="João"></textarea>
+          <label for="instagram">Informe seu Instagram (Opcional)</label>
+          <input type="text" id="instagram" name="instagram" formControlName="instagram" placeholder="Instagram" />
+        </div>
+
+        <div class="form__group">
+          <label for="Linkedin">Informe seu Linkedin (Opcional)</label>
+          <input type="text" id="Linkedin" name="Linkedin" formControlName="linkedin" placeholder="Linkedin" />
+        </div>
+
+        <div class="form__group">
+          <label for="tipo-sanguineo">Tipo sanguíneo</label>
+          <input type="text" id="tipo-sanguineo" name="tipo-sanguineo" formControlName="tipoSanguineo"
+            placeholder="A+" />
+        </div>
+
+        <div class="form__group">
+          <label for="contato-emergencia">Contato de emergência</label>
+          <input type="text" id="contato-emergencia" name="contato-emergencia" formControlName="contatoEmergencia"
+            placeholder="Nome completo" />
+        </div>
+
+        <div class="form__group">
+          <label for="grau-parentesco">Grau de parentesco</label>
+          <input type="text" id="grau-parentesco" name="grau-parentesco" formControlName="grauParentesco"
+            placeholder="Ex: Avó" />
+        </div>
+
+        <div class="form__group">
+          <label for="numero-contato-emergencia">Número para contato</label>
+          <input type="text" id="numero-contato-emergencia" name="numero-contato-emergencia"
+            formControlName="numeroContatoEmergencia" placeholder="(00) 00000-0000" mask="(00) 00000-0000" />
+        </div>
+
+        <div class="form__group">
+          <label for="contato-emergencia-secundario">Segundo contato de emergência (Opcional)</label>
+          <input type="text" id="contato-emergencia-secundario" name="contato-emergencia-secundario"
+            formControlName="contatoEmergenciaSecundario" placeholder="Nome completo" />
+        </div>
+
+        <div class="form__group">
+          <label for="grau-parentesco-secundario">Grau de parentesco (Opcional)</label>
+          <input type="text" id="grau-parentesco-secundario" name="grau-parentesco-secundario"
+            formControlName="grauParentescoSecundario" placeholder="Ex: Avô" />
+        </div>
+
+        <div class="form__group">
+          <label for="numero-contato-emergencia-secundario">Número para contato (Opcional)</label>
+          <input type="text" id="numero-contato-emergencia-secundario" name="numero-contato-emergencia-secundario"
+            formControlName="numeroContatoEmergenciaSecundario" placeholder="(00) 00000-0000" mask="(00) 00000-0000" />
+        </div>
+
+        <div class="form__group">
+          <label for="alergia">Possui Alergia?</label>
+          <select id="alergia" name="alergia" formControlName="alergia">
+            <option value="" disabled selected>Selecione uma opção</option>
+            <option value="SIM">SIM</option>
+            <option value="NÃO">NÃO</option>
+          </select>
+        </div>
+
+        <div class="form__group">
+          <label for="condicao-medica">Possui alguma condição médica crônica?</label>
+          <select id="condicao-medica" name="condicao-medica" formControlName="condicaoMedica"
+            (change)="onManageChronicCondition($event)">
+            <option value="" disabled selected>Selecione uma opção</option>
+            <option value="SIM">SIM</option>
+            <option value="NÃO">NÃO</option>
+          </select>
+        </div>
+
+        @if (hasChronicCondition === 'SIM') {
+        <div class="form__group">
+          <label for="tipo-condicao-medica">Qual condição médica crônica você possue?</label>
+          <input type="text" id="tipo-condicao-medica" name="tipo-condicao-medica" formControlName="tipoCondicaoMedica"
+            placeholder="Ex: Diabetes" />
         </div>
         }
 
         <div class="form__group form__group--full">
           <label for="foto-3x4">Foto 3x4</label>
+
           <div class="form__upload">
             <label class="form__upload-label" for="foto-3x4">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
+              <span class="form__upload-text" id="foto-3x4-nome">Selecione uma imagem</span>
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
+            <input type="file" id="foto-3x4" name="foto-3x4" formControlName="tipo3x4" accept="image/*"
+              onchange="document.getElementById('foto-3x4-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group form__group--full">
-          <label for="foto-3x4">Foto do CPF</label>
+          <label for="cpf-foto">CPF</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
+            <label class="form__upload-label" for="cpf-foto">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
+              <span class="form__upload-text" id="cpf-foto-nome">Selecione uma imagem</span>
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
+            <input type="file" id="cpf-foto" name="cpf-foto" formControlName="cpfFoto" accept="image/*"
+              onchange="document.getElementById('cpf-foto-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group">
-          <label for="foto-3x4">Frente RG</label>
+          <label for="rg-frete">RG (Frente)</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
+            <label class="form__upload-label" for="rg-frete">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
+              <span class="form__upload-text" id="rg-frete-nome">Selecione uma imagem</span>
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
+            <input type="file" id="rg-frete" name="rg-frete" formControlName="rgFrente" accept="image/*"
+              onchange="document.getElementById('rg-frete-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group">
-          <label for="foto-3x4">Verso RG</label>
+          <label for="rg-verso">RG (Verso)</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
+            <label class="form__upload-label" for="rg-verso">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
+              <span class="form__upload-text" id="rg-verso-nome">Selecione uma imagem</span>
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
+            <input type="file" id="rg-verso" name="rg-verso" formControlName="rgVerso" accept="image/*"
+              onchange="document.getElementById('rg-verso-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group form__group--full">
-          <label for="foto-3x4">Certidão de nascimento ou casamento</label>
+          <label for="certidao-nascimento">Certidão de nascimento ou casamento</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
+            <label class="form__upload-label" for="certidao-nascimento">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
+              <span class="form__upload-text" id="certidao-nascimento-nome">Selecione uma imagem</span>
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
+            <input type="file" id="certidao-nascimento" name="certidao-nascimento" formControlName="certidaoNascimento"
+              accept="image/*"
+              onchange="document.getElementById('certidao-nascimento-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group form__group--full">
-          <label for="foto-3x4">Comprovante de residência</label>
+          <label for="comprovante-residencia">Comprovante de residência</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
+            <label class="form__upload-label" for="comprovante-residencia">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
+              <span class="form__upload-text" id="comprovante-residencia-nome">Selecione uma imagem</span>
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
-          </div>
-        </div>
-
-        <div class="form__group">
-          <label for="foto-3x4">Frente do cartão de vacina</label>
-          <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
-            </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
-          </div>
-        </div>
-
-        <div class="form__group">
-          <label for="foto-3x4">Verso do cartão de vacina</label>
-          <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-name">Selecione o arquivo (imagem)</span>
-            </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-name').textContent = this.files[0]?.name || 'Selecione o arquivo (imagem)'" />
+            <input type="file" id="comprovante-residencia" name="comprovante-residencia"
+              formControlName="comprovanteResidencia" accept="image/*"
+              onchange="document.getElementById('comprovante-residencia-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
       </div>
