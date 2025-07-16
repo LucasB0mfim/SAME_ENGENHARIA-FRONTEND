@@ -1,26 +1,81 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+
+import { AdmissionService } from '../../../core/services/admission.service';
 
 @Component({
   selector: 'app-admission-form',
-  imports: [NgxMaskDirective, MatIconModule, CommonModule, ReactiveFormsModule],
+  imports: [NgxMaskDirective, MatIconModule, CommonModule, ReactiveFormsModule, MatProgressSpinnerModule],
   providers: [provideNgxMask()],
   templateUrl: './admission-form.component.html',
   styleUrl: './admission-form.component.scss'
 })
 export class AdmissionFormComponent {
 
+  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
+  private readonly _admission = inject(AdmissionService);
+
+  // ========== FORMULÁRIO ========== //
+  admissionForm: FormGroup = new FormGroup({
+    name: new FormControl('', Validators.required),
+    cpf: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
+    birthDate: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
+    phone: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
+    rg: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    pis: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
+    address: new FormControl('', Validators.required),
+    uniform: new FormControl('', Validators.required),
+    dailyVouchers: new FormControl('', Validators.required),
+    role: new FormControl('', Validators.required),
+    bootSize: new FormControl(''),
+    healthPlan: new FormControl(''),
+    childrenUnder14: new FormControl('', Validators.required),
+    instagram: new FormControl(''),
+    linkedin: new FormControl(''),
+    bloodType: new FormControl('', Validators.required),
+    emergencyName: new FormControl('', Validators.required),
+    relationship: new FormControl('', Validators.required),
+    emergencyPhone: new FormControl('', Validators.required),
+    allergy: new FormControl('', Validators.required),
+    chronicDisease: new FormControl('', Validators.required),
+    photo3x4: new FormControl('', Validators.required),
+    cpfImage: new FormControl('', Validators.required),
+    rgFront: new FormControl('', Validators.required),
+    rgBack: new FormControl('', Validators.required),
+    certificate: new FormControl('', Validators.required),
+    residenceProof: new FormControl('', Validators.required)
+  });
+
   // ========== ESTADOS ==========
+  showForm: boolean = true;
+
+  error: boolean = false;
+  success: boolean = false;
+
+  isLoading: boolean = false;
+
   useVT: string = '';
   useBoot: string = '';
-  hasChildren: string = '';
   hasChronicCondition: string = '';
-  children: string[] = [];
-
   selectedFunction: string = '';
+
+  fileNames: { [key: string]: string } = {};
+
+  showError: boolean = false;
+  errorMessage: string = '';
+
+  healthPlan: string[] = [
+    'ADMINISTRATIVO',
+    'ENGENHEIRO',
+    'TÉCNICO DE SEGURANÇA',
+    'TÉCNICO EM EDIFICAÇÕES'
+  ];
+
   needBoot: string[] = [
     'PINTOR',
     'SERVENTE',
@@ -44,63 +99,10 @@ export class AdmissionFormComponent {
     'MOTORISTA DE CAMINHÃO',
   ];
 
-  hapvida: string[] = [
-    'ADMINISTRATIVO',
-    'ENGENHEIRO',
-    'TÉCNICO DE SEGURANÇA',
-    'TÉCNICO EM EDIFICAÇÕES'
-  ];
-
-  admissionForm: FormGroup = new FormGroup({
-    nome: new FormControl(''),
-    cpf: new FormControl(''),
-    dataNascimento: new FormControl(''),
-    numeroContato: new FormControl(''),
-    rg: new FormControl(''),
-    pis: new FormControl(''),
-    endereco: new FormControl(''),
-    complemento: new FormControl(''),
-    cep: new FormControl(''),
-    tamanhoFarda: new FormControl(''),
-    usaVt: new FormControl(''),
-    quantidadeVT: new FormControl(''),
-    funcao: new FormControl(''),
-    tamanhoBota: new FormControl(''),
-    hapvida: new FormControl(''),
-    possuiFilho: new FormControl(''),
-    nomeFilho: new FormControl(''),
-    cpfFilho: new FormControl(''),
-    cpfFilhoFoto: new FormControl(''),
-    certidaoNascimentoFilho: new FormControl(''),
-    instagram: new FormControl(''),
-    linkedin: new FormControl(''),
-    tipoSanguineo: new FormControl(''),
-    contatoEmergencia: new FormControl(''),
-    grauParentesco: new FormControl(''),
-    numeroContatoEmergencia: new FormControl(''),
-    contatoEmergenciaSecundario: new FormControl(''),
-    grauParentescoSecundario: new FormControl(''),
-    numeroContatoEmergenciaSecundario: new FormControl(''),
-    alergia: new FormControl(''),
-    condicaoMedica: new FormControl(''),
-    tipoCondicaoMedica: new FormControl(''),
-    foto3x4: new FormControl(''),
-    cpfFoto: new FormControl(''),
-    rgFrente: new FormControl(''),
-    rgVerso: new FormControl(''),
-    certidaoNascimento: new FormControl(''),
-    comproventeResidencia: new FormControl('')
-  })
-
-  // ========== UTILITÁRIOS ==========
+  // ========== UTILITÁRIOS ========== //
   onManageVT(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.useVT = selectElement.value;
-  }
-
-  onManageChildren(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.hasChildren = selectElement.value;
   }
 
   onManageBoot(event: Event): void {
@@ -108,26 +110,64 @@ export class AdmissionFormComponent {
     this.useBoot = selectElement.value;
   }
 
-  onManageChronicCondition(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.hasChronicCondition = selectElement.value;
-  }
-
-  onFuncaoChange(event: Event) {
+  onRole(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.selectedFunction = target.value;
   }
 
-  addChildren(): void {
-    this.children.push('');
+  // ========== MENSAGEM PARA PREENCHER TODOS OS CAMPOS ========== //
+  setErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.showError = true;
+
+    setTimeout(() => {
+      this.showError = false;
+    }, 3000);
   }
 
-  updateChildren(index: number, event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.children[index] = target.value;
+  // ========== API ========== //
+  onFileSelected(campo: string, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    this.fileNames[campo] = file?.name || 'Selecione uma imagem';
+    this.admissionForm.get(campo)?.setValue(file);
   }
 
-  removeChildren(index: number): void {
-    this.children.splice(index, 1);
+  sendForm(): void {
+
+    if (this.admissionForm.invalid) {
+      this.admissionForm.markAllAsTouched();
+      this.setErrorMessage('Preencha todos os campos!');
+      return;
+    }
+
+    this.error = false;
+    this.showForm = false;
+    this.isLoading = true;
+
+    const formData = new FormData();
+
+    Object.keys(this.admissionForm.controls).forEach((key) => {
+      const control = this.admissionForm.get(key);
+      const value = control?.value;
+
+      if (value instanceof File) {
+        formData.append(key, value, value.name);
+      } else {
+        formData.append(key, value ?? '');
+      }
+    });
+
+    this._admission.sendForm(formData).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.success = true;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.error = true;
+        console.error('Erro ao enviar formulário.', error)
+      }
+    });
   }
 }

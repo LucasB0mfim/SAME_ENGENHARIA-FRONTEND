@@ -1,9 +1,15 @@
 .container {
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url('../../../../../public/assets/images/wallpaper.png');
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .form {
@@ -207,6 +213,70 @@
       background-color: var(--orange-color);
     }
   }
+}
+
+.success,
+.error {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1024px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #2B2B2B;
+
+  &__title {
+    font-size: clamp(1.5rem, 1.2573rem + 1.0356vw, 2.5rem);
+    font-weight: 500;
+    color: var(--orange-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__subtitle {
+    font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
+    color: var(--white-color);
+  }
+}
+
+.loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message {
+  position: absolute;
+  top: 5%;
+  gap: 8px;
+  display: flex;
+  font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
+  padding: min(1em , 5%);
+  border-radius: 8px;
+  align-items: center;
+  background: #ff5757;
+  color: var(--white-color);
+  border: 1px solid #ff5757;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
 }
 
 @media (max-width: 1024px) {

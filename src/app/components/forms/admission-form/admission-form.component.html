@@ -1,6 +1,15 @@
 <div class="container">
-  <div class="form">
-    <form [formGroup]="admissionForm" class="form__container">
+
+  @if (showError) {
+  <div class="message">
+    <mat-icon>error</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+  }
+
+  <div class="form" *ngIf="showForm">
+    <form [formGroup]="admissionForm" (ngSubmit)="sendForm()" class="form__container">
+
       <header class="form__header">
         <h1 class="form__title">
           Parabéns!
@@ -13,60 +22,46 @@
 
       <div class="form__content">
         <div class="form__group">
-          <label for="nome">Nome completo</label>
-          <input type="text" id="nome" name="nome" formControlName="nome" placeholder="Nome completo" required />
+          <label for="name">Nome completo</label>
+          <input type="text" id="name" name="name" formControlName="name" placeholder="Nome completo" />
         </div>
 
         <div class="form__group">
           <label for="cpf">CPF</label>
           <input type="text" id="cpf" name="cpf" formControlName="cpf" placeholder="000.000.000-00"
-            mask="000.000.000-00" required />
+            mask="000.000.000-00" />
         </div>
 
         <div class="form__group">
-          <label for="data-nascimento">Data de nascimento</label>
-          <input type="text" id="data-nascimento" name="data-nascimento" formControlName="dataNascimento"
-            placeholder="00/00/0000" mask="00/00/0000" required />
+          <label for="birthDate">Data de nascimento</label>
+          <input type="text" id="birthDate" name="birthDate" formControlName="birthDate" placeholder="00/00/0000"
+            mask="00/00/0000" />
         </div>
 
         <div class="form__group">
-          <label for="numero-contato">Número para contato</label>
-          <input type="text" id="numero-contato" name="numero-contato" formControlName="numeroContato"
-            placeholder="(00) 00000-0000" mask="(00) 00000-0000" required />
+          <label for="phone">Número para contato</label>
+          <input type="text" id="phone" name="phone" formControlName="phone" placeholder="(00) 00000-0000"
+            mask="(00) 00000-0000" />
         </div>
 
         <div class="form__group">
           <label for="rg">RG</label>
-          <input type="number" id="rg" name="rg" formControlName="rg" placeholder="00.000.000" required />
+          <input type="number" id="rg" name="rg" formControlName="rg" placeholder="00.000.000" />
         </div>
 
         <div class="form__group">
           <label for="pis">PIS</label>
-          <input type="text" id="pis" name="pis" formControlName="pis" placeholder="00000000000" mask="00000000000"
-            required />
+          <input type="text" id="pis" name="pis" formControlName="pis" placeholder="00000000000" mask="00000000000" />
         </div>
 
         <div class="form__group form__group--full">
-          <label for="endereco">Endereço</label>
-          <input type="text" id="endereco" name="endereco" formControlName="endereco" placeholder="Rua Same, 123"
-            required />
+          <label for="address">Endereço</label>
+          <input type="text" id="address" name="address" formControlName="address" placeholder="Rua Same, 123" />
         </div>
 
         <div class="form__group">
-          <label for="complemento">Complemento</label>
-          <input type="text" id="complemento" name="complemento" formControlName="complemento"
-            placeholder="Bloco A apt 101" required />
-        </div>
-
-        <div class="form__group">
-          <label for="cep">CEP</label>
-          <input type="text" id="cep" name="cep" placeholder="000000-000" formControlName="cep" mask="000000-000"
-            required />
-        </div>
-
-        <div class="form__group">
-          <label for="tamanho-farda">Tamanho da farda</label>
-          <select type="text" id="tamanho-farda" name="tamanho-farda" formControlName="tamanhoFarda">
+          <label for="uniform">Tamanho da farda</label>
+          <select id="uniform" name="uniform" formControlName="uniform">
             <option value="" selected disabled>Selecione o tamanho da sua farda</option>
             <option value="PP">PP</option>
             <option value="P">P</option>
@@ -77,8 +72,8 @@
         </div>
 
         <div class="form__group">
-          <label for="usa-vt">Precisa de vale-transporte?</label>
-          <select id="usa-vt" name="usa-vt" (change)="onManageVT($event)" formControlName="usaVT">
+          <label for="needsTransport">Precisa de vale transporte?</label>
+          <select id="needsTransport" name="needsTransport" (change)="onManageVT($event)">
             <option value="" selected disabled>Selecione uma opção</option>
             <option value="SIM">SIM (DESCONTO DE 6%)</option>
             <option value="NÃO">NÃO (SEM DESCONTO)</option>
@@ -87,33 +82,48 @@
 
         @if (useVT === 'SIM') {
         <div class="form__group">
-          <label for="qtd-vt">Quantos vales-transporte (VT) você precisa por dia?</label>
-          <input type="text" id="qtd-vt" name="qtd-vt" formControlName="quantidadeVT" placeholder="0" mask="00" />
+          <label for="dailyVouchers">Quantos vales transporte (VT) você precisa por dia?</label>
+          <select id="dailyVouchers" name="dailyVouchers" formControlName="dailyVouchers">
+            <option value="" selected disabled>Selecione uma opção</option>
+            <option value="1">1 VALE TRANSPORTE</option>
+            <option value="2">2 VALES TRANSPORTE</option>
+            <option value="3">3 VALES TRANSPORTE</option>
+            <option value="4">4 VALES TRANSPORTE</option>
+            <option value="5">5 VALES TRANSPORTE</option>
+            <option value="6">6 VALES TRANSPORTE</option>
+            <option value="7">7 VALES TRANSPORTE</option>
+            <option value="8">8 VALES TRANSPORTE</option>
+            <option value="9">9 VALES TRANSPORTE</option>
+            <option value="10">10 VALES TRANSPORTE</option>
+          </select>
         </div>
         }
 
         <div class="form__group">
-          <label for="funcao">Função</label>
-          <select id="funcao" name="funcao" (change)="onFuncaoChange($event)" formControlName="funcao">
+          <label for="role">Função</label>
+          <select id="role" name="role" (change)="onRole($event)" formControlName="role">
             <option value="" selected disabled>Selecione a sua função</option>
             <option *ngFor="let boot of needBoot" [value]="boot">{{ boot }}</option>
-            <option value="ESTÁGIARIO">ESTÁGIARIO</option>
+            <option value="ESTAGIARIO">ESTÁGIARIO</option>
             <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
           </select>
         </div>
 
         @if (needBoot.includes(selectedFunction)) {
         <div class="form__group">
-          <label for="tamanho-bota">Tamanho da bota</label>
-          <input type="text" id="tamanho-bota" name="tamanho-bota" formControlName="tamanhoBota" placeholder="00"
-            mask="00" required />
+          <label for="bootSize">Tamanho da bota</label>
+          <select id="bootSize" name="bootSize" formControlName="bootSize">
+            <option value="" selected disabled>Selecione uma opção</option>
+            <option *ngFor="let size of [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]"
+              [value]="size">{{size}}</option>
+          </select>
         </div>
         }
 
-        @if (hapvida.includes(selectedFunction)) {
+        @if (healthPlan.includes(selectedFunction)) {
         <div class="form__group">
-          <label for="hapvida">Deseja optar pelo plano de saúde HAPVIDA?</label>
-          <select id="hapvida" name="hapvida" formControlName="hapvida">
+          <label for="healthPlan">Deseja optar pelo plano de saúde HAPVIDA?</label>
+          <select id="healthPlan" name="healthPlan" formControlName="healthPlan">
             <option value="" disabled selected>Selecione uma opção</option>
             <option value="SIM">SIM (DESCONTO DE 10%)</option>
             <option value="NÃO">NÃO (SEM DESCONTO)</option>
@@ -122,60 +132,22 @@
         }
 
         <div class="form__group">
-          <label for="possui-filhos">Possui filho(s) com menos de 14 anos?</label>
-          <select id="possui-filhos" name="possui-filhos" (change)="onManageChildren($event)"
-            formControlName="possuiFilho">
+          <label for="childrenUnder14">Possui filho(s) com menos de 14 anos?</label>
+          <select id="childrenUnder14" name="childrenUnder14" formControlName="childrenUnder14">
             <option value="" disabled selected>Selecione uma opção</option>
-            <option value="SIM">SIM</option>
-            <option value="NÃO">NÃO</option>
+            <option value="0">NÃO</option>
+            <option value="1">1 FILHO</option>
+            <option value="2">2 FILHOS</option>
+            <option value="3">3 FILHOS</option>
+            <option value="4">4 FILHOS</option>
+            <option value="5">5 FILHOS</option>
+            <option value="6">6 FILHOS</option>
+            <option value="7">7 FILHOS</option>
+            <option value="8">8 FILHOS</option>
+            <option value="9">9 FILHOS</option>
+            <option value="10">10 FILHOS</option>
           </select>
         </div>
-
-        @if (hasChildren === 'SIM') {
-        <div class="form__group form__group--full">
-          <label>Insira os dados dos filhos menores de 14 anos</label>
-
-          <div class="form__group form__group--children" *ngFor="let children of children; let i = index">
-
-            <div class="form__group--data">
-              <input type="text" id="nome-filho" name="nome-filho" formControlName="nomeFilho"
-                placeholder="Nome Completo" [value]="children" (change)="updateChildren(i, $event)">
-
-              <input id="cpf-filho" name="cpf-filho" type="text" formControlName="cpfFilho" placeholder="000.000.000-00"
-                mask="000.000.000-00" [value]="children" (change)="updateChildren(i, $event)">
-
-              <div class="form__upload">
-                <label class="form__upload-label" for="certidao-nascimento-filho">
-                  <mat-icon>cloud_upload</mat-icon>
-                  <span class="form__upload-text" id="certidao-nascimento-filho-nome"
-                    name="certidao-nascimento-filho">Certidão de Nascimento</span>
-                </label>
-
-                <input type="file" id="certidao-nascimento-filho" name="certidao-nascimento-filho"
-                  formControlName="certidaoNascimentoFilho" accept="image/*"
-                  onchange="document.getElementById('certidao-nascimento-filho-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
-              </div>
-
-              <div class="form__upload">
-                <label class="form__upload-label" for="cpf-filho-foto">
-                  <mat-icon>cloud_upload</mat-icon>
-                  <span class="form__upload-text" id="cpf-filho-foto-nome">CPF</span>
-                </label>
-
-                <input type="file" id="cpf-filho-foto" name="cpf-filho-foto" formControlName="cpfFilhoFoto"
-                  accept="image/*"
-                  onchange="document.getElementById('cpf-filho-foto-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
-              </div>
-            </div>
-
-            <button type="button" class="form__remove" (click)="removeChildren(i)">×</button>
-          </div>
-
-          <button type="button" class="form__add" (click)="addChildren()">
-            + Adicionar Filho
-          </button>
-        </div>
-        }
 
         <div class="form__group">
           <label for="instagram">Informe seu Instagram (Opcional)</label>
@@ -183,158 +155,255 @@
         </div>
 
         <div class="form__group">
-          <label for="Linkedin">Informe seu Linkedin (Opcional)</label>
-          <input type="text" id="Linkedin" name="Linkedin" formControlName="linkedin" placeholder="Linkedin" />
+          <label for="linkedin">Informe o link para seu Linkedin (Opcional)</label>
+          <input type="text" id="linkedin" name="linkedin" formControlName="linkedin"
+            placeholder="www.linkedin.com/in/seu_linkedin/" />
         </div>
 
         <div class="form__group">
-          <label for="tipo-sanguineo">Tipo sanguíneo</label>
-          <input type="text" id="tipo-sanguineo" name="tipo-sanguineo" formControlName="tipoSanguineo"
-            placeholder="A+" />
+          <label for="bloodType">Tipo sanguíneo</label>
+          <select id="bloodType" name="bloodType" formControlName="bloodType">
+            <option value="" disabled selected>Selecione uma opção</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
         </div>
 
         <div class="form__group">
-          <label for="contato-emergencia">Contato de emergência</label>
-          <input type="text" id="contato-emergencia" name="contato-emergencia" formControlName="contatoEmergencia"
+          <label for="emergencyName">Contato de emergência</label>
+          <input type="text" id="emergencyName" name="emergencyName" formControlName="emergencyName"
             placeholder="Nome completo" />
         </div>
 
         <div class="form__group">
-          <label for="grau-parentesco">Grau de parentesco</label>
-          <input type="text" id="grau-parentesco" name="grau-parentesco" formControlName="grauParentesco"
-            placeholder="Ex: Avó" />
-        </div>
-
-        <div class="form__group">
-          <label for="numero-contato-emergencia">Número para contato</label>
-          <input type="text" id="numero-contato-emergencia" name="numero-contato-emergencia"
-            formControlName="numeroContatoEmergencia" placeholder="(00) 00000-0000" mask="(00) 00000-0000" />
-        </div>
-
-        <div class="form__group">
-          <label for="contato-emergencia-secundario">Segundo contato de emergência (Opcional)</label>
-          <input type="text" id="contato-emergencia-secundario" name="contato-emergencia-secundario"
-            formControlName="contatoEmergenciaSecundario" placeholder="Nome completo" />
-        </div>
-
-        <div class="form__group">
-          <label for="grau-parentesco-secundario">Grau de parentesco (Opcional)</label>
-          <input type="text" id="grau-parentesco-secundario" name="grau-parentesco-secundario"
-            formControlName="grauParentescoSecundario" placeholder="Ex: Avô" />
-        </div>
-
-        <div class="form__group">
-          <label for="numero-contato-emergencia-secundario">Número para contato (Opcional)</label>
-          <input type="text" id="numero-contato-emergencia-secundario" name="numero-contato-emergencia-secundario"
-            formControlName="numeroContatoEmergenciaSecundario" placeholder="(00) 00000-0000" mask="(00) 00000-0000" />
-        </div>
-
-        <div class="form__group">
-          <label for="alergia">Possui Alergia?</label>
-          <select id="alergia" name="alergia" formControlName="alergia">
+          <label for="relationship">Grau de parentesco</label>
+          <select id="relationship" name="relationship" formControlName="relationship">
             <option value="" disabled selected>Selecione uma opção</option>
-            <option value="SIM">SIM</option>
-            <option value="NÃO">NÃO</option>
+            <option value="PAI">PAI</option>
+            <option value="MÃE">MÃE</option>
+            <option value="FILHO">FILHO</option>
+            <option value="FILHA">FILHA</option>
+            <option value="IRMÃO">IRMÃO</option>
+            <option value="IRMÃ">IRMÃ</option>
+            <option value="AVÔ">AVÔ</option>
+            <option value="AVÓ">AVÓ</option>
+            <option value="NETO">NETO</option>
+            <option value="NETA">NETA</option>
+            <option value="TIO">TIO</option>
+            <option value="TIA">TIA</option>
+            <option value="SOBRINHO">SOBRINHO</option>
+            <option value="SOBRINHA">SOBRINHA</option>
+            <option value="PRIMO">PRIMO</option>
+            <option value="PRIMA">PRIMA</option>
+            <option value="MARIDO">MARIDO</option>
+            <option value="ESPOSA">ESPOSA</option>
+            <option value="COMPANHEIRO">COMPANHEIRO</option>
+            <option value="COMPANHEIRA">COMPANHEIRA</option>
+            <option value="GENRO">GENRO</option>
+            <option value="NORA">NORA</option>
+            <option value="SOGRO">SOGRO</option>
+            <option value="SOGRA">SOGRA</option>
+            <option value="CUNHADO">CUNHADO</option>
+            <option value="CUNHADA">CUNHADA</option>
+            <option value="PADRASTO">PADRASTO</option>
+            <option value="MADRASTA">MADRASTA</option>
+            <option value="ENTEADO">ENTEADO</option>
+            <option value="ENTEADA">ENTEADA</option>
+            <option value="TIO AVÔ">TIO-AVÔ</option>
+            <option value="TIA AVÓ">TIA-AVÓ</option>
+            <option value="BISAVÔ">BISAVÔ</option>
+            <option value="BISAVÓ">BISAVÓ</option>
+            <option value="OUTRO">OUTRO</option>
           </select>
         </div>
 
         <div class="form__group">
-          <label for="condicao-medica">Possui alguma condição médica crônica?</label>
-          <select id="condicao-medica" name="condicao-medica" formControlName="condicaoMedica"
-            (change)="onManageChronicCondition($event)">
+          <label for="emergencyPhone">Número para contato</label>
+          <input type="text" id="emergencyPhone" name="emergencyPhone" formControlName="emergencyPhone"
+            placeholder="(00) 00000-0000" mask="(00) 00000-0000" />
+        </div>
+
+        <div class="form__group">
+          <label for="allergy">Possui Alergia?</label>
+          <select id="allergy" name="allergy" formControlName="allergy">
             <option value="" disabled selected>Selecione uma opção</option>
-            <option value="SIM">SIM</option>
             <option value="NÃO">NÃO</option>
+            <option value="MEDICAMENTOS">ALERGIA A MEDICAMENTOS</option>
+            <option value="PENICILINA">ALERGIA A PENICILINA</option>
+            <option value="ANTI-INFLAMATÓRIOS">ALERGIA A ANTI-INFLAMATÓRIOS</option>
+            <option value="ALIMENTOS">ALERGIA A ALIMENTOS</option>
+            <option value="FRUTOS DO MAR">ALERGIA A FRUTOS DO MAR</option>
+            <option value="AMENDOIM">ALERGIA A AMENDOIM</option>
+            <option value="LACTOSE">ALERGIA A LACTOSE</option>
+            <option value="GLÚTEN">ALERGIA A GLÚTEN</option>
+            <option value="OVO">ALERGIA A OVO</option>
+            <option value="LEITE">ALERGIA A LEITE</option>
+            <option value="POEIRA">ALERGIA A POEIRA</option>
+            <option value="ÁCAROS">ALERGIA A ÁCAROS</option>
+            <option value="PÓLEN">ALERGIA A PÓLEN</option>
+            <option value="FUNGOS">ALERGIA A FUNGOS</option>
+            <option value="PELOS DE ANIMAIS">ALERGIA A PELOS DE ANIMAIS</option>
+            <option value="PICADA DE INSETOS">ALERGIA A PICADA DE INSETOS</option>
+            <option value="ABELHA/VESPA">ALERGIA A ABELHA/VESPA</option>
+            <option value="LÁTEX">ALERGIA A LÁTEX</option>
+            <option value="PRODUTOS QUÍMICOS">ALERGIA A PRODUTOS QUÍMICOS</option>
+            <option value="COSMÉTICOS">ALERGIA A COSMÉTICOS</option>
+            <option value="METIAS">ALERGIA A METAIS (NÍQUEL)</option>
+            <option value="TINTA DE TATUAGEM">ALERGIA A TINTA DE TATUAGEM</option>
+            <option value="OUTRO">OUTRA ALERGIA NÃO LISTADA</option>
           </select>
         </div>
 
-        @if (hasChronicCondition === 'SIM') {
         <div class="form__group">
-          <label for="tipo-condicao-medica">Qual condição médica crônica você possue?</label>
-          <input type="text" id="tipo-condicao-medica" name="tipo-condicao-medica" formControlName="tipoCondicaoMedica"
-            placeholder="Ex: Diabetes" />
+          <label for="chronicDisease">Possui condição médica crônica?</label>
+          <select id="chronicDisease" name="chronicDisease" formControlName="chronicDisease">
+            <option value="" disabled selected>Selecione uma opção</option>
+            <option value="NÃO">NÃO</option>
+            <option value="HIPERTENSÃO ARTERIAL">HIPERTENSÃO ARTERIAL</option>
+            <option value="DOENÇA ARTERIAL CORONARIANA">DOENÇA ARTERIAL CORONARIANA</option>
+            <option value="INSUFICIÊNCIA CARDÍACA">INSUFICIÊNCIA CARDÍACA</option>
+            <option value="AVC">AVC (ACIDENTE VASCULAR CEREBRAL)</option>
+            <option value="DPOC">DPOC (DOENÇA PULMONAR OBSTRUTIVA CRÔNICA)</option>
+            <option value="ASMA">ASMA</option>
+            <option value="DIABETES TIPO 1">DIABETES TIPO 1</option>
+            <option value="DIABETES TIPO 2">DIABETES TIPO 2</option>
+            <option value="DOENÇA RENAL CRÔNICA">DOENÇA RENAL CRÔNICA</option>
+            <option value="ALZHEIMER/DEMÊNCIA">ALZHEIMER/DEMÊNCIA</option>
+            <option value="PARKINSON">PARKINSON</option>
+            <option value="EPILEPSIA">EPILEPSIA</option>
+            <option value="CÂNCER">CÂNCER (NEOPLASIA MALIGNA)</option>
+            <option value="OSTEOARTRITE (ARTROSE)">OSTEOARTRITE (ARTROSE)</option>
+            <option value="ARTRITE REUMATOIDE">ARTRITE REUMATOIDE</option>
+            <option value="OSTEOPOROSE">OSTEOPOROSE</option>
+            <option value="DEPRESSÃO">DEPRESSÃO</option>
+            <option value="TRANSTORNO DE ANSIEDADE">TRANSTORNO DE ANSIEDADE</option>
+            <option value="TRANSTORNO BIPOLAR">TRANSTORNO BIPOLAR</option>
+            <option value="LÚPUS ERITEMATOSO SISTÊMICO">LÚPUS ERITEMATOSO SISTÊMICO</option>
+            <option value="DOENÇA DE CROHN">DOENÇA DE CROHN</option>
+            <option value="PSORÍASE">PSORÍASE</option>
+            <option value="ESTEATOSE HEPÁTICA">ESTEATOSE HEPÁTICA (FÍGADO GORDUROSO)</option>
+            <option value="CIRROSE HEPÁTICA">CIRROSE HEPÁTICA</option>
+            <option value="HIPOTIREOIDISMO">HIPOTIREOIDISMO</option>
+            <option value="HIPERTIREOIDISMO">HIPERTIREOIDISMO</option>
+            <option value="OUTRO">OUTRA CONDIÇÃO NÃO LISTADA</option>
+          </select>
         </div>
-        }
 
         <div class="form__group form__group--full">
-          <label for="foto-3x4">Foto 3x4</label>
-
+          <label for="photo3x4">3x4 Photo</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="foto-3x4">
+            <label class="form__upload-label">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="foto-3x4-nome">Selecione uma imagem</span>
+              <span class="form__upload-text">
+                {{ fileNames['photo3x4'] || 'Selecione uma imagem' }}
+              </span>
+              <input type="file" accept="image/*" (change)="onFileSelected('photo3x4', $event)" />
             </label>
-            <input type="file" id="foto-3x4" name="foto-3x4" formControlName="tipo3x4" accept="image/*"
-              onchange="document.getElementById('foto-3x4-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
-          </div>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="cpf-foto">CPF</label>
-          <div class="form__upload">
-            <label class="form__upload-label" for="cpf-foto">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="cpf-foto-nome">Selecione uma imagem</span>
-            </label>
-            <input type="file" id="cpf-foto" name="cpf-foto" formControlName="cpfFoto" accept="image/*"
-              onchange="document.getElementById('cpf-foto-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
-          </div>
-        </div>
-
-        <div class="form__group">
-          <label for="rg-frete">RG (Frente)</label>
-          <div class="form__upload">
-            <label class="form__upload-label" for="rg-frete">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="rg-frete-nome">Selecione uma imagem</span>
-            </label>
-            <input type="file" id="rg-frete" name="rg-frete" formControlName="rgFrente" accept="image/*"
-              onchange="document.getElementById('rg-frete-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
-          </div>
-        </div>
-
-        <div class="form__group">
-          <label for="rg-verso">RG (Verso)</label>
-          <div class="form__upload">
-            <label class="form__upload-label" for="rg-verso">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="rg-verso-nome">Selecione uma imagem</span>
-            </label>
-            <input type="file" id="rg-verso" name="rg-verso" formControlName="rgVerso" accept="image/*"
-              onchange="document.getElementById('rg-verso-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group form__group--full">
-          <label for="certidao-nascimento">Certidão de nascimento ou casamento</label>
+          <label for="cpfImage">CPF</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="certidao-nascimento">
+            <label class="form__upload-label">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="certidao-nascimento-nome">Selecione uma imagem</span>
+              <span class="form__upload-text">
+                {{ fileNames['cpfImage'] || 'Selecione uma imagem' }}
+              </span>
+              <input type="file" accept="image/*" (change)="onFileSelected('cpfImage', $event)" />
             </label>
-            <input type="file" id="certidao-nascimento" name="certidao-nascimento" formControlName="certidaoNascimento"
-              accept="image/*"
-              onchange="document.getElementById('certidao-nascimento-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
 
         <div class="form__group form__group--full">
-          <label for="comprovante-residencia">Comprovante de residência</label>
+          <label for="rgFront">RG (FRENTE)</label>
           <div class="form__upload">
-            <label class="form__upload-label" for="comprovante-residencia">
+            <label class="form__upload-label">
               <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text" id="comprovante-residencia-nome">Selecione uma imagem</span>
+              <span class="form__upload-text">
+                {{ fileNames['rgFront'] || 'Selecione uma imagem' }}
+              </span>
+              <input type="file" accept="image/*" (change)="onFileSelected('rgFront', $event)" />
             </label>
-            <input type="file" id="comprovante-residencia" name="comprovante-residencia"
-              formControlName="comprovanteResidencia" accept="image/*"
-              onchange="document.getElementById('comprovante-residencia-nome').textContent = this.files[0]?.name || 'Selecione uma imagem'" />
           </div>
         </div>
+
+        <div class="form__group form__group--full">
+          <label for="rgBack">RG (VERSO)</label>
+          <div class="form__upload">
+            <label class="form__upload-label">
+              <mat-icon>cloud_upload</mat-icon>
+              <span class="form__upload-text">
+                {{ fileNames['rgBack'] || 'Selecione uma imagem' }}
+              </span>
+              <input type="file" accept="image/*" (change)="onFileSelected('rgBack', $event)" />
+            </label>
+          </div>
+        </div>
+
+        <div class="form__group form__group--full">
+          <label for="certificate">Certidão de nascimento ou casamento</label>
+          <div class="form__upload">
+            <label class="form__upload-label">
+              <mat-icon>cloud_upload</mat-icon>
+              <span class="form__upload-text">
+                {{ fileNames['certificate'] || 'Selecione uma imagem' }}
+              </span>
+              <input type="file" accept="image/*" (change)="onFileSelected('certificate', $event)" />
+            </label>
+          </div>
+        </div>
+
+        <div class="form__group form__group--full">
+          <label for="residenceProof">Comprovante de residência</label>
+          <div class="form__upload">
+            <label class="form__upload-label">
+              <mat-icon>cloud_upload</mat-icon>
+              <span class="form__upload-text">
+                {{ fileNames['residenceProof'] || 'Selecione uma imagem' }}
+              </span>
+              <input type="file" accept="image/*" (change)="onFileSelected('residenceProof', $event)" />
+            </label>
+          </div>
+        </div>
+
       </div>
 
       <footer class="form__footer">
         <button type="submit" class="form__submit">Enviar</button>
       </footer>
     </form>
+  </div>
+
+  <div class="success" *ngIf="success">
+    <h1 class="success__title">
+      Obrigado!
+      <span>200</span>
+    </h1>
+    <p class="success__subtitle">
+      Seu formulário foi enviado com sucesso. Agora é só aguardar que o pessoal do RH vai entrar em
+      contato com você em breve! Fique a vontade para fechar essa guia se quiser.
+    </p>
+  </div>
+
+  <div class="error" *ngIf="error">
+    <h1 class="error__title">
+      Ops! Algo deu errado :(
+      <span>400</span>
+    </h1>
+    <p class="error__subtitle">
+      Parece que rolou um probleminha ao enviar seus dados. Que tal tentar de novo mais tarde? Se continuar dando erro,
+      chama a galera do RH e conta o que aconteceu!
+    </p>
+  </div>
+
+  <div class="loading" *ngIf="isLoading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </div>
 </div>
