@@ -167,7 +167,7 @@ export class AdmissionComponent implements OnInit {
         this.modalTitle = 'Comprovante de Residência';
         break;
       case 'certificate':
-        this.modalTitle = 'Certificado';
+        this.modalTitle = 'Certidão';
         break;
       default:
         this.modalTitle = 'Documento';
