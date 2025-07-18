@@ -1,24 +1,30 @@
 <div class="container">
 
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
+
   <!-- CONTAINER DE FILTROS -->
   <div class="container__filters">
 
     <!-- BUSCA POR NOME -->
     <div class="filter">
-      <input type="text" placeholder="BUSCAR" class="filter__input">
-    </div>
-
-    <!-- GERAR EXCEL -->
-    <div class="filter">
-      <button class="filter__button filter__button--submit">
-        GERAR EXCEL
-      </button>
+      <input type="text" placeholder="BUSCAR" class="filter__input" (input)="applyFilter($event)" #filterInput>
     </div>
 
     <!-- GERAR LINK -->
     <div class="filter">
-      <button class="filter__button filter__button--submit">
+      <button class="btn btn--submit" (click)="generateLink()">
         GERAR LINK
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--submit" (click)="reload()">
+        <mat-icon [class.rotate-once]="rotate" (click)="triggerRotate()">
+          refresh
+        </mat-icon>
       </button>
     </div>
 
@@ -28,45 +34,233 @@
   <div class="container__cards">
 
     <!-- CARD -->
-    <div class="card">
+    <div class="card" *ngFor="let item of filteredItems; let i = index">
 
       <!--HEADER -->
-      <div class="card__header">
+      <div class="card__header" (click)="toggleBodyVisibility(i)"
+        [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}">
 
         <!-- LADO ESQUERDO -->
         <div class="card__primary">
 
           <!-- -->
           <div class="card__top">
-            <div class="card__title"></div>
-            <span class="card__subtitle"></span>
-            <div class="card__subtitle"></div>
+            <div class="card__title">{{ item.name || 'N/A' }}</div>
           </div>
 
           <div class="card__bottom">
-            <div class="card__subtitle"></div>
+            <div class="card__subtitle">{{ item.role || 'N/A' }}</div>
           </div>
         </div>
 
         <!-- LADO DIREITO -->
         <div class="card__secondary">
-          <div class="card__text">
-            <div class="card__title"></div>
-            <div class="card__subtitle"></div>
-          </div>
+          <button class="btn btn--open-image" (click)="openModal(item, 'photo'); $event.stopPropagation()">
+            <mat-icon>photo_camera_front</mat-icon>
+          </button>
+
+          <button class="btn btn--open-image" (click)="openModal(item, 'cpf'); $event.stopPropagation()">CPF</button>
+          <button class="btn btn--open-image" (click)="openModal(item, 'rg'); $event.stopPropagation()">RG</button>
+
+          <button class="btn btn--open-image" (click)="openModal(item, 'residence'); $event.stopPropagation()">
+            <mat-icon>house</mat-icon>
+          </button>
+
+          <button class="btn btn--open-image" (click)="openModal(item, 'certificate'); $event.stopPropagation()">
+            <mat-icon>assignment</mat-icon>
+          </button>
+
+          <button class="btn btn--trash" (click)="openModalDelete(item); $event.stopPropagation()">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
       </div>
 
       <!-- CORPO -->
-      <div class="card__body">
+      <div class="card__body" *ngIf="isBodyVisible[i]" (click)="toggleBodyVisibility(i)">
 
         <!-- ELEMENTO -->
         <div class="card__info">
-          <div class="card__title"></div>
-          <div class="card__subtitle"></div>
+          <div class="card__title">CPF</div>
+          <div class="card__subtitle">{{ formateCPF(item.cpf) || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">RG</div>
+          <div class="card__subtitle">{{ item.rg || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">PIS</div>
+          <div class="card__subtitle">{{ formatePIS(item.pis) || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">TELEFONE</div>
+          <div class="card__subtitle">{{ formatePhone(item.phone) || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">TAMANHO DA BOTA</div>
+          <div class="card__subtitle">{{ item.boot_size || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">TAMANHO DA FARDA</div>
+          <div class="card__subtitle">{{ item.uniform || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">VALE TRANSPORTE</div>
+          <div class="card__subtitle">{{ item.daily_vouchers || 'NÃO SE QUALIFICA' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">ENDEREÇO</div>
+          <div class="card__subtitle">{{ item.address || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">DATA DE NASCIMENTO</div>
+          <div class="card__subtitle">{{ formateDate(item.birth_date) || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">FILHO(S) PEQUENO(S)</div>
+          <div class="card__subtitle">{{ item.children_under_14 || 'NENHUM' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">ALERGIA</div>
+          <div class="card__subtitle">{{ item.allergy || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">DOENÇA CRONICA</div>
+          <div class="card__subtitle">{{ item.chronic_disease || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">CONTATO DE EMERGÊNCIA</div>
+          <div class="card__subtitle">{{ formatePhone(item.emergency_phone) || 'N/A' }}
+          </div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">NOME DO PARENTE</div>
+          <div class="card__subtitle">{{ item.emergency_name || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">GRAU DE PARENTESCO</div>
+          <div class="card__subtitle">{{ item.relationship || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">TIPO SANGUÍNEO</div>
+          <div class="card__subtitle">{{ item.blood_type || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">INSTAGRAM</div>
+          <div class="card__subtitle">{{ item.instagram || 'N/A' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">LINKEDIN</div>
+          <div class="card__subtitle">{{ item.linkedin || 'N/A' }}</div>
         </div>
 
       </div>
+    </div>
+
+    <div class="modal" *ngIf="isModalVisible">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">{{ modalTitle }}</h2>
+          <button type="button" class="btn btn--exit" (click)="closeModal()">&times;</button>
+        </div>
+        <div class="modal__content">
+
+          <!-- Foto 3x4 -->
+          <div *ngIf="modalType === 'photo' && currentItem?.photo_3x4" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.photo_3x4)" alt="Foto 3x4" class="modal__image">
+          </div>
+
+          <!-- CPF -->
+          <div *ngIf="modalType === 'cpf' && currentItem?.cpf_image" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.cpf_image)" alt="CPF" class="modal__image">
+          </div>
+
+          <!-- RG (Frente e Verso) -->
+          <div *ngIf="modalType === 'rg'" class="modal__rg-container">
+            <div *ngIf="currentItem?.rg_front" class="modal__image-container">
+              <h3>Frente</h3>
+              <img [src]="buildImageUrl(currentItem.rg_front)" alt="RG Frente" class="modal__image">
+            </div>
+            <div *ngIf="currentItem?.rg_back" class="modal__image-container">
+              <h3>Verso</h3>
+              <img [src]="buildImageUrl(currentItem.rg_back)" alt="RG Verso" class="modal__image">
+            </div>
+          </div>
+
+          <!-- Comprovante de Residência -->
+          <div *ngIf="modalType === 'residence' && currentItem?.residence_proof" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.residence_proof)" alt="Comprovante de Residência"
+              class="modal__image">
+          </div>
+
+          <!-- Certificado -->
+          <div *ngIf="modalType === 'certificate' && currentItem?.certificate" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.certificate)" alt="Certificado" class="modal__image">
+          </div>
+
+          <!-- Mensagem quando não há documento -->
+          <div *ngIf="!hasDocument()" class="modal__no-document">
+            <p>Documento não disponível</p>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn--close" (click)="closeModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" *ngIf="isModalDeleteVisible">
+      <div class="modal__container">
+
+        <div class="modal__header">
+          <h2 class="modal__title">Deletar</h2>
+          <button type="button" class="btn btn--exit" (click)="closeModalDelete()">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <h2 class="modal__title">Tem certeza que deseja deletar essa admissão?</h2>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" class="btn btn--close" (click)="closeModalDelete()">Fechar</button>
+          <button type="button" class="btn btn--delete" (click)="deleteAdmission()">
+            @if (isDeleting) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Deletar
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div class="empty" *ngIf="isEmpty">
+      <h2 class="empty__title">Opss... Nenhum resultado foi encontrado :(</h2>
     </div>
 
   </div>

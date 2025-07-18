@@ -26,14 +26,13 @@ export class AdmissionFormComponent {
     cpf: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
     birthDate: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
     phone: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
-    rg: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    rg: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(9)]),
     pis: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
     address: new FormControl('', Validators.required),
     uniform: new FormControl('', Validators.required),
-    dailyVouchers: new FormControl('', Validators.required),
+    dailyVouchers: new FormControl(''),
     role: new FormControl('', Validators.required),
     bootSize: new FormControl(''),
-    healthPlan: new FormControl(''),
     childrenUnder14: new FormControl('', Validators.required),
     instagram: new FormControl(''),
     linkedin: new FormControl(''),
@@ -60,21 +59,11 @@ export class AdmissionFormComponent {
   isLoading: boolean = false;
 
   useVT: string = '';
-  useBoot: string = '';
-  hasChronicCondition: string = '';
-  selectedFunction: string = '';
 
   fileNames: { [key: string]: string } = {};
 
   showError: boolean = false;
   errorMessage: string = '';
-
-  healthPlan: string[] = [
-    'ADMINISTRATIVO',
-    'ENGENHEIRO',
-    'TÉCNICO DE SEGURANÇA',
-    'TÉCNICO EM EDIFICAÇÕES'
-  ];
 
   needBoot: string[] = [
     'PINTOR',
@@ -103,16 +92,6 @@ export class AdmissionFormComponent {
   onManageVT(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.useVT = selectElement.value;
-  }
-
-  onManageBoot(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.useBoot = selectElement.value;
-  }
-
-  onRole(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    this.selectedFunction = target.value;
   }
 
   // ========== MENSAGEM PARA PREENCHER TODOS OS CAMPOS ========== //

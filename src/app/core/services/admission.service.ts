@@ -7,7 +7,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AdmissionService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'https://sameengenharia.com.br/api/admission/create';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -15,8 +14,23 @@ export class AdmissionService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
+  generateLink() {
+    const headers = this._createHeaders();
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/generate-link', null, { headers });
+  }
+
   sendForm(formData: FormData): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>(this._apiUrl, formData, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/create-admission', formData, { headers });
+  }
+
+  getAdmission(): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/admission/find-admission', { headers });
+  }
+
+  deleteById(id: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/admission/delete/${id}`, { headers });
   }
 }

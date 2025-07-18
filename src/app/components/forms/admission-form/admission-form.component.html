@@ -46,12 +46,13 @@
 
         <div class="form__group">
           <label for="rg">RG</label>
-          <input type="number" id="rg" name="rg" formControlName="rg" placeholder="00.000.000" />
+          <input type="number" id="rg" name="rg" formControlName="rg" mask="000000000" placeholder="00.000.000" />
         </div>
 
         <div class="form__group">
           <label for="pis">PIS</label>
-          <input type="text" id="pis" name="pis" formControlName="pis" placeholder="00000000000" mask="00000000000" />
+          <input type="text" id="pis" name="pis" formControlName="pis" placeholder="00000000000"
+            mask="000.00000.00-0" />
         </div>
 
         <div class="form__group form__group--full">
@@ -101,7 +102,7 @@
 
         <div class="form__group">
           <label for="role">Função</label>
-          <select id="role" name="role" (change)="onRole($event)" formControlName="role">
+          <select id="role" name="role" formControlName="role">
             <option value="" selected disabled>Selecione a sua função</option>
             <option *ngFor="let boot of needBoot" [value]="boot">{{ boot }}</option>
             <option value="ESTAGIARIO">ESTÁGIARIO</option>
@@ -109,27 +110,14 @@
           </select>
         </div>
 
-        @if (needBoot.includes(selectedFunction)) {
         <div class="form__group">
-          <label for="bootSize">Tamanho da bota</label>
+          <label for="bootSize">Número do calçado</label>
           <select id="bootSize" name="bootSize" formControlName="bootSize">
             <option value="" selected disabled>Selecione uma opção</option>
             <option *ngFor="let size of [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]"
               [value]="size">{{size}}</option>
           </select>
         </div>
-        }
-
-        @if (healthPlan.includes(selectedFunction)) {
-        <div class="form__group">
-          <label for="healthPlan">Deseja optar pelo plano de saúde HAPVIDA?</label>
-          <select id="healthPlan" name="healthPlan" formControlName="healthPlan">
-            <option value="" disabled selected>Selecione uma opção</option>
-            <option value="SIM">SIM (DESCONTO DE 10%)</option>
-            <option value="NÃO">NÃO (SEM DESCONTO)</option>
-          </select>
-        </div>
-        }
 
         <div class="form__group">
           <label for="childrenUnder14">Possui filho(s) com menos de 14 anos?</label>
