@@ -21,12 +21,17 @@ export class AdmissionService {
 
   sendForm(formData: FormData): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/create-admission', formData, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/create', formData, { headers });
   }
 
-  getAdmission(): Observable<any> {
+  getAdmission(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/admission/find-admission', { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/find', request, { headers });
+  }
+
+  updateAdmission(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/admission/update', request, { headers });
   }
 
   deleteById(id: any): Observable<any> {

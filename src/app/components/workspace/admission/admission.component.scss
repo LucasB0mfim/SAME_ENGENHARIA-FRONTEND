@@ -12,9 +12,11 @@
 
   &__cards {
     gap: 20px;
+    max-height: 90%;
     display: flex;
+    justify-content: flex-start;
     flex-direction: column;
-    padding: 2em 0.7vw 2em 0.7vw;
+    padding: 0 0.7vw 0 0.7vw;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -43,14 +45,9 @@
     font-size: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
     text-transform: uppercase;
     color: var(--text-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    &::placeholder {
-      font-size: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
-    }
   }
 
-  &:first-child {
+  &:nth-child(6) {
     margin-right: auto;
   }
 }
@@ -66,7 +63,41 @@
   align-items: center;
   justify-content: center;
 
-  &--submit {
+  &--primary {
+    height: 42px;
+    border-radius: 4px;
+    color: var(--gray-color);
+    background-color: var(--secondary-color);
+    transition: all ease 0.3s;
+
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
+
+    &.active {
+      color: var(--white-color);
+      transform: translateY(-4px);
+      background-color: var(--orange-color);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &--second {
+    height: 42px;
+    border-radius: 4px;
+    color: var(--white-color);
+    background-color: var(--orange-color);
+    transition: all ease 0.3s;
+
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
+  }
+
+  &--third {
     height: 42px;
     border-radius: 4px;
     color: var(--white-color);
@@ -79,19 +110,6 @@
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  &--delete {
-    height: 42px;
-    border-radius: 4px;
-    color: var(--white-color);
-    background-color: #ff5757;
-    transition: all ease 0.3s;
-
-    &:hover {
-      transform: translateY(-4px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
@@ -112,6 +130,19 @@
     }
   }
 
+  &--delete {
+    height: 42px;
+    border-radius: 4px;
+    color: var(--white-color);
+    background-color: #ff5757;
+    transition: all ease 0.3s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
   &--trash {
     cursor: pointer;
     border-radius: 4px;
@@ -123,19 +154,6 @@
     &:hover {
       color: var(--white-color);
       background-color: #ff5757;
-      transform: translateY(-4px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  &--close {
-    height: 42px;
-    border-radius: 4px;
-    color: var(--white-color);
-    background-color: var(--orange-color);
-    transition: all ease 0.3s;
-
-    &:hover {
       transform: translateY(-4px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -274,6 +292,12 @@
     margin: 0;
   }
 
+  &__subtitle {
+    max-width: 75%;
+    font-size: clamp(0.875rem, 0.8447rem + 0.1294vw, 1rem);
+    color: var(--text-color);
+  }
+
   &__content {
     max-height: 70vh;
     overflow-y: auto;
@@ -328,6 +352,34 @@
     justify-content: flex-end;
     margin-top: 20px;
   }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__label {
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-size: clamp(0.875rem, 0.8447rem + 0.1294vw, 1rem);
+  }
+
+  &__input,
+  &__select {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    padding: 1em;
+    border-radius: 4px;
+    color: var(--gray-color);
+    transition: all 0.3s ease;
+    background: var(--primary-color);
+    font-size: clamp(0.75rem, 0.7197rem + 0.1294vw, 0.875rem);
+  }
 }
 
 .message {
@@ -364,15 +416,12 @@
 }
 
 .empty {
-  text-align: center;
-  border-radius: 4px;
-  padding: min(2em, 5%);
+  width: 100%;
+  padding: 29.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--secondary-color);
-  transition: all ease 0.3s;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
 
   &__title {
     font-size: clamp(0.75rem, 0.6893rem + 0.2589vw, 1rem);

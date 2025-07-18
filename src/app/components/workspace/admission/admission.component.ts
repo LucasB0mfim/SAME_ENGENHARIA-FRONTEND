@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
@@ -9,7 +10,7 @@ import { AdmissionService } from '../../../core/services/admission.service';
 @Component({
   selector: 'app-admission',
   standalone: true,
-  imports: [CommonModule, MatProgressSpinnerModule, MatIconModule],
+  imports: [CommonModule, MatProgressSpinnerModule, MatIconModule, ReactiveFormsModule],
   templateUrl: './admission.component.html',
   styleUrl: './admission.component.scss'
 })
@@ -19,6 +20,9 @@ export class AdmissionComponent implements OnInit {
   private _titleService = inject(TitleService);
   private readonly _admissionService = inject(AdmissionService);
 
+  updateForm: FormGroup = new FormGroup({
+    status: new FormControl('', Validators.required),
+  })
 
   // ========== ESTADOS ========== //
   link: string = '';
@@ -32,6 +36,17 @@ export class AdmissionComponent implements OnInit {
   isLoading: boolean = true;
   isEmpty: boolean = false;
   isDeleting: boolean = false;
+  isGenerating: boolean = false;
+  isUpdating: boolean = false;
+
+  new: boolean = false;
+  inProgress: boolean = false;
+  completed: boolean = false;
+  failed: boolean = false;
+  canceled: boolean = false;
+
+  activeFilter: string = 'NOVO';
+  currentStatus: string = '';
 
   showMessage: boolean = false;
   message: string = '';
@@ -39,6 +54,7 @@ export class AdmissionComponent implements OnInit {
 
   isBodyVisible: boolean[] = [];
   isModalVisible: boolean = false;
+  isModalEditVisible: boolean = false;
   isModalDeleteVisible: boolean = false;
 
   modalType: string = '';
@@ -46,8 +62,8 @@ export class AdmissionComponent implements OnInit {
 
   // ========== HOOK ========== //
   ngOnInit(): void {
+    this.getAdmission('NOVO');
     this._titleService.setTitle('Admissão');
-    this.getAdmission();
   }
 
   // ========== MENSAGEM DINAMICA ========== //
@@ -63,13 +79,13 @@ export class AdmissionComponent implements OnInit {
   }
 
   // ========== API ========== //
-  generateLink() {
-    console.log('Botão GERAR LINK clicado');
+  generateLink(): void {
+    this.isGenerating = true;
+
     this._admissionService.generateLink().subscribe({
       next: (res) => {
-        console.log('Resposta do serviço:', res);
         this.link = res.link;
-        console.log('Link atribuído:', this.link);
+        this.isGenerating = false;
         navigator.clipboard.writeText(this.link)
           .then(() => {
             console.log('Link copiado para a área de transferência');
@@ -81,28 +97,90 @@ export class AdmissionComponent implements OnInit {
           });
       },
       error: (err) => {
+        this.isGenerating = false;
         console.error('Erro ao gerar link:', err);
         this.setMessage('Erro ao gerar o link. Tente novamente.', 'error');
       }
     });
   }
 
-  getAdmission() {
-    this._admissionService.getAdmission().subscribe({
+  filteredAdmission(status: string) {
+    this.activeFilter = status;
+    this.currentStatus = status;
+
+    if (status === 'NOVO') {
+      this.new = true;
+      this.getAdmission('NOVO');
+    } else if (status === 'EM ANDAMENTO') {
+      this.inProgress = true;
+      this.getAdmission('EM ANDAMENTO');
+    } else if (status === 'CONCLUIDO') {
+      this.completed = true;
+      this.getAdmission('CONCLUIDO');
+    } else if (status === 'REPROVADO') {
+      this.failed = true;
+      this.getAdmission('REPROVADO');
+    } else if (status === 'CANCELADO') {
+      this.canceled = true;
+      this.getAdmission('CANCELADO');
+    }
+  }
+
+  getAdmission(status: string): void {
+    this.isEmpty = false;
+    this.filteredItems = [];
+    this.isLoading = true;
+
+    const request = {
+      status: status
+    }
+
+    this._admissionService.getAdmission(request).subscribe({
       next: (res) => {
         this.isLoading = false;
+        this.new = false;
+        this.inProgress = false;
+        this.completed = false;
+        this.canceled = false;
+        this.failed = false;
         this.items = res.result;
         this.filteredItems = [...this.items];
-        this.isBodyVisible = new Array(this.items.length).fill(false);
-
-        if (this.filteredItems.length === 0) {
-          this.isEmpty = true;
-        } else {
-          this.isEmpty = false;
-        }
+        this.isEmpty = this.filteredItems.length === 0;
       },
       error: (err) => {
+        this.new = false;
+        this.inProgress = false;
+        this.completed = false;
+        this.canceled = false;
+        this.failed = false;
         console.error('Erro ao consultar admissões.', err);
+        this.setMessage('Não foi possível carregar as admissões.', 'error');
+      }
+    })
+  }
+
+  updateAdmission() {
+    this.isUpdating = true;
+    const statusButton = this.currentStatus;
+
+    const request = {
+      id: this.currentItem.id,
+      status: this.updateForm.value.status
+    }
+
+    this._admissionService.updateAdmission(request).subscribe({
+      next: () => {
+        this.updateForm.reset({ status: '' });
+        this.isUpdating = false;
+        this.isModalEditVisible = false;
+        this.setMessage('Admissão atualizada com sucesso!', 'success');
+        this.getAdmission(statusButton);
+      },
+      error: (error) => {
+        this.isUpdating = false;
+        this.isModalEditVisible = false;
+        console.error(error)
+        this.setMessage('Falha ao atualizar admissão! Tente novamente outra hora.', 'error');
       }
     })
   }
@@ -115,7 +193,6 @@ export class AdmissionComponent implements OnInit {
     this._admissionService.deleteById(id).subscribe({
       next: (res) => {
         this.isDeleting = false;
-        this.getAdmission();
         this.setMessage('Admissão deletada com sucesso!', 'success');
         this.isModalDeleteVisible = false;
       },
@@ -128,15 +205,6 @@ export class AdmissionComponent implements OnInit {
     })
   }
 
-  // ========== RECARREGAR A LISTA ========== //
-  reload() {
-    this.items = [];
-    this.filteredItems = [];
-    this.isEmpty = false;
-    this.isLoading = true;
-    this.getAdmission();
-  }
-
   // ========== GERENCIAR MODAL ========== //
   toggleBodyVisibility(index: number): void {
     this.isBodyVisible[index] = !this.isBodyVisible[index];
@@ -146,6 +214,11 @@ export class AdmissionComponent implements OnInit {
     this.isModalVisible = false;
     this.isModalDeleteVisible = true;
     this.currentItem = item;
+  }
+
+  openModalEdit(item: any): void {
+    this.currentItem = item;
+    this.isModalEditVisible = true;
   }
 
   openModal(item: any, type: string): void {
@@ -179,6 +252,10 @@ export class AdmissionComponent implements OnInit {
     this.modalType = '';
     this.modalTitle = '';
     this.currentItem = null;
+  }
+
+  closeModalEdit(): void {
+    this.isModalEditVisible = false;
   }
 
   closeModalDelete(): void {
