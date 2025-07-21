@@ -31,6 +31,8 @@ import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { constructionAccessGuard } from './core/guard/construction-access.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { TaskComponent } from './components/workspace/task/task.component';
+import { TaskFormComponent } from './components/forms/task-form/task-form.component';
 
 export const routes: Routes = [
   {
@@ -57,6 +59,11 @@ export const routes: Routes = [
   {
     path: 'admission',
     component: AdmissionFormComponent,
+    canActivate: [tempTokenGuard]
+  },
+  {
+    path: 'task',
+    component: TaskFormComponent,
     canActivate: [tempTokenGuard]
   },
   {
@@ -116,6 +123,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/admission',
         component: AdmissionComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/task',
+        component: TaskComponent,
         canActivate: [humanResourcesGuard]
       },
       {
