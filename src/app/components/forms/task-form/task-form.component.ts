@@ -11,7 +11,7 @@ import { BenefitService } from '../../../core/services/benefit.service';
 
 @Component({
   selector: 'app-task-form',
-  imports: [NgxMaskDirective, MatIconModule, CommonModule, ReactiveFormsModule, MatProgressSpinnerModule],
+  imports: [MatIconModule, CommonModule, ReactiveFormsModule, MatProgressSpinnerModule],
   providers: [provideNgxMask()],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'

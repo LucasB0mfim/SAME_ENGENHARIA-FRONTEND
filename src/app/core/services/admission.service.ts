@@ -20,8 +20,7 @@ export class AdmissionService {
   }
 
   sendForm(formData: FormData): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/create', formData, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/create', formData);
   }
 
   getAdmission(request: any): Observable<any> {

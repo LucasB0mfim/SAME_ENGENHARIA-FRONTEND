@@ -189,11 +189,13 @@ export class AdmissionComponent implements OnInit {
     this.isDeleting = true;
 
     const id = this.currentItem.id;
+    const statusButton = this.currentStatus;
 
     this._admissionService.deleteById(id).subscribe({
       next: (res) => {
         this.isDeleting = false;
         this.setMessage('Admissão deletada com sucesso!', 'success');
+        this.getAdmission(statusButton);
         this.isModalDeleteVisible = false;
       },
       error: (err) => {
