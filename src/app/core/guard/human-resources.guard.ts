@@ -11,7 +11,7 @@ export const humanResourcesGuard: CanActivateFn = (route, state) => {
 
   return _dashboardService.findAll().pipe(
     map(response => {
-      if (response.employee.role === 'Recurso Humanos' || response.employee.role === 'Desenvolvedor' || response.employee.email === 'guilherme.bortolon@sameengenharia.com.br') {
+      if (response.employee.role === 'Recurso Humanos' || response.employee.role === 'Desenvolvedor') {
         return true
       } else if (response.employee.position === 'Diretor') {
         return true

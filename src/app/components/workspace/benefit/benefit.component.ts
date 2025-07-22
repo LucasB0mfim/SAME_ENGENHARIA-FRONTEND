@@ -67,33 +67,49 @@ export class BenefitComponent implements OnInit {
 
   createEmployeeForm: FormGroup = new FormGroup({
     nome: new FormControl(''),
+    chapa: new FormControl(''),
     cpf: new FormControl(null),
     funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
+    recebe_integral: new FormControl(''),
     vr_caju: new FormControl(null),
     vr_vr: new FormControl(null),
     vc_caju: new FormControl(null),
     vc_vr: new FormControl(null),
     vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null)
+    vt_vem: new FormControl(null),
+    vr_caju_fixo: new FormControl(''),
+    vr_vr_fixo: new FormControl(''),
+    vc_caju_fixo: new FormControl(''),
+    vc_vr_fixo: new FormControl(''),
+    vt_caju_fixo: new FormControl(''),
+    vt_vem_fixo: new FormControl('')
   })
 
   updateEmployeeForm: FormGroup = new FormGroup({
     id: new FormControl(null),
     nome: new FormControl(''),
+    chapa: new FormControl(''),
     cpf: new FormControl(null),
     funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
+    recebe_integral: new FormControl(''),
     vr_caju: new FormControl(null),
     vr_vr: new FormControl(null),
     vc_caju: new FormControl(null),
     vc_vr: new FormControl(null),
     vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null)
+    vt_vem: new FormControl(null),
+    vr_caju_fixo: new FormControl(''),
+    vr_vr_fixo: new FormControl(''),
+    vc_caju_fixo: new FormControl(''),
+    vc_vr_fixo: new FormControl(''),
+    vt_caju_fixo: new FormControl(''),
+    vt_vem_fixo: new FormControl('')
   })
 
   // ========== ESTADOS ========== //
@@ -161,29 +177,37 @@ export class BenefitComponent implements OnInit {
   createEmployee(): void {
     this.isCreating = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isCreating = false;
-      return;
-    }
-
     const request = {
       nome: this.upperCase(this.createEmployeeForm.value.nome),
+      chapa: this.createEmployeeForm.value.chapa || '000000',
       cpf: this.createEmployeeForm.value.cpf,
       funcao: this.createEmployeeForm.value.funcao,
       setor: this.createEmployeeForm.value.setor,
       contrato: this.createEmployeeForm.value.contrato,
       centro_custo: this.createEmployeeForm.value.centro_custo,
+      recebe_integral: this.createEmployeeForm.value.recebe_integral || 'NÃO',
       vr_caju: this.createEmployeeForm.value.vr_caju || 0,
       vr_vr: this.createEmployeeForm.value.vr_vr || 0,
       vc_caju: this.createEmployeeForm.value.vc_caju || 0,
       vc_vr: this.createEmployeeForm.value.vc_vr || 0,
       vt_caju: this.createEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.createEmployeeForm.value.vt_vem || 0
+      vt_vem: this.createEmployeeForm.value.vt_vem || 0,
+      vr_caju_fixo: this.createEmployeeForm.value.vr_caju_fixo || 'NÃO',
+      vr_vr_fixo: this.createEmployeeForm.value.vr_vr_fixo || 'NÃO',
+      vc_caju_fixo: this.createEmployeeForm.value.vc_caju_fixo || 'NÃO',
+      vc_vr_fixo: this.createEmployeeForm.value.vc_vr_fixo || 'NÃO',
+      vt_caju_fixo: this.createEmployeeForm.value.vt_caju_fixo || 'NÃO',
+      vt_vem_fixo: this.createEmployeeForm.value.vt_vem_fixo || 'NÃO'
     }
 
-    if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
+    if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo || !request.recebe_integral) {
       this.setErrorMessage('Preencha todos os campos.');
+      this.isCreating = false;
+      return;
+    }
+
+    if (request.chapa.length < 6 || request.chapa.length > 6) {
+      this.setErrorMessage('A chapa possui 6 digitos. Preencha corretamente.');
       this.isCreating = false;
       return;
     }
@@ -207,31 +231,31 @@ export class BenefitComponent implements OnInit {
   updateEmployee(): void {
     this.isUpdating = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isUpdating = false;
-      return;
-    }
-
     const request = {
       id: this.updateEmployeeForm.value.id,
       nome: this.upperCase(this.updateEmployeeForm.value.nome),
+      chapa: this.updateEmployeeForm.value.chapa,
       cpf: this.updateEmployeeForm.value.cpf,
       funcao: this.updateEmployeeForm.value.funcao,
       setor: this.updateEmployeeForm.value.setor,
       contrato: this.updateEmployeeForm.value.contrato,
       centro_custo: this.updateEmployeeForm.value.centro_custo,
+      recebe_integral: this.updateEmployeeForm.value.recebe_integral || 'NÃO',
       vr_caju: this.updateEmployeeForm.value.vr_caju || 0,
       vr_vr: this.updateEmployeeForm.value.vr_vr || 0,
       vc_caju: this.updateEmployeeForm.value.vc_caju || 0,
       vc_vr: this.updateEmployeeForm.value.vc_vr || 0,
       vt_caju: this.updateEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.updateEmployeeForm.value.vt_vem || 0
+      vt_vem: this.updateEmployeeForm.value.vt_vem || 0,
+      vr_caju_fixo: this.updateEmployeeForm.value.vr_caju_fixo || 'NÃO',
+      vr_vr_fixo: this.updateEmployeeForm.value.vr_vr_fixo || 'NÃO',
+      vc_caju_fixo: this.updateEmployeeForm.value.vc_caju_fixo || 'NÃO',
+      vc_vr_fixo: this.updateEmployeeForm.value.vc_vr_fixo || 'NÃO',
+      vt_caju_fixo: this.updateEmployeeForm.value.vt_caju_fixo || 'NÃO',
+      vt_vem_fixo: this.updateEmployeeForm.value.vt_vem_fixo || 'NÃO'
     }
 
-    console.log(request)
-
-    if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo) {
+    if (!request.nome || !request.chapa || !request.cpf || !request.funcao || !request.setor || !request.contrato || !request.centro_custo || !request.recebe_integral) {
       this.setErrorMessage('Preencha todos os campos.');
       this.isUpdating = false;
       return;
@@ -255,12 +279,6 @@ export class BenefitComponent implements OnInit {
 
   findRecord(): void {
     this.isFind = true;
-
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isFind = false;
-      return;
-    }
 
     const request = {
       data: this.recordForm.value.data,
@@ -315,12 +333,6 @@ export class BenefitComponent implements OnInit {
   createRecord(): void {
     this.isCreating = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isCreating = false;
-      return;
-    }
-
     const request = {
       ano_mes: this.createRecordForm.value.ano_mes,
       dias_uteis: this.createRecordForm.value.dias_uteis,
@@ -354,12 +366,6 @@ export class BenefitComponent implements OnInit {
 
   updateRecord(): void {
     this.isUpdating = true;
-
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isUpdating = false;
-      return;
-    }
 
     const request = {
       nome: this.removeSpace(this.updateRecordForm.value.nome),
@@ -398,12 +404,6 @@ export class BenefitComponent implements OnInit {
   deleteEmployee(): void {
     this.isDeleting = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isDeleting = false;
-      return;
-    }
-
     const id = this.updateEmployeeForm.value.id;
 
     this._benefitService.deleteEmployee(id).subscribe({
@@ -425,12 +425,6 @@ export class BenefitComponent implements OnInit {
   deleteRecord(): void {
     this.isDeleting = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isDeleting = false;
-      return;
-    }
-
     const id = this.updateRecordForm.value.id;
 
     this._benefitService.deleteRecord(id).subscribe({
@@ -450,12 +444,6 @@ export class BenefitComponent implements OnInit {
 
   deleteMonth(): void {
     this.isCreating = true;
-
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isCreating = false;
-      return;
-    }
 
     const month = this.deleteMonthForm.value.data
 
@@ -482,12 +470,6 @@ export class BenefitComponent implements OnInit {
   downloadLayoutVr(): void {
     this.isCreating = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isCreating = false;
-      return;
-    }
-
     const request = {
       data: this.createLayoutVrForm.value.data,
       benefit: this.createLayoutVrForm.value.beneficioVr,
@@ -510,12 +492,6 @@ export class BenefitComponent implements OnInit {
   downloadLayoutCaju(): void {
     this.isCreating = true;
 
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isCreating = false;
-      return;
-    }
-
     const request = {
       data: this.createLayoutCajuForm.value.data,
       benefit: this.createLayoutCajuForm.value.beneficioCaju,
@@ -537,12 +513,6 @@ export class BenefitComponent implements OnInit {
 
   downloadLayoutVem(): void {
     this.isCreating = true;
-
-    if (this.userEmail === 'guilherme.bortolon@sameengenharia.com.br') {
-      alert('Você não possui permissão!');
-      this.isCreating = false;
-      return;
-    }
 
     const request = {
       data: this.createLayoutVemForm.value.data,
@@ -569,17 +539,25 @@ export class BenefitComponent implements OnInit {
     this.updateEmployeeForm.patchValue({
       id: employee.id,
       nome: employee.nome,
+      chapa: employee.chapa,
       cpf: employee.cpf,
       funcao: employee.funcao,
       setor: employee.setor,
       contrato: employee.contrato,
       centro_custo: employee.centro_custo,
+      recebe_integral: employee.recebe_integral,
       vr_caju: employee.vr_caju,
       vr_vr: employee.vr_vr,
       vc_caju: employee.vc_caju,
       vc_vr: employee.vc_vr,
       vt_caju: employee.vt_caju,
-      vt_vem: employee.vt_vem
+      vt_vem: employee.vt_vem,
+      vr_caju_fixo: employee.vr_caju_fixo,
+      vr_vr_fixo: employee.vr_vr_fixo,
+      vc_caju_fixo: employee.vc_caju_fixo,
+      vc_vr_fixo: employee.vc_vr_fixo,
+      vt_caju_fixo: employee.vt_caju_fixo,
+      vt_vem_fixo: employee.vt_vem_fixo
     });
   }
 
@@ -686,17 +664,25 @@ export class BenefitComponent implements OnInit {
 
   resetForm(): void {
     this.createEmployeeForm.reset({
-      nome: null,
+      nome: '',
+      chapa: '',
       funcao: '',
       setor: '',
       contrato: '',
       centro_custo: '',
+      recebe_integral: '',
       vr_caju: null,
       vr_vr: null,
       vc_caju: null,
       vc_vr: null,
       vt_caju: null,
-      vt_vem: null
+      vt_vem: null,
+      vr_caju_fixo: '',
+      vr_vr_fixo: '',
+      vc_caju_fixo: '',
+      vc_vr_fixo: '',
+      vt_caju_fixo: '',
+      vt_vem_fixo: ''
     });
   }
 
