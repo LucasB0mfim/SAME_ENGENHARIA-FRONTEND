@@ -45,6 +45,13 @@ export class AdmissionComponent implements OnInit {
   failed: boolean = false;
   canceled: boolean = false;
 
+  // Contadores para cada status
+  newCount: number = 0;
+  inProgressCount: number = 0;
+  completedCount: number = 0;
+  failedCount: number = 0;
+  canceledCount: number = 0;
+
   activeFilter: string = 'NOVO';
   currentStatus: string = '';
 
@@ -60,9 +67,12 @@ export class AdmissionComponent implements OnInit {
   modalType: string = '';
   modalTitle: string = '';
 
+
+
   // ========== HOOK ========== //
   ngOnInit(): void {
     this.getAdmission('NOVO');
+    this.getAdmissionLength();
     this._titleService.setTitle('Admissão');
   }
 
@@ -86,6 +96,7 @@ export class AdmissionComponent implements OnInit {
       next: (res) => {
         this.link = res.link;
         this.isGenerating = false;
+        this.getAdmissionLength(); // Atualizar contagens após gerar link
         navigator.clipboard.writeText(this.link)
           .then(() => {
             console.log('Link copiado para a área de transferência');
@@ -159,6 +170,52 @@ export class AdmissionComponent implements OnInit {
     })
   }
 
+  getAdmissionLength(): void {
+    const request = {
+      status: 'TODOS'
+    }
+
+    this._admissionService.getAdmission(request).subscribe({
+      next: (res) => {
+        this.newCount = 0;
+        this.inProgressCount = 0;
+        this.completedCount = 0;
+        this.failedCount = 0;
+        this.canceledCount = 0;
+
+        if (res.result && Array.isArray(res.result)) {
+          res.result.forEach((item: any) => {
+            switch (item.status) {
+              case 'NOVO':
+                this.newCount++;
+                break;
+              case 'EM ANDAMENTO':
+                this.inProgressCount++;
+                break;
+              case 'CONCLUIDO':
+                this.completedCount++;
+                break;
+              case 'REPROVADO':
+                this.failedCount++;
+                break;
+              case 'CANCELADO':
+                this.canceledCount++;
+                break;
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao buscar contagens de admissões:', err);
+        this.newCount = 0;
+        this.inProgressCount = 0;
+        this.completedCount = 0;
+        this.failedCount = 0;
+        this.canceledCount = 0;
+      }
+    })
+  }
+
   updateAdmission() {
     this.isUpdating = true;
     const statusButton = this.currentStatus;
@@ -175,6 +232,7 @@ export class AdmissionComponent implements OnInit {
         this.isModalEditVisible = false;
         this.setMessage('Admissão atualizada com sucesso!', 'success');
         this.getAdmission(statusButton);
+        this.getAdmissionLength();
       },
       error: (error) => {
         this.isUpdating = false;
@@ -196,6 +254,7 @@ export class AdmissionComponent implements OnInit {
         this.isDeleting = false;
         this.setMessage('Admissão deletada com sucesso!', 'success');
         this.getAdmission(statusButton);
+        this.getAdmissionLength();
         this.isModalDeleteVisible = false;
       },
       error: (err) => {
@@ -325,12 +384,3 @@ export class AdmissionComponent implements OnInit {
     }, 600);
   }
 }
-
-
-
-
-
-
-
-
-
