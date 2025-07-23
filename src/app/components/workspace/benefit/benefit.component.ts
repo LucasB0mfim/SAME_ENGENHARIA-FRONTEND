@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -12,7 +13,8 @@ import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-benefit',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule, NgxMaskDirective],
+  providers: [provideNgxMask()],
   templateUrl: './benefit.component.html',
   styleUrl: './benefit.component.scss'
 })
@@ -21,7 +23,6 @@ export class BenefitComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _benefitService = inject(BenefitService);
-  private readonly _dashboardService = inject(DashboardService);
 
   // ========== FORMULÁRIOS ========== //
   recordForm: FormGroup = new FormGroup({
@@ -39,9 +40,26 @@ export class BenefitComponent implements OnInit {
     id: new FormControl(''),
     nome: new FormControl(''),
     data: new FormControl(''),
+    reembolso: new FormControl(''),
     dias_uteis: new FormControl(''),
     dias_nao_uteis: new FormControl(''),
-    reembolso: new FormControl('')
+    funcao: new FormControl(''),
+    setor: new FormControl(''),
+    contrato: new FormControl(''),
+    centro_custo: new FormControl(''),
+    recebe_integral: new FormControl(''),
+    vr_caju: new FormControl(null),
+    vr_vr: new FormControl(null),
+    vc_caju: new FormControl(null),
+    vc_vr: new FormControl(null),
+    vt_caju: new FormControl(null),
+    vt_vem: new FormControl(null),
+    vr_caju_fixo: new FormControl(''),
+    vr_vr_fixo: new FormControl(''),
+    vc_caju_fixo: new FormControl(''),
+    vc_vr_fixo: new FormControl(''),
+    vt_caju_fixo: new FormControl(''),
+    vt_vem_fixo: new FormControl('')
   })
 
   deleteMonthForm: FormGroup = new FormGroup({
@@ -69,6 +87,7 @@ export class BenefitComponent implements OnInit {
     nome: new FormControl(''),
     chapa: new FormControl(''),
     cpf: new FormControl(null),
+    data_nascimento: new FormControl(''),
     funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
@@ -93,6 +112,7 @@ export class BenefitComponent implements OnInit {
     nome: new FormControl(''),
     chapa: new FormControl(''),
     cpf: new FormControl(null),
+    data_nascimento: new FormControl(''),
     funcao: new FormControl(''),
     setor: new FormControl(''),
     contrato: new FormControl(''),
@@ -181,6 +201,7 @@ export class BenefitComponent implements OnInit {
       nome: this.upperCase(this.createEmployeeForm.value.nome),
       chapa: this.createEmployeeForm.value.chapa || '000000',
       cpf: this.createEmployeeForm.value.cpf,
+      data_nascimento: this.createEmployeeForm.value.data_nascimento,
       funcao: this.createEmployeeForm.value.funcao,
       setor: this.createEmployeeForm.value.setor,
       contrato: this.createEmployeeForm.value.contrato,
@@ -198,18 +219,6 @@ export class BenefitComponent implements OnInit {
       vc_vr_fixo: this.createEmployeeForm.value.vc_vr_fixo || 'NÃO',
       vt_caju_fixo: this.createEmployeeForm.value.vt_caju_fixo || 'NÃO',
       vt_vem_fixo: this.createEmployeeForm.value.vt_vem_fixo || 'NÃO'
-    }
-
-    if (!request.nome || !request.funcao || !request.setor || !request.contrato || !request.centro_custo || !request.recebe_integral) {
-      this.setErrorMessage('Preencha todos os campos.');
-      this.isCreating = false;
-      return;
-    }
-
-    if (request.chapa.length < 6 || request.chapa.length > 6) {
-      this.setErrorMessage('A chapa possui 6 digitos. Preencha corretamente.');
-      this.isCreating = false;
-      return;
     }
 
     this._benefitService.createEmployee(request).subscribe({
@@ -236,6 +245,7 @@ export class BenefitComponent implements OnInit {
       nome: this.upperCase(this.updateEmployeeForm.value.nome),
       chapa: this.updateEmployeeForm.value.chapa,
       cpf: this.updateEmployeeForm.value.cpf,
+      data_nascimento: this.updateEmployeeForm.value.data_nascimento,
       funcao: this.updateEmployeeForm.value.funcao,
       setor: this.updateEmployeeForm.value.setor,
       contrato: this.updateEmployeeForm.value.contrato,
@@ -253,12 +263,6 @@ export class BenefitComponent implements OnInit {
       vc_vr_fixo: this.updateEmployeeForm.value.vc_vr_fixo || 'NÃO',
       vt_caju_fixo: this.updateEmployeeForm.value.vt_caju_fixo || 'NÃO',
       vt_vem_fixo: this.updateEmployeeForm.value.vt_vem_fixo || 'NÃO'
-    }
-
-    if (!request.nome || !request.chapa || !request.cpf || !request.funcao || !request.setor || !request.contrato || !request.centro_custo || !request.recebe_integral) {
-      this.setErrorMessage('Preencha todos os campos.');
-      this.isUpdating = false;
-      return;
     }
 
     this._benefitService.updateEmployee(request).subscribe({
@@ -368,23 +372,29 @@ export class BenefitComponent implements OnInit {
     this.isUpdating = true;
 
     const request = {
-      nome: this.removeSpace(this.updateRecordForm.value.nome),
+      id: this.updateRecordForm.value.id,
       data: this.updateRecordForm.value.data,
+      nome: this.removeSpace(this.updateRecordForm.value.nome),
+      reembolso: this.updateRecordForm.value.reembolso,
       dias_uteis: this.updateRecordForm.value.dias_uteis,
       dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis,
-      reembolso: this.updateRecordForm.value.reembolso
-    }
-
-    if (request.dias_uteis < 0) {
-      this.setErrorMessage('Quantidade de dias trabalhados inválida.');
-      this.isUpdating = false;
-      return;
-    }
-
-    if (request.dias_nao_uteis < 0) {
-      this.setErrorMessage('Quantidade de dias não trabalhados inválida.');
-      this.isUpdating = false;
-      return;
+      funcao: this.updateRecordForm.value.funcao,
+      setor: this.updateRecordForm.value.setor,
+      contrato: this.updateRecordForm.value.contrato,
+      centro_custo: this.updateRecordForm.value.centro_custo,
+      recebe_integral: this.updateRecordForm.value.recebe_integral,
+      vr_caju: this.updateRecordForm.value.vr_caju,
+      vr_caju_fixo: this.updateRecordForm.value.vr_caju_fixo,
+      vr_vr: this.updateRecordForm.value.vr_vr,
+      vr_vr_fixo: this.updateRecordForm.value.vr_vr_fixo,
+      vc_caju: this.updateRecordForm.value.vc_caju,
+      vc_caju_fixo: this.updateRecordForm.value.vc_caju_fixo,
+      vc_vr: this.updateRecordForm.value.vc_vr,
+      vc_vr_fixo: this.updateRecordForm.value.vc_vr_fixo,
+      vt_caju: this.updateRecordForm.value.vt_caju,
+      vt_caju_fixo: this.updateRecordForm.value.vt_caju_fixo,
+      vt_vem: this.updateRecordForm.value.vt_vem,
+      vt_vem_fixo: this.updateRecordForm.value.vt_vem_fixo,
     }
 
     this._benefitService.updateRecord(request).subscribe({
@@ -541,6 +551,7 @@ export class BenefitComponent implements OnInit {
       nome: employee.nome,
       chapa: employee.chapa,
       cpf: employee.cpf,
+      data_nascimento: this.formateDate(employee.data_nascimento),
       funcao: employee.funcao,
       setor: employee.setor,
       contrato: employee.contrato,
@@ -568,9 +579,26 @@ export class BenefitComponent implements OnInit {
       id: employee.id,
       nome: employee.nome,
       data: employee.data,
+      reembolso: employee.reembolso,
       dias_uteis: employee.dias_uteis,
       dias_nao_uteis: employee.dias_nao_uteis,
-      reembolso: employee.reembolso
+      funcao: employee.funcao,
+      setor: employee.setor,
+      contrato: employee.contrato,
+      centro_custo: employee.centro_custo,
+      recebe_integral: employee.recebe_integral,
+      vr_caju: employee.vr_caju,
+      vr_vr: employee.vr_vr,
+      vc_caju: employee.vc_caju,
+      vc_vr: employee.vc_vr,
+      vt_caju: employee.vt_caju,
+      vt_vem: employee.vt_vem,
+      vr_caju_fixo: employee.vr_caju_fixo,
+      vr_vr_fixo: employee.vr_vr_fixo,
+      vc_caju_fixo: employee.vc_caju_fixo,
+      vc_vr_fixo: employee.vc_vr_fixo,
+      vt_caju_fixo: employee.vt_caju_fixo,
+      vt_vem_fixo: employee.vt_vem_fixo
     });
   }
 
@@ -660,6 +688,11 @@ export class BenefitComponent implements OnInit {
 
   removeSpace(value: string): string {
     return value.trim();
+  }
+
+  formateDate(date: string): string {
+    const [year, month, day] = date.split('-');
+    return `${day}${month}${year}`;
   }
 
   resetForm(): void {

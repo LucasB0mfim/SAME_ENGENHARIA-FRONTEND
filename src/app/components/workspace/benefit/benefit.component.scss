@@ -574,13 +574,17 @@
 }
 
 .form__container {
-  width: 50%;
+  width: 70%;
   max-width: 90%;
   background: var(--secondary-color);
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: 2vw;
   animation: slideIn 0.4s ease;
+
+  &--option {
+    width: 50%;
+  }
 }
 
 @keyframes slideIn {
@@ -611,9 +615,13 @@
 
 .form__content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   margin-bottom: 24px;
+
+  &--option {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .form__group {

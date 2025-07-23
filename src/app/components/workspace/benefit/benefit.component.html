@@ -335,16 +335,500 @@
         <div class="form__content">
           <div class="form__group">
             <label for="nome">Nome</label>
-            <input id="nome" type="text" placeholder="Nome completo" formControlName="nome" class="form__input">
+            <input type="text" id="nome" name="nome" placeholder="Nome completo" formControlName="nome"
+              class="form__input">
           </div>
           <div class="form__group">
             <label for="chapa">chapa</label>
-            <input id="chapa" type="text" placeholder="CHAPA" formControlName="chapa" class="form__input">
+            <input type="text" id="chapa" name="chapa" placeholder="CHAPA" formControlName="chapa" class="form__input">
           </div>
           <div class="form__group">
             <label for="cpf">CPF</label>
-            <input id="cpf" type="text" placeholder="CPF" formControlName="cpf" class="form__input">
+            <input type="text" id="cpf" name="cpf" mask="000.000.000-00" placeholder="CPF" formControlName="cpf"
+              class="form__input">
           </div>
+          <div class="form__group">
+            <label for="data_nascimento">Data de nascimento</label>
+            <input type="text" id="data_nascimento" name="data_nascimento" mask="00/00/0000"
+              formControlName="data_nascimento" placeholder="00/00/0000" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="funcao">Função</label>
+            <select id="funcao" name="funcao" formControlName="funcao" class="form__select">
+              <option value="" disabled selected>Selecione uma função</option>
+              <option value="ARMADOR">ARMADOR</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
+              <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="setor">Setor</label>
+            <select id="setor" name="setor" formControlName="setor" class="form__select">
+              <option value="" disabled selected>Selecione um setor</option>
+              <option value="T.I">T.I</option>
+              <option value="OBRA">OBRA</option>
+              <option value="COMPRAS">COMPRAS</option>
+              <option value="ORÇAMENTO">ORÇAMENTO</option>
+              <option value="QUALIDADE">QUALIDADE</option>
+              <option value="FINANCEIRO">FINANCEIRO</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
+              <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="contrato">Contrato</label>
+            <select id="contrato" name="contrato" formControlName="contrato" class="form__select">
+              <option value="" disabled selected>Selecione um tipo</option>
+              <option value="PJ">PJ</option>
+              <option value="CLT">CLT</option>
+              <option value="ESTÁGIO">ESTÁGIO</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="centro_custo">Centro de Custo</label>
+            <select id="centro_custo" name="centro_custo" formControlName="centro_custo" class="form__select">
+              <option value="" disabled selected>Selecione um centro de custo</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="BRK - PV">BRK - PV</option>
+              <option value="BRK - PFIS">BRK - PFIS</option>
+              <option value="BRK - CABO">BRK - CABO</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - REDES">BRK - REDES</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
+              <option value="BRK - CURADO">BRK - CURADO</option>
+              <option value="BRK - GOIANA">BRK - GOIANA</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - CABANGA">BRK - CABANGA</option>
+              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
+              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+            </select>
+          </div>
+
+          <div class="form__group">
+            <label for="recebe_integral">Recebe vale-refeição todo dia?</label>
+            <select id="recebe_integral" name="recebe_integral" formControlName="recebe_integral" class="form__select">
+              <option value="NÃO" selected>NÃO</option>
+              <option value="SIM">SIM</option>
+            </select>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vr_caju">Vale Refeição (CAJU)</label>
+              <input type="number" id="vr_caju" name="vr_caju" placeholder="0.00" formControlName="vr_caju"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vr_caju_fixo">Valor fixo?</label>
+              <select id="vr_caju_fixo" name="vr_caju_fixo" formControlName="vr_caju_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vr_vr">Vale Refeição (VR)</label>
+              <input type="number" id="vr_vr" name="vr_vr" placeholder="0.00" formControlName="vr_vr"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vr_vr_fixo">Valor fixo?</label>
+              <select id="vr_vr_fixo" name="vr_vr_fixo" formControlName="vr_vr_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vc_caju">Vale Combustível (CAJU)</label>
+              <input type="number" id="vc_caju" name="vc_caju" placeholder="0.00" formControlName="vc_caju"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vc_caju_fixo">Valor fixo?</label>
+              <select id="vc_caju_fixo" name="vc_caju_fixo" formControlName="vc_caju_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vc_vr">Vale Combustível (VR)</label>
+              <input type="number" id="vc_vr" name="vc_vr" placeholder="0.00" formControlName="vc_vr"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vc_vr_fixo">Valor fixo?</label>
+              <select id="vc_vr_fixo" name="vc_vr_fixo" formControlName="vc_vr_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vt_caju">Vale Transporte (CAJU)</label>
+              <input type="number" id="vt_caju" name="vt_caju" placeholder="0.00" formControlName="vt_caju"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vt_caju_fixo">Valor fixo?</label>
+              <select id="vt_caju_fixo" name="vt_caju_fixo" formControlName="vt_caju_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vt_vem">Vale Transporte (VEM)</label>
+              <input type="number" id="vt_vem" name="vt_vem" placeholder="0.00" formControlName="vt_vem"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vt_vem_fixo">Valor fixo?</label>
+              <select id="vt_vem_fixo" name="vt_vem_fixo" formControlName="vt_vem_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form__footer">
+          @if (showError) {
+          <div class="form__message form__message--error">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+          }
+          <button type="button" class="btn btn--quaternary" (click)="cancelCreateEmployee()">Cancelar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isCreating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Salvar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <form [formGroup]="updateEmployeeForm" (ngSubmit)="updateEmployee()" *ngIf="editEmployee" class="modal__backdrop"
+      role="dialog" aria-labelledby="edit-employee-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="edit-employee-title">Editar Colaborador</h2>
+          <button type="button" class="btn btn--close" (click)="editEmployee = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+          <div class="form__group">
+            <label for="edit-nome">Nome</label>
+            <input type="text" id="edit-nome" name="edit-nome" placeholder="Nome completo" formControlName="nome"
+              class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-chapa">Chapa</label>
+            <input type="text" id="edit-chapa" name="edit-chapa" placeholder="CHAPA" formControlName="chapa"
+              class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-cpf">CPF</label>
+            <input type="number" id="edit-cpf" name="edit-cpf" placeholder="CPF" formControlName="cpf"
+              class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-data_nascimento">Data de nascimento</label>
+            <input type="text" id="edit-data_nascimento" name="edit-data_nascimento" mask="00/00/0000"
+              placeholder="00/00/0000" formControlName="data_nascimento" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="edit-funcao">Função</label>
+            <select id="edit-funcao" name="edit-funcao" formControlName="funcao" class="form__select">
+              <option value="" disabled>Selecione uma função</option>
+              <option value="ARMADOR">ARMADOR</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
+              <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="edit-setor">Setor</label>
+            <select id="edit-setor" name="edit-setor" formControlName="setor" class="form__select">
+              <option value="" disabled>Selecione um setor</option>
+              <option value="T.I">T.I</option>
+              <option value="OBRA">OBRA</option>
+              <option value="COMPRAS">COMPRAS</option>
+              <option value="ORÇAMENTO">ORÇAMENTO</option>
+              <option value="QUALIDADE">QUALIDADE</option>
+              <option value="FINANCEIRO">FINANCEIRO</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
+              <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="edit-contrato">Contrato</label>
+            <select id="edit-contrato" name="edit-contrato" formControlName="contrato" class="form__select">
+              <option value="" disabled>Selecione um tipo</option>
+              <option value="PJ">PJ</option>
+              <option value="CLT">CLT</option>
+              <option value="ESTÁGIO">ESTÁGIO</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="edit-centro_custo">Centro de Custo</label>
+            <select id="edit-centro_custo" name="edit-centro_custo" formControlName="centro_custo" class="form__select">
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="BRK - PV">BRK - PV</option>
+              <option value="BRK - PFIS">BRK - PFIS</option>
+              <option value="BRK - CABO">BRK - CABO</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - REDES">BRK - REDES</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
+              <option value="BRK - CURADO">BRK - CURADO</option>
+              <option value="BRK - GOIANA">BRK - GOIANA</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - CABANGA">BRK - CABANGA</option>
+              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
+              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+            </select>
+          </div>
+
+          <div class="form__group">
+            <label for="recebe_integral">Recebe vale-refeição todo dia?</label>
+            <select id="recebe_integral" name="recebe_integral" formControlName="recebe_integral" class="form__select">
+              <option value="NÃO" selected>NÃO</option>
+              <option value="SIM">SIM</option>
+            </select>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="edit-vr_caju">Vale Refeição (CAJU)</label>
+              <input type="number" id="edit-vr_caju" name="edit-vr_caju" placeholder="0.00" formControlName="vr_caju"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="edit-vr_caju_fixo">Valor fixo?</label>
+              <select id="edit-vr_caju_fixo" name="edit-vr_caju_fixo" formControlName="vr_caju_fixo"
+                class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="edit-vr_vr">Vale Refeição (VR)</label>
+              <input type="number" id="edit-vr_vr" name="edit-vr_vr" placeholder="0.00" formControlName="vr_vr"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="edit-vr_vr_fixo">Valor fixo?</label>
+              <select id="edit-vr_vr_fixo" name="edit-vr_vr_fixo" formControlName="vr_vr_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="edit-vc_caju">Vale Combustível (CAJU)</label>
+              <input type="number" id="edit-vc_caju" name="edit-vc_caju" placeholder="0.00" formControlName="vc_caju"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="edit-vc_caju_fixo">Valor fixo?</label>
+              <select id="edit-vc_caju_fixo" name="edit-vc_caju_fixo" formControlName="vc_caju_fixo"
+                class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="edit-vc_vr">Vale Combustível (VR)</label>
+              <input type="number" id="edit-vc_vr" name="edit-vc_vr" placeholder="0.00" formControlName="vc_vr"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="edit-vc_vr_fixo">Valor fixo?</label>
+              <select id="edit-vc_vr_fixo" name="edit-vc_vr_fixo" formControlName="vc_vr_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="edit-vt_caju">Vale Transporte (CAJU)</label>
+              <input type="number" id="edit-vt_caju" name="edit-vt_caju" placeholder="0.00" formControlName="vt_caju"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="edit-vt_caju_fixo">Valor fixo?</label>
+              <select id="edit-vt_caju_fixo" name="edit-vt_caju_fixo" formControlName="vt_caju_fixo"
+                class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="edit-vt_vem">Vale Transporte (VEM)</label>
+              <input type="number" id="edit-vt_vem" name="edit-vt_vem" placeholder="0.00" formControlName="vt_vem"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="edit-vt_vem_fixo">Valor fixo?</label>
+              <select id="edit-vt_vem_fixo" name="edit-vt_vem_fixo" formControlName="vt_vem_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+        <div class="form__footer">
+          @if (showError) {
+          <div class="form__message form__message--error">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+          }
+          <button type="button" class="btn btn--danger" (click)="deleteEmployee()">
+            @if (isDeleting) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Deletar
+            }
+          </button>
+          <button type="button" class="btn btn--quaternary" (click)="editEmployee = false">Cancelar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isUpdating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Atualizar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+
+    @if (isLoading) {
+    <div class="loading loading--employees">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+    }
+  </section>
+
+  <section class="record__container" *ngIf="updateRecordSection">
+    <form [formGroup]="updateRecordForm" (ngSubmit)="updateRecord()" class="modal__backdrop" role="dialog"
+      aria-labelledby="create-record-title">
+      <div class="form__container">
+        <div class="form__header">
+          <h2 id="create-record-title">Atualizar Registro</h2>
+          <button type="button" class="btn btn--close" (click)="updateRecordSection = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content">
+
+          <div class="form__group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" formControlName="nome" readonly placeholder="Nome Completo"
+              class="form__input">
+          </div>
+
+          <div class="form__group">
+            <label for="reembolso">Reembolso</label>
+            <input type="number" id="reembolso" name="reembolso" placeholder="0" formControlName="reembolso"
+              class="form__input">
+          </div>
+
+          <div class="form__group">
+            <label for="dias_uteis">Dias Trabalhados</label>
+            <input type="number" id="dias_uteis" name="dias_uteis" placeholder="0" formControlName="dias_uteis"
+              class="form__input">
+          </div>
+
+          <div class="form__group">
+            <label for="dias_nao_uteis">Dias Extras</label>
+            <input type="number" id="dias_nao_uteis" name="dias_nao_uteis" placeholder="0"
+              formControlName="dias_nao_uteis" class="form__input">
+          </div>
+
           <div class="form__group">
             <label for="funcao">Função</label>
             <select id="funcao" formControlName="funcao" class="form__select">
@@ -366,6 +850,7 @@
               <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
             </select>
           </div>
+
           <div class="form__group">
             <label for="setor">Setor</label>
             <select id="setor" formControlName="setor" class="form__select">
@@ -381,6 +866,7 @@
               <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
             </select>
           </div>
+
           <div class="form__group">
             <label for="contrato">Contrato</label>
             <select id="contrato" formControlName="contrato" class="form__select">
@@ -390,6 +876,7 @@
               <option value="ESTÁGIO">ESTÁGIO</option>
             </select>
           </div>
+
           <div class="form__group">
             <label for="centro_custo">Centro de Custo</label>
             <select id="centro_custo" formControlName="centro_custo" class="form__select">
@@ -517,338 +1004,7 @@
               </select>
             </div>
           </div>
-        </div>
-        <div class="form__footer">
-          @if (showError) {
-          <div class="form__message form__message--error">
-            <mat-icon>error</mat-icon>
-            <span>{{ errorMessage }}</span>
-          </div>
-          }
-          <button type="button" class="btn btn--quaternary" (click)="cancelCreateEmployee()">Cancelar</button>
-          <button type="submit" class="btn btn--primary">
-            @if (isCreating) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Salvar
-            }
-          </button>
-        </div>
-      </div>
-    </form>
 
-    <form [formGroup]="updateEmployeeForm" (ngSubmit)="updateEmployee()" *ngIf="editEmployee" class="modal__backdrop"
-      role="dialog" aria-labelledby="edit-employee-title">
-      <div class="form__container">
-        <div class="form__header">
-          <h2 id="edit-employee-title">Editar Colaborador</h2>
-          <button type="button" class="btn btn--close" (click)="editEmployee = false"
-            aria-label="Fechar modal">&times;</button>
-        </div>
-        <div class="form__content">
-          <div class="form__group">
-            <label for="edit-nome">Nome</label>
-            <input id="edit-nome" type="text" placeholder="Nome completo" formControlName="nome" class="form__input">
-          </div>
-          <div class="form__group">
-            <label for="edit-chapa">Chapa</label>
-            <input id="edit-chapa" type="text" placeholder="CHAPA" formControlName="chapa" class="form__input">
-          </div>
-          <div class="form__group">
-            <label for="edit-cpf">CPF</label>
-            <input id="edit-cpf" type="number" placeholder="CPF" formControlName="cpf" class="form__input">
-          </div>
-          <div class="form__group">
-            <label for="edit-funcao">Função</label>
-            <select id="edit-funcao" formControlName="funcao" class="form__select">
-              <option value="" disabled>Selecione uma função</option>
-              <option value="ARMADOR">ARMADOR</option>
-              <option value="DIRETOR">DIRETOR</option>
-              <option value="SERVENTE">SERVENTE</option>
-              <option value="PEDREIRO">PEDREIRO</option>
-              <option value="AUXILIAR">AUXILIAR</option>
-              <option value="ENCANADOR">ENCANADOR</option>
-              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
-              <option value="ALMOXARIFE">ALMOXARIFE</option>
-              <option value="ENGENHEIRO">ENGENHEIRO</option>
-              <option value="ELETRICISTA">ELETRICISTA</option>
-              <option value="COORDENADOR">COORDENADOR</option>
-              <option value="ENCARREGADO">ENCARREGADO</option>
-              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
-              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
-              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
-            </select>
-          </div>
-          <div class="form__group">
-            <label for="edit-setor">Setor</label>
-            <select id="edit-setor" formControlName="setor" class="form__select">
-              <option value="" disabled>Selecione um setor</option>
-              <option value="T.I">T.I</option>
-              <option value="OBRA">OBRA</option>
-              <option value="COMPRAS">COMPRAS</option>
-              <option value="ORÇAMENTO">ORÇAMENTO</option>
-              <option value="QUALIDADE">QUALIDADE</option>
-              <option value="FINANCEIRO">FINANCEIRO</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
-              <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
-            </select>
-          </div>
-          <div class="form__group">
-            <label for="edit-contrato">Contrato</label>
-            <select id="edit-contrato" formControlName="contrato" class="form__select">
-              <option value="" disabled>Selecione um tipo</option>
-              <option value="PJ">PJ</option>
-              <option value="CLT">CLT</option>
-              <option value="ESTÁGIO">ESTÁGIO</option>
-            </select>
-          </div>
-          <div class="form__group">
-            <label for="edit-centro_custo">Centro de Custo</label>
-            <select id="edit-centro_custo" formControlName="centro_custo" class="form__select">
-              <option value="EMLURB">EMLURB</option>
-              <option value="MÁQUINAS">MÁQUINAS</option>
-              <option value="BRK - HH">BRK - HH</option>
-              <option value="BRK - PV">BRK - PV</option>
-              <option value="BRK - PFIS">BRK - PFIS</option>
-              <option value="BRK - CABO">BRK - CABO</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-              <option value="BRK - REDES">BRK - REDES</option>
-              <option value="LUIZ WILSON">LUIZ WILSON</option>
-              <option value="BRK - HH 03">BRK - HH 03</option>
-              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-              <option value="RODA DE FOGO">RODA DE FOGO</option>
-              <option value="BRK - CURADO">BRK - CURADO</option>
-              <option value="BRK - GOIANA">BRK - GOIANA</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="BRK - CABANGA">BRK - CABANGA</option>
-              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
-              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-            </select>
-          </div>
-
-          <div class="form__group">
-            <label for="recebe_integral">Recebe vale-refeição todo dia?</label>
-            <select id="recebe_integral" name="recebe_integral" formControlName="recebe_integral" class="form__select">
-              <option value="NÃO" selected>NÃO</option>
-              <option value="SIM">SIM</option>
-            </select>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="edit-vr_caju">Vale Refeição (CAJU)</label>
-              <input id="edit-vr_caju" name="edit-vr_caju" type="number" placeholder="0.00" formControlName="vr_caju"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="edit-vr_caju_fixo">Valor fixo?</label>
-              <select id="edit-vr_caju_fixo" name="edit-vr_caju_fixo" formControlName="vr_caju_fixo"
-                class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="edit-vr_vr">Vale Refeição (VR)</label>
-              <input id="edit-vr_vr" name="edit-vr_vr" type="number" placeholder="0.00" formControlName="vr_vr"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="edit-vr_vr_fixo">Valor fixo?</label>
-              <select id="edit-vr_vr_fixo" name="edit-vr_vr_fixo" formControlName="vr_vr_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="edit-vc_caju">Vale Combustível (CAJU)</label>
-              <input id="edit-vc_caju" name="edit-vc_caju" type="number" placeholder="0.00" formControlName="vc_caju"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="edit-vc_caju_fixo">Valor fixo?</label>
-              <select id="edit-vc_caju_fixo" name="edit-vc_caju_fixo" formControlName="vc_caju_fixo"
-                class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="edit-vc_vr">Vale Combustível (VR)</label>
-              <input id="edit-vc_vr" name="edit-vc_vr" type="number" placeholder="0.00" formControlName="vc_vr"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="edit-vc_vr_fixo">Valor fixo?</label>
-              <select id="edit-vc_vr_fixo" name="edit-vc_vr_fixo" formControlName="vc_vr_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="edit-vt_caju">Vale Transporte (CAJU)</label>
-              <input id="edit-vt_caju" name="edit-vt_caju" type="number" placeholder="0.00" formControlName="vt_caju"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="edit-vt_caju_fixo">Valor fixo?</label>
-              <select id="edit-vt_caju_fixo" name="edit-vt_caju_fixo" formControlName="vt_caju_fixo"
-                class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="edit-vt_vem">Vale Transporte (VEM)</label>
-              <input id="edit-vt_vem" name="edit-vt_vem" type="number" placeholder="0.00" formControlName="vt_vem"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="edit-vt_vem_fixo">Valor fixo?</label>
-              <select id="edit-vt_vem_fixo" name="edit-vt_vem_fixo" formControlName="vt_vem_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-        </div>
-        <div class="form__footer">
-          @if (showError) {
-          <div class="form__message form__message--error">
-            <mat-icon>error</mat-icon>
-            <span>{{ errorMessage }}</span>
-          </div>
-          }
-          <button type="button" class="btn btn--danger" (click)="deleteEmployee()">
-            @if (isDeleting) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Deletar
-            }
-          </button>
-          <button type="button" class="btn btn--quaternary" (click)="editEmployee = false">Cancelar</button>
-          <button type="submit" class="btn btn--primary">
-            @if (isUpdating) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Atualizar
-            }
-          </button>
-        </div>
-      </div>
-    </form>
-
-    @if (isLoading) {
-    <div class="loading loading--employees">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-    }
-  </section>
-
-  <section class="record__container" *ngIf="createRecordSection">
-    <form [formGroup]="createRecordForm" (ngSubmit)="createRecord()" class="modal__backdrop" role="dialog"
-      aria-labelledby="create-record-title">
-      <div class="form__container">
-        <div class="form__header">
-          <h2 id="create-record-title">Gerar Novo Mês</h2>
-          <button type="button" class="btn btn--close" (click)="createRecordSection = false"
-            aria-label="Fechar modal">&times;</button>
-        </div>
-        <div class="form__content">
-          <div class="form__group form__group--full">
-            <label for="ano-mes">Mês e Ano</label>
-            <input id="ano-mes" type="month" formControlName="ano_mes" class="form__input">
-          </div>
-          <div class="form__group">
-            <label for="dias_uteis">Dias Úteis</label>
-            <input id="dias_uteis" type="number" placeholder="Número de dias úteis" formControlName="dias_uteis"
-              class="form__input">
-          </div>
-          <div class="form__group">
-            <label for="dias_nao_uteis">Dias Não Úteis</label>
-            <input id="dias_nao_uteis" type="number" placeholder="Número de dias úteis" formControlName="dias_nao_uteis"
-              class="form__input">
-          </div>
-        </div>
-        <div class="form__footer">
-          <button type="button" class="btn btn--quaternary"
-            (click)="createRecordSection = false; settingSection = true">Voltar</button>
-          <button type="submit" class="btn btn--primary">
-            @if (isCreating) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Gerar
-            }
-          </button>
-        </div>
-      </div>
-    </form>
-  </section>
-
-  <section class="record__container" *ngIf="updateRecordSection">
-    <form [formGroup]="updateRecordForm" (ngSubmit)="updateRecord()" class="modal__backdrop" role="dialog"
-      aria-labelledby="create-record-title">
-      <div class="form__container">
-        <div class="form__header">
-          <h2 id="create-record-title">Atualizar Registro</h2>
-          <button type="button" class="btn btn--close" (click)="updateRecordSection = false"
-            aria-label="Fechar modal">&times;</button>
-        </div>
-        <div class="form__content">
-          <div class="form__group">
-            <label>Nome</label>
-            <input type="text" formControlName="nome" readonly placeholder="Nome Completo" class="form__input">
-          </div>
-          <div class="form__group">
-            <label>Reembolso</label>
-            <input type="number" placeholder="0" formControlName="reembolso" class="form__input">
-          </div>
-          <div class="form__group">
-            <label>Dias Trabalhados</label>
-            <input type="number" placeholder="0" formControlName="dias_uteis" class="form__input">
-          </div>
-          <div class="form__group">
-            <label>Dias Extras</label>
-            <input type="number" placeholder="0" formControlName="dias_nao_uteis" class="form__input">
-          </div>
         </div>
         <div class="form__footer">
           @if (showError) {
@@ -885,16 +1041,60 @@
     </form>
   </section>
 
+  <section class="record__container" *ngIf="createRecordSection">
+    <form [formGroup]="createRecordForm" (ngSubmit)="createRecord()" class="modal__backdrop" role="dialog"
+      aria-labelledby="create-record-title">
+      <div class="form__container form__container--option">
+        <div class="form__header">
+          <h2 id="create-record-title">Gerar Novo Mês</h2>
+          <button type="button" class="btn btn--close" (click)="createRecordSection = false"
+            aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="form__content form__content--option">
+          <div class="form__group form__group--full">
+            <label for="ano-mes">Mês e Ano</label>
+            <input id="ano-mes" type="month" formControlName="ano_mes" class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="dias_uteis">Dias Úteis</label>
+            <input id="dias_uteis" type="number" placeholder="Número de dias úteis" formControlName="dias_uteis"
+              class="form__input">
+          </div>
+          <div class="form__group">
+            <label for="dias_nao_uteis">Dias Não Úteis</label>
+            <input id="dias_nao_uteis" type="number" placeholder="Número de dias úteis" formControlName="dias_nao_uteis"
+              class="form__input">
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="button" class="btn btn--quaternary"
+            (click)="createRecordSection = false; settingSection = true">Voltar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isCreating) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Gerar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
   <section class="record__container" *ngIf="settingSection">
     <div [formGroup]="createRecordForm" (ngSubmit)="createRecord()" class="modal__backdrop" role="dialog"
       aria-labelledby="create-record-title">
-      <div class="form__container">
+      <div class="form__container form__container--option">
         <div class="form__header">
           <h2 id="create-record-title">Mais Opções</h2>
           <button type="button" class="btn btn--close" (click)="settingSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
-        <div class="form__content">
+        <div class="form__content form__content--option">
           <div class="form__group">
             <button (click)="createRecordSection = true; settingSection = false" class="btn btn--quaternary">
               GERAR MÊS
@@ -931,13 +1131,13 @@
   <section class="record__container" *ngIf="layoutVrSection">
     <form [formGroup]="createLayoutVrForm" (ngSubmit)="downloadLayoutVr()" class="modal__backdrop" role="dialog"
       aria-labelledby="create-record-title">
-      <div class="form__container">
+      <div class="form__container form__container--option">
         <div class="form__header">
           <h2 id="create-record-title">Gerar layout VR</h2>
           <button type="button" class="btn btn--close" (click)="layoutVrSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
-        <div class="form__content">
+        <div class="form__content form__content--option">
           <div class="form__group">
             <label for="data">Mês e Ano</label>
             <input id="data" type="month" formControlName="data" class="form__input">
@@ -1002,13 +1202,13 @@
   <section class="record__container" *ngIf="layoutCajuSection">
     <form [formGroup]="createLayoutCajuForm" (ngSubmit)="downloadLayoutCaju()" class="modal__backdrop" role="dialog"
       aria-labelledby="create-record-title">
-      <div class="form__container">
+      <div class="form__container form__container--option">
         <div class="form__header">
           <h2 id="create-record-title">Gerar layout Caju</h2>
           <button type="button" class="btn btn--close" (click)="layoutCajuSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
-        <div class="form__content">
+        <div class="form__content form__content--option">
           <div class="form__group">
             <label for="data">Mês e Ano</label>
             <input id="data" type="month" formControlName="data" class="form__input">
@@ -1073,13 +1273,13 @@
   <section class="record__container" *ngIf="layoutVemSection">
     <form [formGroup]="createLayoutVemForm" (ngSubmit)="downloadLayoutVem()" class="modal__backdrop" role="dialog"
       aria-labelledby="create-record-title">
-      <div class="form__container">
+      <div class="form__container form__container--option">
         <div class="form__header">
           <h2 id="create-record-title">Gerar layout Vem</h2>
           <button type="button" class="btn btn--close" (click)="layoutVemSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
-        <div class="form__content">
+        <div class="form__content form__content--option">
           <div class="form__group form__group--full">
             <label for="data">Mês e Ano</label>
             <input id="data" type="month" formControlName="data" class="form__input">
@@ -1136,13 +1336,13 @@
   <section class="record__container" *ngIf="deleteMonthSection">
     <form [formGroup]="deleteMonthForm" (ngSubmit)="deleteMonth()" class="modal__backdrop" role="dialog"
       aria-labelledby="create-record-title">
-      <div class="form__container">
+      <div class="form__container form__container--option">
         <div class="form__header">
           <h2 id="create-record-title">Deletar Mês</h2>
           <button type="button" class="btn btn--close" (click)="deleteMonthSection = false"
             aria-label="Fechar modal">&times;</button>
         </div>
-        <div class="form__content">
+        <div class="form__content form__content--option">
           <div class="form__group form__group--full">
             <label for="data">Mês e Ano</label>
             <input id="data" type="month" formControlName="data" class="form__input">
