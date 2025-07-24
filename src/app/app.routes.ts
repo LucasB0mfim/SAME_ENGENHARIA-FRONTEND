@@ -4,7 +4,6 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { UpdateComponent } from './pages/update/update.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { OrderComponent } from './components/workspace/order/order.component';
 import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
@@ -15,10 +14,7 @@ import { AdmissionComponent } from './components/workspace/admission/admission.c
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
-import { ManageOrderComponent } from './components/workspace/manage-order/manage-order.component';
-import { ConstructionComponent } from './components/workspace/construction/construction.component';
 import { AdmissionFormComponent } from './components/forms/admission-form/admission-form.component';
-import { OrderDeliveredComponent } from './components/workspace/order-delivered/order-delivered.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
@@ -28,7 +24,6 @@ import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
-import { constructionAccessGuard } from './core/guard/construction-access.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { TaskComponent } from './components/workspace/task/task.component';
 import { TaskFormComponent } from './components/forms/task-form/task-form.component';
@@ -79,17 +74,6 @@ export const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
-      { path: 'order', component: OrderComponent },
-      { path: 'order-delivered', component: OrderDeliveredComponent },
-      {
-        path: 'constructions',
-        component: ConstructionComponent
-      },
-      {
-        path: 'constructions/manage-order',
-        component: ManageOrderComponent,
-        canActivate: [constructionAccessGuard]
-      },
       {
         path: 'human-resources',
         component: HumanResourcesComponent
