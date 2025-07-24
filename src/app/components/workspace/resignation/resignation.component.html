@@ -1,0 +1,825 @@
+<div class="container">
+
+  <!-- CONTAINER DE FITROS -->
+  <div class="container__filter">
+
+    <button class="btn btn--secondary" (click)="openModalCreate()">
+      Nova Solicitação
+    </button>
+
+  </div>
+
+  <!-- CONTAINER DE CARDS -->
+  <div class="container__card">
+
+    <!-- NOVA SOLICITAÇÃO -->
+    <div class="card__request">
+
+      <!-- TÍTULO -->
+      <h2 class="card__theme">SOLICITAÇÕES</h2>
+
+      <!-- CARD -->
+      <div class="card" *ngFor="let item of getItemsByStatus('NOVA SOLICITACAO'); let i = index">
+
+        <!-- HEADER -->
+        <div class="card__header" [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}"
+          (click)="toggleBodyVisibility(i)">
+
+          <!-- LADO ESQUERDO -->
+          <div class="card__primary">
+
+            <!-- PARTE DE CIMA -->
+            <div class="card__top">
+              <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            </div>
+
+            <!-- PARTE DE BAIXO -->
+            <div class="card__bottom">
+              <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+              <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            </div>
+          </div>
+
+          <!-- LADO DIREITO -->
+          <div class="card__secondary">
+            <button class="btn btn--primary" (click)="openModalEdit(item); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="card__body" *ngIf="isBodyVisible[i]">
+
+          <!-- OBSERVAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">OBSERVAÇÃO</div>
+            <div class="card__subtitle">{{ item.observacao || 'NENHUMA OBSERVAÇÃO' }}</div>
+          </div>
+
+          <!-- DATA DA SOLICITAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">SOLICITAÇÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA DEMISSÃO -->
+          <div class="card__info">
+            <div class="card__title">DEMISSÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">AVISO TRABALHADO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">ÚLTIMO DIA</div>
+            <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA RESCISÃO -->
+          <div class="card__info">
+            <div class="card__title">RESCISÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+          </div>
+
+          <!-- MODALIDADE -->
+          <div class="card__info">
+            <div class="card__title">MODALIDADE</div>
+            <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+
+          <!-- COLABORADOR COMUNICADO -->
+          <div class="card__info">
+            <div class="card__title">COMUNICADO</div>
+            <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="isEmpty">
+        <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+      </div>
+
+    </div>
+
+    <!-- EM ANDAMENTO -->
+    <div class="card__progress">
+
+      <!-- TÍTULO -->
+      <h2 class="card__theme">EM ANDAMENTO</h2>
+
+      <!-- CARD -->
+      <div class="card" *ngFor="let item of getItemsByStatus('EM ANDAMENTO'); let i = index">
+
+        <!-- HEADER -->
+        <div class="card__header" [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}"
+          (click)="toggleBodyVisibility(i)">
+
+          <!-- LADO ESQUERDO -->
+          <div class="card__primary">
+
+            <!-- PARTE DE CIMA -->
+            <div class="card__top">
+              <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            </div>
+
+            <!-- PARTE DE BAIXO -->
+            <div class="card__bottom">
+              <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+              <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            </div>
+          </div>
+
+          <!-- LADO DIREITO -->
+          <div class="card__secondary">
+            <button class="btn btn--primary" (click)="openModalEdit(item); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="card__body" *ngIf="isBodyVisible[i]">
+
+          <!-- OBSERVAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">OBSERVAÇÃO</div>
+            <div class="card__subtitle">{{ item.observacao || 'NENHUMA OBSERVAÇÃO' }}</div>
+          </div>
+
+          <!-- DATA DA SOLICITAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">SOLICITAÇÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA DEMISSÃO -->
+          <div class="card__info">
+            <div class="card__title">DEMISSÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">AVISO TRABALHADO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">ÚLTIMO DIA</div>
+            <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA RESCISÃO -->
+          <div class="card__info">
+            <div class="card__title">RESCISÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+          </div>
+
+          <!-- MODALIDADE -->
+          <div class="card__info">
+            <div class="card__title">MODALIDADE</div>
+            <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+
+          <!-- COLABORADOR COMUNICADO -->
+          <div class="card__info">
+            <div class="card__title">COMUNICADO</div>
+            <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="isEmpty">
+        <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+      </div>
+
+    </div>
+
+    <!-- AVISO TRABALHADO -->
+    <div class="card__notified">
+
+      <!-- TÍTULO -->
+      <h2 class="card__theme">AVISO TRABALHADO</h2>
+
+      <!-- CARD -->
+      <div class="card" *ngFor="let item of getItemsByStatus('AVISO TRABALHADO'); let i = index">
+
+        <!-- HEADER -->
+        <div class="card__header" [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}"
+          (click)="toggleBodyVisibility(i)">
+
+          <!-- LADO ESQUERDO -->
+          <div class="card__primary">
+
+            <!-- PARTE DE CIMA -->
+            <div class="card__top">
+              <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            </div>
+
+            <!-- PARTE DE BAIXO -->
+            <div class="card__bottom">
+              <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+              <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            </div>
+          </div>
+
+          <!-- LADO DIREITO -->
+          <div class="card__secondary">
+            <button class="btn btn--primary" (click)="openModalEdit(item); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="card__body" *ngIf="isBodyVisible[i]">
+
+          <!-- OBSERVAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">OBSERVAÇÃO</div>
+            <div class="card__subtitle">{{ item.observacao || 'NENHUMA OBSERVAÇÃO' }}</div>
+          </div>
+
+          <!-- DATA DA SOLICITAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">SOLICITAÇÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA DEMISSÃO -->
+          <div class="card__info">
+            <div class="card__title">DEMISSÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">AVISO TRABALHADO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">ÚLTIMO DIA</div>
+            <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA RESCISÃO -->
+          <div class="card__info">
+            <div class="card__title">RESCISÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+          </div>
+
+          <!-- MODALIDADE -->
+          <div class="card__info">
+            <div class="card__title">MODALIDADE</div>
+            <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+
+          <!-- COLABORADOR COMUNICADO -->
+          <div class="card__info">
+            <div class="card__title">COMUNICADO</div>
+            <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="isEmpty">
+        <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+      </div>
+
+    </div>
+
+    <!-- DESLIGADO -->
+    <div class="card__fired">
+
+      <!-- TÍTULO -->
+      <h2 class="card__theme">DEMITIDOS</h2>
+
+      <!-- CARD -->
+      <div class="card" *ngFor="let item of getItemsByStatus('DEMITIDO'); let i = index">
+
+        <!-- HEADER -->
+        <div class="card__header" [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}"
+          (click)="toggleBodyVisibility(i)">
+
+          <!-- LADO ESQUERDO -->
+          <div class="card__primary">
+
+            <!-- PARTE DE CIMA -->
+            <div class="card__top">
+              <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            </div>
+
+            <!-- PARTE DE BAIXO -->
+            <div class="card__bottom">
+              <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+              <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            </div>
+          </div>
+
+          <!-- LADO DIREITO -->
+          <div class="card__secondary">
+            <button class="btn btn--primary" (click)="openModalEdit(item); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="card__body" *ngIf="isBodyVisible[i]">
+
+          <!-- OBSERVAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">OBSERVAÇÃO</div>
+            <div class="card__subtitle">{{ item.observacao || 'NENHUMA OBSERVAÇÃO' }}</div>
+          </div>
+
+          <!-- DATA DA SOLICITAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">SOLICITAÇÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA DEMISSÃO -->
+          <div class="card__info">
+            <div class="card__title">DEMISSÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">AVISO TRABALHADO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">ÚLTIMO DIA</div>
+            <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA RESCISÃO -->
+          <div class="card__info">
+            <div class="card__title">RESCISÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+          </div>
+
+          <!-- MODALIDADE -->
+          <div class="card__info">
+            <div class="card__title">MODALIDADE</div>
+            <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+
+          <!-- COLABORADOR COMUNICADO -->
+          <div class="card__info">
+            <div class="card__title">COMUNICADO</div>
+            <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="isEmpty">
+        <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+      </div>
+
+    </div>
+
+    <!-- PAGAMENTO -->
+    <div class="card__termination">
+
+      <!-- TÍTULO -->
+      <h2 class="card__theme">AGUARDANDO RESCISÃO</h2>
+
+      <!-- CARD -->
+      <div class="card" *ngFor="let item of getItemsByStatus('AGUARDANDO RESCISÃO'); let i = index">
+
+        <!-- HEADER -->
+        <div class="card__header" [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}"
+          (click)="toggleBodyVisibility(i)">
+
+          <!-- LADO ESQUERDO -->
+          <div class="card__primary">
+
+            <!-- PARTE DE CIMA -->
+            <div class="card__top">
+              <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            </div>
+
+            <!-- PARTE DE BAIXO -->
+            <div class="card__bottom">
+              <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+              <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            </div>
+          </div>
+
+          <!-- LADO DIREITO -->
+          <div class="card__secondary">
+            <button class="btn btn--primary" (click)="openModalEdit(item); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="card__body" *ngIf="isBodyVisible[i]">
+
+          <!-- OBSERVAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">OBSERVAÇÃO</div>
+            <div class="card__subtitle">{{ item.observacao || 'NENHUMA OBSERVAÇÃO' }}</div>
+          </div>
+
+          <!-- DATA DA SOLICITAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">SOLICITAÇÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA DEMISSÃO -->
+          <div class="card__info">
+            <div class="card__title">DEMISSÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">AVISO TRABALHADO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">ÚLTIMO DIA</div>
+            <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA RESCISÃO -->
+          <div class="card__info">
+            <div class="card__title">RESCISÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+          </div>
+
+          <!-- MODALIDADE -->
+          <div class="card__info">
+            <div class="card__title">MODALIDADE</div>
+            <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+
+          <!-- COLABORADOR COMUNICADO -->
+          <div class="card__info">
+            <div class="card__title">COMUNICADO</div>
+            <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="isEmpty">
+        <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+      </div>
+
+    </div>
+
+    <!-- DEMITIDO -->
+    <div class="card__disconnected">
+
+      <!-- TÍTULO -->
+      <h2 class="card__theme">DESLIGADOS</h2>
+
+      <!-- CARD -->
+      <div class="card" *ngFor="let item of getItemsByStatus('DESLIGADO'); let i = index">
+
+        <!-- HEADER -->
+        <div class="card__header" [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}"
+          (click)="toggleBodyVisibility(i)">
+
+          <!-- LADO ESQUERDO -->
+          <div class="card__primary">
+
+            <!-- PARTE DE CIMA -->
+            <div class="card__top">
+              <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            </div>
+
+            <!-- PARTE DE BAIXO -->
+            <div class="card__bottom">
+              <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+              <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            </div>
+          </div>
+
+          <!-- LADO DIREITO -->
+          <div class="card__secondary">
+            <button class="btn btn--primary" (click)="openModalEdit(item); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="card__body" *ngIf="isBodyVisible[i]">
+
+          <!-- OBSERVAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">OBSERVAÇÃO</div>
+            <div class="card__subtitle">{{ item.observacao || 'NENHUMA OBSERVAÇÃO' }}</div>
+          </div>
+
+          <!-- DATA DA SOLICITAÇÃO -->
+          <div class="card__info">
+            <div class="card__title">SOLICITAÇÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA DEMISSÃO -->
+          <div class="card__info">
+            <div class="card__title">DEMISSÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">AVISO TRABALHADO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DO AVISO TRABALHADO -->
+          <div class="card__info">
+            <div class="card__title">ÚLTIMO DIA</div>
+            <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+          </div>
+
+          <!-- DATA DA RESCISÃO -->
+          <div class="card__info">
+            <div class="card__title">RESCISÃO</div>
+            <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+          </div>
+
+          <!-- MODALIDADE -->
+          <div class="card__info">
+            <div class="card__title">MODALIDADE</div>
+            <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+
+          <!-- COLABORADOR COMUNICADO -->
+          <div class="card__info">
+            <div class="card__title">COMUNICADO</div>
+            <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="isEmpty">
+        <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+      </div>
+    </div>
+
+    <div class="modal" *ngIf="isModalEditVisible">
+      <div class="modal__container">
+        <form [formGroup]="updateForm" (ngSubmit)="update()">
+          <div class="modal__header">
+            <h2 class="modal__title">Editar registro</h2>
+            <button class="btn btn--close" (click)="closeModal()">×</button>
+          </div>
+
+          <div class="modal__content">
+            <div class="modal__group">
+              <label class="modal__label">Nome completo</label>
+              <input class="modal__input" formControlName="nome" type="text" placeholder="Nome compeleto" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Função</label>
+              <select class="modal__select" formControlName="funcao">
+                <option value="">Selecione uma opção</option>
+                <option *ngFor="let funcao of funcoes" [value]="funcao">{{ funcao }}</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Centro de custo</label>
+              <select class="modal__select" formControlName="centro_custo">
+                <option value="">Selecione uma opção</option>
+                <option *ngFor="let centro of centroCustos" [value]="centro">{{ centro }}</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Status</label>
+              <select class="modal__select" formControlName="status">
+                <option value="">Selecione uma opção</option>
+                <option value="NOVA SOLICITAÇÃO">NOVA SOLICITAÇÃO</option>
+                <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+                <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
+                <option value="DEMITIDO">DEMITIDO</option>
+                <option value="AGUARDANDO RESCISÃO">AGUARDANDO RESCISÃO</option>
+                <option value="DESLIGADO">DESLIGADO</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Modalidade</label>
+              <select class="modal__select" formControlName="modalidade">
+                <option value="">Selecione uma opção</option>
+                <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
+                <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
+                <option value="PEDIDO DEMISSÃO">PEDIDO DEMISSÃO</option>
+                <option value="ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA">ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA</option>
+                <option value="TÉRMINO DO CONTRATO DE EXPERIÊNCIA">TÉRMINO DO CONTRATO DE EXPERIÊNCIA</option>
+                <option value="AVISO TRABALHADO JORNADA REDUZIDA">AVISO TRABALHADO JORNADA REDUZIDA</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Colaborador foi comunicado?</label>
+              <select class="modal__select" formControlName="colaborador_comunicado">
+                <option value="">Selecione uma opção</option>
+                <option value="NÃO">NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data da demissão</label>
+              <input class="modal__input" formControlName="data_demissao" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data do início do aviso prévio</label>
+              <input class="modal__input" formControlName="data_inicio_aviso_trabalhado" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data da rescisão</label>
+              <input class="modal__input" formControlName="data_rescisao" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data do último dia de trabalho</label>
+              <input class="modal__input" formControlName="data_ultimo_dia_trabalhado" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data do pagamento rescisão</label>
+              <input class="modal__input" formControlName="data_pagamento_rescisao" type="date" />
+            </div>
+
+            <div class="modal__group modal__group--full">
+              <label class="modal__label">Observação</label>
+              <textarea class="modal__textarea" formControlName="observacao"></textarea>
+            </div>
+          </div>
+
+          <div class="modal__footer">
+            <button class="btn btn--secondary" type="button" (click)="closeModal()">Fechar</button>
+            <button class="btn btn--secondary" type="submit">
+              @if (isUpdating) {
+              <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              } @else {
+              Atualizar
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" *ngIf="isModalCreateVisible">
+      <div class="modal__container">
+        <form [formGroup]="createForm" (ngSubmit)="create()">
+          <div class="modal__header">
+            <h2 class="modal__title">Editar registro</h2>
+            <button class="btn btn--close" (click)="closeModal()">×</button>
+          </div>
+
+          <div class="modal__content">
+            <div class="modal__group">
+              <label class="modal__label">Nome completo</label>
+              <input class="modal__input" formControlName="nome" type="text" placeholder="Nome completo" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Função</label>
+              <select class="modal__select" formControlName="funcao">
+                <option value="">Selecione uma opção</option>
+                <option *ngFor="let funcao of funcoes" [value]="funcao">{{ funcao }}</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Centro de custo</label>
+              <select class="modal__select" formControlName="centro_custo">
+                <option value="">Selecione uma opção</option>
+                <option *ngFor="let centro of centroCustos" [value]="centro">{{ centro }}</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Status</label>
+              <select class="modal__select" formControlName="status">
+                <option value="">Selecione uma opção</option>
+                <option value="NOVA SOLICITAÇÃO">NOVA SOLICITAÇÃO</option>
+                <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+                <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
+                <option value="DEMITIDO">DEMITIDO</option>
+                <option value="AGUARDANDO RESCISÃO">AGUARDANDO RESCISÃO</option>
+                <option value="DESLIGADO">DESLIGADO</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Modalidade</label>
+              <select class="modal__select" formControlName="modalidade">
+                <option value="">Selecione uma opção</option>
+                <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
+                <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
+                <option value="PEDIDO DEMISSÃO">PEDIDO DEMISSÃO</option>
+                <option value="ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA">ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA</option>
+                <option value="TÉRMINO DO CONTRATO DE EXPERIÊNCIA">TÉRMINO DO CONTRATO DE EXPERIÊNCIA</option>
+                <option value="AVISO TRABALHADO JORNADA REDUZIDA">AVISO TRABALHADO JORNADA REDUZIDA</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Colaborador foi comunicado?</label>
+              <select class="modal__select" formControlName="colaborador_comunicado">
+                <option value="">Selecione uma opção</option>
+                <option value="NÃO">NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data da demissão</label>
+              <input class="modal__input" formControlName="data_demissao" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data do início do aviso prévio</label>
+              <input class="modal__input" formControlName="data_inicio_aviso_trabalhado" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data da rescisão</label>
+              <input class="modal__input" formControlName="data_rescisao" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data do último dia de trabalho</label>
+              <input class="modal__input" formControlName="data_ultimo_dia_trabalhado" type="date" />
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Data do pagamento rescisão</label>
+              <input class="modal__input" formControlName="data_pagamento_rescisao" type="date" />
+            </div>
+
+            <div class="modal__group modal__group--full">
+              <label class="modal__label">Observação</label>
+              <textarea class="modal__textarea" formControlName="observacao"></textarea>
+            </div>
+          </div>
+
+          <div class="modal__footer">
+            <button class="btn btn--secondary" type="button" (click)="closeModal()">Fechar</button>
+            <button class="btn btn--secondary" type="submit">
+              @if (isCreating) {
+              <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </div>
+              } @else {
+              Criar
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

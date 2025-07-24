@@ -14,6 +14,7 @@ import { AdmissionComponent } from './components/workspace/admission/admission.c
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
 import { ExperienceComponent } from './components/workspace/experience/experience.component';
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
+import { ResignationComponent } from './components/workspace/resignation/resignation.component';
 import { AdmissionFormComponent } from './components/forms/admission-form/admission-form.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
@@ -95,6 +96,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/admission',
         component: AdmissionComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/resignation',
+        component: ResignationComponent,
         canActivate: [humanResourcesGuard]
       },
       {
