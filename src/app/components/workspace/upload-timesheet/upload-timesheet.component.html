@@ -1,42 +1,55 @@
-<div class="upload">
-  <!-- Mensagens de feedback -->
-  @if (showError) {
-  <div class="upload__message upload__message--error">
-    <mat-icon>error</mat-icon>
-    <span>{{ errorMessage }}</span>
-  </div>
+<div class="container">
+  @if (showMessage) {
+  <div class="message {{ messageType }}">{{ message }}</div>
   }
 
-  @if (showSuccess) {
-  <div class="upload__message upload__message--success">
-    <mat-icon>check_circle</mat-icon>
-    <span>{{ successMessage }}</span>
+  <div class="container__filter">
+    <button class="btn btn--primary {{ isTimesheet ? 'active' : '' }}" (click)="onChangeTimesheet()">Dia útil</button>
+    <button class="btn btn--primary {{ isExtraDay ? 'active' : '' }}" (click)="onChangeExtraDay()">Dia extra</button>
   </div>
-  }
 
-  <!-- Container para selecionar o arquivo -->
-  <div class="upload__timesheet" (click)="triggerFileInput()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
-    <input type="file" [accept]="acceptedFileTypes" #fileInput (change)="onFileSelected($event)" class="upload__input">
-
-    <label class="upload__label">
+  <div class="container__timesheet" *ngIf="isTimesheet">
+    <label class="timesheet__label" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+      <input type="file" class="timesheet__input" accept=".csv" (change)="onFileSelected($event)" #fileInput>
       <mat-icon>cloud_upload</mat-icon>
-
-      <span class="upload__filename">
-        {{ file?.name || 'Arraste ou selecione o arquivo CSV' }}
-      </span>
-
+      <span class="timesheet__filename">{{ file?.name || 'Arraste ou selecione o arquivo CSV' }}</span>
       @if (!file) {
-      <span class="upload__instruction">Tamanho máximo: 5MB</span>
+      <span class="timesheet__instruction">Tamanho máximo: 5MB</span>
       }
     </label>
+    <button class="btn btn--secondary" [disabled]="!file || isLoading" (click)="submitTimesheet()">
+      @if (isLoading) {
+      <div class="loading-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      } @else {
+      ENVIAR
+      }
+    </button>
   </div>
 
-  <!-- Botão para enviar o arquivo -->
-  <button type="button" class="upload__button" [disabled]="!file || loading" (click)="submitTimesheet()">
-    @if (!loading) {
-    <span>ENVIAR</span>
-    } @else {
-    <mat-progress-spinner mode="indeterminate" diameter="24" class="upload__spinner"></mat-progress-spinner>
-    }
-  </button>
+  <div class="container__timesheet" *ngIf="isExtraDay">
+    <label class="timesheet__label" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+      <input type="file" class="timesheet__input" accept=".csv" (change)="onFileSelected($event)" #fileInput>
+      <mat-icon>cloud_upload</mat-icon>
+      <span class="timesheet__filename">{{ file?.name || 'Arraste ou selecione o arquivo CSV' }}</span>
+      @if (!file) {
+      <span class="timesheet__instruction">Tamanho máximo: 5MB</span>
+      }
+    </label>
+    <button class="btn btn--secondary" [disabled]="!file || isLoading" (click)="submitExtraDay()">
+      @if (isLoading) {
+      <div class="loading-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      } @else {
+      ENVIAR
+      }
+    </button>
+  </div>
+
 </div>

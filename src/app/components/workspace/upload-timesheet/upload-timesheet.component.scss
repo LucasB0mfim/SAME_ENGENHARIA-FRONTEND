@@ -1,63 +1,23 @@
-.upload {
-  height: 90%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 4px;
-  position: relative;
+.container {
+  gap: 20px;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
 
-  &__message {
-    position: absolute;
-    top: -20%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 30%;
-    padding: 10px 16px;
-    border-radius: 4px;
+  &__filter {
+    gap: 20px;
     display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    animation: slideDown 0.3s ease-in-out;
-    z-index: 10;
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-
-    &--error {
-      background-color: rgba(255, 87, 87, 0.1);
-      color: #ff5757;
-      border: 1px solid #ff5757;
-    }
-
-    &--success {
-      background-color: rgba(75, 210, 143, 0.1);
-      color: #4bd28f;
-      border: 1px solid #4bd28f;
-    }
   }
 
   &__timesheet {
-    width: 100%;
-    height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-    border-radius: 8px;
-    border: 2px dashed var(--fourth-color);
-    transition: all ease 0.2s;
-
-    &:hover {
-      background-color: var(--secondary-color);
-    }
+    gap: 20px;
+    height: 95%;
+    display: grid;
+    grid-template-rows: 1fr auto;
   }
+}
+
+.timesheet {
 
   &__input {
     position: absolute;
@@ -68,13 +28,18 @@
   }
 
   &__label {
+    cursor: pointer;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    cursor: pointer;
-    text-align: center;
     color: var(--fourth-color);
+    border-radius: 8px;
+    border: 2px dashed var(--fourth-color);
+
+    &:hover {
+      background-color: var(--secondary-color);
+    }
 
     mat-icon {
       width: auto;
@@ -96,23 +61,38 @@
     font-size: 14px;
     opacity: 0.7;
   }
+}
 
-  &__button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 16px;
-    display: flex;
-    font-size: 14px;
-    align-items: center;
-    justify-content: center;
+.btn {
+  cursor: pointer;
+  height: 42px;
+  padding: 0 1em;
+  border: none;
+  outline: none;
+
+  &--primary {
+    border-radius: 4px;
+    color: var(--gray-color);
+    font-weight: 500;
+    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
+    background-color: var(--secondary-color);
+    transition: all ease 0.3s;
+
+    &.active {
+      color: var(--white-color);
+      background-color: var(--orange-color);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &--secondary {
     border: none;
     border-radius: 4px;
     color: var(--fourth-color);
     border: 2px solid var(--fourth-color);
-    cursor: pointer;
-    position: relative;
-    box-shadow: var(--box-shadow);
-    background-color: transparent;
     transition: all ease 0.2s;
 
     &:hover:not(:disabled) {
@@ -125,20 +105,72 @@
       cursor: not-allowed;
     }
   }
+}
 
-  &__spinner {
-    margin: 0 auto;
+.message {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 8px;
+  display: flex;
+  font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
+  padding: min(1em, 5%);
+  border-radius: 8px;
+  align-items: center;
+  z-index: 1000;
+
+  &.success {
+    background: rgba(75, 210, 143, 0.1);
+    color: #4bd28f;
+    border: 1px solid #4bd28f;
+  }
+
+  &.error {
+    background: rgba(255, 87, 87, 0.1);
+    color: #ff5757;
+    border: 1px solid #ff5757;
   }
 }
 
-// Animação para as mensagens
-@keyframes slideDown {
-  0% {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--orange-color);
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+
+  0%,
+  80%,
   100% {
-    transform: translateY(0);
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
     opacity: 1;
   }
 }

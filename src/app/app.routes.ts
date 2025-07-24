@@ -16,7 +16,6 @@ import { ExperienceComponent } from './components/workspace/experience/experienc
 import { CostCenterComponent } from './components/workspace/cost-center/cost-center.component';
 import { AdmissionFormComponent } from './components/forms/admission-form/admission-form.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
-import { UploadExtraDayComponent } from './components/workspace/upload-extra-day/upload-extra-day.component';
 import { UploadTimesheetComponent } from './components/workspace/upload-timesheet/upload-timesheet.component';
 import { FinancialTrackingComponent } from './components/workspace/financial-tracking/financial-tracking.component';
 
@@ -86,11 +85,6 @@ export const routes: Routes = [
       {
         path: 'human-resources/upload-timesheet',
         component: UploadTimesheetComponent,
-        canActivate: [humanResourcesGuard]
-      },
-      {
-        path: 'human-resources/upload-extraDay',
-        component: UploadExtraDayComponent,
         canActivate: [humanResourcesGuard]
       },
       {
