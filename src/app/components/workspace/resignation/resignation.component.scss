@@ -1,21 +1,22 @@
 .container {
-  gap: 20px;
+  gap: 2vw;
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
 
-  &__filter {
+  &__filters {
+    gap: 10px;
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    padding: 0 0.7vw;
   }
 
-  &__card {
-    gap: 60px;
-    height: 95%;
-    padding-right: 10px;
+  &__cards {
+    gap: 20px;
+    max-height: 90%;
     display: flex;
+    justify-content: flex-start;
     flex-direction: column;
+    padding: 0 0.7vw 0 0.7vw;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -30,46 +31,140 @@
   }
 }
 
+.filter {
+
+  &__input {
+    width: clamp(15.625rem, 15.625rem + 0vw, 15.625rem);
+    height: 42px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    padding-left: 10px;
+    background-color: var(--secondary-color);
+    font-size: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
+    text-transform: uppercase;
+    color: var(--text-color);
+  }
+
+  &:nth-child(5) {
+    margin-right: auto;
+  }
+}
+
 .btn {
   cursor: pointer;
-  height: 42px;
   padding: 0 1em;
+  width: auto;
+  height: 42px;
   border: none;
   outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &--primary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 42px;
     border-radius: 4px;
     color: var(--gray-color);
+    background-color: var(--secondary-color);
+    transition: all ease 0.3s;
+
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
+
+    &.active {
+      color: var(--white-color);
+      transform: translateY(-4px);
+      background-color: var(--orange-color);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &--second {
+    height: 42px;
+    border-radius: 4px;
+    color: var(--white-color);
+    background-color: var(--orange-color);
+    transition: all ease 0.3s;
+
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
+  }
+
+  &--third {
+    height: 42px;
+    border-radius: 4px;
+    color: var(--white-color);
+    background-color: var(--orange-color);
+    transition: all ease 0.3s;
+
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &--open-image {
+    height: 42px;
+    border-radius: 4px;
+    color: var(--gray-color);
+    border: 1px solid transparent;
     background-color: var(--primary-color);
     transition: all ease 0.3s;
 
     &:hover {
       color: var(--white-color);
-      transform: translateY(-2px);
       background-color: var(--orange-color);
+      transform: translateY(-4px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
-  &--secondary {
+  &--delete {
+    height: 42px;
     border-radius: 4px;
     color: var(--white-color);
-    font-weight: 500;
-    font-size: clamp(0.6rem, 0.8vw, 0.9rem);
-    background-color: var(--orange-color);
+    background-color: #ff5757;
     transition: all ease 0.3s;
 
     &:hover {
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
-  &--close {
+  &--trash {
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background-color: var(--primary-color);
+    color: var(--gray-color);
+    transition: all ease 0.3s;
+
+    &:hover {
+      color: var(--white-color);
+      background-color: #ff5757;
+      transform: translateY(-4px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &--exit {
     background: none;
+    border: none;
     font-size: 24px;
     color: var(--gray-color);
+    cursor: pointer;
     padding: 0;
     width: 30px;
     height: 30px;
@@ -84,6 +179,15 @@
       color: var(--text-color);
     }
   }
+
+  mat-icon {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .card {
@@ -96,12 +200,6 @@
   &__text {
     gap: 8px;
     display: flex;
-  }
-
-  &__theme {
-    font-size: clamp(1.125rem, 1.0643rem + 0.2589vw, 1.375rem);
-    color: var(--orange-color);
-    font-weight: 500;
   }
 
   &__title {
@@ -148,34 +246,17 @@
     padding: 20px;
     display: grid;
     border-top: 2px solid var(--primary-color);
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(9, 1fr);
 
     .card__info {
       display: flex;
       flex-direction: column;
 
       &:first-child {
-        width: 90%;
         grid-column: 1/-1;
-        margin-bottom: 20px;
       }
     }
   }
-
-  &__request,
-  &__progress,
-  &__notified,
-  &__fired,
-  &__termination,
-  &__disconnected {
-    gap: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.rounded-bottom-left {
-  border-bottom-left-radius: 4px;
 }
 
 .modal {
@@ -192,13 +273,17 @@
   animation: fadeIn 0.3s ease;
 
   &__container {
-    width: 70%;
+    width: 75%;
     max-width: 90%;
     background: var(--secondary-color);
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     padding: 2vw;
     animation: slideIn 0.4s ease;
+
+    &--secondary {
+      width: 50%;
+    }
   }
 
   &__header {
@@ -215,10 +300,10 @@
     margin: 0;
   }
 
-  &__label {
-    margin-bottom: 8px;
-    color: var(--text-color);
+  &__subtitle {
+    max-width: 75%;
     font-size: clamp(0.875rem, 0.8447rem + 0.1294vw, 1rem);
+    color: var(--text-color);
   }
 
   &__content {
@@ -226,6 +311,17 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16px;
     margin-bottom: 24px;
+
+    &--secondary {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__footer {
+    gap: 20px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
 
   &__group {
@@ -237,14 +333,24 @@
     }
   }
 
-  &__footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+  &__label {
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-size: clamp(0.875rem, 0.8447rem + 0.1294vw, 1rem);
   }
 
   &__input,
-  &__select,
+  &__select {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    padding: 1em;
+    border-radius: 4px;
+    color: var(--gray-color);
+    background: var(--primary-color);
+    font-size: clamp(0.75rem, 0.7197rem + 0.1294vw, 0.875rem);
+  }
+
   &__textarea {
     border: none;
     outline: none;
@@ -252,29 +358,61 @@
     padding: 1em;
     border-radius: 4px;
     color: var(--gray-color);
-    transition: all 0.3s ease;
     background: var(--primary-color);
     font-size: clamp(0.75rem, 0.7197rem + 0.1294vw, 0.875rem);
-
-    &:focus {
-      box-shadow: 0 0 0 2px var(--orange-color);
-    }
   }
 }
 
-.empty {
+.message {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 8px;
   display: flex;
+  font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
+  padding: min(1em, 5%);
+  border-radius: 8px;
+  align-items: center;
+  z-index: 1000;
+
+  &.success {
+    background: rgba(75, 210, 143, 0.1);
+    color: #4bd28f;
+    border: 1px solid #4bd28f;
+  }
+
+  &.error {
+    background: rgba(255, 87, 87, 0.1);
+    color: #ff5757;
+    border: 1px solid #ff5757;
+  }
+}
+
+.loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty {
+  width: 100%;
   padding: 29.5px;
-  border-radius: 4px;
+  display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--secondary-color);
 
   &__title {
-    font-size: clamp(0.625rem, 0.5947rem + 0.1294vw, 0.75rem);
-    font-weight: 500;
+    font-size: clamp(0.75rem, 0.6893rem + 0.2589vw, 1rem);
+    font-weight: 600;
     color: var(--gray-color);
   }
+}
+
+.rounded-bottom-left {
+  border-bottom-left-radius: 4px;
 }
 
 .loading-dots {
@@ -304,6 +442,16 @@
   animation-delay: 0.4s;
 }
 
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
+}
+
 @keyframes bounce {
 
   0%,
@@ -316,5 +464,37 @@
   40% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

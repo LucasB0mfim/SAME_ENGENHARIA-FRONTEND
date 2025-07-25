@@ -29,4 +29,10 @@ export class ResignationService {
     return this._httpClient.put<any>('https://sameengenharia.com.br/api/resignation', request, { headers });
   }
 
+  delete(id: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/resignation/${id}`, { headers });
+  }
+
+
 }
