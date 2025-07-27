@@ -61,7 +61,7 @@
           <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
           <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
           <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-          <option value="BRK - EQUIPE TANQUE CABANGA">BRK - EQUIPE TANQUE CABANGA</option>
+          <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
         </select>
       </div>
       <div class="filter">
@@ -429,7 +429,7 @@
               <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
               <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
               <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - EQUIPE TANQUE CABANGA">BRK - EQUIPE TANQUE CABANGA</option>
+              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
             </select>
           </div>
 
@@ -656,7 +656,7 @@
               <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
               <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
               <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - EQUIPE TANQUE CABANGA">BRK - EQUIPE TANQUE CABANGA</option>
+              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
             </select>
           </div>
 
@@ -912,7 +912,10 @@
               <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
               <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
               <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
+              <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
+              <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
               <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
             </select>
           </div>
 
@@ -941,21 +944,6 @@
 
           <div class="form__group form__group--flex">
             <div class="form__group form__group--sub">
-              <label for="vr_vr">Vale Refeição (VR)</label>
-              <input id="vr_vr" name="vr_vr" type="number" placeholder="0.00" formControlName="vr_vr"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="vr_vr_fixo">Valor fixo?</label>
-              <select id="vr_vr_fixo" name="vr_vr_fixo" formControlName="vr_vr_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
               <label for="vc_caju">Vale Combustível (CAJU)</label>
               <input id="vc_caju" name="vc_caju" type="number" placeholder="0.00" formControlName="vc_caju"
                 class="form__input">
@@ -971,13 +959,13 @@
 
           <div class="form__group form__group--flex">
             <div class="form__group form__group--sub">
-              <label for="vc_vr">Vale Combustível (VR)</label>
-              <input id="vc_vr" name="vc_vr" type="number" placeholder="0.00" formControlName="vc_vr"
+              <label for="vt_caju">Vale Transporte (CAJU)</label>
+              <input id="vt_caju" name="vt_caju" type="number" placeholder="0.00" formControlName="vt_caju"
                 class="form__input">
             </div>
             <div class="form__group form__group--sub">
-              <label for="vc_vr_fixo">Valor fixo?</label>
-              <select id="vc_vr_fixo" name="vc_vr_fixo" formControlName="vc_vr_fixo" class="form__select">
+              <label for="vt_caju_fixo">Valor fixo?</label>
+              <select id="vt_caju_fixo" name="vt_caju_fixo" formControlName="vt_caju_fixo" class="form__select">
                 <option value="NÃO" selected>NÃO</option>
                 <option value="SIM">SIM</option>
               </select>
@@ -986,13 +974,28 @@
 
           <div class="form__group form__group--flex">
             <div class="form__group form__group--sub">
-              <label for="vt_caju">Vale Transporte (CAJU)</label>
-              <input id="vt_caju" name="vt_caju" type="number" placeholder="0.00" formControlName="vt_caju"
+              <label for="vr_vr">Vale Refeição (VR)</label>
+              <input id="vr_vr" name="vr_vr" type="number" placeholder="0.00" formControlName="vr_vr"
                 class="form__input">
             </div>
             <div class="form__group form__group--sub">
-              <label for="vt_caju_fixo">Valor fixo?</label>
-              <select id="vt_caju_fixo" name="vt_caju_fixo" formControlName="vt_caju_fixo" class="form__select">
+              <label for="vr_vr_fixo">Valor fixo?</label>
+              <select id="vr_vr_fixo" name="vr_vr_fixo" formControlName="vr_vr_fixo" class="form__select">
+                <option value="NÃO" selected>NÃO</option>
+                <option value="SIM">SIM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group form__group--flex">
+            <div class="form__group form__group--sub">
+              <label for="vc_vr">Vale Combustível (VR)</label>
+              <input id="vc_vr" name="vc_vr" type="number" placeholder="0.00" formControlName="vc_vr"
+                class="form__input">
+            </div>
+            <div class="form__group form__group--sub">
+              <label for="vc_vr_fixo">Valor fixo?</label>
+              <select id="vc_vr_fixo" name="vc_vr_fixo" formControlName="vc_vr_fixo" class="form__select">
                 <option value="NÃO" selected>NÃO</option>
                 <option value="SIM">SIM</option>
               </select>
