@@ -8,36 +8,43 @@
   <!-- CONTAINER DE FILTROS -->
   <div class="container__filters">
 
-    <!-- NOVAS ADMISSÕES -->
+    <!-- NOVA SOLICITAÇÃO -->
     <div class="filter">
-      <button class="btn btn--primary">
-        Solicitações
+      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'NOVA SOLICITAÇÃO'}"
+        (click)="onStatusButtonClick('NOVA SOLICITAÇÃO')">
+        Solicitações ({{ requestCount }})
       </button>
     </div>
 
-    <!-- ADMISSÕES EM ANDAMENTO -->
+    <!-- EM ANDAMENTO -->
     <div class="filter">
-      <button class="btn btn--primary">
-        Em andamento
+      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'EM ANDAMENTO'}"
+        (click)="onStatusButtonClick('EM ANDAMENTO')">
+        Em andamento ({{ progressCount }})
       </button>
     </div>
 
-    <!-- ADMISSÕES CONCLUIDAS -->
+    <!-- AVISO TRABALHADO -->
     <div class="filter">
-      <button class="btn btn--primary">
-        Aviso trabalhado
+      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'AVISO TRABALHADO'}"
+        (click)="onStatusButtonClick('AVISO TRABALHADO')">
+        Aviso trabalhado ({{ noticeWorkedCount }})
       </button>
     </div>
 
+    <!-- DEMITIDO -->
     <div class="filter">
-      <button class="btn btn--primary">
-        Demitidos
+      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'DEMITIDO'}"
+        (click)="onStatusButtonClick('DEMITIDO')">
+        Demitidos ({{ firedCount }})
       </button>
     </div>
 
+    <!-- DESLIGADO -->
     <div class="filter">
-      <button class="btn btn--primary">
-        Desligados
+      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'DESLIGADO'}"
+        (click)="onStatusButtonClick('DESLIGADO')">
+        Desligados ({{ terminatedCount }})
       </button>
     </div>
 
@@ -54,7 +61,7 @@
   <div class="container__cards">
 
     <!-- CARD -->
-    <div class="card" *ngFor="let item of items; let i = index">
+    <div class="card" *ngFor="let item of filteredItems; let i = index">
 
       <!--HEADER -->
       <div class="card__header" (click)="toggleBodyVisibility(i)"
@@ -379,7 +386,7 @@
 
     <!-- SEM RESULTADO -->
     <div class="empty" *ngIf="isEmpty">
-      <h2 class="empty__title">Opss... Nenhum resultado foi encontrado :(</h2>
+      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
     </div>
 
   </div>

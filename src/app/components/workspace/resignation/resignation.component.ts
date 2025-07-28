@@ -51,6 +51,7 @@ export class ResignationComponent implements OnInit {
   // ========== ESTADOS ========== //
   items: any[] = [];
   currentItem: any = [];
+  filteredItems: any[] = [];
 
   isLoading: boolean = true;
   isEmpty: boolean = false;
@@ -72,6 +73,14 @@ export class ResignationComponent implements OnInit {
   isModalEdit: boolean = false;
   isModalDelete: boolean = false;
 
+  activeStatus: string = 'NOVA SOLICITAÇÃO';
+
+  requestCount: number = 0;
+  progressCount: number = 0;
+  terminatedCount: number = 0;
+  firedCount: number = 0;
+  noticeWorkedCount: number = 0;
+
   // ========== HOOK ========== //
   ngOnInit(): void {
     this.findAll();
@@ -85,7 +94,8 @@ export class ResignationComponent implements OnInit {
       next: (res) => {
         this.isLoading = false;
         this.items = res.result;
-        this.items.length > 0 ? this.isEmpty = false : this.isEmpty = true;
+        this.updateStatusCounts();
+        this.filterItemsByStatus(this.activeStatus);
       },
       error: (error) => {
         this.isEmpty = true;
@@ -209,6 +219,17 @@ export class ResignationComponent implements OnInit {
     })
   }
 
+  // ========== GERENCIAR STATUS ========== //
+  onStatusButtonClick(status: string): void {
+    this.filterItemsByStatus(status);
+  }
+
+  filterItemsByStatus(status: string): void {
+    this.activeStatus = status;
+    this.filteredItems = this.items.filter(item => item.status === status);
+    this.isEmpty = this.filteredItems.length === 0;
+  }
+
   // ========== GERENCIAR CORPO ========== //
   toggleBodyVisibility(index: number): void {
     this.isBodyVisible[index] = !this.isBodyVisible[index];
@@ -249,6 +270,37 @@ export class ResignationComponent implements OnInit {
     this.isModalCreate = false;
     this.isModalEdit = false;
     this.isModalDelete = false;
+  }
+
+  // ========== CONTADOR DE STATUS ========== //
+  private updateStatusCounts(): void {
+    this.requestCount = 0;
+    this.progressCount = 0;
+    this.noticeWorkedCount = 0;
+    this.firedCount = 0;
+    this.terminatedCount = 0;
+
+    if (this.items && Array.isArray(this.items)) {
+      this.items.forEach((item: any) => {
+        switch (item.status) {
+          case 'NOVA SOLICITAÇÃO':
+            this.requestCount++;
+            break;
+          case 'EM ANDAMENTO':
+            this.progressCount++;
+            break;
+          case 'AVISO TRABALHADO':
+            this.noticeWorkedCount++;
+            break;
+          case 'DEMITIDO':
+            this.firedCount++;
+            break;
+          case 'DESLIGADO':
+            this.terminatedCount++;
+            break;
+        }
+      });
+    }
   }
 
   // ========== MENSAGEM DINAMICA ========== //
