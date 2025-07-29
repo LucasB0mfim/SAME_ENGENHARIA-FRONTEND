@@ -24,6 +24,12 @@ export class EmployeeComponent implements OnInit {
     centroCusto: new FormControl('GERAL')
   })
 
+  updateForm: FormGroup = new FormGroup({
+    id: new FormControl(''),
+    nome: new FormControl(''),
+    centroCusto: new FormControl('')
+  })
+
   // ========== ESTADOS ========== //
   items: any[] = [];
   filteredItems: any[] = [];
@@ -32,15 +38,20 @@ export class EmployeeComponent implements OnInit {
 
   employee: string = '';
 
+  isEdit: boolean = false;
   isLoading: boolean = true;
+  isUpdate: boolean = false;
   isFind: boolean = false;
+
+  message: string = '';
+  showMessage: boolean = false;
+  messageType: 'success' | 'error' = 'success';
 
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Efetivo');
     this.findAllCostCenter();
     this.findByCostCenter();
-
   }
 
   // ========== API ========== //
@@ -78,13 +89,50 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
+  update(): void {
+    this.isUpdate = true;
 
+    const request = {
+      id: this.updateForm.value.id,
+      nome: this.updateForm.value.nome,
+      centro_custo: this.updateForm.value.centroCusto,
+    }
 
+    this._benefitService.updateCostCenter(request).subscribe({
+      next: () => {
+        this.isEdit = false;
+        this.findByCostCenter();
+        this.isUpdate = false;
+        this.employee = '';
+        this.updateForm.reset({
+          id: '',
+          nome: '',
+          centroCusto: ''
+        });
+        this.setMessage('Colaborador atualizado com sucesso!', 'success');
+      },
+      error: (error) => {
+        this.isEdit = false;
+        this.isUpdate = false;
+        console.error('Erro ao atualizar colaborador: ', error);
+        this.setMessage('Não foi possível atualizar colaborador!', 'error');
+      }
+    });
+  }
 
   // ========== TROCAR ENTRE TELAS ========== //
   openModal(item: any): void {
+    this.isEdit = true;
 
+    this.updateForm.patchValue({
+      id: item.id,
+      nome: item.nome,
+      centroCusto: item.centro_custo
+    })
+  }
+
+  closeModal(): void {
+    this.isEdit = false;
   }
 
   // ========== BUSCAR COLABORADOR ========== //
@@ -99,6 +147,18 @@ export class EmployeeComponent implements OnInit {
     }
 
     this.items = data;
+  }
+
+  // ========== MENSAGEM DINAMICA ========== //
+  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
+    this.message = message;
+    this.messageType = type;
+    this.showMessage = true;
+
+    setTimeout(() => {
+      this.showMessage = false;
+      this.message = '';
+    }, 3000);
   }
 
   // ========== UTILITÁRIOS ========== //

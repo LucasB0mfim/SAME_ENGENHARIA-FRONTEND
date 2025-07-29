@@ -123,4 +123,9 @@ export class BenefitService {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/cost-center', request, { headers });
   }
+
+  updateCostCenter(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/benefit/cost-center', request, { headers });
+  }
 }
