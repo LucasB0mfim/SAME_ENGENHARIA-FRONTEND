@@ -8,7 +8,10 @@ import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BenefitComponent } from './components/workspace/benefit/benefit.component';
+import { TaskFormComponent } from './components/forms/task-form/task-form.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
+import { EmployeeComponent } from './components/workspace/employee/employee.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { FinancialComponent } from './components/workspace/financial/financial.component';
 import { AdmissionComponent } from './components/workspace/admission/admission.component';
 import { TimeSheetComponent } from './components/workspace/time-sheet/time-sheet.component';
@@ -24,9 +27,6 @@ import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
-import { TaskComponent } from './components/workspace/task/task.component';
-import { TaskFormComponent } from './components/forms/task-form/task-form.component';
 
 export const routes: Routes = [
   {
@@ -104,8 +104,8 @@ export const routes: Routes = [
         canActivate: [humanResourcesGuard]
       },
       {
-        path: 'human-resources/task',
-        component: TaskComponent,
+        path: 'human-resources/employees',
+        component: EmployeeComponent,
         canActivate: [humanResourcesGuard]
       },
       {

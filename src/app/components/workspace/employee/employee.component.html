@@ -1,0 +1,64 @@
+<div class="container">
+
+  <div class="container__filter">
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <input type="text" class="input input--primary" placeholder="BUSCAR" [(ngModel)]="employee"
+        (input)="applyFilters()">
+    </div>
+
+    <!-- FILTRO -->
+    <form [formGroup]="costCenterForm" (ngSubmit)="findByCostCenter()" class="filter">
+      <select formControlName="centroCusto" class="select select--primary">
+        <option value="GERAL" selected>GERAL</option>
+        <option *ngFor="let cc of costCenterUnique" [value]="cc">{{ cc }}</option>
+      </select>
+
+      <button type="submit" class="btn btn--primary">
+        @if (isFind) {
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        } @else {
+        BUSCAR
+        }
+      </button>
+    </form>
+  </div>
+
+  <div class="container__card">
+    <div *ngFor="let item of items" (click)="openModal(item)" class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">{{ item.nome || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__title">{{ item.centro_custo || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">CHAPA: </div>
+            <div class="card__title">{{ item.chapa || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">STATUS: </div>
+            <div class="card__title">{{ item.status || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </div>
+</div>

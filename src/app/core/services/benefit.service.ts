@@ -112,4 +112,15 @@ export class BenefitService {
       }
     );
   }
+
+  // ---------------------------- //
+  findAllCostCenter(): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/cost-center', { headers });
+  }
+
+  findByCostCenter(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/cost-center', request, { headers });
+  }
 }
