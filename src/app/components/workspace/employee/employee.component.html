@@ -16,8 +16,9 @@
     <!-- FILTRO -->
     <form [formGroup]="costCenterForm" (ngSubmit)="findByCostCenter()" class="filter">
       <select formControlName="centroCusto" class="select select--primary">
-        <option value="GERAL" selected>GERAL</option>
-        <option *ngFor="let cc of costCenterUnique" [value]="cc">{{ cc }}</option>
+        <option *ngIf="costCenterUnique.length === 0" value="" selected>Carregando...</option>
+        <option *ngIf="costCenterUnique.length > 0" value="GERAL" selected>GERAL</option>
+        <option *ngFor="let costCenter of costCenterUnique" [value]="costCenter">{{ costCenter }}</option>
       </select>
 
       <button type="submit" class="btn btn--primary">
@@ -28,7 +29,7 @@
           <div class="dot"></div>
         </div>
         } @else {
-        Buscar
+        BUSCAR
         }
       </button>
     </form>
@@ -72,46 +73,30 @@
           </div>
 
           <div class="modal__content">
-            <div class="modal__group">
+            <div class="modal__group modal__group--full">
               <label class="modal__label">Nome</label>
-              <input type="text" placeholder="Nome completo" formControlName="nome" class="modal__input">
+              <input type="text" placeholder="Nome completo" formControlName="nome" readonly class="modal__input">
+            </div>
+
+            <div class="modal__group">
+              <label class="modal__label">Função</label>
+              <select class="modal__select" formControlName="funcao">
+                <option value="" disabled>Selecione uma função</option>
+                <option *ngFor="let function of functionUnique" [value]="function">{{ function }}</option>
+              </select>
             </div>
 
             <div class="modal__group">
               <label class="modal__label">Cento de custo</label>
               <select class="modal__select" formControlName="centroCusto">
-                <option value="" disabled selected>Selecione um centro de custo</option>
-                <option value="EMLURB">EMLURB</option>
-                <option value="MÁQUINAS">MÁQUINAS</option>
-                <option value="BRK - HH">BRK - HH</option>
-                <option value="BRK - PV">BRK - PV</option>
-                <option value="BRK - PFIS">BRK - PFIS</option>
-                <option value="BRK - CABO">BRK - CABO</option>
-                <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-                <option value="LUIZ WILSON">LUIZ WILSON</option>
-                <option value="BRK - HH 03">BRK - HH 03</option>
-                <option value="BRK - REDES">BRK - REDES</option>
-                <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-                <option value="BRK - CURADO">BRK - CURADO</option>
-                <option value="BRK - GOIANA">BRK - GOIANA</option>
-                <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-                <option value="BRK - CABANGA">BRK - CABANGA</option>
-                <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
-                <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-                <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-                <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-                <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-                <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
-                <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
-                <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
-                <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-                <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
+                <option value="" disabled>Selecione um centro de custo</option>
+                <option *ngFor="let costCenter of costCenterUnique" [value]="costCenter">{{ costCenter }}</option>
               </select>
             </div>
           </div>
 
           <div class="modal__footer">
-            <button (click)="closeModal()" class="btn btn--primary">
+            <button (click)="closeModal()" class="btn btn--secondary">
               Cancelar
             </button>
 

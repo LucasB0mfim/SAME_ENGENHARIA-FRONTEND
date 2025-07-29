@@ -27,13 +27,16 @@ export class EmployeeComponent implements OnInit {
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
     nome: new FormControl(''),
+    funcao: new FormControl(''),
     centroCusto: new FormControl('')
   })
 
   // ========== ESTADOS ========== //
   items: any[] = [];
   filteredItems: any[] = [];
-  costCenter: any[] = [];
+  employeeInfo: any[] = [];
+
+  functionUnique: String[] = [];
   costCenterUnique: String[] = [];
 
   employee: string = '';
@@ -49,16 +52,16 @@ export class EmployeeComponent implements OnInit {
 
   // ========== HOOK ========== //
   ngOnInit(): void {
-    this._titleService.setTitle('Efetivo');
-    this.findAllCostCenter();
+    this._titleService.setTitle('Colaboradores');
+    this.findEmployee();
     this.findByCostCenter();
   }
 
   // ========== API ========== //
-  findAllCostCenter(): void {
+  findEmployee(): void {
     this._benefitService.findAllCostCenter().subscribe({
       next: (res) => {
-        this.costCenter = res.result;
+        this.employeeInfo = res.result;
         this.removeDuplicate();
       },
       error: (error) => {
@@ -95,6 +98,7 @@ export class EmployeeComponent implements OnInit {
     const request = {
       id: this.updateForm.value.id,
       nome: this.updateForm.value.nome,
+      funcao: this.updateForm.value.funcao,
       centro_custo: this.updateForm.value.centroCusto,
     }
 
@@ -107,6 +111,7 @@ export class EmployeeComponent implements OnInit {
         this.updateForm.reset({
           id: '',
           nome: '',
+          funcao: '',
           centroCusto: ''
         });
         this.setMessage('Colaborador atualizado com sucesso!', 'success');
@@ -127,6 +132,7 @@ export class EmployeeComponent implements OnInit {
     this.updateForm.patchValue({
       id: item.id,
       nome: item.nome,
+      funcao: item.funcao,
       centroCusto: item.centro_custo
     })
   }
@@ -163,12 +169,15 @@ export class EmployeeComponent implements OnInit {
 
   // ========== UTILITÁRIOS ========== //
   removeDuplicate(): void {
-    const array = new Set<String>();
+    const arrayCC = new Set<String>();
+    const arrayFunction = new Set<String>();
 
-    this.costCenter.forEach((item) => {
-      array.add(item.centro_custo)
+    this.employeeInfo.forEach((item) => {
+      arrayCC.add(item.centro_custo)
+      arrayFunction.add(item.funcao);
     });
 
-    this.costCenterUnique = Array.from(array).sort();
+    this.functionUnique = Array.from(arrayFunction).sort();
+    this.costCenterUnique = Array.from(arrayCC).sort();
   }
 }
