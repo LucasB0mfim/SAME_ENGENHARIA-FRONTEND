@@ -1,3 +1,5 @@
+import { tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
@@ -6,7 +8,17 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angul
 
 import { BrkService } from '../../../core/services/brk.service';
 import { TitleService } from '../../../core/services/title.service';
-import { BenefitService } from '../../../core/services/benefit.service';
+
+// Interface para tipagem dos contadores
+interface StatusCounts {
+  'NOVO': number;
+  'EM AGUARDO': number;
+  'LIBERADO': number;
+  'CANCELADO': number;
+}
+
+// Tipo para as chaves dos status
+type StatusKey = keyof StatusCounts;
 
 @Component({
   selector: 'app-brk',
@@ -21,7 +33,7 @@ export class BrkComponent implements OnInit {
   private readonly _brkService = inject(BrkService);
 
   // ========== FORMULÁRIOS ========== //
-  costCenterForm: FormGroup = new FormGroup({
+  findForm: FormGroup = new FormGroup({
     centroCusto: new FormControl('GERAL')
   })
 
@@ -43,7 +55,7 @@ export class BrkComponent implements OnInit {
     aso: new FormControl(''),
     reenvioDoc: new FormControl(''),
     prevAprovReenvioDoc: new FormControl('')
-  })
+  });
 
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
@@ -63,85 +75,152 @@ export class BrkComponent implements OnInit {
     aso: new FormControl(''),
     reenvioDoc: new FormControl(''),
     prevAprovReenvioDoc: new FormControl('')
-  })
+  });
 
   // ========== ESTADOS ========== //
   items: any[] = [];
+  currentItem: any = null;
   filteredItems: any[] = [];
-  currentItem: any[] = [];
 
   employee: string = '';
+  selectedStatus: StatusKey = 'NOVO';
+
+  statusCounts: StatusCounts = {
+    'NOVO': 0,
+    'EM AGUARDO': 0,
+    'LIBERADO': 0,
+    'CANCELADO': 0
+  };
 
   isModalCreate: boolean = false;
   isModalEdit: boolean = false;
+  isModalDelete: boolean = false;
 
-  isLoading: boolean = true;
+  isFind: boolean = false;
   isEmpty: boolean = false;
+  isLoading: boolean = true;
 
   isCreate: boolean = false;
   isUpdate: boolean = false;
+  isDelete: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
-  status: string = '';
-  newCountCount: number = 0;
-  progressCount: number = 0;
-  releasedCount: number = 0;
-  canceledCount: number = 0;
-
   // ========== HOOK ========== //
   ngOnInit(): void {
-    this.findByStatus('NOVO');
+    this.loadInitialData();
     this._titleService.setTitle('BRK');
   }
 
-  // ========== API ========== //
-  findByStatus(status: string): void {
+  // ========== CARREGAMENTO INICIAL ========== //
+  loadInitialData(): void {
     this.items = [];
+    this.isFind = true;
     this.isEmpty = false;
     this.isLoading = true;
-    this.status = status;
+    const centro_custo = this.findForm.value.centroCusto;
 
-    const request = { status }
-
-    this._brkService.findByStatus(request).subscribe({
-      next: (res) => {
-        this.items = res.result;
-        this.filteredItems = [...this.items];
+    forkJoin({
+      contadores: this.loadStatusCounts(centro_custo),
+      dadosIniciais: this._brkService.findItemsByStatus(centro_custo, this.selectedStatus)
+    }).subscribe({
+      next: (result: any) => {
         this.isLoading = false;
+        this.isFind = false;
+        this.items = result.dadosIniciais.result || [];
+        this.filteredItems = [...this.items];
         this.isEmpty = this.items.length === 0;
+        this.applyFilters();
       },
       error: (error) => {
-        this.items = [];
         this.isLoading = false;
         this.isEmpty = true;
-        console.error('Erro ao consultar dados: ', error);
+        this.isFind = false;
+        console.log('Erro ao consultar dados: ', error);
         this.setMessage('Não foi possível carregar os dados!', 'error');
       }
     });
   }
 
-  findByAll(status: string): void {
-    this.items = [];
-    this.isEmpty = false;
-    this.isLoading = true;
-    this.status = status;
+  // ========== CARREGAMENTO DE CONTADORES ========== //
+  loadStatusCounts(centroCusto: string): Observable<any> {
+    const statusList: StatusKey[] = ['NOVO', 'EM AGUARDO', 'LIBERADO', 'CANCELADO'];
 
-    this._brkService.findAll().subscribe({
-      next: (res) => {
-        this.items = res.result;
-        this.filteredItems = [...this.items];
-        this.isLoading = false;
+    const requests = statusList.map(status =>
+      this._brkService.findItemsByStatus(centroCusto, status)
+    );
+
+    return forkJoin(requests).pipe(
+      tap((results: any[]) => {
+        statusList.forEach((status: StatusKey, index: number) => {
+          this.statusCounts[status] = results[index]?.result?.length || 0;
+        });
+      })
+    );
+  }
+
+  // ========== API ========== //
+  findByCC(): void {
+    this.loadInitialData();
+  }
+
+  create(): void {
+    this.isCreate = true;
+
+    const request = {
+      id: this.createForm.value.id,
+      nome: this.createForm.value.nome,
+      funcao: this.createForm.value.funcao,
+      protocolo: this.createForm.value.protocolo,
+      contrato: this.createForm.value.contrato,
+      centro_custo: this.createForm.value.centroCusto,
+      status: this.createForm.value.status || 'NOVO',
+      dt_envio_pesq_social: this.createForm.value.pesquisaSocial,
+      dt_prev_aprov_pesq_social: this.createForm.value.prevAprovPesqSocial,
+      treinamento: this.createForm.value.treinamento || 'NOVO',
+      ficha_epi: this.createForm.value.fichaEPI || 'NOVO',
+      dt_envio_doc: this.createForm.value.envioDoc,
+      dt_prev_aprov_doc: this.createForm.value.prevAprovDoc,
+      os: this.createForm.value.os || 'NOVO',
+      aso: this.createForm.value.aso || 'NOVO',
+      dt_reenvio_doc: this.createForm.value.reenvioDoc,
+      dt_prev_aprov_reenvio_doc: this.createForm.value.prevAprovReenvioDoc
+    }
+
+    this._brkService.create(request).subscribe({
+      next: () => {
+        this.isCreate = false;
+        this.isModalCreate = false;
+        this.createForm.reset({
+          id: '',
+          nome: '',
+          funcao: '',
+          protocolo: '',
+          contrato: '',
+          centroCusto: '',
+          status: '',
+          pesquisaSocial: '',
+          prevAprovPesqSocial: '',
+          treinamento: '',
+          fichaEPI: '',
+          envioDoc: '',
+          prevAprovDoc: '',
+          os: '',
+          aso: '',
+          reenvioDoc: '',
+          prevAprovReenvioDoc: ''
+        });
         this.isEmpty = this.items.length === 0;
+        this.refreshCurrentView();
+        this.setMessage('Colaborador criado com sucesso!', 'success');
       },
       error: (error) => {
-        this.items = [];
-        this.isLoading = false;
-        this.isEmpty = true;
-        console.error('Erro ao consultar dados: ', error);
-        this.setMessage('Não foi possível carregar os dados!', 'error');
+        this.isCreate = false;
+        this.isModalCreate = false;
+        console.error('Erro ao criar colaborador: ', error);
+        this.setMessage('Não foi possível criar o colaborador!', 'error');
       }
     });
   }
@@ -175,7 +254,8 @@ export class BrkComponent implements OnInit {
         this.isModalEdit = false;
         this.updateForm.reset();
         this.employee = '';
-        this.setMessage('Colaborador Atualizado com sucesso!', 'success');
+        this.setMessage('Colaborador atualizado com sucesso!', 'success');
+        this.refreshCurrentView();
       },
       error: (error) => {
         this.isUpdate = false;
@@ -186,41 +266,72 @@ export class BrkComponent implements OnInit {
     });
   }
 
-  create(): void {
-    this.isCreate = true;
+  delete(): void {
+    this.isDelete = true;
 
-    const request = {
-      id: this.createForm.value.id,
-      nome: this.createForm.value.nome,
-      funcao: this.createForm.value.funcao,
-      protocolo: this.createForm.value.protocolo,
-      contrato: this.createForm.value.contrato,
-      centro_custo: this.createForm.value.centroCusto,
-      status: this.createForm.value.status,
-      dt_envio_pesq_social: this.createForm.value.pesquisaSocial,
-      dt_prev_aprov_pesq_social: this.createForm.value.prevAprovPesqSocial,
-      treinamento: this.createForm.value.treinamento,
-      ficha_epi: this.createForm.value.fichaEPI,
-      dt_envio_doc: this.createForm.value.envioDoc,
-      dt_prev_aprov_doc: this.createForm.value.prevAprovDoc,
-      os: this.createForm.value.os,
-      aso: this.createForm.value.aso,
-      dt_reenvio_doc: this.createForm.value.reenvioDoc,
-      dt_prev_aprov_reenvio_doc: this.createForm.value.prevAprovReenvioDoc
-    }
+    const id = this.currentItem.id;
 
-    this._brkService.create(request).subscribe({
+    this._brkService.delete(id).subscribe({
       next: () => {
-        this.isCreate = false;
-        this.isModalCreate = false;
-        this.createForm.reset();
-        this.setMessage('Colaborador criado com sucesso!', 'success');
+        this.isDelete = false;
+        this.isModalEdit = false;
+        this.employee = '';
+        this.setMessage('Colaborador deletado com sucesso!', 'success');
+        this.refreshCurrentView();
       },
       error: (error) => {
-        this.isCreate = false;
-        this.isModalCreate = false;
-        console.error('Erro ao criar colaborador: ', error);
-        this.setMessage('Não foi possível criar o colaborador!', 'error');
+        this.isDelete = false;
+        console.error('Erro ao deletar colaborador: ', error);
+        this.setMessage('Falha ao atualizar colaborador!', 'error');
+      }
+    });
+  }
+
+  // ========== FILTROS POR STATUS ========== //
+  filterByStatus(status: string): void {
+    const statusKey = status as StatusKey;
+
+    if (this.selectedStatus === statusKey) return;
+
+    this.selectedStatus = statusKey;
+    this.employee = '';
+    this.items = [];
+    this.isEmpty = false;
+    this.isLoading = true;
+
+    const centro_custo = this.findForm.value.centroCusto;
+
+    this._brkService.findItemsByStatus(centro_custo, status).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.items = res.result || [];
+        this.filteredItems = [...this.items];
+        this.isEmpty = this.items.length === 0;
+        this.applyFilters();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Erro ao filtrar por status:', error);
+        this.setMessage('Erro ao carregar dados do status selecionado!', 'error');
+      }
+    });
+  }
+
+  // ========== ATUALIZAÇÃO DA VISUALIZAÇÃO ATUAL ========== //
+  refreshCurrentView(): void {
+    const centro_custo = this.findForm.value.centroCusto;
+
+    forkJoin({
+      contadores: this.loadStatusCounts(centro_custo),
+      dadosAtuais: this._brkService.findItemsByStatus(centro_custo, this.selectedStatus)
+    }).subscribe({
+      next: (result: any) => {
+        this.items = result.dadosAtuais.result || [];
+        this.filteredItems = [...this.items];
+        this.applyFilters();
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar visualização:', error);
       }
     });
   }
@@ -255,9 +366,15 @@ export class BrkComponent implements OnInit {
     });
   }
 
+  openModalDelete(item: any): void {
+    this.isModalDelete = true;
+    this.currentItem = item;
+  }
+
   closeModal(): void {
     this.isModalCreate = false;
     this.isModalEdit = false;
+    this.isModalDelete = false;
   }
 
   // ========== MENSAGEM DINAMICA ========== //
@@ -276,10 +393,11 @@ export class BrkComponent implements OnInit {
   applyFilters() {
     let data = [...this.filteredItems];
 
+    // Filtro por nome do colaborador
     if (this.employee) {
       const inputValue = this.employee.toUpperCase();
-      data = data.filter(data =>
-        data.nome.toUpperCase().includes(inputValue)
+      data = data.filter(item =>
+        item.nome && item.nome.toUpperCase().includes(inputValue)
       );
     }
 
@@ -293,4 +411,3 @@ export class BrkComponent implements OnInit {
     return `${day}/${month}/${year}`;
   }
 }
-

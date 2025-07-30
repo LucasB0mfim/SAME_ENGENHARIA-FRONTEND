@@ -13,40 +13,55 @@
         (input)="applyFilters()">
     </div>
 
+    <!-- NAVEGAÇÃO POR STATUS -->
     <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': status === 'NOVO'}" (click)="findByStatus('NOVO')">
-        Novos ({{newCountCount}})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'NOVO'}" (click)="filterByStatus('NOVO')">
+        Novos
+        <span class="counter">{{ statusCounts.NOVO }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': status === 'EM AGUARDO'}"
-        (click)="findByStatus('EM AGUARDO')">
-        Em aguardo ({{progressCount}})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'EM AGUARDO'}"
+        (click)="filterByStatus('EM AGUARDO')">
+        Em aguardo
+        <span class="counter">{{ statusCounts['EM AGUARDO'] }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': status === 'LIBERADO'}" (click)="findByStatus('LIBERADO')">
-        Liberados ({{releasedCount}})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'LIBERADO'}"
+        (click)="filterByStatus('LIBERADO')">
+        Liberados
+        <span class="counter">{{ statusCounts.LIBERADO }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': status === 'CANCELADO'}" (click)="findByStatus('CANCELADO')">
-        Cancelados ({{canceledCount}})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'CANCELADO'}"
+        (click)="filterByStatus('CANCELADO')">
+        Cancelados
+        <span class="counter">{{ statusCounts.CANCELADO }}</span>
       </button>
     </div>
 
     <!-- FILTRO -->
-    <form [formGroup]="costCenterForm" class="filter">
+    <form [formGroup]="findForm" (ngSubmit)="findByCC()" class="filter">
       <select formControlName="centroCusto" class="select select--primary">
         <option value="GERAL">GERAL</option>
         <option value="BRK - RECIFE">BRK - RECIFE</option>
         <option value="BRK - MACEIO">BRK - MACEIO</option>
       </select>
       <button type="submit" class="btn btn--primary">
-        BUSCAR
+        @if (isFind) {
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        } @else {
+        Buscar
+        }
       </button>
     </form>
 
@@ -58,6 +73,7 @@
   </div>
 
   <div class="container__card">
+    <!-- CARD -->
     <div *ngFor="let item of items; let i = index" (click)="openModalEdit(item)" class="card">
       <div class="card__header">
         <div class="card__primary">
@@ -165,12 +181,12 @@
 
           <div class="modal__group">
             <label class="modal__label">Protocolo</label>
-            <input type="date" class="modal__input" formControlName="protocolo">
+            <input type="text" class="modal__input" formControlName="protocolo" placeholder="0.000.000">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Contrato</label>
-            <input type="date" class="modal__input" formControlName="contrato">
+            <input type="text" class="modal__input" formControlName="contrato" placeholder="CW00000">
           </div>
 
           <div class="modal__group">
@@ -263,14 +279,14 @@
         <div class="modal__footer">
           <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
           <button type="submit" class="btn btn--primary">
-            @if (isUpdate) {
+            @if (isCreate) {
             <div class="loading-dots">
               <div class="dot"></div>
               <div class="dot"></div>
               <div class="dot"></div>
             </div>
             } @else {
-            Atualizar
+            Criar
             }
           </button>
         </div>
@@ -314,12 +330,12 @@
 
           <div class="modal__group">
             <label class="modal__label">Protocolo</label>
-            <input type="date" class="modal__input" formControlName="protocolo">
+            <input type="text" class="modal__input" formControlName="protocolo">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Contrato</label>
-            <input type="date" class="modal__input" formControlName="contrato">
+            <input type="text" class="modal__input" formControlName="contrato">
           </div>
 
           <div class="modal__group">
@@ -405,6 +421,19 @@
 
         <div class="modal__footer">
           <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
+
+          <button type="button" (click)="delete()" class="btn btn--danger">
+            @if (isDelete) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Deletar
+            }
+          </button>
+
           <button type="submit" class="btn btn--primary">
             @if (isUpdate) {
             <div class="loading-dots">
@@ -420,8 +449,8 @@
       </div>
     </form>
 
-    <!-- CARREGANDO -->
-    <div *ngIf="isLoading" class="loading">
+    <!-- LOADING -->
+    <div class="loading" *ngIf="isLoading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
 

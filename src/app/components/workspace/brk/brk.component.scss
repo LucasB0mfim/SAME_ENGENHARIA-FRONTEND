@@ -117,6 +117,7 @@
   letter-spacing: 1px;
   font-size: clamp(0.6rem, 0.8vw, 0.9rem);
   transition: all 0.2s ease;
+  position: relative;
 
   &--primary {
     background: var(--orange-color);
@@ -143,15 +144,28 @@
   &--third {
     background: var(--secondary-color);
     color: var(--text-color);
+    gap: 8px;
 
     &.active {
       color: var(--white-color);
       transform: translateY(-4px);
       background-color: var(--orange-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     &:hover {
       transform: translateY(-2px);
+    }
+  }
+
+  &--danger {
+    background: #ff5757;
+    color: var(--white-color);
+
+    &:hover {
+      background: #ff4444;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -189,6 +203,23 @@
       color: var(--text-color);
     }
   }
+}
+
+.counter {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.btn--third.active .counter {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--white-color);
 }
 
 .card {
@@ -291,6 +322,11 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     padding: 2vw;
     animation: slideIn 0.4s ease;
+
+    &--small {
+      width: 400px;
+      max-width: 90%;
+    }
   }
 
   &__header {
@@ -353,6 +389,18 @@
 
     &--full {
       grid-column: 1 / -1;
+    }
+  }
+
+  &__text {
+    color: var(--text-color);
+    font-size: clamp(0.9rem, 1vw, 1.1rem);
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+
+    &--highlight {
+      font-weight: 600;
+      color: var(--orange-color);
     }
   }
 
@@ -421,6 +469,28 @@
 :host ::ng-deep mat-progress-spinner circle {
   stroke: var(--orange-color);
   stroke-width: 8%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes bounce {
