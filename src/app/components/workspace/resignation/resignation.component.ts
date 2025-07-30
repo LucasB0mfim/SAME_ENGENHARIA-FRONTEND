@@ -1,16 +1,27 @@
+import { tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../core/services/title.service';
 import { ResignationService } from '../../../core/services/resignation.service';
-import { BenefitService } from '../../../core/services/benefit.service';
+
+interface StatusCounts {
+  'NOVA SOLICITAÇÃO': number;
+  'EM ANDAMENTO': number;
+  'AVISO TRABALHADO': number;
+  'DEMITIDO': number;
+  'DESLIGADO': number;
+}
+
+type StatusKey = keyof StatusCounts;
 
 @Component({
   selector: 'app-resignation',
-  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './resignation.component.html',
   styleUrl: './resignation.component.scss'
 })
@@ -19,288 +30,303 @@ export class ResignationComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _resignationService = inject(ResignationService);
-  private readonly _benefitService = inject(BenefitService);
 
   // ========== FORMULÁRIOS ========== //
+  createForm: FormGroup = new FormGroup({
+    id: new FormControl(''),
+    nome: new FormControl(''),
+    funcao: new FormControl(''),
+    centroCusto: new FormControl(''),
+    status: new FormControl(''),
+    modalidade: new FormControl(''),
+    dataComunicacao: new FormControl(''),
+    observacao: new FormControl('')
+  });
+
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
     nome: new FormControl(''),
     funcao: new FormControl(''),
-    centro_custo: new FormControl(''),
+    centroCusto: new FormControl(''),
     status: new FormControl(''),
     modalidade: new FormControl(''),
-    colaborador_comunicado: new FormControl(''),
-    data_demissao: new FormControl(''),
-    data_inicio_aviso_trabalhado: new FormControl(''),
-    data_pagamento_rescisao: new FormControl(''),
-    data_rescisao: new FormControl(''),
-    data_solicitacao: new FormControl(''),
-    data_ultimo_dia_trabalhado: new FormControl('')
-  });
-
-  createForm: FormGroup = new FormGroup({
-    nome: new FormControl('', Validators.required),
-    funcao: new FormControl('', Validators.required),
-    centro_custo: new FormControl('', Validators.required),
-    status: new FormControl('', Validators.required),
-    modalidade: new FormControl('', Validators.required),
-    data_comunicacao: new FormControl('', Validators.required),
-    observacao: new FormControl('')
+    colaboradorComunicado: new FormControl(''),
+    dataDemissao: new FormControl(''),
+    dataInicioAvisoTrabalhado: new FormControl(''),
+    dataRescisao: new FormControl(''),
+    dataUltimoDiaDeTrabalho: new FormControl(''),
+    dataPagamentoRescisao: new FormControl('')
   });
 
   // ========== ESTADOS ========== //
   items: any[] = [];
-  currentItem: any = [];
+  currentItem: any = null;
   filteredItems: any[] = [];
 
-  isLoading: boolean = true;
-  isEmpty: boolean = false;
-  isDeleting: boolean = false;
-  isGenerating: boolean = false;
-  isUpdating: boolean = false;
-  isCreating: boolean = false;
+  employee: string = '';
+  selectedStatus: StatusKey = 'NOVA SOLICITAÇÃO';
 
-  funcoes: string[] = [];
-  centroCustos: string[] = [];
-
-  message: string = '';
-  messageType: 'success' | 'error' = 'success';
-  showMessage: boolean = false;
-
-  isBodyVisible: boolean[] = [];
+  statusCounts: StatusCounts = {
+    'NOVA SOLICITAÇÃO': 0,
+    'EM ANDAMENTO': 0,
+    'AVISO TRABALHADO': 0,
+    'DEMITIDO': 0,
+    'DESLIGADO': 0
+  };
 
   isModalCreate: boolean = false;
   isModalEdit: boolean = false;
   isModalDelete: boolean = false;
 
-  activeStatus: string = 'NOVA SOLICITAÇÃO';
+  isFind: boolean = false;
+  isEmpty: boolean = false;
+  isLoading: boolean = true;
 
-  requestCount: number = 0;
-  progressCount: number = 0;
-  terminatedCount: number = 0;
-  firedCount: number = 0;
-  noticeWorkedCount: number = 0;
+  isCreate: boolean = false;
+  isUpdate: boolean = false;
+  isDelete: boolean = false;
+
+  message: string = '';
+  showMessage: boolean = false;
+  messageType: 'success' | 'error' = 'success';
 
   // ========== HOOK ========== //
   ngOnInit(): void {
-    this.findAll();
-    this.findInfo();
+    this.loadInitialData();
     this._titleService.setTitle('Desligamento');
   }
 
-  // ========== API ========== //
-  findAll(): void {
-    this._resignationService.findAll().subscribe({
-      next: (res) => {
+  // ========== CARREGAMENTO INICIAL ========== //
+  loadInitialData(): void {
+    this.items = [];
+    this.isFind = true;
+    this.isEmpty = false;
+    this.isLoading = true;
+
+    forkJoin({
+      contadores: this.loadStatusCounts(),
+      dadosIniciais: this._resignationService.findByStatus(this.selectedStatus)
+    }).subscribe({
+      next: (result: any) => {
         this.isLoading = false;
-        this.items = res.result;
-        this.updateStatusCounts();
-        this.filterItemsByStatus(this.activeStatus);
+        this.isFind = false;
+        this.items = result.dadosIniciais.result || [];
+        this.filteredItems = [...this.items];
+        this.isEmpty = this.items.length === 0;
+        this.applyFilters();
       },
       error: (error) => {
+        this.isLoading = false;
         this.isEmpty = true;
-        this.isLoading = false;
-        this.setMessage('Não foi possível carregar os dados.', 'error');
-        console.error(error);
-      }
-    })
-  }
-
-  findInfo(): void {
-    this._benefitService.findAll().subscribe({
-      next: (res) => {
-        const centroCustoSet = new Set<string>();
-        const funcaoSet = new Set<string>();
-
-        res.result.forEach((item: any) => {
-          if (item.centro_custo) centroCustoSet.add(item.centro_custo);
-          if (item.funcao) funcaoSet.add(item.funcao);
-        });
-
-        this.centroCustos = Array.from(centroCustoSet).sort();
-        this.funcoes = Array.from(funcaoSet).sort();
-      },
-      error: (error) => {
-        console.error(error);
-        this.setMessage('Erro ao carregar informações de centro de custo e função.', 'error');
+        this.isFind = false;
+        console.log('Erro ao consultar dados: ', error);
+        this.setMessage('Não foi possível carregar os dados!', 'error');
       }
     });
   }
 
+  // ========== CARREGAMENTO DE CONTADORES ========== //
+  loadStatusCounts(): Observable<any> {
+    const statusList: StatusKey[] = ['NOVA SOLICITAÇÃO', 'EM ANDAMENTO', 'AVISO TRABALHADO', 'DEMITIDO', 'DESLIGADO'];
+
+    const requests = statusList.map(status =>
+      this._resignationService.findByStatus(status)
+    );
+
+    return forkJoin(requests).pipe(
+      tap((results: any[]) => {
+        statusList.forEach((status: StatusKey, index: number) => {
+          this.statusCounts[status] = results[index]?.result?.length || 0;
+        });
+      })
+    );
+  }
+
+  // ========== API ========== //
   create(): void {
     const date = new Date();
     const currentDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-    this.isCreating = true;
+    this.isCreate = true;
 
     const request = {
       nome: this.createForm.value.nome,
       funcao: this.createForm.value.funcao,
-      centro_custo: this.createForm.value.centro_custo,
+      centro_custo: this.createForm.value.centroCusto,
       status: this.createForm.value.status,
       modalidade: this.createForm.value.modalidade,
-      data_comunicacao: this.createForm.value.data_comunicacao,
+      data_comunicacao: this.createForm.value.dataComunicacao,
       observacao: this.createForm.value.observacao,
       data_solicitacao: currentDate
     }
 
     this._resignationService.create(request).subscribe({
       next: () => {
-        this.isCreating = false;
+        this.isCreate = false;
         this.isModalCreate = false;
-        this.findAll();
         this.createForm.reset({
+          id: '',
           nome: '',
           funcao: '',
-          centro_custo: '',
+          centroCusto: '',
           status: '',
           modalidade: '',
-          data_comunicacao: '',
+          dataComunicacao: '',
           observacao: ''
         });
+        this.isEmpty = this.items.length === 0;
+        this.refreshCurrentView();
+        this.setMessage('Colaborador criado com sucesso!', 'success');
       },
       error: (error) => {
-        this.isLoading = false;
-        this.isCreating = false;
-        console.error('Erro ao gerar solicitação:', error);
-        this.setMessage("Erro ao criar solicitação! Tente novamente outra hora.", 'error');
+        this.isCreate = false;
+        this.isModalCreate = false;
+        console.error('Erro ao criar colaborador: ', error);
+        this.setMessage('Não foi possível criar o colaborador!', 'error');
       }
     });
   }
 
   update(): void {
-    this.isUpdating = true;
+    this.isUpdate = true;
 
     const request = {
       id: this.updateForm.value.id,
+      nome: this.updateForm.value.nome,
+      funcao: this.updateForm.value.funcao,
+      centro_custo: this.updateForm.value.centroCusto,
       status: this.updateForm.value.status,
       modalidade: this.updateForm.value.modalidade,
-      colaborador_comunicado: this.updateForm.value.colaborador_comunicado,
-      data_demissao: this.updateForm.value.data_demissao,
-      data_inicio_aviso_trabalhado: this.updateForm.value.data_inicio_aviso_trabalhado,
-      data_pagamento_rescisao: this.updateForm.value.data_pagamento_rescisao,
-      data_rescisao: this.updateForm.value.data_rescisao,
-      data_solicitacao: this.updateForm.value.data_solicitacao,
-      data_ultimo_dia_trabalhado: this.updateForm.value.data_ultimo_dia_trabalhado,
+      colaborador_comunicado: this.updateForm.value.colaboradorComunicado,
+      data_demissao: this.updateForm.value.dataDemissao,
+      data_inicio_aviso_trabalhado: this.updateForm.value.dataInicioAvisoTrabalhado,
+      data_rescisao: this.updateForm.value.dataRescisao,
+      data_ultimo_dia_trabalhado: this.updateForm.value.dataUltimoDiaDeTrabalho,
+      data_pagamento_rescisao: this.updateForm.value.dataPagamentoRescisao
     }
 
     this._resignationService.update(request).subscribe({
       next: () => {
-        this.isUpdating = false;
+        this.isUpdate = false;
         this.isModalEdit = false;
-        this.findAll();
-        this.setMessage('Solicitação atualizado com sucesso!', 'success');
+        this.employee = '';
+        this.setMessage('Colaborador atualizado com sucesso!', 'success');
+        this.refreshCurrentView();
       },
       error: (error) => {
-        this.isUpdating = false;
-        console.error('Erro ao atualizar solicitação: ', error);
-        this.setMessage('Não foi possível atualizar a solicitação!', 'error');
+        this.isUpdate = false;
+        this.isModalEdit = false;
+        console.error('Erro ao atualizar colaborador: ', error);
+        this.setMessage('Não foi possível atualizar o colaborador!', 'error');
       }
     });
   }
 
   delete(): void {
-    this.isDeleting = true;
+    this.isDelete = true;
 
     const id = this.currentItem.id;
 
     this._resignationService.delete(id).subscribe({
       next: () => {
-        this.isDeleting = false;
-        this.isModalDelete = false;
-        this.findAll();
-        this.setMessage('Solicitação deletada com sucesso!', 'success')
+        this.isDelete = false;
+        this.isModalEdit = false;
+        this.employee = '';
+        this.setMessage('Colaborador deletado com sucesso!', 'success');
+        this.refreshCurrentView();
       },
       error: (error) => {
-        this.isDeleting = false;;
-        this.setMessage('Não foi possível deletar o registro!', 'error');
-        console.error('Erro ao deletar registro: ', error);
+        this.isDelete = false;
+        console.error('Erro ao deletar colaborador: ', error);
+        this.setMessage('Falha ao atualizar colaborador!', 'error');
       }
-    })
+    });
   }
 
-  // ========== GERENCIAR STATUS ========== //
-  onStatusButtonClick(status: string): void {
-    this.filterItemsByStatus(status);
+  // ========== FILTROS POR STATUS ========== //
+  filterByStatus(status: string): void {
+    const statusKey = status as StatusKey;
+
+    if (this.selectedStatus === statusKey) return;
+
+    this.selectedStatus = statusKey;
+    this.employee = '';
+    this.items = [];
+    this.isEmpty = false;
+    this.isLoading = true;
+
+    this._resignationService.findByStatus(status).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.items = res.result || [];
+        this.filteredItems = [...this.items];
+        this.isEmpty = this.items.length === 0;
+        this.applyFilters();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Erro ao filtrar por status:', error);
+        this.setMessage('Erro ao carregar dados do status selecionado!', 'error');
+      }
+    });
   }
 
-  filterItemsByStatus(status: string): void {
-    this.activeStatus = status;
-    this.filteredItems = this.items.filter(item => item.status === status);
-    this.isEmpty = this.filteredItems.length === 0;
+  // ========== ATUALIZAÇÃO DA VISUALIZAÇÃO ATUAL ========== //
+  refreshCurrentView(): void {
+    forkJoin({
+      contadores: this.loadStatusCounts(),
+      dadosAtuais: this._resignationService.findByStatus(this.selectedStatus)
+    }).subscribe({
+      next: (result: any) => {
+        this.items = result.dadosAtuais.result || [];
+        this.filteredItems = [...this.items];
+        this.applyFilters();
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar visualização:', error);
+      }
+    });
   }
 
-  // ========== GERENCIAR CORPO ========== //
-  toggleBodyVisibility(index: number): void {
-    this.isBodyVisible[index] = !this.isBodyVisible[index];
-  }
-
-  // ========== GERENCIAR MODAL ========== //
+  // ========== MODAL ========== //
   openModalCreate(): void {
     this.isModalCreate = true;
   }
 
   openModalEdit(item: any): void {
-    this.currentItem = item;
     this.isModalEdit = true;
+    this.currentItem = item;
 
     this.updateForm.patchValue({
-      id: item.id,
-      nome: item.nome,
-      funcao: item.funcao,
-      status: item.status,
-      centro_custo: item.centro_custo,
-      modalidade: item.modalidade,
-      colaborador_comunicado: item.colaborador_comunicado,
-      data_demissao: item.data_demissao,
-      data_inicio_aviso_trabalhado: item.data_inicio_aviso_trabalhado,
-      data_rescisao: item.data_rescisao,
-      data_ultimo_dia_trabalhado: item.data_ultimo_dia_trabalhado,
-      data_pagamento_rescisao: item.data_pagamento_rescisao,
-      data_solicitacao: item.data_solicitacao
+      id: item.id || '',
+      nome: item.nome || '',
+      funcao: item.funcao || '',
+      protocolo: item.protocolo || '',
+      contrato: item.contrato || '',
+      centroCusto: item.centro_custo || '',
+      status: item.status || '',
+      pesquisaSocial: item.dt_envio_pesq_social || '',
+      prevAprovPesqSocial: item.dt_prev_aprov_pesq_social || '',
+      treinamento: item.treinamento || '',
+      fichaEPI: item.ficha_epi || '',
+      envioDoc: item.dt_envio_doc || '',
+      prevAprovDoc: item.dt_prev_aprov_doc || '',
+      os: item.os || '',
+      aso: item.aso || '',
+      reenvioDoc: item.dt_reenvio_doc || '',
+      prevAprovReenvioDoc: item.dt_prev_aprov_reenvio_doc || '',
     });
   }
 
   openModalDelete(item: any): void {
-    this.currentItem = item;
     this.isModalDelete = true;
+    this.currentItem = item;
   }
 
   closeModal(): void {
     this.isModalCreate = false;
     this.isModalEdit = false;
     this.isModalDelete = false;
-  }
-
-  // ========== CONTADOR DE STATUS ========== //
-  private updateStatusCounts(): void {
-    this.requestCount = 0;
-    this.progressCount = 0;
-    this.noticeWorkedCount = 0;
-    this.firedCount = 0;
-    this.terminatedCount = 0;
-
-    if (this.items && Array.isArray(this.items)) {
-      this.items.forEach((item: any) => {
-        switch (item.status) {
-          case 'NOVA SOLICITAÇÃO':
-            this.requestCount++;
-            break;
-          case 'EM ANDAMENTO':
-            this.progressCount++;
-            break;
-          case 'AVISO TRABALHADO':
-            this.noticeWorkedCount++;
-            break;
-          case 'DEMITIDO':
-            this.firedCount++;
-            break;
-          case 'DESLIGADO':
-            this.terminatedCount++;
-            break;
-        }
-      });
-    }
   }
 
   // ========== MENSAGEM DINAMICA ========== //
@@ -315,10 +341,24 @@ export class ResignationComponent implements OnInit {
     }, 3000);
   }
 
-  // ========== MÉTODOS AUXILIARES ========== //
+  // ========== BUSCAR COLABORADOR ========== //
+  applyFilters() {
+    let data = [...this.filteredItems];
+
+    // Filtro por nome do colaborador
+    if (this.employee) {
+      const inputValue = this.employee.toUpperCase();
+      data = data.filter(item =>
+        item.nome && item.nome.toUpperCase().includes(inputValue)
+      );
+    }
+
+    this.items = data;
+  }
+
+  // ========== AUXILIARES ========== //
   formateDate(date: string): string {
     if (!date) return '';
-
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   }

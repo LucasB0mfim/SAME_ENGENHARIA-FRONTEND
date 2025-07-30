@@ -19,6 +19,11 @@ export class ResignationService {
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/resignation', { headers });
   }
 
+  findByStatus(status: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/resignation/${status}`, { headers });
+  }
+
   create(request: any) {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/resignation', request, { headers });

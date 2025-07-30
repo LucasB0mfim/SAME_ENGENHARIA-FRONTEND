@@ -5,196 +5,194 @@
   <div class="message" [ngClass]="messageType">{{ message }}</div>
   }
 
-  <!-- CONTAINER DE FILTROS -->
-  <div class="container__filters">
+  <div class="container__filter">
 
-    <!-- NOVA SOLICITAÇÃO -->
+    <!-- FILTRO -->
     <div class="filter">
-      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'NOVA SOLICITAÇÃO'}"
-        (click)="onStatusButtonClick('NOVA SOLICITAÇÃO')">
-        Solicitações ({{ requestCount }})
+      <input type="text" class="input input--primary" placeholder="BUSCAR" [(ngModel)]="employee"
+        (input)="applyFilters()">
+    </div>
+
+    <!-- NAVEGAÇÃO POR STATUS -->
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'NOVA SOLICITAÇÃO'}"
+        (click)="filterByStatus('NOVA SOLICITAÇÃO')">
+        Novas solicitações
+        <span class="counter">{{ statusCounts['NOVA SOLICITAÇÃO'] }}</span>
       </button>
     </div>
 
-    <!-- EM ANDAMENTO -->
     <div class="filter">
-      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'EM ANDAMENTO'}"
-        (click)="onStatusButtonClick('EM ANDAMENTO')">
-        Em andamento ({{ progressCount }})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'EM ANDAMENTO'}"
+        (click)="filterByStatus('EM ANDAMENTO')">
+        Em andamento
+        <span class="counter">{{ statusCounts['EM ANDAMENTO'] }}</span>
       </button>
     </div>
 
-    <!-- AVISO TRABALHADO -->
     <div class="filter">
-      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'AVISO TRABALHADO'}"
-        (click)="onStatusButtonClick('AVISO TRABALHADO')">
-        Aviso trabalhado ({{ noticeWorkedCount }})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'AVISO TRABALHADO'}"
+        (click)="filterByStatus('AVISO TRABALHADO')">
+        Aviso trabalhado
+        <span class="counter">{{ statusCounts['AVISO TRABALHADO'] }}</span>
       </button>
     </div>
 
-    <!-- DEMITIDO -->
     <div class="filter">
-      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'DEMITIDO'}"
-        (click)="onStatusButtonClick('DEMITIDO')">
-        Demitidos ({{ firedCount }})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'DEMITIDO'}"
+        (click)="filterByStatus('DEMITIDO')">
+        Demitidos
+        <span class="counter">{{ statusCounts.DEMITIDO }}</span>
       </button>
     </div>
 
-    <!-- DESLIGADO -->
     <div class="filter">
-      <button class="btn btn--primary" [ngClass]="{'active': activeStatus === 'DESLIGADO'}"
-        (click)="onStatusButtonClick('DESLIGADO')">
-        Desligados ({{ terminatedCount }})
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'DESLIGADO'}"
+        (click)="filterByStatus('DESLIGADO')">
+        Demitidos
+        <span class="counter">{{ statusCounts.DESLIGADO }}</span>
       </button>
     </div>
 
-    <!-- GERAR FORMULÁRIO -->
     <div class="filter">
-      <button class="btn btn--third" (click)="openModalCreate()">
-        + Novo
+      <button class="btn btn--primary" (click)="openModalCreate()">
+        <mat-icon>add_circle</mat-icon>
       </button>
     </div>
-
   </div>
 
-  <!-- CONTAINER DOS CARDS -->
-  <div class="container__cards">
-
+  <div class="container__card">
     <!-- CARD -->
-    <div class="card" *ngFor="let item of filteredItems; let i = index">
-
-      <!--HEADER -->
-      <div class="card__header" (click)="toggleBodyVisibility(i)"
-        [ngClass]="{'rounded-bottom-left': !isBodyVisible[i]}">
-
-        <!-- LADO ESQUERDO -->
+    <div *ngFor="let item of items; let i = index" (click)="openModalEdit(item)" class="card">
+      <div class="card__header">
         <div class="card__primary">
-
-          <!-- PARTE SUPERIOR -->
           <div class="card__top">
             <div class="card__title">{{ item.nome || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
           </div>
-
-          <!-- PARTE INFERIOR -->
           <div class="card__bottom">
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
             <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
           </div>
         </div>
-
-        <!-- LADO DIREITO -->
-        <div class="card__secondary">
-          <button class="btn btn--open-image" (click)="openModalEdit(item); $event.stopPropagation()">
-            <mat-icon>edit</mat-icon>
-          </button>
-
-          <button class="btn btn--trash" (click)="openModalDelete(item); $event.stopPropagation()">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
       </div>
-
-      <!-- CORPO -->
-      <div class="card__body" *ngIf="isBodyVisible[i]" (click)="toggleBodyVisibility(i)">
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">OBSERVAÇÃO</div>
-          <div class="card__subtitle">{{ item.observacao || 'N/A' }}</div>
+      <div class="card__body">
+        <div class="card__content">
+          <div class="card__subtitle">OBSERVAÇÃO</div>
+          <div class="card__title">{{ item.observacao || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">SOLICITAÇÃO</div>
-          <div class="card__subtitle">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">SOLICITAÇÃO</div>
+          <div class="card__title">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">COMUNICAR</div>
-          <div class="card__subtitle">{{ formateDate(item.data_comunicacao) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">COMUNICAR</div>
+          <div class="card__title">{{ formateDate(item.data_comunicacao) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">AVISO TRABALHADO</div>
-          <div class="card__subtitle">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">AVISO TRABALHADO</div>
+          <div class="card__title">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">ÚLTIMO DIA</div>
-          <div class="card__subtitle">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">ÚLTIMO DIA</div>
+          <div class="card__title">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">RESCISÃO</div>
-          <div class="card__subtitle">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">RESCISÃO</div>
+          <div class="card__title">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">PAGAMENTO</div>
-          <div class="card__subtitle">{{ formateDate(item.data_pagamento_rescisao) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">PAGAMENTO</div>
+          <div class="card__title">{{ formateDate(item.data_pagamento_rescisao) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">DATA DEMISSÃO</div>
-          <div class="card__subtitle">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">DEMISSÃO</div>
+          <div class="card__title">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">COMUNICOU</div>
-          <div class="card__subtitle">{{ item.colaborador_comunicado || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">COLABORADOR CIENTE</div>
+          <div class="card__title">{{ item.colaborador_comunicado || 'N/A' }}</div>
         </div>
-
-        <!-- ELEMENTO -->
-        <div class="card__info">
-          <div class="card__title">MODALIDADE</div>
-          <div class="card__subtitle">{{ item.modalidade || 'N/A' }}</div>
+        <div class="card__content">
+          <div class="card__subtitle">MODALIDADE</div>
+          <div class="card__title">{{ formateDate(item.dt_prev_aprov_doc) || 'N/A' }}</div>
         </div>
       </div>
     </div>
 
-    <!-- MODAL DE EDIÇÃO -->
-    <form [formGroup]="createForm" (ngSubmit)="create()" class="modal" *ngIf="isModalCreate">
+    <!-- MODAL -->
+    <form *ngIf="isModalCreate" [formGroup]="createForm" (ngSubmit)="create()" class="modal__backdrop">
       <div class="modal__container">
-
         <div class="modal__header">
           <h2 class="modal__title">Criar solicitação</h2>
-          <button type="button" class="btn btn--exit" (click)="closeModal()">&times;</button>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
           <div class="modal__group">
-            <label class="modal__label">Nome completo</label>
-            <input type="text" placeholder="Nome completo" formControlName="nome" class="modal__input">
+            <label class="modal__label">Nome</label>
+            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
           </div>
 
           <div class="modal__group">
-            <label for="funcao" class="modal__label">Função</label>
+            <label class="modal__label">Função</label>
             <select class="modal__select" formControlName="funcao">
-              <option value="" disabled selected>Selecione uma opção</option>
-              <option *ngFor="let funcao of funcoes" [value]="funcao">{{ funcao }}</option>
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="ARMADOR">ARMADOR</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
+              <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
             </select>
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Centro de custo</label>
-            <select class="modal__select" formControlName="centro_custo">
-              <option value="" disabled selected>Selecione uma opção</option>
-              <option *ngFor="let centro of centroCustos" [value]="centro">{{ centro }}</option>
+            <select class="modal__select" formControlName="centroCusto">
+              <option value="" disabled>Selecione um centro de custo</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="BRK - PV">BRK - PV</option>
+              <option value="BRK - PFIS">BRK - PFIS</option>
+              <option value="BRK - CABO">BRK - CABO</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - REDES">BRK - REDES</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
+              <option value="BRK - CURADO">BRK - CURADO</option>
+              <option value="BRK - GOIANA">BRK - GOIANA</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - CABANGA">BRK - CABANGA</option>
+              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
+              <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
+              <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
+              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
             </select>
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Status</label>
             <select class="modal__select" formControlName="status">
-              <option value="" disabled selected>Selecione uma opção</option>
+              <option value="" disabled>Selecione uma opção</option>
               <option value="NOVA SOLICITAÇÃO">NOVA SOLICITAÇÃO</option>
               <option value="EM ANDAMENTO">EM ANDAMENTO</option>
               <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
@@ -206,31 +204,31 @@
           <div class="modal__group">
             <label class="modal__label">Modalidade</label>
             <select class="modal__select" formControlName="modalidade">
-              <option value="" disabled selected>Selecione uma opção</option>
+              <option value="" disabled>Selecione uma opção</option>
               <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
               <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
-              <option value="PEDIDO DEMISSÃO">PEDIDO DEMISSÃO</option>
-              <option value="ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA">ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA</option>
+              <option value="PEDIDO DE DEMISSÃO">PEDIDO DE DEMISSÃO</option>
               <option value="TÉRMINO DO CONTRATO DE EXPERIÊNCIA">TÉRMINO DO CONTRATO DE EXPERIÊNCIA</option>
-              <option value="AVISO TRABALHADO JORNADA REDUZIDA">AVISO TRABALHADO JORNADA REDUZIDA</option>
+              <option value="AVISO TRABALHADO JORNADSA REDUZIDA">AVISO TRABALHADO JORNADSA REDUZIDA</option>
+              <option value="PEDIDO DE DEMISSÃO">ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA</option>
             </select>
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Data para comunicação</label>
-            <input type="date" class="modal__input" formControlName="data_comunicacao">
+            <label class="modal__label">Comunicar colaborador</label>
+            <input type="date" formControlName="dataComunicacao" class="modal__input">
           </div>
 
           <div class="modal__group modal__group--full">
             <label class="modal__label">Observação</label>
-            <textarea formControlName="observacao" placeholder="Digite algo..." class="modal__textarea"></textarea>
+            <textarea formControlName="observacao" placeholder="Digito algo..." class="modal__input"></textarea>
           </div>
         </div>
 
         <div class="modal__footer">
-          <button type="button" class="btn btn--third" (click)="closeModal()">Fechar</button>
-          <button type="submit" class="btn btn--third">
-            @if (isCreating) {
+          <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isCreate) {
             <div class="loading-dots">
               <div class="dot"></div>
               <div class="dot"></div>
@@ -244,40 +242,83 @@
       </div>
     </form>
 
-    <!-- MODAL DE EDIÇÃO -->
-    <form [formGroup]="updateForm" (ngSubmit)="update()" class="modal" *ngIf="isModalEdit">
+    <!-- MODAL -->
+    <form *ngIf="isModalEdit" [formGroup]="updateForm" (ngSubmit)="update()" class="modal__backdrop">
       <div class="modal__container">
-
         <div class="modal__header">
-          <h2 class="modal__title">Atualizar solicitação</h2>
-          <button type="button" class="btn btn--exit" (click)="closeModal()">&times;</button>
+          <h2 class="modal__title">Atualizar colaborador</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
-          <div class="modal__group">
-            <label class="modal__label">Nome completo</label>
-            <input class="modal__input" type="text" formControlName="nome">
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">Nome</label>
+            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Função</label>
-            <input class="modal__input" type="text" formControlName="funcao">
+            <select class="modal__select" formControlName="funcao">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="ARMADOR">ARMADOR</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
+              <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+            </select>
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Centro de custo</label>
-            <input class="modal__input" type="text" formControlName="centro_custo">
+            <select class="modal__select" formControlName="centroCusto">
+              <option value="" disabled>Selecione um centro de custo</option>
+              <option value="EMLURB">EMLURB</option>
+              <option value="MÁQUINAS">MÁQUINAS</option>
+              <option value="BRK - HH">BRK - HH</option>
+              <option value="BRK - PV">BRK - PV</option>
+              <option value="BRK - PFIS">BRK - PFIS</option>
+              <option value="BRK - CABO">BRK - CABO</option>
+              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
+              <option value="BRK - REDES">BRK - REDES</option>
+              <option value="LUIZ WILSON">LUIZ WILSON</option>
+              <option value="BRK - HH 03">BRK - HH 03</option>
+              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
+              <option value="RODA DE FOGO">RODA DE FOGO</option>
+              <option value="BRK - CURADO">BRK - CURADO</option>
+              <option value="BRK - GOIANA">BRK - GOIANA</option>
+              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
+              <option value="BRK - CABANGA">BRK - CABANGA</option>
+              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
+              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
+              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
+              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
+              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
+              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
+              <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
+              <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
+              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
+              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
+            </select>
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Status</label>
             <select class="modal__select" formControlName="status">
-              <option value="">Selecione uma opção</option>
+              <option value="" disabled>Selecione uma opção</option>
               <option value="NOVA SOLICITAÇÃO">NOVA SOLICITAÇÃO</option>
               <option value="EM ANDAMENTO">EM ANDAMENTO</option>
               <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
               <option value="DEMITIDO">DEMITIDO</option>
-              <option value="AGUARDANDO RESCISÃO">AGUARDANDO RESCISÃO</option>
               <option value="DESLIGADO">DESLIGADO</option>
             </select>
           </div>
@@ -285,57 +326,68 @@
           <div class="modal__group">
             <label class="modal__label">Modalidade</label>
             <select class="modal__select" formControlName="modalidade">
-              <option value="">Selecione uma opção</option>
+              <option value="" disabled>Selecione uma opção</option>
               <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
               <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
-              <option value="PEDIDO DEMISSÃO">PEDIDO DEMISSÃO</option>
-              <option value="ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA">ANTECIPAÇÃO DE CONTRATO DE EXPERIÊNCIA</option>
+              <option value="PEDIDO DE DEMISSÃO">PEDIDO DE DEMISSÃO</option>
               <option value="TÉRMINO DO CONTRATO DE EXPERIÊNCIA">TÉRMINO DO CONTRATO DE EXPERIÊNCIA</option>
-              <option value="AVISO TRABALHADO JORNADA REDUZIDA">AVISO TRABALHADO JORNADA REDUZIDA</option>
+              <option value="AVISO TRABALHADO JORNADSA REDUZIDA">AVISO TRABALHADO JORNADSA REDUZIDA</option>
+              <option value="PEDIDO DE DEMISSÃO">ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA</option>
             </select>
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Colaborador foi comunicado?</label>
-            <select class="modal__select" formControlName="colaborador_comunicado">
-              <option value="">Selecione uma opção</option>
+            <label class="modal__label">Colaborador comunicado?</label>
+            <select formControlName="colaboradorComunicado" class="modal__select">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="NÃO">NÃO</option>
               <option value="SIM">SIM</option>
             </select>
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Data da demissão</label>
-            <input class="modal__input" type="date" formControlName="data_demissao" />
+            <label class="modal__label">Demissão</label>
+            <input type="date" formControlName="dataDemissao" class="modal__input">
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Data do início do aviso trabalhado</label>
-            <input class="modal__input" type="date" formControlName="data_inicio_aviso_trabalhado" />
+            <label class="modal__label">Início do aviso trabalhado</label>
+            <input type="date" formControlName="dataInicioAvisoTrabalhado" class="modal__input">
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Data da rescisão</label>
-            <input class="modal__input" type="date" formControlName="data_rescisao" />
+            <label class="modal__label">Rescisão</label>
+            <input type="date" formControlName="dataRescisao" class="modal__input">
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Data do último dia de trabalho</label>
-            <input class="modal__input" type="date" formControlName="data_ultimo_dia_trabalhado" />
+            <label class="modal__label">último dia de trabalho</label>
+            <input type="date" formControlName="dataUltimoDiaDeTrabalho" class="modal__input">
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Data do pagamento rescisão</label>
-            <input class="modal__input" type="date" formControlName="data_pagamento_rescisao" />
+            <label class="modal__label">Pagamento da rescisão</label>
+            <input type="date" formControlName="dataPagamentoRescisao" class="modal__input">
           </div>
-
         </div>
 
         <div class="modal__footer">
-          <button type="button" class="btn btn--third" (click)="closeModal()">Fechar</button>
+          <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
 
-          <button type="submit" class="btn btn--third">
-            @if (isUpdating) {
+          <button type="button" (click)="delete()" class="btn btn--danger">
+            @if (isDelete) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Deletar
+            }
+          </button>
+
+          <button type="submit" class="btn btn--primary">
+            @if (isUpdate) {
             <div class="loading-dots">
               <div class="dot"></div>
               <div class="dot"></div>
@@ -349,36 +401,6 @@
       </div>
     </form>
 
-    <!-- MODAL DE DELETE -->
-    <div class="modal" *ngIf="isModalDelete">
-      <div class="modal__container modal__container--secondary">
-
-        <div class="modal__header">
-          <h2 class="modal__title">Deletar Solicitação</h2>
-          <button type="button" class="btn btn--exit" (click)="closeModal()">&times;</button>
-        </div>
-
-        <h2 class="modal__subtitle">
-          Tem certeza que deseja deletar essa admissão? Essa ação não poderá ser revertida!
-        </h2>
-
-        <div class="modal__footer">
-          <button type="button" class="btn btn--third" (click)="closeModal()">Fechar</button>
-          <button type="button" class="btn btn--delete" (click)="delete()">
-            @if (isDeleting) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Deletar
-            }
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- LOADING -->
     <div class="loading" *ngIf="isLoading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -388,6 +410,5 @@
     <div class="empty" *ngIf="isEmpty">
       <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
     </div>
-
   </div>
 </div>
