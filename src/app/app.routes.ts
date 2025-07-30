@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { UpdateComponent } from './pages/update/update.component';
+import { BrkComponent } from './components/workspace/brk/brk.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
@@ -106,6 +107,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/employees',
         component: EmployeeComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/brk',
+        component: BrkComponent,
         canActivate: [humanResourcesGuard]
       },
       {

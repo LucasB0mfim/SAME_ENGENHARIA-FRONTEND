@@ -1,0 +1,433 @@
+<div class="container">
+
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
+
+  <div class="container__filter">
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <input type="text" class="input input--primary" placeholder="BUSCAR" [(ngModel)]="employee"
+        (input)="applyFilters()">
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': status === 'NOVO'}" (click)="findByStatus('NOVO')">
+        Novos ({{newCountCount}})
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': status === 'EM AGUARDO'}"
+        (click)="findByStatus('EM AGUARDO')">
+        Em aguardo ({{progressCount}})
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': status === 'LIBERADO'}" (click)="findByStatus('LIBERADO')">
+        Liberados ({{releasedCount}})
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': status === 'CANCELADO'}" (click)="findByStatus('CANCELADO')">
+        Cancelados ({{canceledCount}})
+      </button>
+    </div>
+
+    <!-- FILTRO -->
+    <form [formGroup]="costCenterForm" class="filter">
+      <select formControlName="centroCusto" class="select select--primary">
+        <option value="GERAL">GERAL</option>
+        <option value="BRK - RECIFE">BRK - RECIFE</option>
+        <option value="BRK - MACEIO">BRK - MACEIO</option>
+      </select>
+      <button type="submit" class="btn btn--primary">
+        BUSCAR
+      </button>
+    </form>
+
+    <div class="filter">
+      <button class="btn btn--primary" (click)="openModalCreate()">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="container__card">
+    <div *ngFor="let item of items; let i = index" (click)="openModalEdit(item)" class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">{{ item.nome || 'N/A' }}</div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__body-top">
+          <div class="card__content">
+            <div class="card__subtitle">TREINAMENTO</div>
+            <div class="card__title">{{ item.treinamento || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">FICHA DE EPI</div>
+            <div class="card__title">{{ item.ficha_epi || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">ASO</div>
+            <div class="card__title">{{ item.aso || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">OS</div>
+            <div class="card__title">{{ item.os || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__body-bottom">
+          <div class="card__content">
+            <div class="card__subtitle">PROTOLOCO</div>
+            <div class="card__title">{{ item.protocolo || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">CONTRATO</div>
+            <div class="card__title">{{ item.contrato || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">PESQUISA SOCIAL</div>
+            <div class="card__title">{{ formateDate(item.dt_envio_pesq_social) || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">PREV APROVAÇÃO</div>
+            <div class="card__title">{{ formateDate(item.dt_prev_aprov_pesq_social) || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">ENVIO DOC</div>
+            <div class="card__title">{{ formateDate(item.dt_envio_doc) || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">PREV APROVAÇÃO</div>
+            <div class="card__title">{{ formateDate(item.dt_prev_aprov_doc) || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">REENVIO DOC</div>
+            <div class="card__title">{{ formateDate(item.dt_reenvio_doc) || 'N/A' }}</div>
+          </div>
+          <div class="card__content">
+            <div class="card__subtitle">PREV APROVAÇÃO</div>
+            <div class="card__title">{{ formateDate(item.dt_prev_aprov_reenvio_doc) || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <form *ngIf="isModalCreate" [formGroup]="createForm" (ngSubmit)="create()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Criar colaborador</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="modal__label">Nome</label>
+            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Função</label>
+            <select class="modal__select" formControlName="funcao">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="ARMADOR">ARMADOR</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
+              <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Protocolo</label>
+            <input type="date" class="modal__input" formControlName="protocolo">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Contrato</label>
+            <input type="date" class="modal__input" formControlName="contrato">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Cento de custo</label>
+            <select class="modal__select" formControlName="centroCusto">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="BRK - RECIFE">BRK - RECIFE</option>
+              <option value="BRK - MACEIO">BRK - MACEIO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Status</label>
+            <select class="modal__select" formControlName="status">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="NOVO">NOVO</option>
+              <option value="EM AGUARDO">EM AGUARDO</option>
+              <option value="LIBERADO">LIBERADO</option>
+              <option value="CANCELADO">CANCELADO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Pesquisa social</label>
+            <input type="date" class="modal__input" formControlName="pesquisaSocial">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Previsão de aprovação</label>
+            <input type="date" class="modal__input" formControlName="prevAprovPesqSocial">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Treinamento</label>
+            <select class="modal__select" formControlName="treinamento">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Ficha de EPI</label>
+            <select class="modal__select" formControlName="fichaEPI">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Envio do documento</label>
+            <input type="date" class="modal__input" formControlName="envioDoc">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Previsão de aprovação</label>
+            <input type="date" class="modal__input" formControlName="prevAprovDoc">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">OS</label>
+            <select class="modal__select" formControlName="os">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">ASO</label>
+            <select class="modal__select" formControlName="aso">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Reenvio do documento</label>
+            <input type="date" class="modal__input" formControlName="reenvioDoc">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Previsão de aprovação</label>
+            <input type="date" class="modal__input" formControlName="prevAprovReenvioDoc">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isUpdate) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Atualizar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- MODAL -->
+    <form *ngIf="isModalEdit" [formGroup]="updateForm" (ngSubmit)="update()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Atualizar colaborador</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="modal__label">Nome</label>
+            <input type="text" formControlName="nome" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Função</label>
+            <select class="modal__select" formControlName="funcao">
+              <option value="ARMADOR">ARMADOR</option>
+              <option value="DIRETOR">DIRETOR</option>
+              <option value="SERVENTE">SERVENTE</option>
+              <option value="PEDREIRO">PEDREIRO</option>
+              <option value="AUXILIAR">AUXILIAR</option>
+              <option value="ENCANADOR">ENCANADOR</option>
+              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+              <option value="ALMOXARIFE">ALMOXARIFE</option>
+              <option value="ENGENHEIRO">ENGENHEIRO</option>
+              <option value="ELETRICISTA">ELETRICISTA</option>
+              <option value="COORDENADOR">COORDENADOR</option>
+              <option value="ENCARREGADO">ENCARREGADO</option>
+              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
+              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Protocolo</label>
+            <input type="date" class="modal__input" formControlName="protocolo">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Contrato</label>
+            <input type="date" class="modal__input" formControlName="contrato">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Cento de custo</label>
+            <select class="modal__select" formControlName="centroCusto">
+              <option value="BRK - RECIFE">BRK - RECIFE</option>
+              <option value="BRK - MACEIO">BRK - MACEIO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Status</label>
+            <select class="modal__select" formControlName="status">
+              <option value="NOVO">NOVO</option>
+              <option value="EM AGUARDO">EM AGUARDO</option>
+              <option value="LIBERADO">LIBERADO</option>
+              <option value="CANCELADO">CANCELADO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Pesquisa social</label>
+            <input type="date" class="modal__input" formControlName="pesquisaSocial">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Previsão de aprovação</label>
+            <input type="date" class="modal__input" formControlName="prevAprovPesqSocial">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Treinamento</label>
+            <select class="modal__select" formControlName="treinamento">
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Ficha de EPI</label>
+            <select class="modal__select" formControlName="fichaEPI">
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Envio do documento</label>
+            <input type="date" class="modal__input" formControlName="envioDoc">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Previsão de aprovação</label>
+            <input type="date" class="modal__input" formControlName="prevAprovDoc">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">OS</label>
+            <select class="modal__select" formControlName="os">
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">ASO</label>
+            <select class="modal__select" formControlName="aso">
+              <option value="CONCLUIDO">CONCLUIDO</option>
+              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+            </select>
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Reenvio do documento</label>
+            <input type="date" class="modal__input" formControlName="reenvioDoc">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Previsão de aprovação</label>
+            <input type="date" class="modal__input" formControlName="prevAprovReenvioDoc">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
+          <button type="submit" class="btn btn--primary">
+            @if (isUpdate) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Atualizar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- CARREGANDO -->
+    <div *ngIf="isLoading" class="loading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <!-- SEM RESULTADO -->
+    <div class="empty" *ngIf="isEmpty">
+      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    </div>
+  </div>
+</div>
