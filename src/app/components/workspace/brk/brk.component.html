@@ -304,12 +304,13 @@
         <div class="modal__content">
           <div class="modal__group">
             <label class="modal__label">Nome</label>
-            <input type="text" formControlName="nome" class="modal__input">
+            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Função</label>
             <select class="modal__select" formControlName="funcao">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="ARMADOR">ARMADOR</option>
               <option value="DIRETOR">DIRETOR</option>
               <option value="SERVENTE">SERVENTE</option>
@@ -330,17 +331,18 @@
 
           <div class="modal__group">
             <label class="modal__label">Protocolo</label>
-            <input type="text" class="modal__input" formControlName="protocolo">
+            <input type="text" class="modal__input" formControlName="protocolo" placeholder="0.000.000">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Contrato</label>
-            <input type="text" class="modal__input" formControlName="contrato">
+            <input type="text" class="modal__input" formControlName="contrato" placeholder="CW00000">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">Cento de custo</label>
             <select class="modal__select" formControlName="centroCusto">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="BRK - RECIFE">BRK - RECIFE</option>
               <option value="BRK - MACEIO">BRK - MACEIO</option>
             </select>
@@ -349,6 +351,7 @@
           <div class="modal__group">
             <label class="modal__label">Status</label>
             <select class="modal__select" formControlName="status">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="NOVO">NOVO</option>
               <option value="EM AGUARDO">EM AGUARDO</option>
               <option value="LIBERADO">LIBERADO</option>
@@ -369,6 +372,7 @@
           <div class="modal__group">
             <label class="modal__label">Treinamento</label>
             <select class="modal__select" formControlName="treinamento">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="CONCLUIDO">CONCLUIDO</option>
               <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
             </select>
@@ -377,6 +381,7 @@
           <div class="modal__group">
             <label class="modal__label">Ficha de EPI</label>
             <select class="modal__select" formControlName="fichaEPI">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="CONCLUIDO">CONCLUIDO</option>
               <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
             </select>
@@ -395,6 +400,7 @@
           <div class="modal__group">
             <label class="modal__label">OS</label>
             <select class="modal__select" formControlName="os">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="CONCLUIDO">CONCLUIDO</option>
               <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
             </select>
@@ -403,6 +409,7 @@
           <div class="modal__group">
             <label class="modal__label">ASO</label>
             <select class="modal__select" formControlName="aso">
+              <option value="" disabled>Selecione uma opção</option>
               <option value="CONCLUIDO">CONCLUIDO</option>
               <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
             </select>
