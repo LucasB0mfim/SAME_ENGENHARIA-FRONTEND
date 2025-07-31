@@ -116,7 +116,7 @@ export class EmployeeComponent implements OnInit {
   getEmployee(): void {
     this.isLoading = true;
 
-    this._benefitService.findAll().subscribe({
+    this._benefitService.findFullInfo().subscribe({
       next: (data) => {
         this.isLoading = false;
         this.items = data.result;
@@ -212,7 +212,11 @@ export class EmployeeComponent implements OnInit {
       error: (error) => {
         this.isCreating = false;
         console.error('Falha ao criar colaborador: ', error);
-        this.setMessage('Falha ao criar o colaborador! Confira os dados informados.', 'error');
+        if (error.status === 400) {
+          this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+        } else {
+          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+        }
       }
     });
   }
@@ -254,10 +258,13 @@ export class EmployeeComponent implements OnInit {
         this.setMessage('Colaborador atualizado com sucesso!', 'success');
       },
       error: (error) => {
-        this.update = false;
         this.isUpdating = false;
         console.error('Erro ao atualizar colaborador: ', error);
-        this.setMessage('Não foi possível atualizar colaborador!', 'error');
+        if (error.status === 400) {
+          this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+        } else {
+          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+        }
       }
     });
   }
@@ -277,7 +284,11 @@ export class EmployeeComponent implements OnInit {
       error: (error) => {
         this.isDeleting = false;
         console.error('Falha ao deletar colaborador: ', error);
-        this.setMessage('Não foi possível deletar colaborador!', 'error');
+        if (error.status === 400) {
+          this.setMessage('Não foi possível encontrar o id do colaborador.', 'error');
+        } else {
+          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+        }
       }
     })
   }

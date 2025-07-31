@@ -8,6 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angul
 
 import { TitleService } from '../../../core/services/title.service';
 import { ResignationService } from '../../../core/services/resignation.service';
+import { BenefitService } from '../../../core/services/benefit.service';
 
 interface StatusCounts {
   'NOVA SOLICITAÇÃO': number;
@@ -30,13 +31,12 @@ export class ResignationComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _resignationService = inject(ResignationService);
+  private readonly _benefitService = inject(BenefitService);
 
   // ========== FORMULÁRIOS ========== //
   createForm: FormGroup = new FormGroup({
     id: new FormControl(''),
     nome: new FormControl(''),
-    funcao: new FormControl(''),
-    centroCusto: new FormControl(''),
     status: new FormControl(''),
     modalidade: new FormControl(''),
     dataComunicacao: new FormControl(''),
@@ -46,8 +46,6 @@ export class ResignationComponent implements OnInit {
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
     nome: new FormControl(''),
-    funcao: new FormControl(''),
-    centroCusto: new FormControl(''),
     status: new FormControl(''),
     modalidade: new FormControl(''),
     colaboradorComunicado: new FormControl(''),
@@ -59,6 +57,8 @@ export class ResignationComponent implements OnInit {
   items: any[] = [];
   currentItem: any = null;
   filteredItems: any[] = [];
+
+  employeeData: any[] = [];
 
   employee: string = '';
   selectedStatus: StatusKey = 'NOVA SOLICITAÇÃO';
@@ -90,6 +90,7 @@ export class ResignationComponent implements OnInit {
   // ========== HOOK ========== //
   ngOnInit(): void {
     this.loadInitialData();
+    this.getEmployeeInfo();
     this._titleService.setTitle('Desligamento');
   }
 
@@ -148,8 +149,6 @@ export class ResignationComponent implements OnInit {
 
     const request = {
       nome: this.createForm.value.nome,
-      funcao: this.createForm.value.funcao,
-      centro_custo: this.createForm.value.centroCusto,
       status: this.createForm.value.status,
       modalidade: this.createForm.value.modalidade,
       data_comunicacao: this.createForm.value.dataComunicacao,
@@ -164,8 +163,6 @@ export class ResignationComponent implements OnInit {
         this.createForm.reset({
           id: '',
           nome: '',
-          funcao: '',
-          centroCusto: '',
           status: '',
           modalidade: '',
           dataComunicacao: '',
@@ -176,9 +173,12 @@ export class ResignationComponent implements OnInit {
       },
       error: (error) => {
         this.isCreate = false;
-        this.isModalCreate = false;
         console.error('Erro ao criar colaborador: ', error);
-        this.setMessage('Não foi possível criar o colaborador!', 'error');
+        if (error.status === 400) {
+          this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+        } else {
+          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+        }
       }
     });
   }
@@ -189,8 +189,6 @@ export class ResignationComponent implements OnInit {
     const request = {
       id: this.updateForm.value.id,
       nome: this.updateForm.value.nome,
-      funcao: this.updateForm.value.funcao,
-      centro_custo: this.updateForm.value.centroCusto,
       status: this.updateForm.value.status,
       modalidade: this.updateForm.value.modalidade,
       colaborador_comunicado: this.updateForm.value.colaboradorComunicado,
@@ -210,7 +208,11 @@ export class ResignationComponent implements OnInit {
         this.isUpdate = false;
         this.isModalEdit = false;
         console.error('Erro ao atualizar colaborador: ', error);
-        this.setMessage('Falha ao atualizar o colaborador! Confira os dados informados.', 'error');
+        if (error.status === 400) {
+          this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+        } else {
+          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+        }
       }
     });
   }
@@ -232,6 +234,14 @@ export class ResignationComponent implements OnInit {
         this.isDelete = false;
         console.error('Erro ao deletar colaborador: ', error);
         this.setMessage('Falha ao atualizar colaborador!', 'error');
+      }
+    });
+  }
+
+  getEmployeeInfo(): void {
+    this._benefitService.findBasicInfo().subscribe({
+      next: (res) => {
+        this.employeeData = res.result;
       }
     });
   }

@@ -9,7 +9,6 @@ import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BenefitComponent } from './components/workspace/benefit/benefit.component';
-import { TaskFormComponent } from './components/forms/task-form/task-form.component';
 import { TrackingComponent } from './components/workspace/tracking/tracking.component';
 import { EmployeeComponent } from './components/workspace/employee/employee.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
@@ -54,11 +53,6 @@ export const routes: Routes = [
   {
     path: 'admission',
     component: AdmissionFormComponent,
-    canActivate: [tempTokenGuard]
-  },
-  {
-    path: 'task',
-    component: TaskFormComponent,
     canActivate: [tempTokenGuard]
   },
   {

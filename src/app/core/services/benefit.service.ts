@@ -15,9 +15,14 @@ export class BenefitService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findAll(): Observable<any> {
+  findBasicInfo(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee', { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee/basic', { headers });
+  }
+
+  findFullInfo(): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee/full', { headers });
   }
 
   createEmployee(request: any): Observable<any> {

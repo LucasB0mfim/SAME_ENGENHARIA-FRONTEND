@@ -133,67 +133,15 @@
 
         <div class="modal__content">
           <div class="modal__group">
-            <label class="modal__label">Nome</label>
-            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Função</label>
-            <select class="modal__select" formControlName="funcao">
+            <label class="modal__label">Colaborador *</label>
+            <select formControlName="nome" class="modal__select">
               <option value="" disabled>Selecione uma opção</option>
-              <option value="ARMADOR">ARMADOR</option>
-              <option value="DIRETOR">DIRETOR</option>
-              <option value="SERVENTE">SERVENTE</option>
-              <option value="PEDREIRO">PEDREIRO</option>
-              <option value="AUXILIAR">AUXILIAR</option>
-              <option value="ENCANADOR">ENCANADOR</option>
-              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
-              <option value="ALMOXARIFE">ALMOXARIFE</option>
-              <option value="ENGENHEIRO">ENGENHEIRO</option>
-              <option value="ELETRICISTA">ELETRICISTA</option>
-              <option value="COORDENADOR">COORDENADOR</option>
-              <option value="ENCARREGADO">ENCARREGADO</option>
-              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
-              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
-              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+              <option *ngFor="let emp of employeeData" [value]="emp.nome">{{ emp.nome }}</option>
             </select>
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Centro de custo</label>
-            <select class="modal__select" formControlName="centroCusto">
-              <option value="" disabled>Selecione um centro de custo</option>
-              <option value="EMLURB">EMLURB</option>
-              <option value="MÁQUINAS">MÁQUINAS</option>
-              <option value="BRK - HH">BRK - HH</option>
-              <option value="BRK - PV">BRK - PV</option>
-              <option value="BRK - PFIS">BRK - PFIS</option>
-              <option value="BRK - CABO">BRK - CABO</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-              <option value="BRK - REDES">BRK - REDES</option>
-              <option value="LUIZ WILSON">LUIZ WILSON</option>
-              <option value="BRK - HH 03">BRK - HH 03</option>
-              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-              <option value="RODA DE FOGO">RODA DE FOGO</option>
-              <option value="BRK - CURADO">BRK - CURADO</option>
-              <option value="BRK - GOIANA">BRK - GOIANA</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="BRK - CABANGA">BRK - CABANGA</option>
-              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
-              <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
-              <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
-              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Status</label>
+            <label class="modal__label">Status *</label>
             <select class="modal__select" formControlName="status">
               <option value="" disabled>Selecione uma opção</option>
               <option value="NOVA SOLICITAÇÃO">NOVA SOLICITAÇÃO</option>
@@ -205,7 +153,7 @@
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Modalidade</label>
+            <label class="modal__label">Modalidade *</label>
             <select class="modal__select" formControlName="modalidade">
               <option value="" disabled>Selecione uma opção</option>
               <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
@@ -218,7 +166,7 @@
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Comunicar colaborador</label>
+            <label class="modal__label">Comunicar colaborador *</label>
             <input type="date" formControlName="dataComunicacao" class="modal__input">
           </div>
 
@@ -255,67 +203,12 @@
 
         <div class="modal__content">
           <div class="modal__group">
-            <label class="modal__label">Nome</label>
-            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
+            <label class="modal__label">Nome *</label>
+            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input" readonly>
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Função</label>
-            <select class="modal__select" formControlName="funcao">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="ARMADOR">ARMADOR</option>
-              <option value="DIRETOR">DIRETOR</option>
-              <option value="SERVENTE">SERVENTE</option>
-              <option value="PEDREIRO">PEDREIRO</option>
-              <option value="AUXILIAR">AUXILIAR</option>
-              <option value="ENCANADOR">ENCANADOR</option>
-              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
-              <option value="ALMOXARIFE">ALMOXARIFE</option>
-              <option value="ENGENHEIRO">ENGENHEIRO</option>
-              <option value="ELETRICISTA">ELETRICISTA</option>
-              <option value="COORDENADOR">COORDENADOR</option>
-              <option value="ENCARREGADO">ENCARREGADO</option>
-              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
-              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
-              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Centro de custo</label>
-            <select class="modal__select" formControlName="centroCusto">
-              <option value="" disabled>Selecione um centro de custo</option>
-              <option value="EMLURB">EMLURB</option>
-              <option value="MÁQUINAS">MÁQUINAS</option>
-              <option value="BRK - HH">BRK - HH</option>
-              <option value="BRK - PV">BRK - PV</option>
-              <option value="BRK - PFIS">BRK - PFIS</option>
-              <option value="BRK - CABO">BRK - CABO</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-              <option value="BRK - REDES">BRK - REDES</option>
-              <option value="LUIZ WILSON">LUIZ WILSON</option>
-              <option value="BRK - HH 03">BRK - HH 03</option>
-              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-              <option value="RODA DE FOGO">RODA DE FOGO</option>
-              <option value="BRK - CURADO">BRK - CURADO</option>
-              <option value="BRK - GOIANA">BRK - GOIANA</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="BRK - CABANGA">BRK - CABANGA</option>
-              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
-              <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
-              <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
-              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Status</label>
+            <label class="modal__label">Status *</label>
             <select class="modal__select" formControlName="status">
               <option value="" disabled>Selecione uma opção</option>
               <option value="NOVA SOLICITAÇÃO">NOVA SOLICITAÇÃO</option>
@@ -327,7 +220,7 @@
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Modalidade</label>
+            <label class="modal__label">Modalidade *</label>
             <select class="modal__select" formControlName="modalidade">
               <option value="" disabled>Selecione uma opção</option>
               <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
@@ -340,17 +233,17 @@
           </div>
 
           <div class="modal__group">
+            <label class="modal__label">Início do aviso trabalhado *</label>
+            <input type="date" formControlName="dataInicioAvisoTrabalhado" class="modal__input">
+          </div>
+
+          <div class="modal__group">
             <label class="modal__label">Colaborador comunicado?</label>
             <select formControlName="colaboradorComunicado" class="modal__select">
               <option value="" disabled>Selecione uma opção</option>
               <option value="NÃO">NÃO</option>
               <option value="SIM">SIM</option>
             </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Início do aviso trabalhado</label>
-            <input type="date" formControlName="dataInicioAvisoTrabalhado" class="modal__input">
           </div>
 
           <div class="modal__group">
