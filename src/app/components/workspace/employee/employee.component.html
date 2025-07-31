@@ -13,6 +13,10 @@
         (input)="applyFilters()">
     </div>
 
+    <div class="filter">
+      <input value="{{ items.length }} COLABORADORES" disabled class="input input--secondary">
+    </div>
+
     <!-- FILTRO -->
     <form [formGroup]="costCenterForm" (ngSubmit)="getByCostCenter()" class="filter">
       <select formControlName="centroCusto" class="select select--primary">
@@ -73,22 +77,18 @@
           <div class="card__top">
             <div class="card__title">{{ item.nome || 'N/A' }}</div>
             <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">{{ item.contrato || 'N/A' }}</div>
           </div>
           <div class="card__bottom">
-            <div class="card__title">{{ item.centro_custo || 'N/A' }}</div>
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
           </div>
         </div>
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__subtitle">CHAPA: </div>
             <div class="card__title">{{ item.chapa || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">STATUS: </div>
-            <div class="card__title">{{ item.status || 'N/A' }}</div>
           </div>
         </div>
       </div>
@@ -120,8 +120,7 @@
 
           <div class="modal__group">
             <label class="modal__label">Data de nascimento</label>
-            <input type="text" placeholder="00/00/0000" mask="00/00/0000" formControlName="dataNascimento"
-              class="modal__input">
+            <input type="date" formControlName="dataNascimento" class="modal__input">
           </div>
 
           <div class="modal__group">
@@ -351,8 +350,7 @@
 
           <div class="modal__group">
             <label class="modal__label">Data de nascimento</label>
-            <input type="text" placeholder="00/00/0000" mask="00/00/0000" formControlName="dataNascimento"
-              class="modal__input">
+            <input type="date" formControlName="dataNascimento" class="modal__input">
           </div>
 
           <div class="modal__group">

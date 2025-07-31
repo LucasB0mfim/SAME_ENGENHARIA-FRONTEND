@@ -109,7 +109,7 @@ export class EmployeeComponent implements OnInit {
   // ========== HOOK ========== //
   ngOnInit(): void {
     this.getEmployee();
-    this._titleService.setTitle('Colaboradores');
+    this._titleService.setTitle('Efetivo');
   }
 
   // ========== API ========== //
@@ -207,7 +207,7 @@ export class EmployeeComponent implements OnInit {
         })
         this.employee = '';
         this.getEmployee();
-        this.setMessage('Colaborador criado com sucesso', 'success');
+        this.setMessage('Colaborador criado com sucesso!', 'success');
       },
       error: (error) => {
         this.isCreating = false;
@@ -251,13 +251,13 @@ export class EmployeeComponent implements OnInit {
         this.isUpdating = false;
         this.employee = '';
         this.getEmployee();
-        this.setMessage('Colaborador atualizado com sucesso', 'success');
+        this.setMessage('Colaborador atualizado com sucesso!', 'success');
       },
       error: (error) => {
         this.update = false;
         this.isUpdating = false;
         console.error('Erro ao atualizar colaborador: ', error);
-        this.setMessage('Não foi possível atualizar colaborador', 'error');
+        this.setMessage('Não foi possível atualizar colaborador!', 'error');
       }
     });
   }
@@ -270,12 +270,14 @@ export class EmployeeComponent implements OnInit {
       next: () => {
         this.isDeleting = false;
         this.delete = false;
-        this.setMessage('Colaborador deletado com sucesso', 'success');
+        this.employee = '';
+        this.getEmployee();
+        this.setMessage('Colaborador deletado com sucesso!', 'success');
       },
       error: (error) => {
         this.isDeleting = false;
         console.error('Falha ao deletar colaborador: ', error);
-        this.setMessage('Não foi possível deletar colaborador', 'error');
+        this.setMessage('Não foi possível deletar colaborador!', 'error');
       }
     })
   }

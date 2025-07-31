@@ -10,7 +10,7 @@
     display: flex;
     padding: 0 1.3vw 0 0.7vw;
 
-    :nth-child(2) {
+    :nth-child(3) {
       gap: 10px;
       display: flex;
       margin-left: auto;
@@ -73,10 +73,19 @@
   transition: all 0.2s ease;
 
   &--primary {
-    width: clamp(12.5rem, 11.8932rem + 2.589vw, 15rem);
     text-overflow: ellipsis;
     background: var(--secondary-color);
     color: var(--text-color);
+  }
+
+  &--secondary {
+    width: auto;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: var(--white-color);
+    background: var(--orange-color);
   }
 }
 
