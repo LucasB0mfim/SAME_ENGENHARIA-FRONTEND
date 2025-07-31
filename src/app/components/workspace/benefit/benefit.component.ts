@@ -3,7 +3,6 @@ import { saveAs } from 'file-saver';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -12,8 +11,7 @@ import { BenefitService } from '../../../core/services/benefit.service';
 
 @Component({
   selector: 'app-benefit',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule, NgxMaskDirective],
-  providers: [provideNgxMask()],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './benefit.component.html',
   styleUrl: './benefit.component.scss'
 })
@@ -82,58 +80,8 @@ export class BenefitComponent implements OnInit {
     centro_custo: new FormControl('')
   })
 
-  createEmployeeForm: FormGroup = new FormGroup({
-    nome: new FormControl(''),
-    chapa: new FormControl(''),
-    cpf: new FormControl(null),
-    data_nascimento: new FormControl(''),
-    funcao: new FormControl(''),
-    setor: new FormControl(''),
-    contrato: new FormControl(''),
-    centro_custo: new FormControl(''),
-    recebe_integral: new FormControl(''),
-    vr_caju: new FormControl(null),
-    vr_vr: new FormControl(null),
-    vc_caju: new FormControl(null),
-    vc_vr: new FormControl(null),
-    vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null),
-    vr_caju_fixo: new FormControl(''),
-    vr_vr_fixo: new FormControl(''),
-    vc_caju_fixo: new FormControl(''),
-    vc_vr_fixo: new FormControl(''),
-    vt_caju_fixo: new FormControl(''),
-    vt_vem_fixo: new FormControl('')
-  })
-
-  updateEmployeeForm: FormGroup = new FormGroup({
-    id: new FormControl(null),
-    nome: new FormControl(''),
-    chapa: new FormControl(''),
-    cpf: new FormControl(null),
-    data_nascimento: new FormControl(''),
-    funcao: new FormControl(''),
-    setor: new FormControl(''),
-    contrato: new FormControl(''),
-    centro_custo: new FormControl(''),
-    recebe_integral: new FormControl(''),
-    vr_caju: new FormControl(null),
-    vr_vr: new FormControl(null),
-    vc_caju: new FormControl(null),
-    vc_vr: new FormControl(null),
-    vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null),
-    vr_caju_fixo: new FormControl(''),
-    vr_vr_fixo: new FormControl(''),
-    vc_caju_fixo: new FormControl(''),
-    vc_vr_fixo: new FormControl(''),
-    vt_caju_fixo: new FormControl(''),
-    vt_vem_fixo: new FormControl('')
-  })
-
   // ========== ESTADOS ========== //
   items: any[] = [];
-  employees: any[] = [];
   filteredItem: any[] = [];
   timesheet: any[] = [];
   grafic: any = {};
@@ -142,7 +90,6 @@ export class BenefitComponent implements OnInit {
   geralSection: boolean = true;
   recordSection: boolean = false;
   deleteMonthSection: boolean = false;
-  employeeSection: boolean = false;
   createRecordSection: boolean = false;
   settingSection: boolean = false;
   layoutVrSection: boolean = false;
@@ -176,110 +123,6 @@ export class BenefitComponent implements OnInit {
   }
 
   // ========== API ========== //
-  findEmployee(): void {
-    this.employees = [];
-    this.isLoading = true;
-
-    this._benefitService.findAll().subscribe({
-      next: (data) => {
-        this.employees = data.result;
-        this.filteredItem = [...this.employees];
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.error(error);
-      }
-    })
-  }
-
-  createEmployee(): void {
-    this.isCreating = true;
-
-    const request = {
-      nome: this.upperCase(this.createEmployeeForm.value.nome),
-      chapa: this.createEmployeeForm.value.chapa || '000000',
-      cpf: this.createEmployeeForm.value.cpf,
-      data_nascimento: this.createEmployeeForm.value.data_nascimento,
-      funcao: this.createEmployeeForm.value.funcao,
-      setor: this.createEmployeeForm.value.setor,
-      contrato: this.createEmployeeForm.value.contrato,
-      centro_custo: this.createEmployeeForm.value.centro_custo,
-      recebe_integral: this.createEmployeeForm.value.recebe_integral || 'NÃO',
-      vr_caju: this.createEmployeeForm.value.vr_caju || 0,
-      vr_vr: this.createEmployeeForm.value.vr_vr || 0,
-      vc_caju: this.createEmployeeForm.value.vc_caju || 0,
-      vc_vr: this.createEmployeeForm.value.vc_vr || 0,
-      vt_caju: this.createEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.createEmployeeForm.value.vt_vem || 0,
-      vr_caju_fixo: this.createEmployeeForm.value.vr_caju_fixo || 'NÃO',
-      vr_vr_fixo: this.createEmployeeForm.value.vr_vr_fixo || 'NÃO',
-      vc_caju_fixo: this.createEmployeeForm.value.vc_caju_fixo || 'NÃO',
-      vc_vr_fixo: this.createEmployeeForm.value.vc_vr_fixo || 'NÃO',
-      vt_caju_fixo: this.createEmployeeForm.value.vt_caju_fixo || 'NÃO',
-      vt_vem_fixo: this.createEmployeeForm.value.vt_vem_fixo || 'NÃO'
-    }
-
-    this._benefitService.createEmployee(request).subscribe({
-      next: () => {
-        this.setSuccessMessage('Colaborador criado com sucesso.');
-        this.addEmployee = false;
-        this.resetForm();
-        this.findEmployee();
-        this.isCreating = false;
-      },
-      error: (error) => {
-        console.error(error);
-        this.setErrorMessage('Erro ao criar.');
-        this.isCreating = false;
-      }
-    })
-  }
-
-  updateEmployee(): void {
-    this.isUpdating = true;
-
-    const request = {
-      id: this.updateEmployeeForm.value.id,
-      nome: this.upperCase(this.updateEmployeeForm.value.nome),
-      chapa: this.updateEmployeeForm.value.chapa,
-      cpf: this.updateEmployeeForm.value.cpf,
-      data_nascimento: this.updateEmployeeForm.value.data_nascimento,
-      funcao: this.updateEmployeeForm.value.funcao,
-      setor: this.updateEmployeeForm.value.setor,
-      contrato: this.updateEmployeeForm.value.contrato,
-      centro_custo: this.updateEmployeeForm.value.centro_custo,
-      recebe_integral: this.updateEmployeeForm.value.recebe_integral || 'NÃO',
-      vr_caju: this.updateEmployeeForm.value.vr_caju || 0,
-      vr_vr: this.updateEmployeeForm.value.vr_vr || 0,
-      vc_caju: this.updateEmployeeForm.value.vc_caju || 0,
-      vc_vr: this.updateEmployeeForm.value.vc_vr || 0,
-      vt_caju: this.updateEmployeeForm.value.vt_caju || 0,
-      vt_vem: this.updateEmployeeForm.value.vt_vem || 0,
-      vr_caju_fixo: this.updateEmployeeForm.value.vr_caju_fixo || 'NÃO',
-      vr_vr_fixo: this.updateEmployeeForm.value.vr_vr_fixo || 'NÃO',
-      vc_caju_fixo: this.updateEmployeeForm.value.vc_caju_fixo || 'NÃO',
-      vc_vr_fixo: this.updateEmployeeForm.value.vc_vr_fixo || 'NÃO',
-      vt_caju_fixo: this.updateEmployeeForm.value.vt_caju_fixo || 'NÃO',
-      vt_vem_fixo: this.updateEmployeeForm.value.vt_vem_fixo || 'NÃO'
-    }
-
-    this._benefitService.updateEmployee(request).subscribe({
-      next: () => {
-        this.setSuccessMessage('Colaborador atualizado com sucesso.');
-        this.editEmployee = false;
-        this.updateEmployeeForm.reset();
-        this.findEmployee();
-        this.isUpdating = false;
-      },
-      error: (error) => {
-        console.error(error);
-        this.setErrorMessage('Erro ao atualizar.');
-        this.isUpdating = false;
-      }
-    })
-  }
-
   findRecord(): void {
     this.isFind = true;
 
@@ -410,27 +253,6 @@ export class BenefitComponent implements OnInit {
     })
   }
 
-  deleteEmployee(): void {
-    this.isDeleting = true;
-
-    const id = this.updateEmployeeForm.value.id;
-
-    this._benefitService.deleteEmployee(id).subscribe({
-      next: () => {
-        this.setSuccessMessage('Colaborador deletado com sucesso.');
-        this.editEmployee = false;
-        this.updateEmployeeForm.reset();
-        this.findEmployee();
-        this.isDeleting = false;
-      },
-      error: (error) => {
-        console.error(error);
-        this.setErrorMessage('Erro ao deletar.');
-        this.isDeleting = false;
-      }
-    })
-  }
-
   deleteRecord(): void {
     this.isDeleting = true;
 
@@ -542,35 +364,6 @@ export class BenefitComponent implements OnInit {
   }
 
   // ========== ABRIR O FORMULÁRIO COM OS DADOS DO COLABORADOR ========== //
-  openEditEmployee(employee: any): void {
-    this.editEmployee = true;
-
-    this.updateEmployeeForm.patchValue({
-      id: employee.id,
-      nome: employee.nome,
-      chapa: employee.chapa,
-      cpf: employee.cpf,
-      data_nascimento: this.formateDate(employee.data_nascimento),
-      funcao: employee.funcao,
-      setor: employee.setor,
-      contrato: employee.contrato,
-      centro_custo: employee.centro_custo,
-      recebe_integral: employee.recebe_integral,
-      vr_caju: employee.vr_caju,
-      vr_vr: employee.vr_vr,
-      vc_caju: employee.vc_caju,
-      vc_vr: employee.vc_vr,
-      vt_caju: employee.vt_caju,
-      vt_vem: employee.vt_vem,
-      vr_caju_fixo: employee.vr_caju_fixo,
-      vr_vr_fixo: employee.vr_vr_fixo,
-      vc_caju_fixo: employee.vc_caju_fixo,
-      vc_vr_fixo: employee.vc_vr_fixo,
-      vt_caju_fixo: employee.vt_caju_fixo,
-      vt_vem_fixo: employee.vt_vem_fixo
-    });
-  }
-
   openEditRecord(employee: any): void {
     this.updateRecordSection = true;
 
@@ -612,7 +405,6 @@ export class BenefitComponent implements OnInit {
       );
     }
 
-    this.employees = data;
     this.items = data;
   }
 
@@ -621,30 +413,14 @@ export class BenefitComponent implements OnInit {
     this.geralSection = true;
     this.recordSection = false;
     this.activeButton = 'geral';
-    this.employeeSection = false;
     this.employee = '';
   }
 
   showRecord(): void {
     this.recordSection = true;
     this.geralSection = false;
-    this.employeeSection = false;
     this.activeButton = 'record';
     this.employee = '';
-  }
-
-  showEmployee(): void {
-    this.geralSection = false;
-    this.recordSection = false;
-    this.employeeSection = true;
-    this.activeButton = 'employee';
-    this.employee = '';
-    this.findEmployee();
-  }
-
-  cancelCreateEmployee(): void {
-    this.addEmployee = false;
-    this.resetForm();
   }
 
   // ========== MOSTRAR MENSAGENS ========== //
@@ -692,30 +468,6 @@ export class BenefitComponent implements OnInit {
   formateDate(date: string): string {
     const [year, month, day] = date.split('-');
     return `${day}${month}${year}`;
-  }
-
-  resetForm(): void {
-    this.createEmployeeForm.reset({
-      nome: '',
-      chapa: '',
-      funcao: '',
-      setor: '',
-      contrato: '',
-      centro_custo: '',
-      recebe_integral: '',
-      vr_caju: null,
-      vr_vr: null,
-      vc_caju: null,
-      vc_vr: null,
-      vt_caju: null,
-      vt_vem: null,
-      vr_caju_fixo: '',
-      vr_vr_fixo: '',
-      vc_caju_fixo: '',
-      vc_vr_fixo: '',
-      vt_caju_fixo: '',
-      vt_vem_fixo: ''
-    });
   }
 
   resetLayoutVrForm(): void {

@@ -57,7 +57,7 @@
           <div class="dot"></div>
         </div>
         } @else {
-        BUSCAR
+        <mat-icon>search</mat-icon>
         }
       </button>
     </form>
@@ -559,7 +559,7 @@
     </form>
 
     <form *ngIf="delete" [formGroup]="deleteForm" (ngSubmit)="deleteEmployee()" class="modal__backdrop">
-      <div class="modal__container">
+      <div class="modal__container modal__container--secondary">
 
         <div class="modal__header">
           <h2 class="modal__title">Deletar colaborador</h2>
