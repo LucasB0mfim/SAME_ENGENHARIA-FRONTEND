@@ -17,7 +17,7 @@
     <div class="filter">
       <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'NOVA SOLICITAÇÃO'}"
         (click)="filterByStatus('NOVA SOLICITAÇÃO')">
-        Novas solicitações
+        Solicitações
         <span class="counter">{{ statusCounts['NOVA SOLICITAÇÃO'] }}</span>
       </button>
     </div>
@@ -75,6 +75,17 @@
             <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
           </div>
         </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">SOLICITAÇÃO: </div>
+            <div class="card__title">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+          <div class="card__text">
+            <div class="card__subtitle">MODALIDADE: </div>
+            <div class="card__title">{{ item.modalidade || 'N/A' }}</div>
+          </div>
+        </div>
       </div>
       <div class="card__body">
         <div class="card__content">
@@ -82,19 +93,15 @@
           <div class="card__title">{{ item.observacao || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">SOLICITAÇÃO</div>
-          <div class="card__title">{{ formateDate(item.data_solicitacao) || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
           <div class="card__subtitle">COMUNICAR</div>
           <div class="card__title">{{ formateDate(item.data_comunicacao) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">AVISO TRAB.</div>
+          <div class="card__subtitle">AVISO TRABALHADO</div>
           <div class="card__title">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">ÚLTIMO DIA</div>
+          <div class="card__subtitle">ÚLTIMO DIA TRAB.</div>
           <div class="card__title">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
         </div>
         <div class="card__content">
@@ -110,12 +117,8 @@
           <div class="card__title">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">COL. CIENTE</div>
+          <div class="card__subtitle">COLAB. COMUNICADO</div>
           <div class="card__title">{{ item.colaborador_comunicado || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
-          <div class="card__subtitle">MODALIDADE</div>
-          <div class="card__title">{{ item.modalidade || 'N/A' }}</div>
         </div>
       </div>
     </div>
