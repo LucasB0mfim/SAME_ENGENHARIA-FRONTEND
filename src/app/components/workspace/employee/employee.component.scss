@@ -5,12 +5,13 @@
   grid-template-rows: auto 1fr;
 
   &__filter {
+    gap: 10px;
     width: 100%;
-    padding: 0 1.3vw 0 0.7vw;
     display: flex;
+    padding: 0 1.3vw 0 0.7vw;
 
     :nth-child(2) {
-      gap: 20px;
+      gap: 10px;
       display: flex;
       margin-left: auto;
     }
@@ -49,15 +50,13 @@
   z-index: 1000;
 
   &.success {
-    background: rgba(75, 210, 143, 0.1);
-    color: #4bd28f;
-    border: 1px solid #4bd28f;
+    color: var(--white-color);
+    background: #4bd28f;
   }
 
   &.error {
-    background: rgba(255, 87, 87, 0.1);
-    color: #ff5757;
-    border: 1px solid #ff5757;
+    color: var(--white-color);
+    background: #ff5757;
   }
 }
 
@@ -137,6 +136,17 @@
     &:hover {
       color: var(--orange-color);
       transform: translateY(-2px);
+    }
+  }
+
+  &--third {
+    background: #ff5757;
+    color: var(--white-color);
+
+    &:hover {
+      background: #ff5757;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -233,12 +243,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 2;
     animation: fadeIn 0.3s ease;
   }
 
   &__container {
-    width: 50%;
+    width: 70%;
     max-width: 90%;
     background: var(--secondary-color);
     border-radius: 8px;
@@ -261,6 +271,11 @@
     margin: 0;
   }
 
+  &__subtitle {
+    color: var(--text-color);
+    font-size: clamp(0.875rem, 0.8447rem + 0.1294vw, 1rem);
+  }
+
   &__label {
     padding-left: 5px;
     margin-bottom: 8px;
@@ -272,6 +287,7 @@
 
   &__input,
   &__select {
+    width: 100%;
     border: none;
     outline: none;
     padding: 12px 16px;
@@ -279,9 +295,9 @@
     color: var(--text-color);
     text-transform: uppercase;
     background: var(--primary-color);
-    cursor: pointer;
     font-size: clamp(0.6rem, 0.8vw, 0.9rem);
     transition: all 0.2s ease;
+    text-overflow: ellipsis;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     &:focus {
@@ -294,11 +310,19 @@
     }
   }
 
+  &__select {
+    cursor: pointer;
+  }
+
   &__content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 24px;
+
+    &--secondary {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__group {
@@ -307,6 +331,20 @@
 
     &--full {
       grid-column: 1 / -1;
+    }
+
+    &--main {
+      gap: 20px;
+      width: 100%;
+      flex-direction: row;
+    }
+
+    &--child:first-child {
+      width: 65%;
+    }
+
+    &--child:last-child {
+      width: 35%;
     }
   }
 

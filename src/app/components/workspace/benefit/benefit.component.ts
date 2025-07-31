@@ -9,7 +9,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
 import { BenefitService } from '../../../core/services/benefit.service';
-import { DashboardService } from '../../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-benefit',
