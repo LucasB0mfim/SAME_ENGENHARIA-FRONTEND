@@ -254,6 +254,7 @@ export class ResignationComponent implements OnInit {
         this.isLoading = false;
         this.items = res.result || [];
         this.filteredItems = [...this.items];
+        this.isEmpty = this.items.length === 0;
       },
       error: (error) => {
         this.isLoading = false;
