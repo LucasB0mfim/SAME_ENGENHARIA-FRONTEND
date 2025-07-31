@@ -171,7 +171,6 @@ export class ResignationComponent implements OnInit {
           dataComunicacao: '',
           observacao: ''
         });
-        this.isEmpty = this.items.length === 0;
         this.refreshCurrentView();
         this.setMessage('Colaborador criado com sucesso!', 'success');
       },
@@ -201,9 +200,9 @@ export class ResignationComponent implements OnInit {
 
     this._resignationService.update(request).subscribe({
       next: () => {
+        this.employee = '';
         this.isUpdate = false;
         this.isModalEdit = false;
-        this.employee = '';
         this.setMessage('Colaborador atualizado com sucesso!', 'success');
         this.refreshCurrentView();
       },
@@ -211,7 +210,7 @@ export class ResignationComponent implements OnInit {
         this.isUpdate = false;
         this.isModalEdit = false;
         console.error('Erro ao atualizar colaborador: ', error);
-        this.setMessage('Não foi possível atualizar o colaborador!', 'error');
+        this.setMessage('Falha ao atualizar o colaborador! Confira os dados informados.', 'error');
       }
     });
   }
@@ -223,11 +222,11 @@ export class ResignationComponent implements OnInit {
 
     this._resignationService.delete(id).subscribe({
       next: () => {
+        this.employee = '';
         this.isDelete = false;
         this.isModalEdit = false;
-        this.employee = '';
-        this.setMessage('Colaborador deletado com sucesso!', 'success');
         this.refreshCurrentView();
+        this.setMessage('Colaborador deletado com sucesso!', 'success');
       },
       error: (error) => {
         this.isDelete = false;
@@ -251,11 +250,10 @@ export class ResignationComponent implements OnInit {
 
     this._resignationService.findByStatus(status).subscribe({
       next: (res: any) => {
+        this.applyFilters();
         this.isLoading = false;
         this.items = res.result || [];
         this.filteredItems = [...this.items];
-        this.isEmpty = this.items.length === 0;
-        this.applyFilters();
       },
       error: (error) => {
         this.isLoading = false;
@@ -273,10 +271,12 @@ export class ResignationComponent implements OnInit {
     }).subscribe({
       next: (result: any) => {
         this.items = result.dadosAtuais.result || [];
+        this.isEmpty = this.items.length === 0;
         this.filteredItems = [...this.items];
         this.applyFilters();
       },
       error: (error) => {
+        this.isEmpty = true;
         console.error('Erro ao atualizar visualização:', error);
       }
     });
