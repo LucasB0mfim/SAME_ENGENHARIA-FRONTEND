@@ -49,7 +49,7 @@
     <div class="filter">
       <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'DESLIGADO'}"
         (click)="filterByStatus('DESLIGADO')">
-        Demitidos
+        Desligados
         <span class="counter">{{ statusCounts.DESLIGADO }}</span>
       </button>
     </div>
@@ -90,7 +90,7 @@
           <div class="card__title">{{ formateDate(item.data_comunicacao) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">AVISO TRABALHADO</div>
+          <div class="card__subtitle">AVISO TRAB.</div>
           <div class="card__title">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
         </div>
         <div class="card__content">
@@ -110,12 +110,12 @@
           <div class="card__title">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">COLABORADOR CIENTE</div>
+          <div class="card__subtitle">COL. CIENTE</div>
           <div class="card__title">{{ item.colaborador_comunicado || 'N/A' }}</div>
         </div>
         <div class="card__content">
           <div class="card__subtitle">MODALIDADE</div>
-          <div class="card__title">{{ formateDate(item.dt_prev_aprov_doc) || 'N/A' }}</div>
+          <div class="card__title">{{ item.modalidade || 'N/A' }}</div>
         </div>
       </div>
     </div>
@@ -251,7 +251,7 @@
         </div>
 
         <div class="modal__content">
-          <div class="modal__group modal__group--full">
+          <div class="modal__group">
             <label class="modal__label">Nome</label>
             <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
           </div>
@@ -346,11 +346,6 @@
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Demissão</label>
-            <input type="date" formControlName="dataDemissao" class="modal__input">
-          </div>
-
-          <div class="modal__group">
             <label class="modal__label">Início do aviso trabalhado</label>
             <input type="date" formControlName="dataInicioAvisoTrabalhado" class="modal__input">
           </div>
@@ -358,16 +353,6 @@
           <div class="modal__group">
             <label class="modal__label">Rescisão</label>
             <input type="date" formControlName="dataRescisao" class="modal__input">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">último dia de trabalho</label>
-            <input type="date" formControlName="dataUltimoDiaDeTrabalho" class="modal__input">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Pagamento da rescisão</label>
-            <input type="date" formControlName="dataPagamentoRescisao" class="modal__input">
           </div>
         </div>
 

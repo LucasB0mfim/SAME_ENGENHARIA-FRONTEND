@@ -51,11 +51,8 @@ export class ResignationComponent implements OnInit {
     status: new FormControl(''),
     modalidade: new FormControl(''),
     colaboradorComunicado: new FormControl(''),
-    dataDemissao: new FormControl(''),
     dataInicioAvisoTrabalhado: new FormControl(''),
     dataRescisao: new FormControl(''),
-    dataUltimoDiaDeTrabalho: new FormControl(''),
-    dataPagamentoRescisao: new FormControl('')
   });
 
   // ========== ESTADOS ========== //
@@ -198,11 +195,8 @@ export class ResignationComponent implements OnInit {
       status: this.updateForm.value.status,
       modalidade: this.updateForm.value.modalidade,
       colaborador_comunicado: this.updateForm.value.colaboradorComunicado,
-      data_demissao: this.updateForm.value.dataDemissao,
       data_inicio_aviso_trabalhado: this.updateForm.value.dataInicioAvisoTrabalhado,
-      data_rescisao: this.updateForm.value.dataRescisao,
-      data_ultimo_dia_trabalhado: this.updateForm.value.dataUltimoDiaDeTrabalho,
-      data_pagamento_rescisao: this.updateForm.value.dataPagamentoRescisao
+      data_rescisao: this.updateForm.value.dataRescisao
     }
 
     this._resignationService.update(request).subscribe({
@@ -301,20 +295,12 @@ export class ResignationComponent implements OnInit {
       id: item.id || '',
       nome: item.nome || '',
       funcao: item.funcao || '',
-      protocolo: item.protocolo || '',
-      contrato: item.contrato || '',
       centroCusto: item.centro_custo || '',
       status: item.status || '',
-      pesquisaSocial: item.dt_envio_pesq_social || '',
-      prevAprovPesqSocial: item.dt_prev_aprov_pesq_social || '',
-      treinamento: item.treinamento || '',
-      fichaEPI: item.ficha_epi || '',
-      envioDoc: item.dt_envio_doc || '',
-      prevAprovDoc: item.dt_prev_aprov_doc || '',
-      os: item.os || '',
-      aso: item.aso || '',
-      reenvioDoc: item.dt_reenvio_doc || '',
-      prevAprovReenvioDoc: item.dt_prev_aprov_reenvio_doc || '',
+      modalidade: item.modalidade || '',
+      colaboradorComunicado: item.colaborador_comunicado || '',
+      dataInicioAvisoTrabalhado: item.data_inicio_aviso_trabalhado || '',
+      dataRescisao: item.data_rescisao || ''
     });
   }
 
