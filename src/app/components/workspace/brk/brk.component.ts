@@ -12,9 +12,11 @@ import { TitleService } from '../../../core/services/title.service';
 // Interface para tipagem dos contadores
 interface StatusCounts {
   'NOVO': number;
-  'EM AGUARDO': number;
+  'PESQUISA SOCIAL': number;
+  'DOCUMENTAÇÃO': number;
+  'INTEGRAÇÃO': number;
   'LIBERADO': number;
-  'CANCELADO': number;
+  'PAUSADO': number;
 }
 
 // Tipo para as chaves dos status
@@ -41,20 +43,9 @@ export class BrkComponent implements OnInit {
     id: new FormControl(''),
     nome: new FormControl(''),
     funcao: new FormControl(''),
-    protocolo: new FormControl(''),
     contrato: new FormControl(''),
     centroCusto: new FormControl(''),
-    status: new FormControl(''),
-    pesquisaSocial: new FormControl(''),
-    prevAprovPesqSocial: new FormControl(''),
-    treinamento: new FormControl(''),
-    fichaEPI: new FormControl(''),
-    envioDoc: new FormControl(''),
-    prevAprovDoc: new FormControl(''),
-    os: new FormControl(''),
-    aso: new FormControl(''),
-    reenvioDoc: new FormControl(''),
-    prevAprovReenvioDoc: new FormControl('')
+    status: new FormControl('')
   });
 
   updateForm: FormGroup = new FormGroup({
@@ -87,9 +78,11 @@ export class BrkComponent implements OnInit {
 
   statusCounts: StatusCounts = {
     'NOVO': 0,
-    'EM AGUARDO': 0,
+    'PESQUISA SOCIAL': 0,
+    'DOCUMENTAÇÃO': 0,
+    'INTEGRAÇÃO': 0,
     'LIBERADO': 0,
-    'CANCELADO': 0
+    'PAUSADO': 0,
   };
 
   isModalCreate: boolean = false;
@@ -146,7 +139,7 @@ export class BrkComponent implements OnInit {
 
   // ========== CARREGAMENTO DE CONTADORES ========== //
   loadStatusCounts(centroCusto: string): Observable<any> {
-    const statusList: StatusKey[] = ['NOVO', 'EM AGUARDO', 'LIBERADO', 'CANCELADO'];
+    const statusList: StatusKey[] = ['NOVO', 'PESQUISA SOCIAL', 'INTEGRAÇÃO', 'DOCUMENTAÇÃO', 'INTEGRAÇÃO', 'LIBERADO', 'PAUSADO'];
 
     const requests = statusList.map(status =>
       this._brkService.findItemsByStatus(centroCusto, status)
@@ -173,20 +166,9 @@ export class BrkComponent implements OnInit {
       id: this.createForm.value.id,
       nome: this.createForm.value.nome,
       funcao: this.createForm.value.funcao,
-      protocolo: this.createForm.value.protocolo,
       contrato: this.createForm.value.contrato,
       centro_custo: this.createForm.value.centroCusto,
       status: this.createForm.value.status,
-      dt_envio_pesq_social: this.createForm.value.pesquisaSocial,
-      dt_prev_aprov_pesq_social: this.createForm.value.prevAprovPesqSocial,
-      treinamento: this.createForm.value.treinamento,
-      ficha_epi: this.createForm.value.fichaEPI,
-      dt_envio_doc: this.createForm.value.envioDoc,
-      dt_prev_aprov_doc: this.createForm.value.prevAprovDoc,
-      os: this.createForm.value.os,
-      aso: this.createForm.value.aso,
-      dt_reenvio_doc: this.createForm.value.reenvioDoc,
-      dt_prev_aprov_reenvio_doc: this.createForm.value.prevAprovReenvioDoc
     }
 
     this._brkService.create(request).subscribe({
@@ -197,20 +179,9 @@ export class BrkComponent implements OnInit {
           id: '',
           nome: '',
           funcao: '',
-          protocolo: '',
           contrato: '',
           centroCusto: '',
-          status: '',
-          pesquisaSocial: '',
-          prevAprovPesqSocial: '',
-          treinamento: '',
-          fichaEPI: '',
-          envioDoc: '',
-          prevAprovDoc: '',
-          os: '',
-          aso: '',
-          reenvioDoc: '',
-          prevAprovReenvioDoc: ''
+          status: ''
         });
         this.isEmpty = this.items.length === 0;
         this.refreshCurrentView();

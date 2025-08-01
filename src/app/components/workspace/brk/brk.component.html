@@ -16,32 +16,48 @@
     <!-- NAVEGAÇÃO POR STATUS -->
     <div class="filter">
       <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'NOVO'}" (click)="filterByStatus('NOVO')">
-        Novos
-        <span class="counter">{{ statusCounts.NOVO }}</span>
+        Novo
+        <span class="counter">{{ statusCounts['NOVO'] }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'EM AGUARDO'}"
-        (click)="filterByStatus('EM AGUARDO')">
-        Em aguardo
-        <span class="counter">{{ statusCounts['EM AGUARDO'] }}</span>
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'PESQUISA SOCIAL'}"
+        (click)="filterByStatus('PESQUISA SOCIAL')">
+        P.S
+        <span class="counter">{{ statusCounts['PESQUISA SOCIAL'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'DOCUMENTAÇÃO'}"
+        (click)="filterByStatus('DOCUMENTAÇÃO')">
+        Documentação
+        <span class="counter">{{ statusCounts['DOCUMENTAÇÃO'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'INTEGRAÇÃO'}"
+        (click)="filterByStatus('INTEGRAÇÃO')">
+        Integração
+        <span class="counter">{{ statusCounts['INTEGRAÇÃO'] }}</span>
       </button>
     </div>
 
     <div class="filter">
       <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'LIBERADO'}"
         (click)="filterByStatus('LIBERADO')">
-        Liberados
-        <span class="counter">{{ statusCounts.LIBERADO }}</span>
+        Liberado
+        <span class="counter">{{ statusCounts['LIBERADO'] }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'CANCELADO'}"
-        (click)="filterByStatus('CANCELADO')">
-        Cancelados
-        <span class="counter">{{ statusCounts.CANCELADO }}</span>
+      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'PAUSADO'}"
+        (click)="filterByStatus('PAUSADO')">
+        Pausado
+        <span class="counter">{{ statusCounts['PAUSADO'] }}</span>
       </button>
     </div>
 
@@ -145,14 +161,14 @@
 
     <!-- MODAL -->
     <form *ngIf="isModalCreate" [formGroup]="createForm" (ngSubmit)="create()" class="modal__backdrop">
-      <div class="modal__container">
+      <div class="modal__container modal__container--small">
         <div class="modal__header">
           <h2 class="modal__title">Criar colaborador</h2>
           <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
-        <div class="modal__content">
-          <div class="modal__group">
+        <div class="modal__content modal__content--small">
+          <div class="modal__group modal__group--full">
             <label class="modal__label">Nome</label>
             <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input">
           </div>
@@ -180,11 +196,6 @@
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Protocolo</label>
-            <input type="text" class="modal__input" formControlName="protocolo" placeholder="0.000.000">
-          </div>
-
-          <div class="modal__group">
             <label class="modal__label">Contrato</label>
             <input type="text" class="modal__input" formControlName="contrato" placeholder="CW00000">
           </div>
@@ -207,72 +218,6 @@
               <option value="LIBERADO">LIBERADO</option>
               <option value="CANCELADO">CANCELADO</option>
             </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Pesquisa social</label>
-            <input type="date" class="modal__input" formControlName="pesquisaSocial">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Previsão de aprovação</label>
-            <input type="date" class="modal__input" formControlName="prevAprovPesqSocial">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Treinamento</label>
-            <select class="modal__select" formControlName="treinamento">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Ficha de EPI</label>
-            <select class="modal__select" formControlName="fichaEPI">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Envio do documento</label>
-            <input type="date" class="modal__input" formControlName="envioDoc">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Previsão de aprovação</label>
-            <input type="date" class="modal__input" formControlName="prevAprovDoc">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">OS</label>
-            <select class="modal__select" formControlName="os">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">ASO</label>
-            <select class="modal__select" formControlName="aso">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Reenvio do documento</label>
-            <input type="date" class="modal__input" formControlName="reenvioDoc">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Previsão de aprovação</label>
-            <input type="date" class="modal__input" formControlName="prevAprovReenvioDoc">
           </div>
         </div>
 
