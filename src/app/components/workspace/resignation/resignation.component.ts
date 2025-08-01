@@ -213,6 +213,8 @@ export class ResignationComponent implements OnInit {
         console.error('Erro ao atualizar colaborador: ', error);
         if (error.status === 400) {
           this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+        } else if (error.status === 422) {
+          this.setMessage('O início do aviso trabalhado é incompátivel com a sua modalidade!', 'error');
         } else {
           this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
         }
