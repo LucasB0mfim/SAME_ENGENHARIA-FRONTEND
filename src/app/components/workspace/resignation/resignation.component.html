@@ -82,7 +82,6 @@
             <div class="card__subtitle">|</div>
           </div>
           <div class="card__text">
-            <div class="card__subtitle">MODALIDADE: </div>
             <div class="card__title">{{ item.modalidade || 'N/A' }}</div>
           </div>
         </div>
@@ -159,9 +158,10 @@
               <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
               <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
               <option value="PEDIDO DE DEMISSÃO">PEDIDO DE DEMISSÃO</option>
+              <option value="ENCERRAMENTO DE CONTRATO">ENCERRAMENTO DE CONTRATO</option>
               <option value="TÉRMINO DO CONTRATO DE EXPERIÊNCIA">TÉRMINO DO CONTRATO DE EXPERIÊNCIA</option>
               <option value="AVISO TRABALHADO JORNADSA REDUZIDA">AVISO TRABALHADO JORNADSA REDUZIDA</option>
-              <option value="PEDIDO DE DEMISSÃO">ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA</option>
+              <option value="ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA">ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA</option>
             </select>
           </div>
 
@@ -202,7 +202,7 @@
         </div>
 
         <div class="modal__content">
-          <div class="modal__group">
+          <div class="modal__group modal__group--full">
             <label class="modal__label">Nome *</label>
             <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input" readonly>
           </div>
@@ -226,15 +226,26 @@
               <option value="AVISO INDENIZADO">AVISO INDENIZADO</option>
               <option value="AVISO TRABALHADO">AVISO TRABALHADO</option>
               <option value="PEDIDO DE DEMISSÃO">PEDIDO DE DEMISSÃO</option>
+              <option value="ENCERRAMENTO DE CONTRATO">ENCERRAMENTO DE CONTRATO</option>
               <option value="TÉRMINO DO CONTRATO DE EXPERIÊNCIA">TÉRMINO DO CONTRATO DE EXPERIÊNCIA</option>
               <option value="AVISO TRABALHADO JORNADSA REDUZIDA">AVISO TRABALHADO JORNADSA REDUZIDA</option>
-              <option value="PEDIDO DE DEMISSÃO">ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA</option>
+              <option value="ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA">ATECIPAÇÃO DO CONTRATO DE EXPERIÊNCIA</option>
             </select>
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Início do aviso trabalhado *</label>
+            <label class="modal__label">Início do aviso trabalhado</label>
             <input type="date" formControlName="dataInicioAvisoTrabalhado" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Modalidade do aviso trabalhado</label>
+            <select class="modal__select" formControlName="modalidadeAvisoTrabalhado">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="NÃO SE APLICA">NÃO SE APLICA</option>
+              <option value="REDUÇÃO DE DIAS">REDUÇÃO DE DIAS</option>
+              <option value="REDUÇÃO DE CARGA HORARIA">REDUÇÃO DE CARGA HORARIA</option>
+            </select>
           </div>
 
           <div class="modal__group">

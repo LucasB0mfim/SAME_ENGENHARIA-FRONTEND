@@ -49,7 +49,9 @@ export class ResignationComponent implements OnInit {
     status: new FormControl(''),
     modalidade: new FormControl(''),
     colaboradorComunicado: new FormControl(''),
+    dataComunicacao: new FormControl(''),
     dataInicioAvisoTrabalhado: new FormControl(''),
+    modalidadeAvisoTrabalhado: new FormControl(''),
     dataRescisao: new FormControl(''),
   });
 
@@ -192,7 +194,9 @@ export class ResignationComponent implements OnInit {
       status: this.updateForm.value.status,
       modalidade: this.updateForm.value.modalidade,
       colaborador_comunicado: this.updateForm.value.colaboradorComunicado,
+      data_comunicacao: this.updateForm.value.dataComunicacao,
       data_inicio_aviso_trabalhado: this.updateForm.value.dataInicioAvisoTrabalhado,
+      modalidade_aviso_trabalhado: this.updateForm.value.modalidadeAvisoTrabalhado,
       data_rescisao: this.updateForm.value.dataRescisao
     }
 
@@ -206,7 +210,6 @@ export class ResignationComponent implements OnInit {
       },
       error: (error) => {
         this.isUpdate = false;
-        this.isModalEdit = false;
         console.error('Erro ao atualizar colaborador: ', error);
         if (error.status === 400) {
           this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
@@ -310,7 +313,9 @@ export class ResignationComponent implements OnInit {
       status: item.status || '',
       modalidade: item.modalidade || '',
       colaboradorComunicado: item.colaborador_comunicado || '',
+      dataComunicacao: item.data_comunicacao || '',
       dataInicioAvisoTrabalhado: item.data_inicio_aviso_trabalhado || '',
+      ModalidadeAvisoTrabalhado: item.modalidade_aviso_trabalhado || '',
       dataRescisao: item.data_rescisao || ''
     });
   }
