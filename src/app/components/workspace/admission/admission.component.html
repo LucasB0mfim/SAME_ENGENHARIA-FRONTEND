@@ -123,11 +123,11 @@
 
           <!-- -->
           <div class="card__top">
-            <div class="card__title">{{ item.name || 'N/A' }}</div>
+            <div class="card__title">{{ item.nome || 'N/A' }}</div>
           </div>
 
           <div class="card__bottom">
-            <div class="card__subtitle">{{ item.role || 'N/A' }}</div>
+            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
           </div>
         </div>
 
@@ -137,8 +137,13 @@
             <mat-icon>photo_camera_front</mat-icon>
           </button>
 
-          <button class="btn btn--open-image" (click)="openModal(item, 'cpf'); $event.stopPropagation()">CPF</button>
-          <button class="btn btn--open-image" (click)="openModal(item, 'rg'); $event.stopPropagation()">RG</button>
+          <button class="btn btn--open-image" (click)="openModal(item, 'cpf'); $event.stopPropagation()">
+            CPF
+          </button>
+
+          <button class="btn btn--open-image" (click)="openModal(item, 'rg'); $event.stopPropagation()">
+            RG
+          </button>
 
           <button class="btn btn--open-image" (click)="openModal(item, 'residence'); $event.stopPropagation()">
             <mat-icon>house</mat-icon>
@@ -146,6 +151,10 @@
 
           <button class="btn btn--open-image" (click)="openModal(item, 'certificate'); $event.stopPropagation()">
             <mat-icon>assignment</mat-icon>
+          </button>
+
+          <button class="btn btn--open-image" (click)="openModal(item, 'vem'); $event.stopPropagation()">
+            <mat-icon>directions_bus</mat-icon>
           </button>
 
           <button class="btn btn--open-image" (click)="openModalEdit(item); $event.stopPropagation()">
@@ -179,68 +188,73 @@
 
         <div class="card__info">
           <div class="card__title">TELEFONE</div>
-          <div class="card__subtitle">{{ formatePhone(item.phone) || 'N/A' }}</div>
+          <div class="card__subtitle">{{ formatePhone(item.numero_contato) || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">TAMANHO DA BOTA</div>
-          <div class="card__subtitle">{{ item.boot_size || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.numero_calcado || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">TAMANHO DA FARDA</div>
-          <div class="card__subtitle">{{ item.uniform || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.tamanho_farda || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">VALE TRANSPORTE</div>
-          <div class="card__subtitle">{{ item.daily_vouchers || 'NÃO SE QUALIFICA' }}</div>
+          <div class="card__subtitle">{{ item.quantidade_vt || 'NÃO SE QUALIFICA' }}</div>
+        </div>
+
+        <div class="card__info">
+          <div class="card__title">NÚMERO VEM</div>
+          <div class="card__subtitle">{{ formateVEM(item.numero_vem) || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">ENDEREÇO</div>
-          <div class="card__subtitle">{{ item.address || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.endereco || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">DATA DE NASCIMENTO</div>
-          <div class="card__subtitle">{{ formateDate(item.birth_date) || 'N/A' }}</div>
+          <div class="card__subtitle">{{ formateDate(item.data_nascimento) || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">FILHO(S) PEQUENO(S)</div>
-          <div class="card__subtitle">{{ item.children_under_14 || 'NENHUM' }}</div>
+          <div class="card__subtitle">{{ item.criancas_dependentes || 'NENHUM' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">ALERGIA</div>
-          <div class="card__subtitle">{{ item.allergy || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.alergia || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">DOENÇA CRONICA</div>
-          <div class="card__subtitle">{{ item.chronic_disease || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.doenca_cronica || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">CONTATO DE EMERGÊNCIA</div>
-          <div class="card__subtitle">{{ formatePhone(item.emergency_phone) || 'N/A' }}
+          <div class="card__subtitle">{{ formatePhone(item.numero_contato_emergencia) || 'N/A' }}
           </div>
         </div>
 
         <div class="card__info">
           <div class="card__title">NOME DO PARENTE</div>
-          <div class="card__subtitle">{{ item.emergency_name || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.contato_emergencia_nome || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">GRAU DE PARENTESCO</div>
-          <div class="card__subtitle">{{ item.relationship || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.grau_parentesco_emergencia || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
           <div class="card__title">TIPO SANGUÍNEO</div>
-          <div class="card__subtitle">{{ item.blood_type || 'N/A' }}</div>
+          <div class="card__subtitle">{{ item.tipo_sanguineo || 'N/A' }}</div>
         </div>
 
         <div class="card__info">
@@ -266,36 +280,41 @@
         <div class="modal__content">
 
           <!-- Foto 3x4 -->
-          <div *ngIf="modalType === 'photo' && currentItem?.photo_3x4" class="modal__image-container">
-            <img [src]="buildImageUrl(currentItem.photo_3x4)" alt="Foto 3x4" class="modal__image">
+          <div *ngIf="modalType === 'photo' && currentItem?.foto_3x4" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.foto_3x4)" alt="Foto 3x4" class="modal__image">
           </div>
 
           <!-- CPF -->
-          <div *ngIf="modalType === 'cpf' && currentItem?.cpf_image" class="modal__image-container">
-            <img [src]="buildImageUrl(currentItem.cpf_image)" alt="CPF" class="modal__image">
+          <div *ngIf="modalType === 'cpf' && currentItem?.foto_cpf" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.foto_cpf)" alt="CPF" class="modal__image">
           </div>
 
           <!-- RG (Frente e Verso) -->
           <div *ngIf="modalType === 'rg'" class="modal__rg-container">
-            <div *ngIf="currentItem?.rg_front" class="modal__image-container">
+            <div *ngIf="currentItem?.foto_rg_frente" class="modal__image-container">
               <h3>Frente</h3>
-              <img [src]="buildImageUrl(currentItem.rg_front)" alt="RG Frente" class="modal__image">
+              <img [src]="buildImageUrl(currentItem.foto_rg_frente)" alt="RG Frente" class="modal__image">
             </div>
-            <div *ngIf="currentItem?.rg_back" class="modal__image-container">
+            <div *ngIf="currentItem?.foto_rg_verso" class="modal__image-container">
               <h3>Verso</h3>
-              <img [src]="buildImageUrl(currentItem.rg_back)" alt="RG Verso" class="modal__image">
+              <img [src]="buildImageUrl(currentItem.foto_rg_verso)" alt="RG Verso" class="modal__image">
             </div>
           </div>
 
           <!-- Comprovante de Residência -->
-          <div *ngIf="modalType === 'residence' && currentItem?.residence_proof" class="modal__image-container">
-            <img [src]="buildImageUrl(currentItem.residence_proof)" alt="Comprovante de Residência"
-              class="modal__image">
+          <div *ngIf="modalType === 'residence' && currentItem?.foto_certidao" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.foto_certidao)" alt="Comprovante de Residência" class="modal__image">
           </div>
 
           <!-- Certificado -->
-          <div *ngIf="modalType === 'certificate' && currentItem?.certificate" class="modal__image-container">
-            <img [src]="buildImageUrl(currentItem.certificate)" alt="Certificado" class="modal__image">
+          <div *ngIf="modalType === 'certificate' && currentItem?.foto_comprovante_residencia"
+            class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.foto_comprovante_residencia)" alt="Certificado" class="modal__image">
+          </div>
+
+          <!-- Vem -->
+          <div *ngIf="modalType === 'vem' && currentItem?.foto_vem" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.foto_vem)" alt="vem" class="modal__image">
           </div>
 
           <!-- Mensagem quando não há documento -->

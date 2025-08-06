@@ -303,6 +303,9 @@ export class AdmissionComponent implements OnInit {
       case 'certificate':
         this.modalTitle = 'Certidão';
         break;
+      case 'vem':
+        this.modalTitle = 'Cartão VEM';
+        break;
       default:
         this.modalTitle = 'Documento';
     }
@@ -328,15 +331,17 @@ export class AdmissionComponent implements OnInit {
 
     switch (this.modalType) {
       case 'photo':
-        return !!this.currentItem.photo_3x4;
+        return !!this.currentItem.foto_3x4;
       case 'cpf':
-        return !!this.currentItem.cpf_image;
+        return !!this.currentItem.foto_cpf;
       case 'rg':
-        return !!(this.currentItem.rg_front || this.currentItem.rg_back);
+        return !!(this.currentItem.foto_rg_frente || this.currentItem.foto_rg_verso);
       case 'residence':
-        return !!this.currentItem.residence_proof;
+        return !!this.currentItem.foto_comprovante_residencia;
       case 'certificate':
-        return !!this.currentItem.certificate;
+        return !!this.currentItem.foto_certidao;
+      case 'vem':
+        return !!this.currentItem.foto_vem;
       default:
         return false;
     }
@@ -374,6 +379,10 @@ export class AdmissionComponent implements OnInit {
 
   formatePIS(cpf: string): string {
     return `${cpf.slice(0, 3)}.${cpf.slice(3, 8)}.${cpf.slice(8, 10)}-${cpf.slice(10, 11)}`;
+  }
+
+  formateVEM(cpf: string): string {
+    return `${cpf.slice(0, 2)}.${cpf.slice(2, 4)}.${cpf.slice(4, 11)}-${cpf.slice(11, 12)}`;
   }
 
   triggerRotate() {

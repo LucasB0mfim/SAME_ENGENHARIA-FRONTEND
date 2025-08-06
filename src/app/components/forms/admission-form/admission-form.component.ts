@@ -1,143 +1,184 @@
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, inject, OnInit } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { AdmissionService } from '../../../core/services/admission.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admission-form',
-  imports: [NgxMaskDirective, MatIconModule, CommonModule, ReactiveFormsModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective, MatProgressSpinnerModule],
   providers: [provideNgxMask()],
   templateUrl: './admission-form.component.html',
   styleUrl: './admission-form.component.scss'
 })
-export class AdmissionFormComponent {
-  private readonly _admission = inject(AdmissionService);
+export class AdmissionFormComponent implements OnInit {
 
-  admissionForm: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    cpf: new FormControl('', [Validators.required]),
-    birthDate: new FormControl('', [Validators.required]),
-    phone: new FormControl('', [Validators.required]),
-    rg: new FormControl('', [Validators.required]),
+  // ========== INJEÇÃO DE DEPENDENCIAS ========== //
+  private readonly _admissionService = inject(AdmissionService);
+  private _router = inject(Router);
+
+  // ========== ESTADOS ========== //
+  isLoading: boolean = false;
+  uploadedFiles: { [key: string]: File } = {};
+
+  // ========== FORMULÁRIO ========== //
+  createForm: FormGroup = new FormGroup({
+    nome: new FormControl('', Validators.required),
+    cpf: new FormControl('', Validators.required),
+    data_nascimento: new FormControl('', Validators.required),
+    numero_contato: new FormControl('', Validators.required),
+    rg: new FormControl('', Validators.required),
     pis: new FormControl(''),
-    address: new FormControl('', [Validators.required]),
-    uniform: new FormControl('', [Validators.required]),
-    dailyVouchers: new FormControl(''),
-    role: new FormControl('', [Validators.required]),
-    bootSize: new FormControl(''),
-    childrenUnder14: new FormControl('', [Validators.required]),
+    endereco: new FormControl('', Validators.required),
+
+    // Dados profissionais
+    funcao: new FormControl('', Validators.required),
+    tamanho_farda: new FormControl('', Validators.required),
+    numero_calcado: new FormControl('', Validators.required),
+    criancas_dependentes: new FormControl('', Validators.required),
+    precisa_vt: new FormControl(''),
+    quantidade_vt: new FormControl(''),
+    possui_vem: new FormControl(''),
+    numero_vem: new FormControl(''),
+
+    // Redes sociais
     instagram: new FormControl(''),
     linkedin: new FormControl(''),
-    bloodType: new FormControl('', [Validators.required]),
-    emergencyName: new FormControl('', [Validators.required]),
-    relationship: new FormControl('', [Validators.required]),
-    emergencyPhone: new FormControl('', [Validators.required]),
-    allergy: new FormControl('', [Validators.required]),
-    chronicDisease: new FormControl('', [Validators.required]),
-    photo3x4: new FormControl(null, [Validators.required]),
-    cpfImage: new FormControl(null, [Validators.required]),
-    rgFront: new FormControl(null, [Validators.required]),
-    rgBack: new FormControl(null, [Validators.required]),
-    certificate: new FormControl(null, [Validators.required]),
-    residenceProof: new FormControl(null, [Validators.required])
+
+    // Dados médicos
+    tipo_sanguineo: new FormControl('', Validators.required),
+    alergia: new FormControl('', Validators.required),
+    doenca_cronica: new FormControl('', Validators.required),
+
+    // Contato de emergência
+    contato_emergencia_nome: new FormControl('', Validators.required),
+    grau_parentesco_emergencia: new FormControl('', Validators.required),
+    numero_contato_emergencia: new FormControl('', Validators.required),
   });
 
-  showForm: boolean = true;
-  error: boolean = false;
-  success: boolean = false;
-  isLoading: boolean = false;
-  useVT: string = '';
-  fileNames: { [key: string]: string } = {};
-  showError: boolean = false;
-  errorMessage: string = '';
+  // ========== HOOK ========== //
+  ngOnInit(): void {
+    // Observar mudanças no campo "Precisa de vale transporte"
+    this.createForm.get('precisa_vt')?.valueChanges.subscribe(value => {
+      this.updateValeTransporteValidations(value);
+    });
 
-  needBoot: string[] = [
-    'PINTOR', 'SERVENTE', 'PEDREIRO', 'ARMADOR', 'SOLDADOR', 'BETONEIRO',
-    'ELETRICISTA', 'ALMOXARIFE', 'ENGENHEIRO', 'ENCANADOR', 'SERRALHEIRO',
-    'CARPINTEIRO', 'ENCARREGADO', 'APONTADOR', 'MESTRE DE OBRAS',
-    'AUXILIAR DE ENGENHARIA', 'TÉCNICO DE SEGURANÇA', 'TÉCNICO EM EDIFICAÇÕES',
-    'OPERADOR DE MÁQUINAS', 'MOTORISTA DE CAMINHÃO'
-  ];
-
-  onManageVT(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.useVT = selectElement.value;
-    this.admissionForm.get('dailyVouchers')?.setValidators(
-      this.useVT === 'SIM' ? [Validators.required] : []
-    );
-    this.admissionForm.get('dailyVouchers')?.updateValueAndValidity();
+    // Observar mudanças no campo "Possui Cartão VEM"
+    this.createForm.get('possui_vem')?.valueChanges.subscribe(value => {
+      this.updateCartaoVEMValidations(value);
+    });
   }
 
-  setErrorMessage(message: string): void {
-    this.showError = true;
-    this.errorMessage = message;
-    setTimeout(() => {
-      this.showError = false;
-      this.errorMessage = '';
-    }, 3000);
-  }
+  updateValeTransporteValidations(precisaValeTransporte: string): void {
+    const quantidadeVTControl = this.createForm.get('quantidade_vt');
+    const possuiCartaoVEMControl = this.createForm.get('possui_vem');
 
-  onFileSelected(field: string, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    console.log(`Arquivo selecionado para ${field}:`, file);
-    if (file) {
-      this.fileNames[field] = file.name;
-      this.admissionForm.get(field)?.setValue(file);
+    if (precisaValeTransporte === 'SIM') {
+      quantidadeVTControl?.setValidators([Validators.required]);
+      possuiCartaoVEMControl?.setValidators([Validators.required]);
     } else {
-      this.fileNames[field] = 'Selecione uma imagem';
-      this.admissionForm.get(field)?.setValue(null);
+      quantidadeVTControl?.clearValidators();
+      possuiCartaoVEMControl?.clearValidators();
+      quantidadeVTControl?.setValue('');
+      possuiCartaoVEMControl?.setValue('');
+
+      // Limpar também os campos dependentes do cartão VEM
+      this.updateCartaoVEMValidations('');
     }
+
+    quantidadeVTControl?.updateValueAndValidity();
+    possuiCartaoVEMControl?.updateValueAndValidity();
   }
 
-  sendForm(): void {
+  updateCartaoVEMValidations(possuiCartaoVEM: string): void {
+    const numeroCartaoVEMControl = this.createForm.get('numero_vem');
+    const fotoCartaoVEMControl = this.createForm.get('foto_vem');
 
-    if (this.admissionForm.invalid) {
-      console.log('Campos inválidos:', this.admissionForm.controls);
-      Object.keys(this.admissionForm.controls).forEach(key => {
-        const control = this.admissionForm.get(key);
-        if (control?.invalid) {
-          console.log(`Campo ${key} inválido:`, control.errors);
-        }
-      });
-      this.admissionForm.markAllAsTouched();
-      this.setErrorMessage('Por favor, preencha todos os campos obrigatórios!');
+    if (possuiCartaoVEM === 'SIM') {
+      numeroCartaoVEMControl?.setValidators([Validators.required]);
+      fotoCartaoVEMControl?.setValidators([Validators.required]);
+    } else {
+      numeroCartaoVEMControl?.clearValidators();
+      fotoCartaoVEMControl?.clearValidators();
+      numeroCartaoVEMControl?.setValue('');
+      fotoCartaoVEMControl?.setValue(null);
+    }
+
+    numeroCartaoVEMControl?.updateValueAndValidity();
+    fotoCartaoVEMControl?.updateValueAndValidity();
+  }
+
+  // ========== DEFINIR ERRO ========== //
+  hasError(fieldName: string): boolean {
+    const field = this.createForm.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  // ========== MENSAGEM DE CAMPO INVÁLIDO ========== //
+  getErrorMessage(fieldName: string): string {
+    const field = this.createForm.get(fieldName);
+    if (field && field.errors) {
+      if (field.errors['required']) {
+        return 'Este campo é obrigatório';
+      }
+    }
+    return '';
+  }
+
+  // ========== API ========== //
+  onSubmit(): void {
+    if (this.createForm.invalid) return;
+
+    const requiredFiles = [
+      'foto_3x4',
+      'foto_cpf',
+      'foto_rg_frente',
+      'foto_rg_verso',
+      'foto_certidao',
+      'foto_comprovante_residencia'
+    ];
+
+    const missingFiles = requiredFiles.filter(field => !this.uploadedFiles[field]);
+
+    if (missingFiles.length > 0) {
+      alert('Por favor, envie a imagem de todos os documentos.');
       return;
     }
 
-    this.isLoading = true;
-    this.showForm = false;
-    this.error = false;
-    this.success = false;
+    // this.isLoading = true;
 
     const formData = new FormData();
-    const formValue = this.admissionForm.value;
 
-    Object.entries(formValue).forEach(([key, value]) => {
-      if (value instanceof File) {
-        formData.append(key, value, value.name);
-      } else if (value !== null && value !== '') {
-        formData.append(key, String(value));
-      }
+    Object.entries(this.createForm.value).forEach(([key, value]) => {
+      formData.append(key, value != null ? String(value) : '');
     });
 
-    formData.append('useVT', this.useVT);
+    Object.entries(this.uploadedFiles).forEach(([key, file]) => {
+      formData.append(key, file, file.name);
+    });
 
-    this._admission.sendForm(formData).subscribe({
+    this._admissionService.sendForm(formData).subscribe({
       next: () => {
-        this.success = true;
-        this.isLoading = false;
+        // this.isLoading = false;
+        // this._router.navigate(['/success-form']);
       },
       error: (error) => {
-        console.error('Erro no envio:', error);
-        this.isLoading = false;
-        this.error = true;
-        this.showForm = true;
-        this.setErrorMessage('Erro ao enviar o formulário. Tente novamente!');
+        console.error(error);
+        // this.isLoading = false;
+        // this._router.navigate(['/error-form']);
       }
     });
+  }
+
+  // ========== MANIPULAR IMAGEM ========== //
+  onFileChange(event: Event, field: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.uploadedFiles[field] = input.files[0];
+    }
   }
 }

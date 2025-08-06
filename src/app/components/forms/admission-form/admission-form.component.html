@@ -1,69 +1,66 @@
 <div class="container">
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="form" *ngIf="!isLoading">
 
-  @if (showError) {
-  <div class="message">
-    <mat-icon>error</mat-icon>
-    <span>{{ errorMessage }}</span>
-  </div>
-  }
+    <!-- Seção: Dados Pessoais -->
+    <div class="form__section">
+      <h2 class="form__title">Dados Pessoais</h2>
 
-  <div class="form" *ngIf="showForm">
-    <form [formGroup]="admissionForm" (ngSubmit)="sendForm()" class="form__container">
+      <div class="form__content">
+        <div class="form__group form__group--full">
+          <label class="form__label">Nome completo</label>
+          <input type="text" formControlName="nome" placeholder="Digite seu nome completo" class="form__input">
+          <div *ngIf="hasError('nome')" class="form__error">
+            {{ getErrorMessage('nome') }}
+          </div>
+        </div>
 
-      <header class="form__header">
-        <h1 class="form__title">
-          Parabéns!
-        </h1>
-        <p class="form__subtitle">
-          A Same Engenharia tem o prazer de informar que você foi selecionado para fazer parte do nosso time! Para
-          darmos continuidade ao processo, preencha os campos abaixo com seus dados:
-        </p>
-      </header>
+        <div class="form__group">
+          <label class="form__label">CPF</label>
+          <input type="text" formControlName="cpf" placeholder="000.000.000-00" mask="000.000.000-00"
+            class="form__input">
+          <div *ngIf="hasError('cpf')" class="form__error">
+            {{ getErrorMessage('cpf') }}
+          </div>
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Data de nascimento</label>
+          <input type="date" formControlName="data_nascimento" class="form__input">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Número de contato</label>
+          <input type="text" formControlName="numero_contato" placeholder="(00) 00000-0000" mask="(00) 00000-0000"
+            class="form__input">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">RG</label>
+          <input type="text" formControlName="rg" class="form__input" placeholder="Digite o RG">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">PIS - Opcional</label>
+          <input type="text" formControlName="pis" placeholder="000.00000.00-0" class="form__input"
+            mask="000.00000.00-00">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Endereço</label>
+          <input type="text" formControlName="endereco" placeholder="Digite o endereço completo" class="form__input">
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção: Dados Profissionais -->
+    <div class="form__section">
+      <h2 class="form__title">Dados Profissionais</h2>
 
       <div class="form__content">
         <div class="form__group">
-          <label for="name">Nome completo</label>
-          <input type="text" id="name" name="name" formControlName="name" placeholder="Nome completo" />
-        </div>
-
-        <div class="form__group">
-          <label for="cpf">CPF</label>
-          <input type="text" id="cpf" name="cpf" formControlName="cpf" placeholder="000.000.000-00"
-            mask="000.000.000-00" />
-        </div>
-
-        <div class="form__group">
-          <label for="birthDate">Data de nascimento</label>
-          <input type="text" id="birthDate" name="birthDate" formControlName="birthDate" placeholder="00/00/0000"
-            mask="00/00/0000" />
-        </div>
-
-        <div class="form__group">
-          <label for="phone">Número para contato</label>
-          <input type="text" id="phone" name="phone" formControlName="phone" placeholder="(00) 00000-0000"
-            mask="(00) 00000-0000" />
-        </div>
-
-        <div class="form__group">
-          <label for="rg">RG</label>
-          <input type="number" id="rg" name="rg" formControlName="rg" placeholder="00.000.000" />
-        </div>
-
-        <div class="form__group">
-          <label for="pis">PIS (Opcional)</label>
-          <input type="text" id="pis" name="pis" formControlName="pis" placeholder="00000000000"
-            mask="000.00000.00-0" />
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="address">Endereço</label>
-          <input type="text" id="address" name="address" formControlName="address" placeholder="Rua Same, 123" />
-        </div>
-
-        <div class="form__group">
-          <label for="uniform">Tamanho da farda</label>
-          <select id="uniform" name="uniform" formControlName="uniform">
-            <option value="" selected disabled>Selecione o tamanho da sua farda</option>
+          <label class="form__label">Tamanho da farda</label>
+          <select formControlName="tamanho_farda" class="form__select">
+            <option value="" disabled>Selecione o tamanho da sua farda</option>
             <option value="PP">PP</option>
             <option value="P">P</option>
             <option value="M">M</option>
@@ -73,19 +70,81 @@
         </div>
 
         <div class="form__group">
-          <label for="needsTransport">Precisa de vale transporte?</label>
-          <select id="needsTransport" name="needsTransport" (change)="onManageVT($event)">
-            <option value="" selected disabled>Selecione uma opção</option>
-            <option value="SIM">SIM (DESCONTO DE 6%)</option>
-            <option value="NÃO">NÃO (SEM DESCONTO)</option>
+          <label class="form__label">Função</label>
+          <select formControlName="funcao" class="form__select">
+            <option value="" disabled>Selecione uma opção</option>
+            <option value="PINTOR">PINTOR</option>
+            <option value="ARMADOR">ARMADOR</option>
+            <option value="SERVENTE">SERVENTE</option>
+            <option value="PEDREIRO">PEDREIRO</option>
+            <option value="SOLDADOR">SOLDADOR</option>
+            <option value="BETONEIRO">BETONEIRO</option>
+            <option value="ENCANADOR">ENCANADOR</option>
+            <option value="APONTADOR">APONTADOR</option>
+            <option value="ALMOXARIFE">ALMOXARIFE</option>
+            <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
+            <option value="ENGENHEIRO">ENGENHEIRO</option>
+            <option value="ENCARREGADO">ENCARREGADO</option>
+            <option value="ELETRICISTA">ELETRICISTA</option>
+            <option value="SERRALHEIRO">SERRALHEIRO</option>
+            <option value="CARPINTEIRO">CARPINTEIRO</option>
+            <option value="MESTRE DE OBRAS">MESTRE DE OBRAS</option>
+            <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
+            <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
+            <option value="MOTORISTA DE CAMINHÃO">MOTORISTA DE CAMINHÃO</option>
+            <option value="AUXILIAR DE ENGENHARIA">AUXILIAR DE ENGENHARIA</option>
+            <option value="AUXILIAR ADMINISTRATIVO">AUXILIAR ADMINISTRATIVO</option>
+            <option value="TÉCNICO EM EDIFICAÇÕES">TÉCNICO EM EDIFICAÇÕES</option>
           </select>
         </div>
 
-        @if (useVT === 'SIM') {
         <div class="form__group">
-          <label for="dailyVouchers">Quantos vales transporte (VT) você precisa por dia?</label>
-          <select id="dailyVouchers" name="dailyVouchers" formControlName="dailyVouchers">
-            <option value="" selected disabled>Selecione uma opção</option>
+          <label class="form__label">Número do calçado</label>
+          <select formControlName="numero_calcado" class="form__select">
+            <option value="" disabled>Selecione uma opção</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+            <option value="32">32</option>
+            <option value="33">33</option>
+            <option value="34">34</option>
+            <option value="35">35</option>
+            <option value="36">36</option>
+            <option value="37">37</option>
+            <option value="38">38</option>
+            <option value="39">39</option>
+            <option value="40">40</option>
+            <option value="41">41</option>
+            <option value="42">42</option>
+            <option value="43">43</option>
+            <option value="44">44</option>
+            <option value="45">45</option>
+            <option value="46">46</option>
+            <option value="47">47</option>
+            <option value="48">48</option>
+            <option value="49">49</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Filhos com menos de 14 anos</label>
+          <input type="number" formControlName="criancas_dependentes" min="0" placeholder="Digite um número"
+            class="form__input">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Precisa de vale transporte?</label>
+          <select formControlName="precisa_vt" class="form__select">
+            <option value="">Selecione uma opção</option>
+            <option value="SIM">SIM</option>
+            <option value="NÃO">NÃO</option>
+          </select>
+        </div>
+
+        <div class="form__group" *ngIf="createForm.get('precisa_vt')?.value === 'SIM'">
+          <label class="form__label">Quantidade de VT</label>
+          <select formControlName="quantidade_vt" class="form__select">
+            <option value="" disabled>Selecione uma opção uma opção</option>
             <option value="1">1 VALE TRANSPORTE</option>
             <option value="2">2 VALES TRANSPORTE</option>
             <option value="3">3 VALES TRANSPORTE</option>
@@ -98,60 +157,51 @@
             <option value="10">10 VALES TRANSPORTE</option>
           </select>
         </div>
-        }
 
-        <div class="form__group">
-          <label for="role">Função</label>
-          <select id="role" name="role" formControlName="role">
-            <option value="" selected disabled>Selecione a sua função</option>
-            <option *ngFor="let boot of needBoot" [value]="boot">{{ boot }}</option>
-            <option value="ESTAGIARIO">ESTÁGIARIO</option>
-            <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
+        <div class="form__group" *ngIf="createForm.get('precisa_vt')?.value === 'SIM'">
+          <label class="form__label">Possui Cartão VEM?</label>
+          <select formControlName="possui_vem" class="form__select">
+            <option value="">Selecione uma opção</option>
+            <option value="SIM">SIM</option>
+            <option value="NÃO">NÃO</option>
           </select>
         </div>
 
+        <div class="form__group" *ngIf="createForm.get('possui_vem')?.value === 'SIM'">
+          <label class="form__label">Número do Cartão VEM</label>
+          <input type="text" formControlName="numero_vem" placeholder="00.00.00000000-0" mask="00.00.00000000-0"
+            class="form__input">
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção: Redes Sociais -->
+    <div class="form__section">
+      <h2 class="form__title">Redes Sociais</h2>
+
+      <div class="form__content">
         <div class="form__group">
-          <label for="bootSize">Número do calçado</label>
-          <select id="bootSize" name="bootSize" formControlName="bootSize">
-            <option value="" selected disabled>Selecione uma opção</option>
-            <option *ngFor="let size of [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]"
-              [value]="size">{{size}}</option>
-          </select>
+          <label class="form__label">Instagram - Opcional</label>
+          <input type="text" formControlName="instagram" class="form__input" placeholder="@usuario ou link">
         </div>
 
         <div class="form__group">
-          <label for="childrenUnder14">Possui filho(s) com menos de 14 anos?</label>
-          <select id="childrenUnder14" name="childrenUnder14" formControlName="childrenUnder14">
-            <option value="" disabled selected>Selecione uma opção</option>
-            <option value="0">NÃO</option>
-            <option value="1">1 FILHO</option>
-            <option value="2">2 FILHOS</option>
-            <option value="3">3 FILHOS</option>
-            <option value="4">4 FILHOS</option>
-            <option value="5">5 FILHOS</option>
-            <option value="6">6 FILHOS</option>
-            <option value="7">7 FILHOS</option>
-            <option value="8">8 FILHOS</option>
-            <option value="9">9 FILHOS</option>
-            <option value="10">10 FILHOS</option>
-          </select>
+          <label class="form__label">LinkedIn - Opcional</label>
+          <input type="url" formControlName="linkedin" class="form__input"
+            placeholder="https://linkedin.com/in/usuario">
         </div>
+      </div>
+    </div>
 
-        <div class="form__group">
-          <label for="instagram">Informe seu Instagram (Opcional)</label>
-          <input type="text" id="instagram" name="instagram" formControlName="instagram" placeholder="Instagram" />
-        </div>
+    <!-- Seção: Dados Médicos -->
+    <div class="form__section">
+      <h2 class="form__title">Dados Médicos</h2>
 
+      <div class="form__content">
         <div class="form__group">
-          <label for="linkedin">Informe o link para seu Linkedin (Opcional)</label>
-          <input type="text" id="linkedin" name="linkedin" formControlName="linkedin"
-            placeholder="www.linkedin.com/in/seu_linkedin/" />
-        </div>
-
-        <div class="form__group">
-          <label for="bloodType">Tipo sanguíneo</label>
-          <select id="bloodType" name="bloodType" formControlName="bloodType">
-            <option value="" disabled selected>Selecione uma opção</option>
+          <label class="form__label">Tipo sanguíneo</label>
+          <select formControlName="tipo_sanguineo" class="form__select">
+            <option value="" disabled>Selecione uma opção</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -164,15 +214,87 @@
         </div>
 
         <div class="form__group">
-          <label for="emergencyName">Contato de emergência</label>
-          <input type="text" id="emergencyName" name="emergencyName" formControlName="emergencyName"
-            placeholder="Nome completo" />
+          <label class="form__label">Possui alergia?</label>
+          <select formControlName="alergia" class="form__select">
+            <option value="" disabled>Selecione uma opção</option>
+            <option value="NÃO">NÃO</option>
+            <option value="MEDICAMENTOS">ALERGIA A MEDICAMENTOS</option>
+            <option value="PENICILINA">ALERGIA A PENICILINA</option>
+            <option value="ANTI-INFLAMATÓRIOS">ALERGIA A ANTI-INFLAMATÓRIOS</option>
+            <option value="ALIMENTOS">ALERGIA A ALIMENTOS</option>
+            <option value="FRUTOS DO MAR">ALERGIA A FRUTOS DO MAR</option>
+            <option value="AMENDOIM">ALERGIA A AMENDOIM</option>
+            <option value="LACTOSE">ALERGIA A LACTOSE</option>
+            <option value="GLÚTEN">ALERGIA A GLÚTEN</option>
+            <option value="OVO">ALERGIA A OVO</option>
+            <option value="LEITE">ALERGIA A LEITE</option>
+            <option value="POEIRA">ALERGIA A POEIRA</option>
+            <option value="ÁCAROS">ALERGIA A ÁCAROS</option>
+            <option value="PÓLEN">ALERGIA A PÓLEN</option>
+            <option value="FUNGOS">ALERGIA A FUNGOS</option>
+            <option value="PELOS DE ANIMAIS">ALERGIA A PELOS DE ANIMAIS</option>
+            <option value="PICADA DE INSETOS">ALERGIA A PICADA DE INSETOS</option>
+            <option value="ABELHA/VESPA">ALERGIA A ABELHA/VESPA</option>
+            <option value="LÁTEX">ALERGIA A LÁTEX</option>
+            <option value="PRODUTOS QUÍMICOS">ALERGIA A PRODUTOS QUÍMICOS</option>
+            <option value="COSMÉTICOS">ALERGIA A COSMÉTICOS</option>
+            <option value="METIAS">ALERGIA A METAIS (NÍQUEL)</option>
+            <option value="TINTA DE TATUAGEM">ALERGIA A TINTA DE TATUAGEM</option>
+            <option value="OUTRO">OUTRA ALERGIA NÃO LISTADA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form__group form__group--full">
+        <label class="form__label">Possui doença crônica?</label>
+        <select formControlName="doenca_cronica" class="form__select">
+          <option value="" disabled>Selecione uma opção</option>
+          <option value="NÃO">NÃO</option>
+          <option value="HIPERTENSÃO ARTERIAL">HIPERTENSÃO ARTERIAL</option>
+          <option value="DOENÇA ARTERIAL CORONARIANA">DOENÇA ARTERIAL CORONARIANA</option>
+          <option value="INSUFICIÊNCIA CARDÍACA">INSUFICIÊNCIA CARDÍACA</option>
+          <option value="AVC">AVC (ACIDENTE VASCULAR CEREBRAL)</option>
+          <option value="DPOC">DPOC (DOENÇA PULMONAR OBSTRUTIVA CRÔNICA)</option>
+          <option value="ASMA">ASMA</option>
+          <option value="DIABETES TIPO 1">DIABETES TIPO 1</option>
+          <option value="DIABETES TIPO 2">DIABETES TIPO 2</option>
+          <option value="DOENÇA RENAL CRÔNICA">DOENÇA RENAL CRÔNICA</option>
+          <option value="ALZHEIMER/DEMÊNCIA">ALZHEIMER/DEMÊNCIA</option>
+          <option value="PARKINSON">PARKINSON</option>
+          <option value="EPILEPSIA">EPILEPSIA</option>
+          <option value="CÂNCER">CÂNCER (NEOPLASIA MALIGNA)</option>
+          <option value="OSTEOARTRITE (ARTROSE)">OSTEOARTRITE (ARTROSE)</option>
+          <option value="ARTRITE REUMATOIDE">ARTRITE REUMATOIDE</option>
+          <option value="OSTEOPOROSE">OSTEOPOROSE</option>
+          <option value="DEPRESSÃO">DEPRESSÃO</option>
+          <option value="TRANSTORNO DE ANSIEDADE">TRANSTORNO DE ANSIEDADE</option>
+          <option value="TRANSTORNO BIPOLAR">TRANSTORNO BIPOLAR</option>
+          <option value="LÚPUS ERITEMATOSO SISTÊMICO">LÚPUS ERITEMATOSO SISTÊMICO</option>
+          <option value="DOENÇA DE CROHN">DOENÇA DE CROHN</option>
+          <option value="PSORÍASE">PSORÍASE</option>
+          <option value="ESTEATOSE HEPÁTICA">ESTEATOSE HEPÁTICA (FÍGADO GORDUROSO)</option>
+          <option value="CIRROSE HEPÁTICA">CIRROSE HEPÁTICA</option>
+          <option value="HIPOTIREOIDISMO">HIPOTIREOIDISMO</option>
+          <option value="HIPERTIREOIDISMO">HIPERTIREOIDISMO</option>
+          <option value="OUTRO">OUTRA CONDIÇÃO NÃO LISTADA</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Seção: Contato de Emergência -->
+    <div class="form__section">
+      <h2 class="form__title">Contato de Emergência</h2>
+
+      <div class="form__content">
+        <div class="form__group form__group--full">
+          <label class="form__label">Nome do contato</label>
+          <input type="text" formControlName="contato_emergencia_nome" placeholder="Nome completo" class="form__input">
         </div>
 
         <div class="form__group">
-          <label for="relationship">Grau de parentesco</label>
-          <select id="relationship" name="relationship" formControlName="relationship">
-            <option value="" disabled selected>Selecione uma opção</option>
+          <label class="form__label">Grau de parentesco</label>
+          <select formControlName="grau_parentesco_emergencia" class="form__select">
+            <option value="" disabled>Selecione uma opção</option>
             <option value="PAI">PAI</option>
             <option value="MÃE">MÃE</option>
             <option value="FILHO">FILHO</option>
@@ -211,185 +333,65 @@
           </select>
         </div>
 
-        <div class="form__group">
-          <label for="emergencyPhone">Número para contato</label>
-          <input type="text" id="emergencyPhone" name="emergencyPhone" formControlName="emergencyPhone"
-            placeholder="(00) 00000-0000" mask="(00) 00000-0000" />
-        </div>
 
         <div class="form__group">
-          <label for="allergy">Possui Alergia?</label>
-          <select id="allergy" name="allergy" formControlName="allergy">
-            <option value="" disabled selected>Selecione uma opção</option>
-            <option value="NÃO">NÃO</option>
-            <option value="MEDICAMENTOS">ALERGIA A MEDICAMENTOS</option>
-            <option value="PENICILINA">ALERGIA A PENICILINA</option>
-            <option value="ANTI-INFLAMATÓRIOS">ALERGIA A ANTI-INFLAMATÓRIOS</option>
-            <option value="ALIMENTOS">ALERGIA A ALIMENTOS</option>
-            <option value="FRUTOS DO MAR">ALERGIA A FRUTOS DO MAR</option>
-            <option value="AMENDOIM">ALERGIA A AMENDOIM</option>
-            <option value="LACTOSE">ALERGIA A LACTOSE</option>
-            <option value="GLÚTEN">ALERGIA A GLÚTEN</option>
-            <option value="OVO">ALERGIA A OVO</option>
-            <option value="LEITE">ALERGIA A LEITE</option>
-            <option value="POEIRA">ALERGIA A POEIRA</option>
-            <option value="ÁCAROS">ALERGIA A ÁCAROS</option>
-            <option value="PÓLEN">ALERGIA A PÓLEN</option>
-            <option value="FUNGOS">ALERGIA A FUNGOS</option>
-            <option value="PELOS DE ANIMAIS">ALERGIA A PELOS DE ANIMAIS</option>
-            <option value="PICADA DE INSETOS">ALERGIA A PICADA DE INSETOS</option>
-            <option value="ABELHA/VESPA">ALERGIA A ABELHA/VESPA</option>
-            <option value="LÁTEX">ALERGIA A LÁTEX</option>
-            <option value="PRODUTOS QUÍMICOS">ALERGIA A PRODUTOS QUÍMICOS</option>
-            <option value="COSMÉTICOS">ALERGIA A COSMÉTICOS</option>
-            <option value="METIAS">ALERGIA A METAIS (NÍQUEL)</option>
-            <option value="TINTA DE TATUAGEM">ALERGIA A TINTA DE TATUAGEM</option>
-            <option value="OUTRO">OUTRA ALERGIA NÃO LISTADA</option>
-          </select>
+          <label class="form__label">Número de contato</label>
+          <input type="text" formControlName="numero_contato_emergencia" placeholder="(00) 00000-0000"
+            mask="(00) 00000-0000" class="form__input">
         </div>
-
-        <div class="form__group">
-          <label for="chronicDisease">Possui condição médica crônica?</label>
-          <select id="chronicDisease" name="chronicDisease" formControlName="chronicDisease">
-            <option value="" disabled selected>Selecione uma opção</option>
-            <option value="NÃO">NÃO</option>
-            <option value="HIPERTENSÃO ARTERIAL">HIPERTENSÃO ARTERIAL</option>
-            <option value="DOENÇA ARTERIAL CORONARIANA">DOENÇA ARTERIAL CORONARIANA</option>
-            <option value="INSUFICIÊNCIA CARDÍACA">INSUFICIÊNCIA CARDÍACA</option>
-            <option value="AVC">AVC (ACIDENTE VASCULAR CEREBRAL)</option>
-            <option value="DPOC">DPOC (DOENÇA PULMONAR OBSTRUTIVA CRÔNICA)</option>
-            <option value="ASMA">ASMA</option>
-            <option value="DIABETES TIPO 1">DIABETES TIPO 1</option>
-            <option value="DIABETES TIPO 2">DIABETES TIPO 2</option>
-            <option value="DOENÇA RENAL CRÔNICA">DOENÇA RENAL CRÔNICA</option>
-            <option value="ALZHEIMER/DEMÊNCIA">ALZHEIMER/DEMÊNCIA</option>
-            <option value="PARKINSON">PARKINSON</option>
-            <option value="EPILEPSIA">EPILEPSIA</option>
-            <option value="CÂNCER">CÂNCER (NEOPLASIA MALIGNA)</option>
-            <option value="OSTEOARTRITE (ARTROSE)">OSTEOARTRITE (ARTROSE)</option>
-            <option value="ARTRITE REUMATOIDE">ARTRITE REUMATOIDE</option>
-            <option value="OSTEOPOROSE">OSTEOPOROSE</option>
-            <option value="DEPRESSÃO">DEPRESSÃO</option>
-            <option value="TRANSTORNO DE ANSIEDADE">TRANSTORNO DE ANSIEDADE</option>
-            <option value="TRANSTORNO BIPOLAR">TRANSTORNO BIPOLAR</option>
-            <option value="LÚPUS ERITEMATOSO SISTÊMICO">LÚPUS ERITEMATOSO SISTÊMICO</option>
-            <option value="DOENÇA DE CROHN">DOENÇA DE CROHN</option>
-            <option value="PSORÍASE">PSORÍASE</option>
-            <option value="ESTEATOSE HEPÁTICA">ESTEATOSE HEPÁTICA (FÍGADO GORDUROSO)</option>
-            <option value="CIRROSE HEPÁTICA">CIRROSE HEPÁTICA</option>
-            <option value="HIPOTIREOIDISMO">HIPOTIREOIDISMO</option>
-            <option value="HIPERTIREOIDISMO">HIPERTIREOIDISMO</option>
-            <option value="OUTRO">OUTRA CONDIÇÃO NÃO LISTADA</option>
-          </select>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="photo3x4">3x4 Photo</label>
-          <div class="form__upload">
-            <label class="form__upload-label">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text">
-                {{ fileNames['photo3x4'] || 'Selecione uma imagem' }}
-              </span>
-              <input type="file" accept="image/*" (change)="onFileSelected('photo3x4', $event)" />
-            </label>
-          </div>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="cpfImage">CPF</label>
-          <div class="form__upload">
-            <label class="form__upload-label">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text">
-                {{ fileNames['cpfImage'] || 'Selecione uma imagem' }}
-              </span>
-              <input type="file" accept="image/*" (change)="onFileSelected('cpfImage', $event)" />
-            </label>
-          </div>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="rgFront">RG (FRENTE)</label>
-          <div class="form__upload">
-            <label class="form__upload-label">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text">
-                {{ fileNames['rgFront'] || 'Selecione uma imagem' }}
-              </span>
-              <input type="file" accept="image/*" (change)="onFileSelected('rgFront', $event)" />
-            </label>
-          </div>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="rgBack">RG (VERSO)</label>
-          <div class="form__upload">
-            <label class="form__upload-label">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text">
-                {{ fileNames['rgBack'] || 'Selecione uma imagem' }}
-              </span>
-              <input type="file" accept="image/*" (change)="onFileSelected('rgBack', $event)" />
-            </label>
-          </div>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="certificate">Certidão de nascimento ou casamento</label>
-          <div class="form__upload">
-            <label class="form__upload-label">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text">
-                {{ fileNames['certificate'] || 'Selecione uma imagem' }}
-              </span>
-              <input type="file" accept="image/*" (change)="onFileSelected('certificate', $event)" />
-            </label>
-          </div>
-        </div>
-
-        <div class="form__group form__group--full">
-          <label for="residenceProof">Comprovante de residência</label>
-          <div class="form__upload">
-            <label class="form__upload-label">
-              <mat-icon>cloud_upload</mat-icon>
-              <span class="form__upload-text">
-                {{ fileNames['residenceProof'] || 'Selecione uma imagem' }}
-              </span>
-              <input type="file" accept="image/*" (change)="onFileSelected('residenceProof', $event)" />
-            </label>
-          </div>
-        </div>
-
       </div>
+    </div>
 
-      <footer class="form__footer">
-        <button type="submit" class="form__submit">Enviar</button>
-      </footer>
-    </form>
-  </div>
+    <!-- Seção: Upload de Documentos -->
+    <div class="form__section">
+      <h2 class="form__title">Upload de Documentos</h2>
 
-  <div class="success" *ngIf="success">
-    <h1 class="success__title">
-      Obrigado!
-      <span>200</span>
-    </h1>
-    <p class="success__subtitle">
-      Seu formulário foi enviado com sucesso. Agora é só aguardar que o pessoal do RH vai entrar em
-      contato com você em breve! Fique a vontade para fechar essa guia se quiser.
-    </p>
-  </div>
+      <div class="form__content">
+        <div class="form__group">
+          <label class="form__label">Foto 3x4</label>
+          <input type="file" (change)="onFileChange($event, 'foto_3x4')" accept="image/*" class="form__file">
+        </div>
 
-  <div class="error" *ngIf="error">
-    <h1 class="error__title">
-      Ops! Algo deu errado :(
-      <span>400</span>
-    </h1>
-    <p class="error__subtitle">
-      Parece que rolou um probleminha ao enviar seus dados. Que tal tentar de novo mais tarde? Se continuar dando erro,
-      chama a galera do RH e conta o que aconteceu!
-    </p>
-  </div>
+        <div class="form__group">
+          <label class="form__label">Foto do CPF</label>
+          <input type="file" (change)="onFileChange($event, 'foto_cpf')" accept="image/*" class="form__file">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Foto RG (Frente)</label>
+          <input type="file" (change)="onFileChange($event, 'foto_rg_frente')" accept="image/*" class="form__file">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Foto RG (Verso)</label>
+          <input type="file" (change)="onFileChange($event, 'foto_rg_verso')" accept="image/*" class="form__file">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Foto da certidão de nascimento</label>
+          <input type="file" (change)="onFileChange($event, 'foto_certidao')" accept="image/*" class="form__file">
+        </div>
+
+        <div class="form__group">
+          <label class="form__label">Foto do comprovante de residência</label>
+          <input type="file" (change)="onFileChange($event, 'foto_comprovante_residencia')" accept="image/*"
+            class="form__file">
+        </div>
+
+        <div class="form__group form__group--full" *ngIf="createForm.get('possui_vem')?.value === 'SIM'">
+          <label class="form__label">Foto do cartão VEM</label>
+          <input type="file" (change)="onFileChange($event, 'foto_vem')" accept="image/*" class="form__file">
+        </div>
+      </div>
+    </div>
+
+    <div class="form__footer">
+      <button type="submit" class="btn btn--primary" [disabled]="createForm.invalid">
+        Enviar formulário
+      </button>
+    </div>
+
+  </form>
 
   <div class="loading" *ngIf="isLoading">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
