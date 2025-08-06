@@ -149,7 +149,7 @@ export class AdmissionFormComponent implements OnInit {
       return;
     }
 
-    // this.isLoading = true;
+    this.isLoading = true;
 
     const formData = new FormData();
 
@@ -163,13 +163,13 @@ export class AdmissionFormComponent implements OnInit {
 
     this._admissionService.sendForm(formData).subscribe({
       next: () => {
-        // this.isLoading = false;
-        // this._router.navigate(['/success-form']);
+        this.isLoading = false;
+        this._router.navigate(['/success-form']);
       },
       error: (error) => {
         console.error(error);
-        // this.isLoading = false;
-        // this._router.navigate(['/error-form']);
+        this.isLoading = false;
+        this._router.navigate(['/error-form']);
       }
     });
   }
