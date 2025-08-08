@@ -267,6 +267,11 @@
           <div class="card__subtitle">{{ item.linkedin || 'N/A' }}</div>
         </div>
 
+        <div class="card__info">
+          <div class="card__title">OBSERVAÇÃO</div>
+          <div class="card__subtitle">{{ item.observacao || 'N/A' }}</div>
+        </div>
+
       </div>
     </div>
 
@@ -369,7 +374,7 @@
         </div>
 
         <div class="modal__content">
-          <div class="modal__group">
+          <div class="modal__group modal__group--full">
             <label for="status" class="modal__label">Status</label>
             <select name="status" id="status" formControlName="status" class="modal__select">
               <option value="" selected disabled>Selecione uma opção</option>
@@ -379,6 +384,11 @@
               <option value="REPROVADO">REPROVADO</option>
               <option value="CANCELADO">CANCELADO</option>
             </select>
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">Observação</label>
+            <textarea formControlName="observacao" placeholder="Digito algo..." class="modal__input"></textarea>
           </div>
         </div>
 

@@ -22,6 +22,7 @@ export class AdmissionComponent implements OnInit {
 
   updateForm: FormGroup = new FormGroup({
     status: new FormControl('', Validators.required),
+    observacao: new FormControl(''),
   })
 
   // ========== ESTADOS ========== //
@@ -66,8 +67,6 @@ export class AdmissionComponent implements OnInit {
 
   modalType: string = '';
   modalTitle: string = '';
-
-
 
   // ========== HOOK ========== //
   ngOnInit(): void {
@@ -222,7 +221,8 @@ export class AdmissionComponent implements OnInit {
 
     const request = {
       id: this.currentItem.id,
-      status: this.updateForm.value.status
+      status: this.updateForm.value.status,
+      observacao: this.updateForm.value.observacao,
     }
 
     this._admissionService.updateAdmission(request).subscribe({
@@ -233,6 +233,11 @@ export class AdmissionComponent implements OnInit {
         this.setMessage('Admissão atualizada com sucesso!', 'success');
         this.getAdmission(statusButton);
         this.getAdmissionLength();
+        this.updateForm.reset({
+          id: '',
+          status: '',
+          observacao: ''
+        })
       },
       error: (error) => {
         this.isUpdating = false;
@@ -280,6 +285,12 @@ export class AdmissionComponent implements OnInit {
   openModalEdit(item: any): void {
     this.currentItem = item;
     this.isModalEditVisible = true;
+
+    this.updateForm.patchValue({
+      id: item.id,
+      status: item.status,
+      observacao: item.observacao
+    })
   }
 
   openModal(item: any, type: string): void {

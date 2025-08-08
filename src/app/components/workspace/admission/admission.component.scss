@@ -251,6 +251,10 @@
     .card__info {
       display: flex;
       flex-direction: column;
+
+      &:last-child {
+        grid-column: 1/-1;
+      }
     }
   }
 }
@@ -299,8 +303,19 @@
   }
 
   &__content {
-    max-height: 70vh;
-    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
   }
 
   &__image-container {
@@ -373,6 +388,7 @@
     cursor: pointer;
     border: none;
     outline: none;
+    resize: none;
     padding: 1em;
     border-radius: 4px;
     color: var(--gray-color);
