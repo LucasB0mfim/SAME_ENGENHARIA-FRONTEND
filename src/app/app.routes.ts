@@ -29,6 +29,7 @@ import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
+import { TaskComponent } from './components/workspace/task/task.component';
 
 export const routes: Routes = [
   {
@@ -116,6 +117,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/brk',
         component: BrkComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/task',
+        component: TaskComponent,
         canActivate: [humanResourcesGuard]
       },
       {
