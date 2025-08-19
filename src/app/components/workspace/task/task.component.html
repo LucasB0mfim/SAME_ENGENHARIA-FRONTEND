@@ -1,1 +1,76 @@
-<p>task works!</p>
+<div class="container">
+
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
+
+  <div class="container__filter">
+    <!-- FILTRO -->
+    <div class="filter">
+      <input type="text" class="input input--primary" placeholder="Pesquisar">
+    </div>
+  </div>
+
+  <div class="container__card">
+    <!-- CARD -->
+    <div *ngFor="let item of items" class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">{{ item.criador || 'N/A' }}</div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__subtitle">{{ item.descricao || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">SOLICITAÇÃO:</div>
+            <div class="card__title">{{ formateDate(item.data_criacao) || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__content">
+          <div class="card__subtitle">OBSERVAÇÃO</div>
+          <div class="card__title">{{ item.observacao || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">COMUNICAR</div>
+          <div class="card__title">{{ formateDate(item.data_comunicacao) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">AVISO TRABALHADO</div>
+          <div class="card__title">{{ formateDate(item.data_inicio_aviso_trabalhado) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">MODALIDADE</div>
+          <div class="card__title">{{ item.modalidade_aviso_trabalhado || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">ÚLTIMO DIA TRAB.</div>
+          <div class="card__title">{{ formateDate(item.data_ultimo_dia_trabalhado) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">RESCISÃO</div>
+          <div class="card__title">{{ formateDate(item.data_rescisao) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">PAGAMENTO</div>
+          <div class="card__title">{{ formateDate(item.data_pagamento_rescisao) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">DEMISSÃO</div>
+          <div class="card__title">{{ formateDate(item.data_demissao) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">COMUNICADO</div>
+          <div class="card__title">{{ item.colaborador_comunicado || 'N/A' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

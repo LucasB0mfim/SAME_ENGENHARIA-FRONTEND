@@ -38,6 +38,4 @@ export class ResignationService {
     const headers = this._createHeaders();
     return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/resignation/${id}`, { headers });
   }
-
-
 }
