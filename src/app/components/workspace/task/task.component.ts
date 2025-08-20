@@ -3,10 +3,12 @@ import { Component, inject, OnInit } from '@angular/core';
 
 import { TitleService } from '../../../core/services/title.service';
 import { TaskService } from '../../../core/services/task.service';
+import { MatOptgroup } from "@angular/material/core";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-task',
-  imports: [CommonModule],
+  imports: [CommonModule, MatOptgroup, MatIcon],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss'
 })
@@ -18,10 +20,9 @@ export class TaskComponent implements OnInit {
 
   // ========== ESTADOS ========== //
   items: any[] = [];
+  currentItem: any = [];
 
-  isCreate: boolean = false;
-  isUpdate: boolean = false;
-  isDelete: boolean = false;
+  showModal: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
@@ -42,6 +43,15 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  openModalOption(item: any): void {
+    this.currentItem = item;
+    this.showModal = true;
+  }
+
+  closeModalOption(): void {
+    this.showModal = false;
+  }
+
   // ========== MENSAGEM DINAMICA ========== //
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
@@ -59,5 +69,12 @@ export class TaskComponent implements OnInit {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
+  }
+
+  // ========== AUXILIARES ========== //
+  showImage(): void {
+    const urlImage = this.currentItem.foto_prancheta;
+    const url = `https://sameengenharia.com.br/api/task/file/${urlImage}`;
+    window.open(url, '_blank');
   }
 }
