@@ -30,6 +30,7 @@ import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TaskComponent } from './components/workspace/task/task.component';
+import { EquipmentRentalComponent } from './components/workspace/equipment-rental/equipment-rental.component';
 
 export const routes: Routes = [
   {
@@ -122,6 +123,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/task',
         component: TaskComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/equipment-rental',
+        component: EquipmentRentalComponent,
         canActivate: [humanResourcesGuard]
       },
       {
