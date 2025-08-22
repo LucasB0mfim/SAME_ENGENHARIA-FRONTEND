@@ -81,6 +81,7 @@ export const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
+      { path: 'equipment-rental', component: EquipmentRentalComponent },
       {
         path: 'human-resources',
         component: HumanResourcesComponent
@@ -123,11 +124,6 @@ export const routes: Routes = [
       {
         path: 'human-resources/task',
         component: TaskComponent,
-        canActivate: [humanResourcesGuard]
-      },
-      {
-        path: 'human-resources/equipment-rental',
-        component: EquipmentRentalComponent,
         canActivate: [humanResourcesGuard]
       },
       {

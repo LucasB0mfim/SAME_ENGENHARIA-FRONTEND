@@ -35,11 +35,6 @@
           <span class="card__subtitle">UNIDADE</span>
           <h4 class="card__title">{{ item.unidade|| 'N/A' }}</h4>
         </div>
-
-        <div class="card__content">
-          <span class="card__subtitle">FORNECEDOR</span>
-          <h4 class="card__title">{{ item.fornecedor || 'N/A' }}</h4>
-        </div>
       </div>
     </div>
   </div>
@@ -71,6 +66,11 @@
       </header>
 
       <div class="modal__content">
+        <div class="modal__group modal__group--full">
+          <label class="modal__label">Equipamento</label>
+          <input type="text" formControlName="equipamento" readonly class="modal__input">
+        </div>
+
         <div class="modal__group">
           <label class="modal__label">ID Produto</label>
           <input type="number" placeholder="ID" formControlName="id_produto" class="modal__input">
@@ -78,7 +78,7 @@
 
         <div class="modal__group">
           <label class="modal__label">IDMov</label>
-          <input type="number" placeholder="IDMov" formControlName="idmov" class="modal__input">
+          <input type="number" placeholder="IDMOV" formControlName="idmov" class="modal__input">
         </div>
 
         <div class="modal__group">
@@ -95,10 +95,10 @@
           <label class="modal__label">Tempo Contratado</label>
           <select formControlName="tempo_contratado" class="modal__input">
             <option value="" disabled>Selecione um período</option>
-            <option value="DIA">Dia</option>
-            <option value="SEMANA">Semana</option>
-            <option value="QUINZENA">Quinzena</option>
-            <option value="MES">Mês</option>
+            <option value="dia">Dia</option>
+            <option value="Semana">Semana</option>
+            <option value="Quinzena">Quinzena</option>
+            <option value="Mês">Mês</option>
           </select>
         </div>
 
@@ -114,7 +114,7 @@
 
         <div class="modal__group">
           <label class="modal__label">Ordem de Compra</label>
-          <input type="number" placeholder="Código da OC" formControlName="ordem_compra" class="modal__input">
+          <input type="number" placeholder="OC" formControlName="ordem_compra" class="modal__input">
         </div>
 
         <div class="modal__group">
@@ -133,12 +133,12 @@
   <div *ngIf="renewModal" class="container__modal">
     <form [formGroup]="renewForm" (ngSubmit)="onRenew()" class="modal">
       <header class="modal__header">
-        <h2 class="modal__title">Renovar Loca</h2>
+        <h2 class="modal__title">Renovar Locação</h2>
         <mat-icon (click)="closeRenew()" class="modal__icon">close</mat-icon>
       </header>
 
       <div class="modal__content">
-        <div class="modal__group">
+        <div class="modal__group modal__group--full">
           <label class="modal__label">Equipamento</label>
           <input type="text" formControlName="equipamento" readonly class="modal__input">
         </div>
@@ -149,24 +149,13 @@
         </div>
 
         <div class="modal__group">
+          <label class="modal__label">IDMOV</label>
+          <input type="number" placeholder="IDMOV" formControlName="idmov" class="modal__input">
+        </div>
+
+        <div class="modal__group">
           <label class="modal__label">Período</label>
           <input type="text" formControlName="periodo" readonly class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">IDMov</label>
-          <input type="number" placeholder="IDMov" formControlName="idmov" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Tempo Contratado</label>
-          <select formControlName="tempo_contratado" class="modal__input">
-            <option value="" disabled>Selecione um período</option>
-            <option value="DIA">Dia</option>
-            <option value="SEMANA">Semana</option>
-            <option value="QUINZENA">Quinzena</option>
-            <option value="MES">Mês</option>
-          </select>
         </div>
 
         <div class="modal__group">
@@ -176,7 +165,7 @@
 
         <div class="modal__group">
           <label class="modal__label">Ordem de Compra</label>
-          <input type="number" placeholder="Código da OC" formControlName="ordem_compra" class="modal__input">
+          <input type="number" placeholder="OC" formControlName="ordem_compra" class="modal__input">
         </div>
 
         <div class="modal__group">

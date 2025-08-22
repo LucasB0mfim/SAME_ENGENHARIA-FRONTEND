@@ -3,12 +3,10 @@ import { Component, inject, OnInit } from '@angular/core';
 
 import { TitleService } from '../../../core/services/title.service';
 import { TaskService } from '../../../core/services/task.service';
-import { MatOptgroup } from "@angular/material/core";
-import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-task',
-  imports: [CommonModule, MatOptgroup, MatIcon],
+  imports: [CommonModule],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss'
 })

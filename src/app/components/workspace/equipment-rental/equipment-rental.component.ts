@@ -41,6 +41,7 @@ export class EquipmentRentalComponent implements OnInit {
   });
 
   updateForm: FormGroup = new FormGroup({
+    equipamento: new FormControl(''),
     id_produto: new FormControl(''),
     idmov: new FormControl(''),
     data_inicial: new FormControl(''),
@@ -52,7 +53,7 @@ export class EquipmentRentalComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this._titleService.setTitle('Locação');
+    this._titleService.setTitle('Locação de equipamento');
     this.findAll();
 
     this.updateForm.get('periodo')?.valueChanges.subscribe(periodoSelecionado => {
@@ -166,6 +167,7 @@ export class EquipmentRentalComponent implements OnInit {
     this.editModal = true;
 
     this.updateForm.patchValue({
+      equipamento: this.currentItem.equipamento || '',
       id_produto: this.currentItem.locacoes[0].id_produto || '',
       idmov: this.currentItem.locacoes[0].idmov || '',
       data_inicial: this.currentItem.locacoes[0].data_inicial || '',
