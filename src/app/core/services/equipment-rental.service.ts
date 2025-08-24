@@ -19,6 +19,16 @@ export class EquipmentRentalService {
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/equipment-rental', { headers });
   }
 
+  findByIdmov(idmov: any) {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/${idmov}`, { headers });
+  }
+
+  findByIdProduto(idProduto: any) {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/id/${idProduto}`, { headers });
+  }
+
   update(request: any) {
     const headers = this._createHeaders();
     return this._httpClient.put<any>('https://sameengenharia.com.br/api/equipment-rental', request, { headers });

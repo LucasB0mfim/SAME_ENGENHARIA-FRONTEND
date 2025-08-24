@@ -14,21 +14,27 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
   styleUrl: './equipment-rental.component.scss'
 })
 export class EquipmentRentalComponent implements OnInit {
-
+  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private readonly _titleService = inject(TitleService);
   private readonly _rentalService = inject(EquipmentRentalService);
 
+  // ========== ESTADOS ========== //
   items: any[] = [];
   currentItem: any = null;
 
-  optionModal: boolean = false;
+  menuModal: boolean = false;
   editModal: boolean = false;
   renewModal: boolean = false;
+
+  showResume: Boolean = true;
+  showDatails: Boolean = false;
+  showHistory: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
+  // ========== FORMULÁRIOS ========== //
   renewForm: FormGroup = new FormGroup({
     id_produto: new FormControl(''),
     idmov: new FormControl(''),
@@ -52,8 +58,9 @@ export class EquipmentRentalComponent implements OnInit {
     periodo: new FormControl('')
   });
 
+  // ========== HOOK ========== //
   ngOnInit(): void {
-    this._titleService.setTitle('Locação de equipamento');
+    this._titleService.setTitle('Locações');
     this.findAll();
 
     this.updateForm.get('periodo')?.valueChanges.subscribe(periodoSelecionado => {
@@ -76,7 +83,10 @@ export class EquipmentRentalComponent implements OnInit {
     });
   };
 
+  // ========== API ========== //
   findAll(): void {
+    this._titleService.setTitle('Histórico de locações');
+
     this._rentalService.findAll().subscribe({
       next: (res) => {
         this.items = res.result;
@@ -101,8 +111,8 @@ export class EquipmentRentalComponent implements OnInit {
 
     this._rentalService.update(request).subscribe({
       next: () => {
-        this.closeAll();
-        this.findAll();
+        this.editModal = false;
+        this.openDetail(this.currentItem);
         this.setMessage('Locação atualizada com sucesso!', 'success');
       },
       error: (err) => {
@@ -125,8 +135,7 @@ export class EquipmentRentalComponent implements OnInit {
 
     this._rentalService.renew(request).subscribe({
       next: () => {
-        this.closeAll();
-        this.findAll();
+        this.renewModal = false;
         this.setMessage('Locação renovada com sucesso!', 'success');
 
         this.renewForm.reset({
@@ -143,27 +152,15 @@ export class EquipmentRentalComponent implements OnInit {
     })
   };
 
-  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
-    this.message = message;
-    this.messageType = type;
-    this.showMessage = true;
-
-    setTimeout(() => {
-      this.showMessage = false;
-      this.message = '';
-    }, 3000);
-  }
-
-  openOption(employee: any): void {
-    this.renewModal = false;
-    this.editModal = false;
-    this.optionModal = true;
-    this.currentItem = employee;
+  // ========== TELA DE MENU ========== //
+  openMenu(item: any): void {
+    this.menuModal = true;
+    this.currentItem = item;
   };
 
+  // ========== ABRIR EDITOR ========== //
   openEdit(): void {
-    this.optionModal = false;
-    this.renewModal = false;
+    this.menuModal = false;
     this.editModal = true;
 
     this.updateForm.patchValue({
@@ -179,9 +176,9 @@ export class EquipmentRentalComponent implements OnInit {
     });
   };
 
+  // ========== ABRIR RENOVADOR ========== //
   openRenew(): void {
-    this.optionModal = false;
-    this.editModal = false;
+    this.menuModal = false;
     this.renewModal = true;
 
     this.renewForm.patchValue({
@@ -192,27 +189,92 @@ export class EquipmentRentalComponent implements OnInit {
     });
   };
 
-  closeOption(): void {
-    this.optionModal = false;
+  // ========== IDMOV ========== //
+  openDetail(item: any): void {
+    this.showResume = false;
+    this.showDatails = true;
+    this._titleService.setTitle('Lista de equipamentos');
+
+    this._rentalService.findByIdmov(item.idmov).subscribe({
+      next: (res) => {
+        this.items = res.result;
+      },
+      error: (err) => {
+        console.error('Erro ao buscar registros: ', err);
+      }
+    });
+  }
+
+  // ========== ID PRODUTO ========== //
+  openHistory(): void {
+    this.menuModal = false;
+    this.showDatails = false;
+    this.showHistory = true;
+    this._titleService.setTitle('Histórico de locações');
+
+    this._rentalService.findByIdProduto(this.currentItem.id_produto).subscribe({
+      next: (res) => {
+        this.items = res.result;
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   };
 
+  // ========== RETORNAR PARA TELA INICIAL ========== //
+  returnEquipment(): void {
+    this.showDatails = false;
+    this.showResume = true;
+
+    this.findAll();
+  }
+
+  // ========== RETORNAR PARA TELA IDMOV ========== //
+  returnIDMOV(): void {
+    this.showHistory = false;
+    this.openDetail(this.currentItem);
+  }
+
+  // ========== FECHAR EDITOR ========== //
   closeEdit(): void {
     this.editModal = false;
-  };
+  }
 
+  // ========== FECHAR MENU ========== //
+  closeMenu(): void {
+    this.menuModal = false;
+  }
+
+  // ========== FECHAR RENOVADOR ========== //
   closeRenew(): void {
     this.renewModal = false;
-  };
+  }
 
-  returnOption(): void {
-    this.renewModal = false;
-    this.editModal = false;
-    this.optionModal = true;
-  };
-
-  closeAll(): void {
-    this.optionModal = false;
+  // ========== RETORNAR AO MENU ========== //
+  returnMenu(): void {
     this.editModal = false;
     this.renewModal = false;
-  };
+    this.menuModal = true;
+  }
+
+  // ========== MENSAGEM ========== //
+  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
+    this.message = message;
+    this.messageType = type;
+    this.showMessage = true;
+
+    setTimeout(() => {
+      this.showMessage = false;
+      this.message = '';
+    }, 3000);
+  }
+
+  // ========== FORMATAR DATA ========== //
+  formateDate(date: string): string {
+    if (!date) return '';
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+  }
 }
+
