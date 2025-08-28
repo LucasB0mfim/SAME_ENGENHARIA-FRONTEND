@@ -279,6 +279,10 @@
 .access-card__list {
   display: flex;
   flex-direction: column;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .access-card__item {
@@ -318,6 +322,12 @@
 .access-card__date {
   font-size: 12px;
   color: var(--text-color);
+}
+
+.access-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .notice {

@@ -52,6 +52,8 @@ export class GeneralComponent implements OnInit {
   ilustration = 'assets/images/ilustration-night.gif';
   avatar: string = 'assets/images/avatarIconDark.png';
 
+  falaAi: string = 'https://docs.google.com/forms/d/1h_UFcDfnbMmu710rZQ4pqF8_B-RnQUFs_7FsP_AREPc/edit';
+
 
   // ========== HOOK ========== //
   ngOnInit(): void {
