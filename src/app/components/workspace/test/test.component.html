@@ -1,0 +1,105 @@
+<div class="container">
+
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
+
+  <div class="container__filter">
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <input type="text" class="input input--primary" placeholder="Pesquisar">
+    </div>
+
+    <!-- NAVEGAÇÃO POR STATUS -->
+    <div class="filter">
+      <button class="btn btn--third">
+        Ativos
+        <span class="counter">{{ 0 }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--third">
+        Devolvidos
+        <span class="counter">{{ 0 }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container__card">
+    <!-- CARD -->
+    <div *ngFor="let item of items; let i = index" class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">UNID:</div>
+            <div class="card__title">{{ item.quantidade || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__title">{{ item.equipamento || 'N/A' }}</div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">OC:</div>
+            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">MOV:</div>
+            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">IDMOV:</div>
+            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__title">R$</div>
+            <div class="card__title">{{ item.locacoes[0].valor || 'N/A'}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__content">
+          <div class="card__subtitle">CRIADOR</div>
+          <div class="card__title">{{ item.criador || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">FORNECEDOR</div>
+          <div class="card__title">{{ item.fornecedor || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">DOCUMENTO</div>
+          <div class="card__title">MODALIDADE</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">DATA INICIAL</div>
+          <div class="card__title">{{ formateDate(item.locacoes[0].data_inicial) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">DATA FINAL</div>
+          <div class="card__title">{{ formateDate(item.locacoes[0].data_final) || 'N/A' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <!-- SEM RESULTADO -->
+    <div class="empty" *ngIf="isEmpty">
+      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    </div>
+  </div>
+</div>
