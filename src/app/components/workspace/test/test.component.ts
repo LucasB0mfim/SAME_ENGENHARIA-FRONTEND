@@ -37,6 +37,7 @@ export class TestComponent implements OnInit {
     this._titleService.setTitle('Locação');
   }
 
+  // ========== BUSCAR EQUIPAMENTOS ========== //
   getEquipment(): void {
     this._equipamentService.findAll().pipe(finalize(() => this.isLoading = false)).subscribe({
       next: (res) => {

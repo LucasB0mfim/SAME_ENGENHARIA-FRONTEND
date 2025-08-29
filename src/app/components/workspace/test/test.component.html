@@ -37,7 +37,7 @@
             <div class="card__title">UNID:</div>
             <div class="card__title">{{ item.quantidade || 'N/A' }}</div>
             <div class="card__subtitle">|</div>
-            <div class="card__title">{{ item.equipamento || 'N/A' }}</div>
+            <div class="card__title">{{ item.nome_equipamento || 'N/A' }}</div>
           </div>
           <div class="card__bottom">
             <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
@@ -46,13 +46,13 @@
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__subtitle">OC:</div>
-            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__title">{{ item.ordem_compra || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
           <div class="card__text">
             <div class="card__subtitle">MOV:</div>
-            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__title">{{ item.movimento || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
@@ -64,30 +64,30 @@
 
           <div class="card__text">
             <div class="card__title">R$</div>
-            <div class="card__title">{{ item.locacoes[0].valor || 'N/A'}}</div>
+            <div class="card__title">{{ item.valor || 'N/A'}}</div>
           </div>
         </div>
       </div>
       <div class="card__body">
         <div class="card__content">
-          <div class="card__subtitle">CRIADOR</div>
-          <div class="card__title">{{ item.criador || 'N/A' }}</div>
+          <div class="card__subtitle">USUÁRIO</div>
+          <div class="card__title">{{ item.nome_criador || 'N/A' }}</div>
         </div>
         <div class="card__content">
           <div class="card__subtitle">FORNECEDOR</div>
           <div class="card__title">{{ item.fornecedor || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">DOCUMENTO</div>
-          <div class="card__title">MODALIDADE</div>
+          <div class="card__subtitle">Nº DOCUMENTO</div>
+          <div class="card__title">{{ item.numero_documento || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">DATA INICIAL</div>
-          <div class="card__title">{{ formateDate(item.locacoes[0].data_inicial) || 'N/A' }}</div>
+          <div class="card__subtitle">INÍCIO DO CONTRATO</div>
+          <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">DATA FINAL</div>
-          <div class="card__title">{{ formateDate(item.locacoes[0].data_final) || 'N/A' }}</div>
+          <div class="card__subtitle">FIM DO CONTRATO</div>
+          <div class="card__title">{{ formateDate(item.data_final) || 'N/A' }}</div>
         </div>
       </div>
     </div>
