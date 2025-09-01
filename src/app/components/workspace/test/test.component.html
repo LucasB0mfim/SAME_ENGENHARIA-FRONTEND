@@ -9,22 +9,32 @@
 
     <!-- FILTRO -->
     <div class="filter">
-      <input type="text" class="input input--primary" placeholder="Pesquisar">
-    </div>
-
-    <!-- NAVEGAÇÃO POR STATUS -->
-    <div class="filter">
-      <button class="btn btn--third">
+      <button (click)="getByStatus('ATIVO')" class="btn btn--third">
         Ativos
-        <span class="counter">{{ 0 }}</span>
+        <span class="counter">{{ status['ATIVO'] }}</span>
       </button>
     </div>
 
+    <!-- FILTRO -->
     <div class="filter">
-      <button class="btn btn--third">
+      <button (click)="getByStatus('DEVOLVIDO')" class="btn btn--third">
         Devolvidos
-        <span class="counter">{{ 0 }}</span>
+        <span class="counter">{{ status['DEVOLVIDO'] }}</span>
       </button>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <input type="text" placeholder="Pesquisar" [(ngModel)]="idmov" (input)="applyFilters()"
+        class="input input--primary">
+    </div>
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <select [(ngModel)]="costCenter" (input)="applyFilters()" class="input input--primary">
+        <option value="GERAL">Geral</option>
+        <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
+      </select>
     </div>
   </div>
 

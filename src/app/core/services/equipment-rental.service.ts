@@ -14,11 +14,6 @@ export class EquipmentRentalService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findAll() {
-    const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/equipment-rental', { headers });
-  }
-
   findByIdmov(idmov: any) {
     const headers = this._createHeaders();
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/${idmov}`, { headers });
@@ -27,6 +22,16 @@ export class EquipmentRentalService {
   findByIdProduto(idProduto: any) {
     const headers = this._createHeaders();
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/id/${idProduto}`, { headers });
+  }
+
+  findAll() {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/equipment-rental', { headers });
+  }
+
+  findByStatus(status: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/${status}`, { headers });
   }
 
   update(request: any) {
