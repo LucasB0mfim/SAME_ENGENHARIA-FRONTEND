@@ -9,7 +9,7 @@
 
     <!-- FILTRO -->
     <div class="filter">
-      <button (click)="getByStatus('ATIVO')" class="btn btn--third">
+      <button (click)="getByStatus('ATIVO')" [ngClass]="{'active': selectedStatus === 'ATIVO'}" class="btn btn--third">
         Ativos
         <span class="counter">{{ status['ATIVO'] }}</span>
       </button>
@@ -17,7 +17,8 @@
 
     <!-- FILTRO -->
     <div class="filter">
-      <button (click)="getByStatus('DEVOLVIDO')" class="btn btn--third">
+      <button (click)="getByStatus('DEVOLVIDO')" [ngClass]="{'active': selectedStatus === 'DEVOLVIDO'}"
+        class="btn btn--third">
         Devolvidos
         <span class="counter">{{ status['DEVOLVIDO'] }}</span>
       </button>
@@ -31,10 +32,16 @@
 
     <!-- FILTRO -->
     <div class="filter">
-      <select [(ngModel)]="costCenter" (input)="applyFilters()" class="input input--primary">
+      <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input--primary">
         <option value="GERAL">Geral</option>
         <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
       </select>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--primary" (click)="loadInitial()">
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
   </div>
 
@@ -73,23 +80,23 @@
           </div>
 
           <div class="card__text">
-            <div class="card__title">R$</div>
-            <div class="card__title">{{ item.valor || 'N/A'}}</div>
+            <div class="card__subtitle">DOC:</div>
+            <div class="card__title">{{ item.numero_documento || 'N/A'}}</div>
           </div>
         </div>
       </div>
       <div class="card__body">
         <div class="card__content">
           <div class="card__subtitle">USUÁRIO</div>
-          <div class="card__title">{{ item.nome_criador || 'N/A' }}</div>
+          <div class="card__title">{{ item.criador || 'N/A' }}</div>
         </div>
         <div class="card__content">
           <div class="card__subtitle">FORNECEDOR</div>
           <div class="card__title">{{ item.fornecedor || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">Nº DOCUMENTO</div>
-          <div class="card__title">{{ item.numero_documento || 'N/A' }}</div>
+          <div class="card__subtitle">VALOR DO EQUIPAMENTO</div>
+          <div class="card__title">R$ {{ item.valor || 'N/A' }}</div>
         </div>
         <div class="card__content">
           <div class="card__subtitle">INÍCIO DO CONTRATO</div>

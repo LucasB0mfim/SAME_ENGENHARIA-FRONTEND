@@ -1,13 +1,13 @@
-import { finalize, tap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
 import { EquipmentRentalService } from '../../../core/services/equipment-rental.service';
-import { forkJoin, Observable } from 'rxjs';
 
 interface status {
   'ATIVO': number;
@@ -18,29 +18,36 @@ type statusKey = keyof status;
 
 @Component({
   selector: 'app-test',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatIconModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './test.component.html',
   styleUrl: './test.component.scss'
 })
 export class TestComponent implements OnInit {
+
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private _equipamentService = inject(EquipmentRentalService);
 
   // ========== ESTADOS ========== //
   items: any[] = [];
-  filteredItem: any[] = [];
+  filteredItems: any[] = [];
   costCenters: any = null;
 
-  status: status = { 'ATIVO': 0, 'DEVOLVIDO': 0 };
   selectedStatus: statusKey = 'ATIVO';
-
-  idmov: string = '';
-  costCenter: string = '';
+  status: status = { 'ATIVO': 0, 'DEVOLVIDO': 0 };
 
   isFind: boolean = false;
   isEmpty: boolean = false;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
+
+  idmov: string = '';
+  costCenter: string = 'GERAL';
 
   message: string = '';
   showMessage: boolean = false;
@@ -52,63 +59,92 @@ export class TestComponent implements OnInit {
     this._titleService.setTitle('Locação');
   }
 
-  // ========== LOADING INICIAL ========== //
+  // ========== LOADING INICIAL OTIMIZADO ========== //
   loadInitial(): void {
-    forkJoin({
-      contadores: this.statusCounter(),
-      inicialData: this._equipamentService.findByStatus(this.selectedStatus)
-    }).pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (res) => {
-          this.items = res.inicialData.result;
-          this.costCenters = [...new Set(this.items.map((item) => item.centro_custo))];
-        },
-        error: (err) => {
-          console.log('Erro ao consultar dados: ', err);
-          this.setMessage('Não foi possível carregar os dados!', 'error');
-        }
-      })
-  }
+    this.items = [];
+    this.isEmpty = false;
+    this.isLoading = true;
 
-  // ========== LOADING INICIAL ========== //
-  getByStatus(status: string): void {
-    const statusKey = status as statusKey;
-    this.selectedStatus = statusKey;
-
-    this._equipamentService.findByStatus(status)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (res) => {
-          this.items = res.result;
-        },
-        error: (err) => {
-          console.error('Erro ao filtrar por status:', err);
-          this.setMessage('Erro ao carregar dados do status selecionado!', 'error');
-        }
-      })
-  }
-
-  statusCounter(): Observable<any> {
     const statusList: statusKey[] = ['ATIVO', 'DEVOLVIDO'];
 
     const requests = statusList.map(status =>
       this._equipamentService.findByStatus(status)
     );
 
-    return forkJoin(requests).pipe(
-      tap((results: any[]) => {
-        statusList.forEach((status: statusKey, index: number) => {
-          this.status[status] = results[index]?.result?.length || 0;
-        });
-      })
-    );
+    forkJoin(requests)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+
+          statusList.forEach((status: statusKey, index: number) => {
+            const data = res[index]?.result || [];
+            this.status[status] = data.length;
+          });
+
+          this.items = res[0]?.result || [];
+          this.filteredItems = [...this.items];
+          this.costCenters = [...new Set(this.items.map((item) => item.centro_custo))];
+
+          this.isEmpty = this.items.length === 0;
+          this.applyFilters();
+        },
+        error: (err) => {
+          this.isEmpty = true;
+          console.log('Erro ao carregar dados: ', err);
+          this.setMessage('Não foi possível carregar os dados!', 'error');
+        }
+      });
   }
 
-  // ========== AUXILIARES ========== //
-  formateDate(date: string): string {
-    if (!date) return '';
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
+  // ========== FILTRO POR STATUS ========== //
+  getByStatus(status: string): void {
+    const statusKey = status as statusKey;
+    this.selectedStatus = statusKey;
+
+    this.items = [];
+    this.isEmpty = false;
+    this.isLoading = true;
+
+    this._equipamentService.findByStatus(status)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+          const data = res.result || [];
+
+          this.items = data;
+          this.filteredItems = [...this.items];
+
+          this.status[statusKey] = data.length;
+          this.isEmpty = this.items.length === 0;
+        },
+        error: (err) => {
+          this.isEmpty = true;
+          console.error('Erro ao carregar:', err);
+          this.setMessage('Erro ao carregar!', 'error');
+        }
+      });
+  }
+
+  // ========== FILTROS ========== //
+  applyFilters() {
+    let data = [...this.filteredItems];
+
+    if (this.idmov) {
+      const inputValue = this.idmov.trim();
+      data = data.filter(item =>
+        item.idmov && item.idmov.toString().includes(inputValue)
+      );
+    }
+
+    if (this.costCenter && this.costCenter !== 'GERAL') {
+      const inputValue = this.costCenter;
+      data = data.filter(item =>
+        item.centro_custo && item.centro_custo.includes(inputValue)
+      );
+    }
+
+    this.items = data;
+    this.isEmpty = this.items.length === 0;
   }
 
   // ========== MENSAGEM DINAMICA ========== //
@@ -123,23 +159,11 @@ export class TestComponent implements OnInit {
     }, 3000);
   }
 
-  applyFilters() {
-    let item = [...this.filteredItem];
-
-    if (this.idmov) {
-      const inputValue = this.idmov.toString();
-      item = item.filter((item) =>
-        item.idmov.includes(inputValue)
-      )
-    }
-
-    if (this.costCenter) {
-      const inputValue = this.costCenter.toString();
-      item = item.filter((item) =>
-        item.centro_custo.includes(inputValue)
-      )
-    }
-
-    this.items = item;
+  // ========== AUXILIARES ========== //
+  formateDate(date: string): string {
+    if (!date) return '';
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
   }
 }
+

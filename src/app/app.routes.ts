@@ -30,7 +30,6 @@ import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TaskComponent } from './components/workspace/task/task.component';
-import { EquipmentRentalComponent } from './components/workspace/equipment-rental/equipment-rental.component';
 import { TestComponent } from './components/workspace/test/test.component';
 
 export const routes: Routes = [
@@ -82,7 +81,6 @@ export const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
-      { path: 'equipment-rental', component: EquipmentRentalComponent },
       { path: 'test', component: TestComponent },
       {
         path: 'human-resources',

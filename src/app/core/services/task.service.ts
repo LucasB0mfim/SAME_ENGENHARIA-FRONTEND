@@ -19,4 +19,8 @@ export class TaskService {
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/task', { headers });
   }
 
+  findByStatus(status: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/task/${status}`, { headers });
+  }
 }

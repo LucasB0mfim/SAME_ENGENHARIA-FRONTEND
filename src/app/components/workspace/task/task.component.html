@@ -6,93 +6,130 @@
   }
 
   <div class="container__filter">
+    @if (!showDetails) {
     <!-- FILTRO -->
     <div class="filter">
-      <input type="text" class="input input--primary" placeholder="Pesquisar">
+      <button (click)="getByStatus('SOLICITACAO')" [ngClass]="{'active': selectedStatus === 'SOLICITACAO'}"
+        class="btn btn--third">
+        Solicitações
+        <span class="counter">{{ status['SOLICITACAO'] }}</span>
+      </button>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <button (click)="getByStatus('ANDAMENTO')" [ngClass]="{'active': selectedStatus === 'ANDAMENTO'}"
+        class="btn btn--third">
+        Em andamento
+        <span class="counter">{{ status['ANDAMENTO'] }}</span>
+      </button>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <button (click)="getByStatus('FINALIZADO')" [ngClass]="{'active': selectedStatus === 'FINALIZADO'}"
+        class="btn btn--third">
+        Finalizadas
+        <span class="counter">{{ status['FINALIZADO'] }}</span>
+      </button>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="filter filter--right">
+      <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input--primary">
+        <option value="GERAL">Geral</option>
+        <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
+      </select>
     </div>
 
     <div class="filter">
-      <button class="btn btn--third">Solicitações</button>
+      <button class="btn btn--primary" (click)="loadInitial()">
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
-
-    <div class="filter">
-      <button class="btn btn--third">Em andamento</button>
+    } @else {
+    <div class="filter filter--right">
+      <button class="btn btn--primary" (click)="returnHome()">
+        <mat-icon>reset_tv</mat-icon>
+      </button>
     </div>
-
-    <div class="filter">
-      <button class="btn btn--third">Concluidos</button>
-    </div>
+    }
   </div>
 
   <div class="container__card">
-    <!-- CARD -->
-    <div *ngFor="let item of items" class="card">
-      <div class="card__header" (click)="openModalOption(item)">
+
+    @if (!showDetails) {
+    <div *ngFor="let item of items; let i = index" (click)="openDatails(item)" class="card">
+      <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
             <div class="card__title">{{ item.criador || 'N/A' }}</div>
           </div>
-
           <div class="card__bottom">
             <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
           </div>
         </div>
-      </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">ST:</div>
+            <div class="card__title">{{ formateDate(item.data_criacao) || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
 
+          <div class="card__text">
+            <div class="card__subtitle">DI:</div>
+            <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">DF:</div>
+            <div class="card__title">{{ formateDate(item.data_final) || 'N/A'}}</div>
+          </div>
+        </div>
+      </div>
       <div class="card__body">
         <div class="card__content">
-          <div class="card__subtitle">ATIVIDADE</div>
+          <div class="card__subtitle">DESCRIÇÃO</div>
           <div class="card__title">{{ item.descricao || 'N/A' }}</div>
-        </div>
-
-        <div class="card__content">
-          <div class="card__subtitle">DATA CRIAÇÃO</div>
-          <div class="card__title">{{ formateDate(item.data_criacao) || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
-          <div class="card__subtitle">DATA DE INÍCIO</div>
-          <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
-          <div class="card__subtitle">DATA DE TÉRMINO</div>
-          <div class="card__title">{{ formateDate(item.data_final) || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
-          <div class="card__subtitle">BÔNUS PEDREIRO</div>
-          <div class="card__title">R$ {{ item.valor_pedreiro || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
-          <div class="card__subtitle">BÔNUS SERVENTE</div>
-          <div class="card__title">R$ {{ item.valor_servente || 'N/A' }}</div>
         </div>
       </div>
     </div>
-
-    <form class="modal__backdrop" *ngIf="showModal">
-      <div class="modal__container">
-        <div class="modal__header">
-          <h2 class="modal__title">Mais opções</h2>
-          <button type="button" class="btn btn--close">&times;</button>
-        </div>
-
-        <div class="modal__content">
-          <div class="modal__group">
-            <button type="button" (click)="showImage()" class="btn btn--secondary">Prancheta</button>
+    } @else {
+    <div *ngFor="let emp of employees.participantes" class="card">
+      <div class="card__header card__header--border">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">{{ emp.nome || 'N/A' }}</div>
           </div>
-
-          <div class="modal__group">
-            <button type="button" class="btn btn--secondary">Participantes</button>
-          </div>
-
-          <div class="modal__group modal__group--full">
-            <button type="button" class="btn btn--secondary">Editar</button>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ emp.funcao || 'N/A' }}</div>
           </div>
         </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">VALOR:</div>
+            <div class="card__title">R$ {{ emp.valor || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
 
-        <div class="modal__footer">
-          <button type="button" (click)="closeModalOption()" class="btn btn--secondary">Voltar</button>
+          <div class="card__text">
+            <div class="card__subtitle">CPF:</div>
+            <div class="card__title">{{ formateCPF(emp.cpf) || 'N/A'}}</div>
+          </div>
         </div>
       </div>
-    </form>
+    </div>
+    }
+
+    <!-- LOADING -->
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <!-- SEM RESULTADO -->
+    <div class="empty" *ngIf="isEmpty">
+      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    </div>
   </div>
 </div>
