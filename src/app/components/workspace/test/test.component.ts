@@ -165,5 +165,9 @@ export class TestComponent implements OnInit {
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   }
+
+  upperCase(string: string): string {
+    return string.trim().toUpperCase();
+  }
 }
 

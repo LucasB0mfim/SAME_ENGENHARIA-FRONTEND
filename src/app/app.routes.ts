@@ -31,6 +31,8 @@ import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TaskComponent } from './components/workspace/task/task.component';
 import { TestComponent } from './components/workspace/test/test.component';
+import { BuyComponent } from './components/workspace/buy/buy.component';
+import { EquipmentRentalComponent } from './components/workspace/equipment-rental/equipment-rental.component';
 
 export const routes: Routes = [
   {
@@ -82,6 +84,14 @@ export const routes: Routes = [
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
       { path: 'test', component: TestComponent },
+      {
+        path: 'buy',
+        component: BuyComponent
+      },
+      {
+        path: 'buy/equipament-rental',
+        component: EquipmentRentalComponent
+      },
       {
         path: 'human-resources',
         component: HumanResourcesComponent
