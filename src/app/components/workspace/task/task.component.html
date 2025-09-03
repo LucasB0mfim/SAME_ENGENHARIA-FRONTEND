@@ -48,7 +48,17 @@
       </button>
     </div>
     } @else {
+    <div class="filter">
+      <span class="filter__span">R$ {{ calculateValueTask() }}</span>
+    </div>
+
     <div class="filter filter--right">
+      <button class="btn btn--primary" (click)="openClipboard()">
+        <mat-icon>content_paste</mat-icon>
+      </button>
+    </div>
+
+    <div class="filter">
       <button class="btn btn--primary" (click)="returnHome()">
         <mat-icon>reset_tv</mat-icon>
       </button>

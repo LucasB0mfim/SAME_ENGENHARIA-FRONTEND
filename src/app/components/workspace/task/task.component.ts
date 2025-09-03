@@ -132,12 +132,21 @@ export class TaskComponent implements OnInit {
   openDatails(item: any): void {
     this.employees = item;
     this.showDetails = true;
+    this.calculateValueTask();
+    this._titleService.setTitle('Participantes');
+  }
+
+  // ========== ABRIR FOTO DA PRANCHETA ========== //
+  openClipboard(): void {
+    const imageName = this.employees.foto_prancheta;
+    window.open(`https://sameengenharia.com.br/api/task/file/${imageName}`, "_blank", "noopener,noreferrer");
   }
 
   // ========== VOLTAR PARA O INÍCIO ========== //
   returnHome(): void {
-    this.showDetails = false;
     this.loadInitial();
+    this.showDetails = false;
+    this._titleService.setTitle('Tarefas');
   }
 
   // ========== FILTROS ========== //
@@ -176,5 +185,11 @@ export class TaskComponent implements OnInit {
 
   formateCPF(cpf: string): string {
     return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9, 11)}`;
+  }
+
+  calculateValueTask(): void {
+    return this.employees.participantes.reduce((acc: number, item: any) => {
+      return acc + item.valor / 100
+    }, 0);
   }
 }
