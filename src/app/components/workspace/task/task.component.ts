@@ -189,7 +189,7 @@ export class TaskComponent implements OnInit {
 
   calculateValueTask(): void {
     return this.employees.participantes.reduce((acc: number, item: any) => {
-      return acc + item.valor / 100
+      return acc + item.valor
     }, 0);
   }
 }
