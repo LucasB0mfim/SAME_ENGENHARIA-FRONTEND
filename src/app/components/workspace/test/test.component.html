@@ -74,8 +74,8 @@
           </div>
 
           <div class="card__text">
-            <div class="card__subtitle">IDMOV:</div>
-            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__subtitle">ID:</div>
+            <div class="card__title">{{ item.id || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
@@ -99,11 +99,11 @@
           <div class="card__title">R$ {{ item.valor || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">INÍCIO DO CONTRATO</div>
+          <div class="card__subtitle">INÍCIO DO PERÍODO</div>
           <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A' }}</div>
         </div>
         <div class="card__content">
-          <div class="card__subtitle">FIM DO CONTRATO</div>
+          <div class="card__subtitle">FIM DO PERÍODO</div>
           <div class="card__title">{{ formateDate(item.data_final) || 'N/A' }}</div>
         </div>
         <div class="card__content">
