@@ -39,10 +39,17 @@
     </div>
 
     <div class="filter">
-      <button class="btn btn--primary" (click)="loadInitial()">
+      <button type="button" class="btn btn--primary" (click)="openModal()">
+        <mat-icon>archive</mat-icon>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button type="button" class="btn btn--primary" (click)="loadInitial()">
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
+
   </div>
 
   <div class="container__card">
@@ -63,7 +70,7 @@
         <div class="card__secondary">
           <div class="card__text">
             <div class="card__subtitle">OC:</div>
-            <div class="card__title">{{ item.ordem_compra || 'N/A'}}</div>
+            <div class="card__title">{{ item.contrato.ordem_compra || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
@@ -74,14 +81,20 @@
           </div>
 
           <div class="card__text">
-            <div class="card__subtitle">ID:</div>
-            <div class="card__title">{{ item.id || 'N/A'}}</div>
+            <div class="card__subtitle">IDMOV:</div>
+            <div class="card__title">{{ item.contrato.idmov || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
           <div class="card__text">
             <div class="card__subtitle">DOC:</div>
             <div class="card__title">{{ item.numero_documento || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">PD:</div>
+            <div class="card__title">{{ item.contrato.periodo || 'N/A'}}</div>
           </div>
         </div>
       </div>
@@ -100,11 +113,11 @@
         </div>
         <div class="card__content">
           <div class="card__subtitle">INÍCIO DO PERÍODO</div>
-          <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A' }}</div>
+          <div class="card__title">{{ formateDate(item.contrato.data_inicial) || 'N/A' }}</div>
         </div>
         <div class="card__content">
           <div class="card__subtitle">FIM DO PERÍODO</div>
-          <div class="card__title">{{ formateDate(item.data_final) || 'N/A' }}</div>
+          <div class="card__title">{{ formateDate(item.contrato.data_final) || 'N/A' }}</div>
         </div>
         <div class="card__content">
           <div class="card__subtitle">DURAÇÃO</div>
@@ -112,6 +125,45 @@
         </div>
       </div>
     </div>
+
+    <!-- MODAL -->
+    @if (isModalOpen) {
+    <form [formGroup]="rentalReturnForm" (ngSubmit)="onRentalReturn()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Devolver Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">IDMOV *</label>
+            <input
+              type="number"
+              formControlName="idmov"
+              placeholder="Insira o idmov da locação"
+              class="modal__input">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button
+            type="button"
+            (click)="closeModal()"
+            class="btn btn--secondary">
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            [disabled]="!rentalReturnForm.get('idmov')?.valid"
+            class="btn btn--primary">
+            Devolver
+          </button>
+        </div>
+      </div>
+    </form>
+    }
 
     <!-- LOADING -->
     <div class="loading" *ngIf="isLoading">

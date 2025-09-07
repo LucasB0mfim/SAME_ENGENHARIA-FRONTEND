@@ -1,274 +1,119 @@
 <div class="container">
+
+  <!-- MENSAGEM -->
   @if (showMessage) {
   <div class="message" [ngClass]="messageType">{{ message }}</div>
   }
 
   <div class="container__filter">
+
+    <!-- FILTRO -->
     <div class="filter">
-      <input type="text" placeholder="Pesquisar" class="filter__input">
+      <button (click)="getByStatus('NOVO')" [ngClass]="{'active': selectedStatus === 'NOVO'}" class="btn btn--third">
+        Novos
+        <span class="counter">{{ status['NOVO'] }}</span>
+      </button>
     </div>
 
-    <div class="filter" (click)="returnEquipment()" *ngIf="showDatails">
-      <mat-icon class="filter__icon">arrow_back_ios_new</mat-icon>
+    <!-- FILTRO -->
+    <div class="filter">
+      <button (click)="getByStatus('VENCIDO')" [ngClass]="{'active': selectedStatus === 'VENCIDO'}"
+        class="btn btn--third">
+        Vencidos
+        <span class="counter">{{ status['VENCIDO'] }}</span>
+      </button>
     </div>
 
-    <div class="filter" (click)="returnIDMOV()" *ngIf="showHistory">
-      <mat-icon class="filter__icon">arrow_back_ios_new</mat-icon>
+    <!-- FILTRO -->
+    <div class="filter">
+      <input type="text" placeholder="Pesquisar" [(ngModel)]="idmov" (input)="applyFilters()"
+        class="input input--primary">
+    </div>
+
+    <!-- FILTRO -->
+    <div class="filter">
+      <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input--primary">
+        <option value="GERAL">Geral</option>
+        <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
+      </select>
+    </div>
+
+    <div class="filter">
+      <button class="btn btn--primary" (click)="loadInitial()">
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
   </div>
 
   <div class="container__card">
-    <ng-container *ngIf="showResume">
-      <div class="card" (click)="openDetail(item)" *ngFor="let item of items">
-        <header class="card__header card__header--border">
-          <div class="card__header--left">
-            <div class="card__header--top">
-              <h3 class="card__title">{{ item.idmov|| 'N/A' }}</h3>
-              <span class="card__subtitle">|</span>
-              <span class="card__subtitle">{{ item.criador|| 'N/A' }}</span>
-            </div>
-
-            <div class="card__header--bottom">
-              <span class="card__subtitle">{{ item.centro_custo || 'N/A' }}</span>
-            </div>
+    <!-- CARD -->
+    <div *ngFor="let item of items; let i = index" class="card">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__title">UNID:</div>
+            <div class="card__title">{{ item.quantidade || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+            <div class="card__title">{{ item.nome_equipamento || 'N/A' }}</div>
           </div>
-        </header>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="showDatails">
-      <div class="card" (click)="openMenu(item)" *ngFor="let item of items">
-        <header class="card__header">
-          <div class="card__header--left">
-            <div class="card__header--top">
-              <h3 class="card__title">{{ item.idmov|| 'N/A' }}</h3>
-              <span class="card__subtitle">|</span>
-              <span class="card__subtitle">{{ item.criador|| 'N/A' }}</span>
-            </div>
-
-            <div class="card__header--bottom">
-              <span class="card__subtitle">{{ item.centro_custo|| 'N/A' }}</span>
-            </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
           </div>
-          <div class="card__header--right">
-            <div class="card__text">
-              <span class="card__subtitle">QTD:</span>
-              <span class="card__title">{{ item.quantidade || 'N/A' }}</span>
-              <span class="card__subtitle">|</span>
-            </div>
-            <div class="card__text">
-              <span class="card__subtitle">UNID:</span>
-              <span class="card__title">{{ item.unidade || 'N/A' }}</span>
-            </div>
-          </div>
-        </header>
+        </div>
+        <div class="card__secondary">
 
-        <div class="card__body">
-          <div class="card__content">
-            <span class="card__subtitle">EQUIPAMENTO</span>
-            <h4 class="card__title">{{ item.equipamento|| 'N/A' }}</h4>
+          <div class="card__text">
+            <div class="card__subtitle">MOV:</div>
+            <div class="card__title">{{ item.movimento || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">IDMOV:</div>
+            <div class="card__title">{{ item.contrato.idmov || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">DOC:</div>
+            <div class="card__title">{{ item.numero_documento || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">PD:</div>
+            <div class="card__title">{{ item.contrato.periodo || 'N/A'}}</div>
           </div>
         </div>
       </div>
-    </ng-container>
-
-    <ng-container *ngIf="showHistory">
-      <ng-container *ngFor="let item of items">
-        <div class="card" *ngFor="let locacao of item.locacoes">
-          <header class="card__header">
-            <div class="card__header--left">
-              <div class="card__header--top">
-                <h3 class="card__title">{{ locacao.idmov || 'N/A' }}</h3>
-                <span class="card__subtitle">|</span>
-                <span class="card__subtitle">{{ item.criador|| 'N/A' }}</span>
-              </div>
-
-              <div class="card__header--bottom">
-                <span class="card__subtitle">{{ item.centro_custo|| 'N/A' }}</span>
-              </div>
-            </div>
-          </header>
-
-          <div class="card__body card__body--large">
-            <div class="card__content">
-              <span class="card__subtitle">EQUIPAMENTO</span>
-              <h4 class="card__title">{{ item.equipamento || 'N/A' }}</h4>
-            </div>
-
-            <div class="card__content">
-              <span class="card__subtitle">PERÍODO LOCADO</span>
-              <h4 class="card__title">{{ locacao.periodo || 'N/A' }}</h4>
-            </div>
-
-            <div class="card__content">
-              <span class="card__subtitle">VALOR DA LOCAÇÃO</span>
-              <h4 class="card__title">R$ {{ locacao.valor || 'N/A' }}</h4>
-            </div>
-
-            <div class="card__content">
-              <span class="card__subtitle">ORDEM DE COMPRA</span>
-              <h4 class="card__title">{{ locacao.ordem_compra || 'N/A' }}</h4>
-            </div>
-
-            <div class="card__content">
-              <span class="card__subtitle">DATA CRIAÇÃO</span>
-              <h4 class="card__title">{{ formateDate(locacao.data_criacao) || 'N/A' }}</h4>
-            </div>
-
-            <div class="card__content">
-              <span class="card__subtitle">DATA INICIAL</span>
-              <h4 class="card__title">{{ formateDate(locacao.data_inicial) || 'N/A' }}</h4>
-            </div>
-
-            <div class="card__content">
-              <span class="card__subtitle">DATA FINAL</span>
-              <h4 class="card__title">{{ formateDate(locacao.data_final) || 'N/A' }}</h4>
-            </div>
-          </div>
+      <div class="card__body">
+        <div class="card__content">
+          <div class="card__subtitle">USUÁRIO</div>
+          <div class="card__title">{{ item.criador || 'N/A' }}</div>
         </div>
-      </ng-container>
-    </ng-container>
-  </div>
-
-  <div *ngIf="menuModal" class="container__modal">
-    <div class="modal">
-      <header class="modal__header">
-        <h2 class="modal__title">Menu de Opções</h2>
-        <mat-icon (click)="closeMenu()" class="modal__icon">close</mat-icon>
-      </header>
-
-      <div class="modal__content">
-        <button type="button" (click)="openEdit()" class="modal__button">Editar Locação</button>
-        <button type="button" (click)="openRenew()" class="modal__button">Renovar Locação</button>
-        <button type="button" (click)="openHistory()" class="modal__button modal__button--full">Ver histórico</button>
+        <div class="card__content">
+          <div class="card__subtitle">INÍCIO DO PERÍODO</div>
+          <div class="card__title">{{ formateDate(item.contrato.data_inicial) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">FIM DO PERÍODO</div>
+          <div class="card__title">{{ formateDate(item.contrato.data_final) || 'N/A' }}</div>
+        </div>
+        <div class="card__content">
+          <div class="card__subtitle">DURAÇÃO</div>
+          <div class="card__title">{{ upperCase(item.unidade) || 'N/A' }}</div>
+        </div>
       </div>
-
-      <footer class="modal__footer">
-        <button type="button" (click)="closeMenu()" class="modal__button">Sair</button>
-      </footer>
     </div>
-  </div>
 
-  <div *ngIf="editModal" class="container__modal">
-    <form [formGroup]="updateForm" (ngSubmit)="onUpdate()" class="modal">
-      <header class="modal__header">
-        <h2 class="modal__title">Editar Locação</h2>
-        <mat-icon (click)="closeEdit()" class="modal__icon">close</mat-icon>
-      </header>
+    <!-- LOADING -->
+    <div class="loading" *ngIf="isLoading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
 
-      <div class="modal__content">
-        <div class="modal__group modal__group--full">
-          <label class="modal__label">Equipamento</label>
-          <input type="text" formControlName="equipamento" readonly class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">ID Produto</label>
-          <input type="number" placeholder="ID" formControlName="id_produto" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">IDMov</label>
-          <input type="number" placeholder="IDMOV" formControlName="idmov" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Período</label>
-          <select formControlName="periodo" class="modal__input">
-            <option value="" disabled>Selecione um período</option>
-            <option *ngFor="let item of currentItem.locacoes" [ngValue]="item.periodo">
-              {{ item.periodo }}
-            </option>
-          </select>
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Tempo Contratado</label>
-          <select formControlName="tempo_contratado" class="modal__input">
-            <option value="" disabled>Selecione um período</option>
-            <option value="dia">Dia</option>
-            <option value="Semana">Semana</option>
-            <option value="Quinzena">Quinzena</option>
-            <option value="Mês">Mês</option>
-          </select>
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Data Inicial</label>
-          <input type="date" formControlName="data_inicial" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Data Final</label>
-          <input type="date" formControlName="data_final" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Ordem de Compra</label>
-          <input type="number" placeholder="OC" formControlName="ordem_compra" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Valor</label>
-          <input type="number" placeholder="R$ 0,00" formControlName="valor" class="modal__input">
-        </div>
-      </div>
-
-      <footer class="modal__footer">
-        <button type="button" (click)="returnMenu()" class="modal__button">Voltar</button>
-        <button type="submit" class="modal__button">Editar</button>
-      </footer>
-    </form>
-  </div>
-
-  <div *ngIf="renewModal" class="container__modal">
-    <form [formGroup]="renewForm" (ngSubmit)="onRenew()" class="modal">
-      <header class="modal__header">
-        <h2 class="modal__title">Renovar Locação</h2>
-        <mat-icon (click)="closeRenew()" class="modal__icon">close</mat-icon>
-      </header>
-
-      <div class="modal__content">
-        <div class="modal__group modal__group--full">
-          <label class="modal__label">Equipamento</label>
-          <input type="text" formControlName="equipamento" readonly class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">ID Produto</label>
-          <input type="number" placeholder="ID" formControlName="id_produto" readonly class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">IDMOV</label>
-          <input type="number" placeholder="IDMOV" formControlName="idmov" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Período</label>
-          <input type="text" formControlName="periodo" readonly class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Data Inicial</label>
-          <input type="date" formControlName="data_inicial" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Ordem de Compra</label>
-          <input type="number" placeholder="OC" formControlName="ordem_compra" class="modal__input">
-        </div>
-
-        <div class="modal__group">
-          <label class="modal__label">Valor</label>
-          <input type="number" placeholder="R$ 0,00" formControlName="valor" class="modal__input">
-        </div>
-      </div>
-
-      <footer class="modal__footer">
-        <button type="button" (click)="returnMenu()" class="modal__button">Voltar</button>
-        <button type="submit" class="modal__button">Renovar</button>
-      </footer>
-    </form>
+    <!-- SEM RESULTADO -->
+    <div class="empty" *ngIf="isEmpty">
+      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    </div>
   </div>
 </div>

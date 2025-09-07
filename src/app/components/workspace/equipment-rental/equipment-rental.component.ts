@@ -1,264 +1,157 @@
+import { forkJoin } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-
 import { MatIconModule } from '@angular/material/icon';
+import { Component, inject, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
 import { EquipmentRentalService } from '../../../core/services/equipment-rental.service';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+
+interface status {
+  'NOVO': number;
+  'VENCIDO': number;
+}
+
+type statusKey = keyof status;
 
 @Component({
   selector: 'app-equipment-rental',
-  imports: [CommonModule, MatIconModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatIconModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './equipment-rental.component.html',
   styleUrl: './equipment-rental.component.scss'
 })
 export class EquipmentRentalComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
-  private readonly _titleService = inject(TitleService);
-  private readonly _rentalService = inject(EquipmentRentalService);
+  private _titleService = inject(TitleService);
+  private _equipamentService = inject(EquipmentRentalService);
 
   // ========== ESTADOS ========== //
   items: any[] = [];
-  currentItem: any = null;
+  rawItems: any[] = [];
+  filteredItems: any[] = [];
+  costCenters: any = null;
 
-  menuModal: boolean = false;
-  editModal: boolean = false;
-  renewModal: boolean = false;
+  selectedStatus: statusKey = 'NOVO';
+  status: status = { 'NOVO': 0, 'VENCIDO': 0 };
 
-  showResume: Boolean = true;
-  showDatails: Boolean = false;
-  showHistory: boolean = false;
+  isFind: boolean = false;
+  isEmpty: boolean = false;
+  isLoading: boolean = false;
+
+  idmov: string = '';
+  costCenter: string = 'GERAL';
 
   message: string = '';
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
-  // ========== FORMULÁRIOS ========== //
-  renewForm: FormGroup = new FormGroup({
-    id_produto: new FormControl(''),
-    idmov: new FormControl(''),
-    data_inicial: new FormControl(''),
-    ordem_compra: new FormControl(''),
-    valor: new FormControl(''),
-    tempo_contratado: new FormControl(''),
-    equipamento: new FormControl(''),
-    periodo: new FormControl('')
-  });
-
-  updateForm: FormGroup = new FormGroup({
-    equipamento: new FormControl(''),
-    id_produto: new FormControl(''),
-    idmov: new FormControl(''),
-    data_inicial: new FormControl(''),
-    data_final: new FormControl(''),
-    ordem_compra: new FormControl(''),
-    valor: new FormControl(''),
-    tempo_contratado: new FormControl(''),
-    periodo: new FormControl('')
-  });
-
   // ========== HOOK ========== //
   ngOnInit(): void {
-    this._titleService.setTitle('Locações');
-    this.findAll();
+    this.loadInitial();
+    this._titleService.setTitle('Locação');
+  }
 
-    this.updateForm.get('periodo')?.valueChanges.subscribe(periodoSelecionado => {
-      if (this.currentItem && periodoSelecionado) {
-        const locacao = this.currentItem.locacoes.find(
-          (l: any) => l.periodo === periodoSelecionado
-        );
-        if (locacao) {
-          this.updateForm.patchValue({
-            id_produto: locacao.id_produto || '',
-            idmov: locacao.idmov || '',
-            data_inicial: locacao.data_inicial || '',
-            data_final: locacao.data_final || '',
-            ordem_compra: locacao.ordem_compra || '',
-            valor: locacao.valor || '',
-            tempo_contratado: locacao.tempo_contratado || ''
-          }, { emitEvent: false });
+  // ========== LOADING INICIAL OTIMIZADO ========== //
+  loadInitial(): void {
+    this.items = [];
+    this.isEmpty = false;
+    this.isLoading = true;
+
+    const statusList: statusKey[] = ['NOVO', 'VENCIDO'];
+
+    const requests = statusList.map(status =>
+      this._equipamentService.findByStatus(status)
+    );
+
+    forkJoin(requests)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+
+          statusList.forEach((status: statusKey, index: number) => {
+            const data = res[index]?.result || [];
+            this.status[status] = data.length;
+          });
+
+          this.rawItems = res[0]?.result || [];
+          this.filteredItems = this.convertJson(this.rawItems);
+          this.items = [...this.filteredItems];
+
+          this.costCenters = [...new Set(this.filteredItems.map((item) => item.centro_custo))];
+
+          this.isEmpty = this.items.length === 0;
+
+          this.applyFilters();
+        },
+        error: (err) => {
+          this.isEmpty = true;
+          console.error('Não foi possível buscar os contratos:', err);
         }
-      }
-    });
-  };
+      });
+  }
 
-  // ========== API ========== //
-  findAll(): void {
-    this._titleService.setTitle('Histórico de locações');
+  // ========== FILTRO POR STATUS ========== //
+  getByStatus(status: string): void {
+    const statusKey = status as statusKey;
+    this.selectedStatus = statusKey;
 
-    this._rentalService.findAll().subscribe({
-      next: (res) => {
-        this.items = res.result;
-      },
-      error: (err) => {
-        console.error('Erro ao buscar registros: ', err);
-      }
-    });
-  };
+    this.items = [];
+    this.isEmpty = false;
+    this.isLoading = true;
 
-  onUpdate(): void {
-    const request = {
-      id_produto: this.updateForm.value.id_produto,
-      idmov: this.updateForm.value.idmov,
-      data_inicial: this.updateForm.value.data_inicial,
-      data_final: this.updateForm.value.data_final,
-      ordem_compra: this.updateForm.value.ordem_compra,
-      valor: this.updateForm.value.valor,
-      tempo_contratado: this.updateForm.value.tempo_contratado,
-      periodo: this.updateForm.value.periodo
+    this._equipamentService.findByStatus(status)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+          const data = res.result || [];
+
+          this.rawItems = data;
+          this.filteredItems = this.convertJson(this.rawItems);
+
+          this.items = [...this.filteredItems];
+
+          this.status[statusKey] = data.length;
+          this.isEmpty = this.items.length === 0;
+        },
+        error: (err) => {
+          this.isEmpty = true;
+          console.error('Erro ao buscar contratos:', err);
+          this.setMessage('Erro ao buscar contratos!', 'error');
+        }
+      });
+  }
+
+  // ========== FILTROS ========== //
+  applyFilters() {
+    let data = [...this.filteredItems];
+
+    if (this.idmov) {
+      const inputValue = this.idmov.trim();
+      data = data.filter(item =>
+        item.contrato.idmov && item.contrato.idmov.toString().includes(inputValue)
+      );
     }
 
-    this._rentalService.update(request).subscribe({
-      next: () => {
-        this.editModal = false;
-        this.openDetail(this.currentItem);
-        this.setMessage('Locação atualizada com sucesso!', 'success');
-      },
-      error: (err) => {
-        console.error('Erro ao atualizar locação: ', err);
-        this.setMessage('Erro ao atualizar locação!', 'error');
-      }
-    })
-  };
-
-  onRenew(): void {
-    const request = {
-      periodo: this.renewForm.value.periodo,
-      id_produto: this.renewForm.value.id_produto,
-      idmov: this.renewForm.value.idmov,
-      data_inicial: this.renewForm.value.data_inicial,
-      ordem_compra: this.renewForm.value.ordem_compra,
-      valor: this.renewForm.value.valor,
-      tempo_contratado: this.renewForm.value.tempo_contratado
+    if (this.costCenter && this.costCenter !== 'GERAL') {
+      const inputValue = this.costCenter;
+      data = data.filter(item =>
+        item.centro_custo && item.centro_custo.includes(inputValue)
+      );
     }
 
-    this._rentalService.renew(request).subscribe({
-      next: () => {
-        this.renewModal = false;
-        this.setMessage('Locação renovada com sucesso!', 'success');
-
-        this.renewForm.reset({
-          idmov: '',
-          data_inicial: '',
-          ordem_compra: '',
-          valor: ''
-        });
-      },
-      error: (err) => {
-        console.error('Erro ao renovar locação: ', err);
-        this.setMessage('Erro ao renovar locação!', 'error');
-      }
-    })
-  };
-
-  // ========== TELA DE MENU ========== //
-  openMenu(item: any): void {
-    this.menuModal = true;
-    this.currentItem = item;
-  };
-
-  // ========== ABRIR EDITOR ========== //
-  openEdit(): void {
-    this.menuModal = false;
-    this.editModal = true;
-
-    this.updateForm.patchValue({
-      equipamento: this.currentItem.equipamento || '',
-      id_produto: this.currentItem.locacoes[0].id_produto || '',
-      idmov: this.currentItem.locacoes[0].idmov || '',
-      data_inicial: this.currentItem.locacoes[0].data_inicial || '',
-      data_final: this.currentItem.locacoes[0].data_final || '',
-      ordem_compra: this.currentItem.locacoes[0].ordem_compra || '',
-      valor: this.currentItem.locacoes[0].valor || '',
-      tempo_contratado: this.currentItem.locacoes[0].tempo_contratado || '',
-      periodo: this.currentItem.locacoes[0].periodo || ''
-    });
-  };
-
-  // ========== ABRIR RENOVADOR ========== //
-  openRenew(): void {
-    this.menuModal = false;
-    this.renewModal = true;
-
-    this.renewForm.patchValue({
-      equipamento: this.currentItem.equipamento || '',
-      id_produto: this.currentItem.id_produto || '',
-      periodo: (this.currentItem.locacoes.length + 1) || '',
-      tempo_contratado: this.currentItem.locacoes[0].tempo_contratado || ''
-    });
-  };
-
-  // ========== IDMOV ========== //
-  openDetail(item: any): void {
-    this.showResume = false;
-    this.showDatails = true;
-    this._titleService.setTitle('Lista de equipamentos');
-
-    this._rentalService.findByIdmov(item.idmov).subscribe({
-      next: (res) => {
-        this.items = res.result;
-      },
-      error: (err) => {
-        console.error('Erro ao buscar registros: ', err);
-      }
-    });
+    this.items = data;
+    this.isEmpty = this.items.length === 0;
   }
 
-  // ========== ID PRODUTO ========== //
-  openHistory(): void {
-    this.menuModal = false;
-    this.showDatails = false;
-    this.showHistory = true;
-    this._titleService.setTitle('Histórico de locações');
-
-    this._rentalService.findByIdProduto(this.currentItem.id_produto).subscribe({
-      next: (res) => {
-        this.items = res.result;
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  };
-
-  // ========== RETORNAR PARA TELA INICIAL ========== //
-  returnEquipment(): void {
-    this.showDatails = false;
-    this.showResume = true;
-
-    this.findAll();
-  }
-
-  // ========== RETORNAR PARA TELA IDMOV ========== //
-  returnIDMOV(): void {
-    this.showHistory = false;
-    this.openDetail(this.currentItem);
-  }
-
-  // ========== FECHAR EDITOR ========== //
-  closeEdit(): void {
-    this.editModal = false;
-  }
-
-  // ========== FECHAR MENU ========== //
-  closeMenu(): void {
-    this.menuModal = false;
-  }
-
-  // ========== FECHAR RENOVADOR ========== //
-  closeRenew(): void {
-    this.renewModal = false;
-  }
-
-  // ========== RETORNAR AO MENU ========== //
-  returnMenu(): void {
-    this.editModal = false;
-    this.renewModal = false;
-    this.menuModal = true;
-  }
-
-  // ========== MENSAGEM ========== //
+  // ========== MENSAGEM DINAMICA ========== //
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
     this.messageType = type;
@@ -275,6 +168,36 @@ export class EquipmentRentalComponent implements OnInit {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
+  }
+
+  // ========== CONVERTER PARA MAIUSCULO ========== //
+  upperCase(string: string): string {
+    return string.trim().toUpperCase();
+  }
+
+  // ========== CONVERTER JSON ========== //
+  convertJson(data: any[]): any[] {
+    return data.flatMap(item => {
+      return item.contrato_base.contrato_itens.map((equip: any) => ({
+        ...equip,
+        centro_custo: item.contrato_base.centro_custo,
+        movimento: item.contrato_base.movimento,
+        criador: item.contrato_base.criador,
+        unidade: item.contrato_base.unidade,
+        foto_equipamento: item.contrato_base.foto_equipamento,
+        contrato: {
+          contrato_id: item.contrato_id,
+          numero_documento: item.numero_documento,
+          periodo: item.periodo,
+          ordem_compra: item.ordem_compra,
+          idmov: item.idmov,
+          data_inicial: item.data_inicial,
+          data_final: item.data_final,
+          valor: item.valor,
+          status: item.status
+        }
+      }));
+    });
   }
 }
 

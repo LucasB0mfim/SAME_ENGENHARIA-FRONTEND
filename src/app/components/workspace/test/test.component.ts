@@ -3,7 +3,7 @@ import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../core/services/title.service';
@@ -29,13 +29,18 @@ type statusKey = keyof status;
   styleUrl: './test.component.scss'
 })
 export class TestComponent implements OnInit {
-
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private _equipamentService = inject(EquipmentRentalService);
 
+  // ========== FORMULÁRIOS ========== //
+  rentalReturnForm: FormGroup = new FormGroup({
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)])
+  });
+
   // ========== ESTADOS ========== //
   items: any[] = [];
+  rawItems: any[] = [];
   filteredItems: any[] = [];
   costCenters: any = null;
 
@@ -45,6 +50,8 @@ export class TestComponent implements OnInit {
   isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
+
+  isModalOpen: boolean = false;
 
   idmov: string = '';
   costCenter: string = 'GERAL';
@@ -81,22 +88,24 @@ export class TestComponent implements OnInit {
             this.status[status] = data.length;
           });
 
-          this.items = res[0]?.result || [];
-          this.filteredItems = [...this.items];
-          this.costCenters = [...new Set(this.items.map((item) => item.centro_custo))];
+          this.rawItems = res[0]?.result || [];
+          this.filteredItems = this.convertJson(this.rawItems);
+          this.items = [...this.filteredItems];
+
+          this.costCenters = [...new Set(this.filteredItems.map((item) => item.centro_custo))];
 
           this.isEmpty = this.items.length === 0;
+
           this.applyFilters();
         },
         error: (err) => {
           this.isEmpty = true;
-          console.log('Erro ao carregar dados: ', err);
-          this.setMessage('Não foi possível carregar os dados!', 'error');
+          console.error('Não foi possível buscar os contratos:', err);
         }
       });
   }
 
-  // ========== FILTRO POR STATUS ========== //
+  // ========== BUSCAR CONTRATO POR STATUS ========== //
   getByStatus(status: string): void {
     const statusKey = status as statusKey;
     this.selectedStatus = statusKey;
@@ -111,18 +120,49 @@ export class TestComponent implements OnInit {
         next: (res) => {
           const data = res.result || [];
 
-          this.items = data;
-          this.filteredItems = [...this.items];
+          this.rawItems = data;
+          this.filteredItems = this.convertJson(this.rawItems);
+
+          this.items = [...this.filteredItems];
 
           this.status[statusKey] = data.length;
           this.isEmpty = this.items.length === 0;
         },
         error: (err) => {
           this.isEmpty = true;
-          console.error('Erro ao carregar:', err);
-          this.setMessage('Erro ao carregar!', 'error');
+          console.error('Erro ao buscar contratos:', err);
+          this.setMessage('Erro ao buscar contratos!', 'error');
         }
       });
+  }
+
+  onRentalReturn(): void {
+    const idmov = this.rentalReturnForm.value.idmov;
+    this._equipamentService.rentalReturn(idmov)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isModalOpen = false;
+          this.rentalReturnForm.reset();
+          console.log("MENSAGEM: ", res)
+          this.setMessage(res.message, 'success');
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openModal(): void {
+    this.isModalOpen = true;
+  }
+
+  // ========== FECHAR MODAL ========== //
+  closeModal(): void {
+    this.isModalOpen = false;
   }
 
   // ========== FILTROS ========== //
@@ -132,7 +172,7 @@ export class TestComponent implements OnInit {
     if (this.idmov) {
       const inputValue = this.idmov.trim();
       data = data.filter(item =>
-        item.idmov && item.idmov.toString().includes(inputValue)
+        item.contrato.idmov && item.contrato.idmov.toString().includes(inputValue)
       );
     }
 
@@ -159,15 +199,40 @@ export class TestComponent implements OnInit {
     }, 3000);
   }
 
-  // ========== AUXILIARES ========== //
+  // ========== FORMATAR DATA ========== //
   formateDate(date: string): string {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   }
 
+  // ========== CONVERTER PARA MAIUSCULO ========== //
   upperCase(string: string): string {
     return string.trim().toUpperCase();
   }
-}
 
+  // ========== CONVERTER JSON ========== //
+  convertJson(data: any[]): any[] {
+    return data.flatMap(item => {
+      return item.contrato_base.contrato_itens.map((equip: any) => ({
+        ...equip,
+        centro_custo: item.contrato_base.centro_custo,
+        movimento: item.contrato_base.movimento,
+        criador: item.contrato_base.criador,
+        unidade: item.contrato_base.unidade,
+        foto_equipamento: item.contrato_base.foto_equipamento,
+        contrato: {
+          contrato_id: item.contrato_id,
+          numero_documento: item.numero_documento,
+          periodo: item.periodo,
+          ordem_compra: item.ordem_compra,
+          idmov: item.idmov,
+          data_inicial: item.data_inicial,
+          data_final: item.data_final,
+          valor: item.valor,
+          status: item.status
+        }
+      }));
+    });
+  }
+}
