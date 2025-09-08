@@ -7,7 +7,13 @@
 
   <div class="container__filter">
 
-    <!-- FILTRO -->
+    <div class="filter">
+      <button (click)="getByStatus('NOVO')" [ngClass]="{'active': selectedStatus === 'NOVO'}" class="btn btn--third">
+        Novos
+        <span class="counter">{{ status['NOVO'] }}</span>
+      </button>
+    </div>
+
     <div class="filter">
       <button (click)="getByStatus('ATIVO')" [ngClass]="{'active': selectedStatus === 'ATIVO'}" class="btn btn--third">
         Ativos
@@ -15,7 +21,14 @@
       </button>
     </div>
 
-    <!-- FILTRO -->
+    <div class="filter">
+      <button (click)="getByStatus('VENCIDO')" [ngClass]="{'active': selectedStatus === 'VENCIDO'}"
+        class="btn btn--third">
+        Vencidos
+        <span class="counter">{{ status['VENCIDO'] }}</span>
+      </button>
+    </div>
+
     <div class="filter">
       <button (click)="getByStatus('DEVOLVIDO')" [ngClass]="{'active': selectedStatus === 'DEVOLVIDO'}"
         class="btn btn--third">
@@ -24,13 +37,11 @@
       </button>
     </div>
 
-    <!-- FILTRO -->
     <div class="filter">
       <input type="text" placeholder="Pesquisar" [(ngModel)]="idmov" (input)="applyFilters()"
         class="input input--primary">
     </div>
 
-    <!-- FILTRO -->
     <div class="filter">
       <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input--primary">
         <option value="GERAL">Geral</option>
@@ -39,21 +50,14 @@
     </div>
 
     <div class="filter">
-      <button type="button" class="btn btn--primary" (click)="openModal()">
-        <mat-icon>archive</mat-icon>
+      <button type="button" class="btn btn--primary" (click)="openMenu()">
+        <mat-icon>settings</mat-icon>
       </button>
     </div>
-
-    <div class="filter">
-      <button type="button" class="btn btn--primary" (click)="loadInitial()">
-        <mat-icon>refresh</mat-icon>
-      </button>
-    </div>
-
   </div>
 
   <div class="container__card">
-    <!-- CARD -->
+
     <div *ngFor="let item of items; let i = index" class="card">
       <div class="card__header">
         <div class="card__primary">
@@ -81,14 +85,14 @@
           </div>
 
           <div class="card__text">
-            <div class="card__subtitle">IDMOV:</div>
+            <div class="card__subtitle">ID:</div>
             <div class="card__title">{{ item.contrato.idmov || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
           <div class="card__text">
             <div class="card__subtitle">DOC:</div>
-            <div class="card__title">{{ item.numero_documento || 'N/A'}}</div>
+            <div class="card__title">{{ item.numero_contrato || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
@@ -126,38 +130,163 @@
       </div>
     </div>
 
-    <!-- MODAL -->
-    @if (isModalOpen) {
-    <form [formGroup]="rentalReturnForm" (ngSubmit)="onRentalReturn()" class="modal__backdrop">
+    @if (isMenuOpen) {
+    <div class="modal__backdrop">
       <div class="modal__container">
         <div class="modal__header">
-          <h2 class="modal__title">Devolver Locação</h2>
-          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+          <h2 class="modal__title">Mais Opções</h2>
+          <button type="button" (click)="closeMenu()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <button type="button" (click)="openRegister()" class="btn btn--secondary">
+              <mat-icon>add</mat-icon>
+              Cadastrar Locação
+            </button>
+          </div>
+
+          <div class="modal__group">
+            <button type="button" (click)="openRenew()" class="btn btn--secondary">
+              <mat-icon>recycling</mat-icon>
+              Renovar Locação
+            </button>
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <button type="button" (click)="openArchive()" class="btn btn--secondary">
+              <mat-icon>archive</mat-icon>
+              Devolver Locação
+            </button>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="closeMenu()" class="btn btn--secondary">
+            Sair
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if(isRegisterOpen) {
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Cadastrar Locação</h2>
+          <button type="button" (click)="closeRegister()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
           <div class="modal__group modal__group--full">
-            <label class="modal__label">IDMOV *</label>
-            <input
-              type="number"
-              formControlName="idmov"
-              placeholder="Insira o idmov da locação"
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">ID *</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o idmov" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Ordem de Compra *</label>
+            <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
               class="modal__input">
           </div>
         </div>
 
         <div class="modal__footer">
-          <button
-            type="button"
-            (click)="closeModal()"
-            class="btn btn--secondary">
-            Cancelar
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
           </button>
 
-          <button
-            type="submit"
-            [disabled]="!rentalReturnForm.get('idmov')?.valid"
-            class="btn btn--primary">
+          <button type="submit" class="btn btn--primary">
+            Cadastrar
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if(isRenewOpen) {
+    <form [formGroup]="renewForm" (ngSubmit)="onRenew()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Renovar Locação</h2>
+          <button type="button" (click)="closeRenew()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="modal__label">ID Atual *</label>
+            <input type="number" formControlName="idmov_atual" placeholder="Insira o idmov atual" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">ID Novo *</label>
+            <input type="number" formControlName="idmov_novo" placeholder="Insira o idmov novo" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Número Documento *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do documento"
+              class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Ordem de Compra *</label>
+            <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
+              class="modal__input">
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">Início do Contrato *</label>
+            <input type="date" formControlName="data_inicial" class="modal__input">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--primary">
+            Renovar
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if (isArchiveOpen) {
+    <form [formGroup]="archiveForm" (ngSubmit)="onArchive()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Devolver Locação</h2>
+          <button type="button" (click)="closeArchive()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="modal__label">ID *</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o idmov da locação" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="modal__input">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--primary">
             Devolver
           </button>
         </div>

@@ -10,8 +10,10 @@ import { TitleService } from '../../../core/services/title.service';
 import { EquipmentRentalService } from '../../../core/services/equipment-rental.service';
 
 interface status {
+  'NOVO': number;
   'ATIVO': number;
-  'DEVOLVIDO': number
+  'VENCIDO': number;
+  'DEVOLVIDO': number;
 }
 
 type statusKey = keyof status;
@@ -34,8 +36,22 @@ export class TestComponent implements OnInit {
   private _equipamentService = inject(EquipmentRentalService);
 
   // ========== FORMULÁRIOS ========== //
-  rentalReturnForm: FormGroup = new FormGroup({
+  archiveForm: FormGroup = new FormGroup({
     idmov: new FormControl('', [Validators.required, Validators.min(10000)])
+  });
+
+  renewForm: FormGroup = new FormGroup({
+    idmov_atual: new FormControl('', [Validators.required, Validators.min(10000)]),
+    idmov_novo: new FormControl('', [Validators.required, Validators.min(10000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(10000)]),
+    ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
+    data_inicial: new FormControl('', Validators.required),
+  });
+
+  registerForm: FormGroup = new FormGroup({
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+    ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
   // ========== ESTADOS ========== //
@@ -45,13 +61,16 @@ export class TestComponent implements OnInit {
   costCenters: any = null;
 
   selectedStatus: statusKey = 'ATIVO';
-  status: status = { 'ATIVO': 0, 'DEVOLVIDO': 0 };
+  status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0 };
 
   isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
 
-  isModalOpen: boolean = false;
+  isMenuOpen: boolean = false;
+  isRegisterOpen: boolean = false;
+  isArchiveOpen: boolean = false;
+  isRenewOpen: boolean = false;
 
   idmov: string = '';
   costCenter: string = 'GERAL';
@@ -72,7 +91,7 @@ export class TestComponent implements OnInit {
     this.isEmpty = false;
     this.isLoading = true;
 
-    const statusList: statusKey[] = ['ATIVO', 'DEVOLVIDO'];
+    const statusList: statusKey[] = ['NOVO', 'ATIVO', 'VENCIDO', 'DEVOLVIDO'];
 
     const requests = statusList.map(status =>
       this._equipamentService.findByStatus(status)
@@ -136,17 +155,80 @@ export class TestComponent implements OnInit {
       });
   }
 
-  onRentalReturn(): void {
-    const idmov = this.rentalReturnForm.value.idmov;
-    this._equipamentService.rentalReturn(idmov)
+  onRenew(): void {
+
+    const request = {
+      idmov_atual: this.renewForm.value.idmov_atual,
+      idmov_novo: this.renewForm.value.idmov_novo,
+      numero_contrato: this.renewForm.value.numero_contrato,
+      ordem_compra: this.renewForm.value.ordem_compra,
+      data_inicial: this.renewForm.value.data_inicial,
+    }
+
+    this._equipamentService.renew(request)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res) => {
           this.loadInitial();
-          this.isModalOpen = false;
-          this.rentalReturnForm.reset();
-          console.log("MENSAGEM: ", res)
+          this.isRenewOpen = false;
           this.setMessage(res.message, 'success');
+
+          this.renewForm.reset({
+            idmov_atual: '',
+            idmov_novo: '',
+            numero_contrato: '',
+            ordem_compra: '',
+            data_inicial: ''
+          });
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
+  }
+
+  onRegister(): void {
+
+    const request = {
+      idmov: this.registerForm.value.idmov,
+      numero_contrato: this.registerForm.value.numero_contrato,
+      ordem_compra: this.registerForm.value.ordem_compra
+    }
+
+    this._equipamentService.register(request)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isRegisterOpen = false;
+          this.setMessage(res.message, 'success');
+          this.registerForm.reset({
+            numero_contrato: '',
+            idmov: '',
+            ordem_compra: ''
+          });
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
+  }
+
+  onArchive(): void {
+    const idmov = this.archiveForm.value.idmov;
+    this._equipamentService.archive(idmov)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isArchiveOpen = false;
+          this.setMessage(res.message, 'success');
+
+          this.archiveForm.reset({
+            idmov: ''
+          });
         },
         error: (err) => {
           this.setMessage(err.error.message, 'error');
@@ -156,13 +238,54 @@ export class TestComponent implements OnInit {
   }
 
   // ========== ABRIR MODAL ========== //
-  openModal(): void {
-    this.isModalOpen = true;
+  openMenu(): void {
+    this.isMenuOpen = true;
   }
 
   // ========== FECHAR MODAL ========== //
-  closeModal(): void {
-    this.isModalOpen = false;
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openRegister(): void {
+    this.isMenuOpen = false;
+    this.isRegisterOpen = true;
+  }
+
+  // ========== FECHAR MODAL ========== //
+  closeRegister(): void {
+    this.isRegisterOpen = false;
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openRenew(): void {
+    this.isMenuOpen = false;
+    this.isRenewOpen = true;
+  }
+
+  // ========== FECHAR MODAL ========== //
+  closeRenew(): void {
+    this.isRenewOpen = false;
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openArchive(): void {
+    this.isMenuOpen = false;
+    this.isArchiveOpen = true;
+  }
+
+  // ========== FECHAR MODAL ========== //
+  closeArchive(): void {
+    this.isArchiveOpen = false;
+  }
+
+  // ========== RETORNAR AO MENU ========== //
+  returnMenu(): void {
+    this.isArchiveOpen = false;
+    this.isRegisterOpen = false;
+    this.isRenewOpen = false;
+    this.isMenuOpen = true;
   }
 
   // ========== FILTROS ========== //
@@ -221,9 +344,10 @@ export class TestComponent implements OnInit {
         criador: item.contrato_base.criador,
         unidade: item.contrato_base.unidade,
         foto_equipamento: item.contrato_base.foto_equipamento,
+        fornecedor: item.contrato_base.fornecedor,
         contrato: {
           contrato_id: item.contrato_id,
-          numero_documento: item.numero_documento,
+          numero_contrato: item.numero_contrato,
           periodo: item.periodo,
           ordem_compra: item.ordem_compra,
           idmov: item.idmov,

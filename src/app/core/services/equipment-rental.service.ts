@@ -14,23 +14,23 @@ export class EquipmentRentalService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findByIdmov(idmov: any) {
-    const headers = this._createHeaders();
-    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/${idmov}`, { headers });
-  }
-
   findByStatus(status: any): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/${status}`, { headers });
   }
 
-  rentalReturn(idmov: number): Observable<any> {
+  register(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>(`https://sameengenharia.com.br/api/equipment-rental/${idmov}`, null, { headers });
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/equipment-rental/register', request, { headers });
   }
 
-  renew(request: any) {
+  renew(request: any): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/equipment-rental/renew', request, { headers });
+  }
+
+  archive(idmov: number): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>(`https://sameengenharia.com.br/api/equipment-rental/${idmov}`, null, { headers });
   }
 }
