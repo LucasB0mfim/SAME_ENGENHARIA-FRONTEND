@@ -1,6 +1,5 @@
 <div class="container">
 
-  <!-- MENSAGEM -->
   @if (showMessage) {
   <div class="message" [ngClass]="messageType">{{ message }}</div>
   }
@@ -57,7 +56,6 @@
   </div>
 
   <div class="container__card">
-
     <div *ngFor="let item of items; let i = index" class="card">
       <div class="card__header">
         <div class="card__primary">
@@ -91,8 +89,14 @@
           </div>
 
           <div class="card__text">
-            <div class="card__subtitle">DOC:</div>
+            <div class="card__subtitle">NC:</div>
             <div class="card__title">{{ item.numero_contrato || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">DR:</div>
+            <div class="card__title">{{ upperCase(item.unidade) || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
@@ -104,28 +108,28 @@
       </div>
       <div class="card__body">
         <div class="card__content">
-          <div class="card__subtitle">USUÁRIO</div>
-          <div class="card__title">{{ item.criador || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
           <div class="card__subtitle">FORNECEDOR</div>
           <div class="card__title">{{ item.fornecedor || 'N/A' }}</div>
         </div>
+
+        <div class="card__content">
+          <div class="card__subtitle">USUÁRIO</div>
+          <div class="card__title">{{ item.criador || 'N/A' }}</div>
+        </div>
+
         <div class="card__content">
           <div class="card__subtitle">VALOR DO EQUIPAMENTO</div>
           <div class="card__title">R$ {{ item.valor || 'N/A' }}</div>
         </div>
+
         <div class="card__content">
           <div class="card__subtitle">INÍCIO DO PERÍODO</div>
           <div class="card__title">{{ formateDate(item.contrato.data_inicial) || 'N/A' }}</div>
         </div>
+
         <div class="card__content">
           <div class="card__subtitle">FIM DO PERÍODO</div>
           <div class="card__title">{{ formateDate(item.contrato.data_final) || 'N/A' }}</div>
-        </div>
-        <div class="card__content">
-          <div class="card__subtitle">DURAÇÃO</div>
-          <div class="card__title">{{ upperCase(item.unidade) || 'N/A' }}</div>
         </div>
       </div>
     </div>
@@ -141,21 +145,18 @@
         <div class="modal__content">
           <div class="modal__group">
             <button type="button" (click)="openRegister()" class="btn btn--secondary">
-              <mat-icon>add</mat-icon>
               Cadastrar Locação
             </button>
           </div>
 
           <div class="modal__group">
             <button type="button" (click)="openRenew()" class="btn btn--secondary">
-              <mat-icon>recycling</mat-icon>
               Renovar Locação
             </button>
           </div>
 
           <div class="modal__group modal__group--full">
             <button type="button" (click)="openArchive()" class="btn btn--secondary">
-              <mat-icon>archive</mat-icon>
               Devolver Locação
             </button>
           </div>
@@ -203,7 +204,15 @@
           </button>
 
           <button type="submit" class="btn btn--primary">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
             Cadastrar
+            }
           </button>
         </div>
       </div>
@@ -221,17 +230,17 @@
         <div class="modal__content">
           <div class="modal__group">
             <label class="modal__label">ID Atual *</label>
-            <input type="number" formControlName="idmov_atual" placeholder="Insira o idmov atual" class="modal__input">
+            <input type="number" formControlName="idmov_atual" placeholder="Insira o id atual" class="modal__input">
           </div>
 
           <div class="modal__group">
             <label class="modal__label">ID Novo *</label>
-            <input type="number" formControlName="idmov_novo" placeholder="Insira o idmov novo" class="modal__input">
+            <input type="number" formControlName="idmov_novo" placeholder="Insira o id novo" class="modal__input">
           </div>
 
           <div class="modal__group">
-            <label class="modal__label">Número Documento *</label>
-            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do documento"
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
               class="modal__input">
           </div>
 
@@ -253,7 +262,15 @@
           </button>
 
           <button type="submit" class="btn btn--primary">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
             Renovar
+            }
           </button>
         </div>
       </div>
@@ -287,21 +304,32 @@
           </button>
 
           <button type="submit" class="btn btn--primary">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
             Devolver
+            }
           </button>
         </div>
       </div>
     </form>
     }
 
-    <!-- LOADING -->
-    <div class="loading" *ngIf="isLoading">
+    @if (isLoading) {
+    <div class="loading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
+    }
 
-    <!-- SEM RESULTADO -->
-    <div class="empty" *ngIf="isEmpty">
-      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    @if (isEmpty) {
+    <div class="empty">
+      <mat-icon class="empty__icon">wrong_location</mat-icon>
+      <h2 class="empty__title">Nenhum contrato foi encontrado</h2>
     </div>
+    }
   </div>
 </div>

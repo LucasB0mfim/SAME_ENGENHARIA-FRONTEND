@@ -66,6 +66,7 @@ export class TestComponent implements OnInit {
   isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
+  isProcessing: boolean = false;
 
   isMenuOpen: boolean = false;
   isRegisterOpen: boolean = false;
@@ -107,7 +108,7 @@ export class TestComponent implements OnInit {
             this.status[status] = data.length;
           });
 
-          this.rawItems = res[0]?.result || [];
+          this.rawItems = res[1]?.result || [];
           this.filteredItems = this.convertJson(this.rawItems);
           this.items = [...this.filteredItems];
 
@@ -155,7 +156,37 @@ export class TestComponent implements OnInit {
       });
   }
 
+  onRegister(): void {
+    this.isProcessing = true;
+
+    const request = {
+      idmov: this.registerForm.value.idmov,
+      numero_contrato: this.registerForm.value.numero_contrato,
+      ordem_compra: this.registerForm.value.ordem_compra
+    }
+
+    this._equipamentService.register(request)
+      .pipe(finalize(() => this.isProcessing = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isRegisterOpen = false;
+          this.setMessage(res.message, 'success');
+          this.registerForm.reset({
+            numero_contrato: '',
+            idmov: '',
+            ordem_compra: ''
+          });
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
+  }
+
   onRenew(): void {
+    this.isProcessing = true;
 
     const request = {
       idmov_atual: this.renewForm.value.idmov_atual,
@@ -166,7 +197,7 @@ export class TestComponent implements OnInit {
     }
 
     this._equipamentService.renew(request)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
           this.loadInitial();
@@ -188,38 +219,12 @@ export class TestComponent implements OnInit {
       });
   }
 
-  onRegister(): void {
-
-    const request = {
-      idmov: this.registerForm.value.idmov,
-      numero_contrato: this.registerForm.value.numero_contrato,
-      ordem_compra: this.registerForm.value.ordem_compra
-    }
-
-    this._equipamentService.register(request)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (res) => {
-          this.loadInitial();
-          this.isRegisterOpen = false;
-          this.setMessage(res.message, 'success');
-          this.registerForm.reset({
-            numero_contrato: '',
-            idmov: '',
-            ordem_compra: ''
-          });
-        },
-        error: (err) => {
-          this.setMessage(err.error.message, 'error');
-          console.error('Erro ao atualizar contrato: ', err);
-        }
-      });
-  }
-
   onArchive(): void {
+    this.isProcessing = true;
+
     const idmov = this.archiveForm.value.idmov;
     this._equipamentService.archive(idmov)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
           this.loadInitial();
