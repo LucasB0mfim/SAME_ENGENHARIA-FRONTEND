@@ -60,10 +60,22 @@
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
-            <div class="card__title">UNID:</div>
-            <div class="card__title">{{ item.quantidade || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__title">{{ item.nome_equipamento || 'N/A' }}</div>
+
+            <div class="card__text">
+              <div class="card__title">DR:</div>
+              <div class="card__title">{{ upperCase(item.unidade) || 'N/A'}}</div>
+              <div class="card__subtitle">|</div>
+            </div>
+
+            <div class="card__text">
+              <div class="card__title">UND:</div>
+              <div class="card__title">{{ item.quantidade || 'N/A' }}</div>
+              <div class="card__subtitle">|</div>
+            </div>
+
+            <div class="card__text">
+              <div class="card__title">{{ item.nome_equipamento || 'N/A' }}</div>
+            </div>
           </div>
           <div class="card__bottom">
             <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
@@ -91,12 +103,6 @@
           <div class="card__text">
             <div class="card__subtitle">NC:</div>
             <div class="card__title">{{ item.numero_contrato || 'N/A'}}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">DR:</div>
-            <div class="card__title">{{ upperCase(item.unidade) || 'N/A'}}</div>
             <div class="card__subtitle">|</div>
           </div>
 
@@ -139,7 +145,7 @@
       <div class="modal__container">
         <div class="modal__header">
           <h2 class="modal__title">Mais Opções</h2>
-          <button type="button" (click)="closeMenu()" class="btn btn--close">&times;</button>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
@@ -155,15 +161,21 @@
             </button>
           </div>
 
-          <div class="modal__group modal__group--full">
+          <div class="modal__group">
             <button type="button" (click)="openArchive()" class="btn btn--secondary">
               Devolver Locação
+            </button>
+          </div>
+
+          <div class="modal__group">
+            <button type="button" (click)="openHistory()" class="btn btn--secondary">
+              Ver Histórico
             </button>
           </div>
         </div>
 
         <div class="modal__footer">
-          <button type="button" (click)="closeMenu()" class="btn btn--secondary">
+          <button type="button" (click)="closeModal()" class="btn btn--secondary">
             Sair
           </button>
         </div>
@@ -176,7 +188,7 @@
       <div class="modal__container">
         <div class="modal__header">
           <h2 class="modal__title">Cadastrar Locação</h2>
-          <button type="button" (click)="closeRegister()" class="btn btn--close">&times;</button>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
@@ -224,7 +236,7 @@
       <div class="modal__container">
         <div class="modal__header">
           <h2 class="modal__title">Renovar Locação</h2>
-          <button type="button" (click)="closeRenew()" class="btn btn--close">&times;</button>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
@@ -261,7 +273,7 @@
             Voltar
           </button>
 
-          <button type="submit" class="btn btn--primary">
+          <button type="submit" [disabled]="!renewForm.valid" class="btn btn--primary">
             @if (isProcessing) {
             <div class="loading-dots">
               <div class="dot"></div>
@@ -282,7 +294,7 @@
       <div class="modal__container">
         <div class="modal__header">
           <h2 class="modal__title">Devolver Locação</h2>
-          <button type="button" (click)="closeArchive()" class="btn btn--close">&times;</button>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
@@ -303,7 +315,7 @@
             Voltar
           </button>
 
-          <button type="submit" class="btn btn--primary">
+          <button type="submit" [disabled]="!archiveForm.valid" class="btn btn--primary">
             @if (isProcessing) {
             <div class="loading-dots">
               <div class="dot"></div>
@@ -312,6 +324,43 @@
             </div>
             } @else {
             Devolver
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if (isHistoryOpen) {
+    <form [formGroup]="historyForm" (ngSubmit)="onHistory()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Visualizar Histórico</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="modal__input">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
+          </button>
+
+          <button type="submit" [disabled]="!historyForm.valid" class="btn btn--primary">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Buscar
             }
           </button>
         </div>

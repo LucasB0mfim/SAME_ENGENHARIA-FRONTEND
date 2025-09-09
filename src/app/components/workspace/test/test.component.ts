@@ -3,8 +3,8 @@ import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { TitleService } from '../../../core/services/title.service';
 import { EquipmentRentalService } from '../../../core/services/equipment-rental.service';
@@ -14,6 +14,7 @@ interface status {
   'ATIVO': number;
   'VENCIDO': number;
   'DEVOLVIDO': number;
+  'HISTORICO': number;
 }
 
 type statusKey = keyof status;
@@ -37,13 +38,14 @@ export class TestComponent implements OnInit {
 
   // ========== FORMULÁRIOS ========== //
   archiveForm: FormGroup = new FormGroup({
-    idmov: new FormControl('', [Validators.required, Validators.min(10000)])
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
   renewForm: FormGroup = new FormGroup({
     idmov_atual: new FormControl('', [Validators.required, Validators.min(10000)]),
     idmov_novo: new FormControl('', [Validators.required, Validators.min(10000)]),
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(10000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
     data_inicial: new FormControl('', Validators.required),
   });
@@ -54,6 +56,10 @@ export class TestComponent implements OnInit {
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
+  historyForm: FormGroup = new FormGroup({
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)])
+  });
+
   // ========== ESTADOS ========== //
   items: any[] = [];
   rawItems: any[] = [];
@@ -61,7 +67,7 @@ export class TestComponent implements OnInit {
   costCenters: any = null;
 
   selectedStatus: statusKey = 'ATIVO';
-  status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0 };
+  status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0, 'HISTORICO': 0 };
 
   isFind: boolean = false;
   isEmpty: boolean = false;
@@ -72,6 +78,7 @@ export class TestComponent implements OnInit {
   isRegisterOpen: boolean = false;
   isArchiveOpen: boolean = false;
   isRenewOpen: boolean = false;
+  isHistoryOpen: boolean = false;
 
   idmov: string = '';
   costCenter: string = 'GERAL';
@@ -156,6 +163,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== REGISTRAR CONTRATO ========== //
   onRegister(): void {
     this.isProcessing = true;
 
@@ -185,6 +193,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== RENOVAR CONTRATO ========== //
   onRenew(): void {
     this.isProcessing = true;
 
@@ -219,6 +228,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== DEVOLVER CONTRATO ========== //
   onArchive(): void {
     this.isProcessing = true;
 
@@ -232,7 +242,41 @@ export class TestComponent implements OnInit {
           this.setMessage(res.message, 'success');
 
           this.archiveForm.reset({
-            idmov: ''
+            idmov: '',
+            numero_contrato: ''
+          });
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
+  }
+
+  // ========== BUSCAR HISTÓRICO DO CONTRATO ========== //
+  onHistory(): void {
+    this.isProcessing = true;
+
+    const numero_contrato = this.historyForm.value.numero_contrato;
+
+    this._equipamentService.findByContract(numero_contrato)
+      .pipe(finalize(() => this.isProcessing = false))
+      .subscribe({
+        next: (res) => {
+          const data = res.result || [];
+          this.selectedStatus = 'HISTORICO';
+
+          this.rawItems = data;
+          this.filteredItems = this.convertJson(this.rawItems);
+
+          this.items = [...this.filteredItems];
+          this.isEmpty = this.items.length === 0;
+
+          this.isHistoryOpen = false;
+          this.setMessage(res.message, 'success');
+
+          this.historyForm.reset({
+            numero_contrato: ''
           });
         },
         error: (err) => {
@@ -247,9 +291,13 @@ export class TestComponent implements OnInit {
     this.isMenuOpen = true;
   }
 
-  // ========== FECHAR MODAL ========== //
-  closeMenu(): void {
-    this.isMenuOpen = false;
+  // ========== RETORNAR AO MENU ========== //
+  returnMenu(): void {
+    this.isArchiveOpen = false;
+    this.isRegisterOpen = false;
+    this.isHistoryOpen = false;
+    this.isRenewOpen = false;
+    this.isMenuOpen = true;
   }
 
   // ========== ABRIR MODAL ========== //
@@ -258,20 +306,10 @@ export class TestComponent implements OnInit {
     this.isRegisterOpen = true;
   }
 
-  // ========== FECHAR MODAL ========== //
-  closeRegister(): void {
-    this.isRegisterOpen = false;
-  }
-
   // ========== ABRIR MODAL ========== //
   openRenew(): void {
     this.isMenuOpen = false;
     this.isRenewOpen = true;
-  }
-
-  // ========== FECHAR MODAL ========== //
-  closeRenew(): void {
-    this.isRenewOpen = false;
   }
 
   // ========== ABRIR MODAL ========== //
@@ -280,17 +318,20 @@ export class TestComponent implements OnInit {
     this.isArchiveOpen = true;
   }
 
-  // ========== FECHAR MODAL ========== //
-  closeArchive(): void {
-    this.isArchiveOpen = false;
+  // ========== ABRIR MODAL ========== //
+  openHistory(): void {
+    this.isMenuOpen = false;
+    this.isHistoryOpen = true;
   }
 
-  // ========== RETORNAR AO MENU ========== //
-  returnMenu(): void {
-    this.isArchiveOpen = false;
+  // ========== FECHAR MODAL ========== //
+  closeModal(): void {
+    this.isMenuOpen = false;
     this.isRegisterOpen = false;
     this.isRenewOpen = false;
-    this.isMenuOpen = true;
+    this.isArchiveOpen = false;
+    this.isHistoryOpen = false;
+
   }
 
   // ========== FILTROS ========== //

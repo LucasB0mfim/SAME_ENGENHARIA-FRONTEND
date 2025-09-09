@@ -18,6 +18,11 @@ export class EquipmentRentalService {
     const headers = this._createHeaders();
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/${status}`, { headers });
   }
+  
+  findByContract(numero_contrato: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/contract/${numero_contrato}`, { headers });
+  }
 
   register(request: any): Observable<any> {
     const headers = this._createHeaders();
