@@ -56,7 +56,7 @@
   </div>
 
   <div class="container__card">
-    <div *ngFor="let item of items; let i = index" class="card">
+    <div *ngFor="let item of items" (click)="openHistory(item)" class="card">
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
@@ -161,15 +161,9 @@
             </button>
           </div>
 
-          <div class="modal__group">
+          <div class="modal__group modal__group--full">
             <button type="button" (click)="openArchive()" class="btn btn--secondary">
               Devolver Locação
-            </button>
-          </div>
-
-          <div class="modal__group">
-            <button type="button" (click)="openHistory()" class="btn btn--secondary">
-              Ver Histórico
             </button>
           </div>
         </div>
@@ -332,40 +326,94 @@
     }
 
     @if (isHistoryOpen) {
-    <form [formGroup]="historyForm" (ngSubmit)="onHistory()" class="modal__backdrop">
-      <div class="modal__container">
-        <div class="modal__header">
-          <h2 class="modal__title">Visualizar Histórico</h2>
-          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+    <div class="modal__backdrop">
+      <div class="modal__container--secondary">
+
+        <div class="modal__header modal__header--secondary">
+          <h2 class="modal__title modal__title">Visualizar Histórico</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close btn--close">&times;</button>
         </div>
 
-        <div class="modal__content">
-          <div class="modal__group modal__group--full">
-            <label class="modal__label">Número do Contrato *</label>
-            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
-              class="modal__input">
+        <div class="modal__content modal__content--secondary">
+          <div *ngFor="let item of groupItems" class="card">
+            <div class="card__header">
+              <div class="card__primary">
+                <div class="card__top">
+
+                  <div class="card__text">
+                    <div class="card__title">{{ item.contrato_base.fornecedor || 'N/A'}}</div>
+                  </div>
+
+                </div>
+                <div class="card__bottom">
+                  <div class="card__subtitle">{{ item.contrato_base.centro_custo || 'N/A' }}</div>
+                </div>
+              </div>
+              <div class="card__secondary">
+                <div class="card__text">
+                  <div class="card__subtitle">ID:</div>
+                  <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+                  <div class="card__subtitle">|</div>
+                </div>
+
+                <div class="card__text">
+                  <div class="card__subtitle">OC:</div>
+                  <div class="card__title">{{ item.ordem_compra || 'N/A'}}</div>
+                  <div class="card__subtitle">|</div>
+                </div>
+
+                <div class="card__text">
+                  <div class="card__subtitle">DR:</div>
+                  <div class="card__title">{{ upperCase(item.contrato_base.unidade) || 'N/A'}}</div>
+                  <div class="card__subtitle">|</div>
+                </div>
+
+                <div class="card__text">
+                  <div class="card__subtitle">IP:</div>
+                  <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A'}}</div>
+                  <div class="card__subtitle">|</div>
+                </div>
+
+                <div class="card__text">
+                  <div class="card__subtitle">FP:</div>
+                  <div class="card__title">{{ formateDate(item.data_final) || 'N/A'}}</div>
+                  <div class="card__subtitle">|</div>
+                </div>
+
+                <div class="card__text">
+                  <div class="card__subtitle">PD:</div>
+                  <div class="card__title">{{ item.periodo || 'N/A'}}</div>
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let contratoItem of item.contrato_base.contrato_itens"
+              class="card__body card__body--secondary">
+              <div class="card__content">
+                <div class="card__subtitle">VALOR</div>
+                <div class="card__title">R$ {{ contratoItem.valor || 'N/A' }}</div>
+              </div>
+
+              <div class="card__content">
+                <div class="card__subtitle">QUANTIDADE</div>
+                <div class="card__title">{{ contratoItem.quantidade || 'N/A' }} UND(S)</div>
+              </div>
+
+              <div class="card__content">
+                <div class="card__subtitle">EQUIPAMENTO</div>
+                <div class="card__title">{{ contratoItem.nome_equipamento || 'N/A' }}</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="modal__footer">
-          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+        <div class="modal__footer modal__footer--secondary">
+          <button type="button" (click)="closeModal()" class="btn btn--primary">
             Voltar
           </button>
-
-          <button type="submit" [disabled]="!historyForm.valid" class="btn btn--primary">
-            @if (isProcessing) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Buscar
-            }
-          </button>
         </div>
+
       </div>
-    </form>
+    </div>
     }
 
     @if (isLoading) {

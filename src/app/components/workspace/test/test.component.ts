@@ -14,7 +14,6 @@ interface status {
   'ATIVO': number;
   'VENCIDO': number;
   'DEVOLVIDO': number;
-  'HISTORICO': number;
 }
 
 type statusKey = keyof status;
@@ -56,18 +55,16 @@ export class TestComponent implements OnInit {
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
-  historyForm: FormGroup = new FormGroup({
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)])
-  });
-
   // ========== ESTADOS ========== //
   items: any[] = [];
   rawItems: any[] = [];
+  groupItems: any[] = [];
   filteredItems: any[] = [];
+
   costCenters: any = null;
 
   selectedStatus: statusKey = 'ATIVO';
-  status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0, 'HISTORICO': 0 };
+  status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0 };
 
   isFind: boolean = false;
   isEmpty: boolean = false;
@@ -254,30 +251,15 @@ export class TestComponent implements OnInit {
   }
 
   // ========== BUSCAR HISTÓRICO DO CONTRATO ========== //
-  onHistory(): void {
-    this.isProcessing = true;
-
-    const numero_contrato = this.historyForm.value.numero_contrato;
-
+  onHistory(numero_contrato: number): void {
     this._equipamentService.findByContract(numero_contrato)
-      .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
-          const data = res.result || [];
-          this.selectedStatus = 'HISTORICO';
+          this.rawItems = res.result;
+          // this.filteredItems = this.convertJson(this.rawItems);
+          this.groupItems = [...this.rawItems];
 
-          this.rawItems = data;
-          this.filteredItems = this.convertJson(this.rawItems);
-
-          this.items = [...this.filteredItems];
-          this.isEmpty = this.items.length === 0;
-
-          this.isHistoryOpen = false;
           this.setMessage(res.message, 'success');
-
-          this.historyForm.reset({
-            numero_contrato: ''
-          });
         },
         error: (err) => {
           this.setMessage(err.error.message, 'error');
@@ -319,9 +301,9 @@ export class TestComponent implements OnInit {
   }
 
   // ========== ABRIR MODAL ========== //
-  openHistory(): void {
-    this.isMenuOpen = false;
+  openHistory(item: any): void {
     this.isHistoryOpen = true;
+    this.onHistory(item.numero_contrato);
   }
 
   // ========== FECHAR MODAL ========== //
