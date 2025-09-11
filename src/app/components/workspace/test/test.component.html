@@ -56,7 +56,7 @@
   </div>
 
   <div class="container__card">
-    <div *ngFor="let item of items" (click)="openHistory(item)" class="card">
+    <div *ngFor="let item of items" (click)="showHistory(item)" class="card">
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
@@ -156,14 +156,26 @@
           </div>
 
           <div class="modal__group">
+            <button type="button" (click)="openActive()" class="btn btn--secondary">
+              Ativar Locação
+            </button>
+          </div>
+
+          <div class="modal__group">
             <button type="button" (click)="openRenew()" class="btn btn--secondary">
               Renovar Locação
             </button>
           </div>
 
-          <div class="modal__group modal__group--full">
+          <div class="modal__group">
             <button type="button" (click)="openArchive()" class="btn btn--secondary">
               Devolver Locação
+            </button>
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <button type="button" (click)="openHistory()" class="btn btn--secondary">
+              Buscar Locação
             </button>
           </div>
         </div>
@@ -182,6 +194,70 @@
       <div class="modal__container">
         <div class="modal__header">
           <h2 class="modal__title">Cadastrar Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="modal__label">ID do Contrato*</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o idmov" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="modal__input">
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <label class="modal__label-upload">
+
+              @if (uploadedFile) {
+              <span class="modal__span">
+                {{ uploadedFile.name }}
+              </span>
+              } @else {
+              <mat-icon class="modal__icon modal__icon--upload">
+                cloud_upload
+              </mat-icon>
+
+              <span class="modal__span">
+                Anexar contrato
+              </span>
+              }
+
+              <input type="file" accept="image/*" (change)="onFileChange($event)"
+                class="modal__input modal__input--none">
+            </label>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--primary">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Cadastrar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if(isActiveOpen) {
+    <form [formGroup]="activeForm" (ngSubmit)="onActive()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Ativar Locação</h2>
           <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
@@ -209,7 +285,7 @@
             Voltar
           </button>
 
-          <button type="submit" class="btn btn--primary">
+          <button type="submit" [disabled]="!activeForm.valid" class="btn btn--primary">
             @if (isProcessing) {
             <div class="loading-dots">
               <div class="dot"></div>
@@ -217,7 +293,7 @@
               <div class="dot"></div>
             </div>
             } @else {
-            Cadastrar
+            Ativar
             }
           </button>
         </div>
@@ -326,6 +402,43 @@
     }
 
     @if (isHistoryOpen) {
+    <form [formGroup]="historyForm" (ngSubmit)="onHistory()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Buscar Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="modal__input">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
+          </button>
+
+          <button type="submit" [disabled]="!historyForm.valid" class="btn btn--primary">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Buscar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if (isHistory) {
     <div class="modal__backdrop">
       <div class="modal__container--secondary">
 

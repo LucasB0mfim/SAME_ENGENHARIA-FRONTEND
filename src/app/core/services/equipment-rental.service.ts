@@ -24,9 +24,14 @@ export class EquipmentRentalService {
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/equipment-rental/contract/${numero_contrato}`, { headers });
   }
 
-  register(request: any): Observable<any> {
+  register(formData: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('https://sameengenharia.com.br/api/equipment-rental/register', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/equipment-rental/register', formData, { headers });
+  }
+
+  active(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/equipment-rental/active', request, { headers });
   }
 
   renew(request: any): Observable<any> {

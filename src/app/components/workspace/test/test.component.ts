@@ -8,6 +8,7 @@ import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } 
 
 import { TitleService } from '../../../core/services/title.service';
 import { EquipmentRentalService } from '../../../core/services/equipment-rental.service';
+import { DashboardService } from '../../../core/services/dashboard.service';
 
 interface status {
   'NOVO': number;
@@ -34,11 +35,19 @@ export class TestComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private _equipamentService = inject(EquipmentRentalService);
+  private _userService = inject(DashboardService);
 
   // ========== FORMULÁRIOS ========== //
-  archiveForm: FormGroup = new FormGroup({
-    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+  registerForm: FormGroup = new FormGroup({
     numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+    ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
+  });
+
+  activeForm: FormGroup = new FormGroup({
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+    ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
   renewForm: FormGroup = new FormGroup({
@@ -49,10 +58,13 @@ export class TestComponent implements OnInit {
     data_inicial: new FormControl('', Validators.required),
   });
 
-  registerForm: FormGroup = new FormGroup({
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+  archiveForm: FormGroup = new FormGroup({
     idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
-    ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+  });
+
+  historyForm: FormGroup = new FormGroup({
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
   // ========== ESTADOS ========== //
@@ -60,6 +72,8 @@ export class TestComponent implements OnInit {
   rawItems: any[] = [];
   groupItems: any[] = [];
   filteredItems: any[] = [];
+
+  userInfo: any = null;
 
   costCenters: any = null;
 
@@ -73,9 +87,14 @@ export class TestComponent implements OnInit {
 
   isMenuOpen: boolean = false;
   isRegisterOpen: boolean = false;
+  isActiveOpen: boolean = false;
   isArchiveOpen: boolean = false;
   isRenewOpen: boolean = false;
   isHistoryOpen: boolean = false;
+  isHistory: boolean = false;
+
+  uploadedFile: File | null = null;
+  compressedFile: File | null = null;
 
   idmov: string = '';
   costCenter: string = 'GERAL';
@@ -83,6 +102,11 @@ export class TestComponent implements OnInit {
   message: string = '';
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
+
+  // ===== CONFIGURAÇÕES FIXAS DE COMPRESSÃO ===== //
+  private readonly MAX_WIDTH = 800;
+  private readonly MAX_HEIGHT = 600;
+  private readonly QUALITY = 0.3;
 
   // ========== HOOK ========== //
   ngOnInit(): void {
@@ -160,24 +184,76 @@ export class TestComponent implements OnInit {
       });
   }
 
+  getUser(): void {
+    this._userService.findAll().subscribe({
+      next: (res) => {
+        this.userInfo = res.employee;
+      },
+      error: (err) => {
+        this.setMessage(err.error.message, 'error');
+        console.error('Erro ao carregar dados do colaborador: ', err);
+      }
+    });
+  }
+
   // ========== REGISTRAR CONTRATO ========== //
   onRegister(): void {
     this.isProcessing = true;
 
-    const request = {
-      idmov: this.registerForm.value.idmov,
-      numero_contrato: this.registerForm.value.numero_contrato,
-      ordem_compra: this.registerForm.value.ordem_compra
+    if (!this.compressedFile && !this.uploadedFile) {
+      this.isProcessing = false;
+      this.setMessage('O envio da foto é obrigatório!', 'error');
+      return;
     }
 
-    this._equipamentService.register(request)
+    const formData = new FormData();
+    formData.append('criador', this.userInfo.email);
+    formData.append('idmov', this.registerForm.value.idmov || '');
+    formData.append('numero_contrato', this.registerForm.value.numero_contrato || '');
+
+    // Usa a imagem comprimida se disponível, senão usa a original
+    const fileToSend = this.compressedFile || this.uploadedFile!;
+    formData.append('foto_contrato', fileToSend, fileToSend.name);
+
+
+    this._equipamentService.register(formData)
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
           this.loadInitial();
-          this.isRegisterOpen = false;
           this.setMessage(res.message, 'success');
+          this.isRegisterOpen = false;
+
           this.registerForm.reset({
+            idmov: '',
+            numero_contrato: '',
+          });
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
+  }
+
+  // ========== REGISTRAR CONTRATO ========== //
+  onActive(): void {
+    this.isProcessing = true;
+
+    const request = {
+      idmov: this.activeForm.value.idmov,
+      numero_contrato: this.activeForm.value.numero_contrato,
+      ordem_compra: this.activeForm.value.ordem_compra
+    }
+
+    this._equipamentService.active(request)
+      .pipe(finalize(() => this.isProcessing = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isActiveOpen = false;
+          this.setMessage(res.message, 'success');
+          this.activeForm.reset({
             numero_contrato: '',
             idmov: '',
             ordem_compra: ''
@@ -251,15 +327,18 @@ export class TestComponent implements OnInit {
   }
 
   // ========== BUSCAR HISTÓRICO DO CONTRATO ========== //
-  onHistory(numero_contrato: number): void {
+  onHistory(numeroContrato?: number): void {
+
+    const numero_contrato = this.historyForm.value.numero_contrato || numeroContrato
+
     this._equipamentService.findByContract(numero_contrato)
       .subscribe({
         next: (res) => {
-          this.rawItems = res.result;
-          // this.filteredItems = this.convertJson(this.rawItems);
-          this.groupItems = [...this.rawItems];
+          this.isHistory = true;
+          this.isHistoryOpen = false;
 
-          this.setMessage(res.message, 'success');
+          this.rawItems = res.result;
+          this.groupItems = [...this.rawItems];
         },
         error: (err) => {
           this.setMessage(err.error.message, 'error');
@@ -276,16 +355,24 @@ export class TestComponent implements OnInit {
   // ========== RETORNAR AO MENU ========== //
   returnMenu(): void {
     this.isArchiveOpen = false;
-    this.isRegisterOpen = false;
+    this.isActiveOpen = false;
     this.isHistoryOpen = false;
     this.isRenewOpen = false;
+    this.isRegisterOpen = false;
     this.isMenuOpen = true;
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openActive(): void {
+    this.isMenuOpen = false;
+    this.isActiveOpen = true;
   }
 
   // ========== ABRIR MODAL ========== //
   openRegister(): void {
     this.isMenuOpen = false;
     this.isRegisterOpen = true;
+    this.getUser();
   }
 
   // ========== ABRIR MODAL ========== //
@@ -301,18 +388,24 @@ export class TestComponent implements OnInit {
   }
 
   // ========== ABRIR MODAL ========== //
-  openHistory(item: any): void {
+  openHistory(): void {
+    this.isMenuOpen = false;
     this.isHistoryOpen = true;
+  }
+
+  showHistory(item: any): void {
     this.onHistory(item.numero_contrato);
   }
 
   // ========== FECHAR MODAL ========== //
   closeModal(): void {
     this.isMenuOpen = false;
-    this.isRegisterOpen = false;
+    this.isActiveOpen = false;
     this.isRenewOpen = false;
     this.isArchiveOpen = false;
     this.isHistoryOpen = false;
+    this.isRegisterOpen = false;
+    this.isHistory = false;
 
   }
 
@@ -386,5 +479,97 @@ export class TestComponent implements OnInit {
         }
       }));
     });
+  }
+
+  // ===== CAPTURAR E COMPRIMIR IMAGEM ===== //
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.uploadedFile = input.files[0];
+
+      // Comprimir a imagem automaticamente
+      this.compressImage(this.uploadedFile)
+        .then(compressedFile => {
+          this.compressedFile = compressedFile;
+          console.log(`Imagem comprimida: ${(this.uploadedFile!.size / 1024).toFixed(0)}KB -> ${(compressedFile.size / 1024).toFixed(0)}KB`);
+        })
+        .catch(error => {
+          console.error('Erro ao comprimir imagem:', error);
+          // Em caso de erro na compressão, usa a imagem original
+          this.compressedFile = null;
+        });
+    }
+  }
+
+  // ===== FUNÇÃO SIMPLES DE COMPRESSÃO DE IMAGEM ===== //
+  private compressImage(file: File): Promise<File> {
+    return new Promise((resolve, reject) => {
+      if (!file.type.startsWith('image/')) {
+        reject(new Error('Arquivo não é uma imagem'));
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+
+      img.onload = () => {
+        // Calcula as novas dimensões mantendo a proporção
+        let { width, height } = this.calculateNewDimensions(img.width, img.height);
+
+        // Define o tamanho do canvas
+        canvas.width = width;
+        canvas.height = height;
+
+        // Desenha a imagem redimensionada no canvas
+        ctx!.drawImage(img, 0, 0, width, height);
+
+        // Converte para JPEG com qualidade baixa
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const compressedFile = new File(
+                [blob],
+                file.name.replace(/\.[^/.]+$/, '_compressed.jpg'),
+                {
+                  type: 'image/jpeg',
+                  lastModified: Date.now()
+                }
+              );
+              resolve(compressedFile);
+            } else {
+              reject(new Error('Erro ao comprimir imagem'));
+            }
+          },
+          'image/jpeg',
+          this.QUALITY
+        );
+      };
+
+      img.onerror = () => {
+        reject(new Error('Erro ao carregar imagem'));
+      };
+
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  // ===== CALCULAR NOVAS DIMENSÕES ===== //
+  private calculateNewDimensions(originalWidth: number, originalHeight: number): { width: number, height: number } {
+    let width = originalWidth;
+    let height = originalHeight;
+
+    // Redimensiona se exceder os limites máximos
+    if (width > this.MAX_WIDTH) {
+      height = (height * this.MAX_WIDTH) / width;
+      width = this.MAX_WIDTH;
+    }
+
+    if (height > this.MAX_HEIGHT) {
+      width = (width * this.MAX_HEIGHT) / height;
+      height = this.MAX_HEIGHT;
+    }
+
+    return { width: Math.round(width), height: Math.round(height) };
   }
 }
