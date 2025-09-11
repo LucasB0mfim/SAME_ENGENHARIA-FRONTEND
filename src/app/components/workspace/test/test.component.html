@@ -237,7 +237,7 @@
             Voltar
           </button>
 
-          <button type="submit" class="btn btn--primary">
+          <button type="submit" [disabled]="!registerForm.valid" class="btn btn--primary">
             @if (isProcessing) {
             <div class="loading-dots">
               <div class="dot"></div>

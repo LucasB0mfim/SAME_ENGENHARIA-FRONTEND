@@ -40,8 +40,7 @@ export class TestComponent implements OnInit {
   // ========== FORMULÁRIOS ========== //
   registerForm: FormGroup = new FormGroup({
     numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
-    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
-    ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)])
   });
 
   activeForm: FormGroup = new FormGroup({
@@ -184,6 +183,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== BUSCAR DADOS DO USUÁRIO ========== //
   getUser(): void {
     this._userService.findAll().subscribe({
       next: (res) => {
@@ -211,10 +211,8 @@ export class TestComponent implements OnInit {
     formData.append('idmov', this.registerForm.value.idmov || '');
     formData.append('numero_contrato', this.registerForm.value.numero_contrato || '');
 
-    // Usa a imagem comprimida se disponível, senão usa a original
     const fileToSend = this.compressedFile || this.uploadedFile!;
     formData.append('foto_contrato', fileToSend, fileToSend.name);
-
 
     this._equipamentService.register(formData)
       .pipe(finalize(() => this.isProcessing = false))
