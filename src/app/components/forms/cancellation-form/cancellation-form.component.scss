@@ -1,0 +1,338 @@
+@mixin transition($properties: all, $duration: 0.2s, $timing: ease-in-out) {
+  transition: $properties $duration $timing;
+}
+
+@mixin focus-ring($color: #FF6F00) {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba($color, 0.1);
+}
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  @include transition();
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  background-image: url("../../../../../public/assets/images/wallpaper.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.error-message {
+  color: #ef4444;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  @include button-base;
+  min-width: 140px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  &--primary {
+    background-color: #FF6F00;
+    color: #FFFFFF;
+    border-color: #FF6F00;
+
+    &:hover:not(:disabled) {
+      background-color: #db5f00;
+      border-color: #db5f00;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      @include focus-ring(#FF6F00);
+    }
+  }
+}
+
+.form {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  max-width: 800px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: calc(100vh - (#{2rem} * 2));
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0;
+    max-height: calc(100vh - (#{1rem} * 2));
+  }
+
+  &__section {
+    padding: 3rem;
+    border-radius: 6px;
+    background-color: #FF6F00;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{($i - 1) * 0.1}s;
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #FFFFFF;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background-color: #FFFFFF;
+    }
+  }
+
+  &__label {
+    font-weight: 500;
+    color: #FFFFFF;
+    margin-bottom: 0.25rem;
+  }
+
+  &__input,
+  &__select {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    color: #FFFFFF;
+    border: 2px solid #CC5500;
+    border-radius: 6px;
+    font-size: clamp(0.75rem, 0.7197rem + 0.1294vw, 0.875rem);
+    background-color: #CC5500;
+
+    &::placeholder {
+      color: #EEEEEE;
+    }
+
+    &:focus {
+      border-color: #FFFFFF;
+      @include focus-ring(#FFFFFF);
+    }
+  }
+
+  &__select {
+    cursor: pointer;
+  }
+
+  &__file {
+    cursor: pointer;
+    padding: 0.5rem;
+    border: 2px dashed #CC5500;
+    background-color: #CC5500;
+    @include transition();
+
+    &:focus {
+      border-color: #FFFFFF;
+      background-color: rgba(#FFFFFF, 0.05);
+      @include focus-ring(#FFFFFF);
+    }
+
+    &.error {
+      border-color: #ef4444;
+      background-color: rgba(#ef4444, 0.05);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem 0;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
+
+.loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="number"].form__input {
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+// Indicadores visuais para campos obrigatórios
+.form__group:has(.form-control[required]) label::after,
+.form__group:has(.form-control.ng-invalid.ng-touched) label::after {
+  display: inline;
+}
+
+// Melhorias de acessibilidade
+.form__input:focus-visible {
+  outline: 2px solid #FF6F00;
+  outline-offset: 2px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .admissao-container {
+    padding: 0.5rem;
+  }
+
+  .admissao-form {
+    padding: 1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+@media print {
+  .container {
+    background-color: #FFFFFF;
+    box-shadow: none;
+  }
+
+  .form__footer {
+    display: none;
+  }
+
+  .form__input {
+    border: 1px solid #FFFFFF !important;
+    background-color: #FFFFFF !important;
+  }
+}
+
+// Estilos para mensagens de erro
+.form__error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+  font-weight: 500;
+}
+
+// Estilos para campos com erro
+.form__input.ng-invalid.ng-touched,
+.form__select.ng-invalid.ng-touched,
+.form__file.ng-invalid.ng-touched {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
+}
+
+@media (max-width: 1024px) {
+  :host ::ng-deep mat-progress-spinner {
+    width: 10vw !important;
+    height: 10vw !important;
+  }
+}

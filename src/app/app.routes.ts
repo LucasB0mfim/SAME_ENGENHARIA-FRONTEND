@@ -31,6 +31,7 @@ import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TaskComponent } from './components/workspace/task/task.component';
 import { TestComponent } from './components/workspace/test/test.component';
+import { CancellationFormComponent } from './components/forms/cancellation-form/cancellation-form.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +59,10 @@ export const routes: Routes = [
     path: 'admission',
     component: AdmissionFormComponent,
     canActivate: [tempTokenGuard]
+  },
+  {
+    path: 'benefit-cancellation-form',
+    component: CancellationFormComponent,
   },
   {
     path: 'unauthorized',
