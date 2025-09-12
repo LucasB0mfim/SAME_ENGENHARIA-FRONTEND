@@ -40,14 +40,17 @@ export class TaskComponent implements OnInit {
 
   employees: any = null;
 
-  showDetails: boolean = false;
-
   selectedStatus: statusKey = 'SOLICITACAO';
   status: status = { 'SOLICITACAO': 0, 'ANDAMENTO': 0, 'FINALIZADO': 0 };
 
   isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
+
+  isTaskOpen: boolean = false;
+  isMenuOpen: boolean = false;
+  isEditOpen: boolean = false;
+  isListOpen: boolean = false;
 
   costCenters: any = null;
   costCenter: string = 'GERAL';
@@ -58,6 +61,7 @@ export class TaskComponent implements OnInit {
 
   // ========== HOOK ========== //
   ngOnInit(): void {
+    this.isTaskOpen = true;
     this.loadInitial();
     this._titleService.setTitle('Tarefas');
   }
@@ -128,28 +132,48 @@ export class TaskComponent implements OnInit {
       });
   }
 
-  // ========== ABRIR DETALHES ========== //
-  openDatails(item: any): void {
+
+
+
+
+
+  openMenu(item: any): void {
     this.employees = item;
-    this.showDetails = true;
-    this.calculateValueTask();
-    this._titleService.setTitle('Participantes');
+    this.isMenuOpen = true;
   }
 
-  // ========== ABRIR FOTO DA PRANCHETA ========== //
+  openList() {
+    this.isMenuOpen = false;
+    this.isTaskOpen = false;
+    this.isListOpen = true;
+    this.calculateValueTask();
+  }
+
+  openEdit() {
+    this.isMenuOpen = false;
+    this.isListOpen = true;
+  }
+
+  closeModal(): void {
+    this.isMenuOpen = false;
+  }
+
+  returnMenu(): void {
+    this.isEditOpen = false;
+    this.isListOpen = false;
+    this.isMenuOpen = true;
+  }
+
+  returnTask(): void {
+    this.isTaskOpen = false;
+    this.isTaskOpen = true;
+  }
+
   openClipboard(): void {
     const imageName = this.employees.foto_prancheta;
     window.open(`https://sameengenharia.com.br/api/task/file/${imageName}`, "_blank", "noopener,noreferrer");
   }
 
-  // ========== VOLTAR PARA O INÍCIO ========== //
-  returnHome(): void {
-    this.loadInitial();
-    this.showDetails = false;
-    this._titleService.setTitle('Tarefas');
-  }
-
-  // ========== FILTROS ========== //
   applyFilters() {
     let data = [...this.filteredItems];
 
@@ -164,7 +188,6 @@ export class TaskComponent implements OnInit {
     this.isEmpty = this.items.length === 0;
   }
 
-  // ========== MENSAGEM DINAMICA ========== //
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
     this.messageType = type;
@@ -176,7 +199,11 @@ export class TaskComponent implements OnInit {
     }, 3000);
   }
 
-  // ========== AUXILIARES ========== //
+
+
+
+
+
   formateDate(date: string): string {
     if (!date) return '';
     const [year, month, day] = date.split('-');
@@ -192,4 +219,7 @@ export class TaskComponent implements OnInit {
       return acc + item.valor
     }, 0);
   }
+
+
+
 }

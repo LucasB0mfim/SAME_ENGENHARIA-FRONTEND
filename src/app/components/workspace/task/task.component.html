@@ -1,12 +1,11 @@
 <div class="container">
 
-  <!-- MENSAGEM -->
   @if (showMessage) {
   <div class="message" [ngClass]="messageType">{{ message }}</div>
   }
 
   <div class="container__filter">
-    @if (!showDetails) {
+    @if (isTaskOpen) {
     <!-- FILTRO -->
     <div class="filter">
       <button (click)="getByStatus('SOLICITACAO')" [ngClass]="{'active': selectedStatus === 'SOLICITACAO'}"
@@ -47,7 +46,9 @@
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
-    } @else {
+    }
+
+    @if (isListOpen) {
     <div class="filter">
       <span class="filter__span">R$ {{ calculateValueTask() }}</span>
     </div>
@@ -59,7 +60,7 @@
     </div>
 
     <div class="filter">
-      <button class="btn btn--primary" (click)="returnHome()">
+      <button class="btn btn--primary" (click)="returnTask()">
         <mat-icon>reset_tv</mat-icon>
       </button>
     </div>
@@ -67,9 +68,8 @@
   </div>
 
   <div class="container__card">
-
-    @if (!showDetails) {
-    <div *ngFor="let item of items; let i = index" (click)="openDatails(item)" class="card">
+    @if (isTaskOpen) {
+    <div *ngFor="let item of items" (click)="openMenu(item)" class="card">
       <div class="card__header">
         <div class="card__primary">
           <div class="card__top">
@@ -105,7 +105,40 @@
         </div>
       </div>
     </div>
-    } @else {
+    }
+
+    @if (isMenuOpen) {
+    <div class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Mais Opções</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <button type="button" (click)="openEdit()" class="btn btn--secondary">
+              Atualizar Status
+            </button>
+          </div>
+
+          <div class="modal__group">
+            <button type="button" (click)="openList()" class="btn btn--secondary">
+              Visualizar Participantes
+            </button>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="closeModal()" class="btn btn--secondary">
+            Sair
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if (isListOpen) {
     <div *ngFor="let emp of employees.participantes" class="card">
       <div class="card__header card__header--border">
         <div class="card__primary">
@@ -132,14 +165,56 @@
     </div>
     }
 
-    <!-- LOADING -->
-    <div class="loading" *ngIf="isLoading">
+    @if(isEditOpen) {
+    <form class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="modal__title">Ativar Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group modal__group--full">
+            <label class="modal__label">Número do Contrato *</label>
+            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">ID *</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o idmov" class="modal__input">
+          </div>
+
+          <div class="modal__group">
+            <label class="modal__label">Ordem de Compra *</label>
+            <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
+              class="modal__input">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--primary">
+            Ativar
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if (isLoading) {
+    <div class="loading">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
+    }
 
-    <!-- SEM RESULTADO -->
-    <div class="empty" *ngIf="isEmpty">
+    @if (isEmpty) {
+    <div class="empty">
       <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
     </div>
+    }
   </div>
 </div>
