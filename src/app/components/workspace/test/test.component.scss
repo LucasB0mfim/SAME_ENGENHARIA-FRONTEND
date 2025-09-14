@@ -237,9 +237,15 @@
   }
 
   &__title {
-    font-weight: 600;
     color: var(--text-color);
+
+    font-weight: 600;
+    max-width: clamp(28.125rem, 26.608rem + 6.4725vw, 34.375rem);
     font-size: clamp(0.625rem, 0.5947rem + 0.1294vw, 0.75rem);
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &__subtitle {

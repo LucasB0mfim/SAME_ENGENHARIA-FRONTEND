@@ -39,12 +39,12 @@ export class TestComponent implements OnInit {
 
   // ========== FORMULÁRIOS ========== //
   registerForm: FormGroup = new FormGroup({
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
     idmov: new FormControl('', [Validators.required, Validators.min(10000)])
   });
 
   activeForm: FormGroup = new FormGroup({
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
     idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
@@ -52,18 +52,18 @@ export class TestComponent implements OnInit {
   renewForm: FormGroup = new FormGroup({
     idmov_atual: new FormControl('', [Validators.required, Validators.min(10000)]),
     idmov_novo: new FormControl('', [Validators.required, Validators.min(10000)]),
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
     data_inicial: new FormControl('', Validators.required),
   });
 
   archiveForm: FormGroup = new FormGroup({
     idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
   });
 
   historyForm: FormGroup = new FormGroup({
-    numero_contrato: new FormControl('', [Validators.required, Validators.min(1000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
   });
 
   // ========== ESTADOS ========== //
