@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { ExperienceService } from '../../../core/services/experience.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { ExperienceService } from '../../../../core/services/experience.service';
 
 @Component({
   selector: 'app-experience',

@@ -4,10 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { TrackingService } from '../../../core/services/tracking.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { TrackingService } from '../../../../core/services/tracking.service';
 
-import { ITrackingInfo } from '../../../core/interfaces/tracking-response.interface';
+import { ITrackingInfo } from '../../../../core/interfaces/tracking-response.interface';
 
 @Component({
   selector: 'app-tracking',

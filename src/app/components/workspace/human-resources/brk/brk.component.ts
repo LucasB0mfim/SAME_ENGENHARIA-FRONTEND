@@ -7,9 +7,9 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { BrkService } from '../../../core/services/brk.service';
-import { TitleService } from '../../../core/services/title.service';
-import { BenefitService } from '../../../core/services/benefit.service';
+import { BrkService } from '../../../../core/services/brk.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { BenefitService } from '../../../../core/services/benefit.service';
 
 // Interface para tipagem dos contadores
 interface StatusCounts {

@@ -6,8 +6,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { TaskService } from '../../../core/services/task.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { TaskService } from '../../../../core/services/task.service';
 
 interface status {
   'SOLICITACAO': number;

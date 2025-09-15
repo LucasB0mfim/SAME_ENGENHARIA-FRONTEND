@@ -6,9 +6,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { TitleService } from '../../../core/services/title.service';
-import { EquipmentRentalService } from '../../../core/services/equipment-rental.service';
-import { DashboardService } from '../../../core/services/dashboard.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { EquipmentRentalService } from '../../../../core/services/equipment-rental.service';
+import { DashboardService } from '../../../../core/services/dashboard.service';
 
 interface status {
   'NOVO': number;

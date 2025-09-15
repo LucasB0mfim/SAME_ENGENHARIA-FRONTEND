@@ -6,9 +6,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { TitleService } from '../../../core/services/title.service';
-import { ResignationService } from '../../../core/services/resignation.service';
-import { BenefitService } from '../../../core/services/benefit.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { ResignationService } from '../../../../core/services/resignation.service';
+import { BenefitService } from '../../../../core/services/benefit.service';
 
 interface StatusCounts {
   'NOVA SOLICITAÇÃO': number;

@@ -4,8 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { FinancialService } from '../../../core/services/financial.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { FinancialService } from '../../../../core/services/financial.service';
 
 @Component({
   selector: 'app-financial-tracking',

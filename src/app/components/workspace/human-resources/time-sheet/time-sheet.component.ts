@@ -6,11 +6,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { TitleService } from '../../../core/services/title.service';
-import { TimesheetService } from '../../../core/services/timesheet.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { TimesheetService } from '../../../../core/services/timesheet.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { ICommonData } from '../../../core/interfaces/timesheet-response.interface';
+import { ICommonData } from '../../../../core/interfaces/timesheet-response.interface';
 
 @Component({
   selector: 'app-time-sheet',

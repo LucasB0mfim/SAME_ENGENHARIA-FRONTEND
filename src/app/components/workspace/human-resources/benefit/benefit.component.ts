@@ -6,8 +6,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { BenefitService } from '../../../core/services/benefit.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { BenefitService } from '../../../../core/services/benefit.service';
 
 @Component({
   selector: 'app-benefit',

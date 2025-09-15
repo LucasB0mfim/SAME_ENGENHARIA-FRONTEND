@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, ViewChild, ElementRef, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { TimesheetService } from '../../../core/services/timesheet.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { TimesheetService } from '../../../../core/services/timesheet.service';
 
 @Component({
   selector: 'app-upload-timesheet',

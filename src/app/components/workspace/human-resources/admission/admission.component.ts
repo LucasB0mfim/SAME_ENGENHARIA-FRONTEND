@@ -4,8 +4,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TitleService } from '../../../core/services/title.service';
-import { AdmissionService } from '../../../core/services/admission.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { AdmissionService } from '../../../../core/services/admission.service';
 
 @Component({
   selector: 'app-admission',

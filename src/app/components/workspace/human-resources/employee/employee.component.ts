@@ -5,8 +5,8 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { TitleService } from '../../../core/services/title.service';
-import { BenefitService } from '../../../core/services/benefit.service';
+import { TitleService } from '../../../../core/services/title.service';
+import { BenefitService } from '../../../../core/services/benefit.service';
 
 @Component({
   selector: 'app-employee',

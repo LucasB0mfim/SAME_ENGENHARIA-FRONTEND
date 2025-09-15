@@ -3,11 +3,12 @@ import { NgChartsModule } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { TitleService } from '../../../core/services/title.service.js';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { IndicatorService } from '../../../core/services/indicator.service.js';
 import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ThemeService } from '../../../core/services/theme.service.js';
+
+import { TitleService } from '../../../../core/services/title.service';
+import { ThemeService } from '../../../../core/services/theme.service';
+import { IndicatorService } from '../../../../core/services/indicator.service';
 
 interface CostCenterIndicator {
   centro_custo: string;
