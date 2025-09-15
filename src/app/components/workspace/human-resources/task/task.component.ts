@@ -3,11 +3,11 @@ import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { TitleService } from '../../../../core/services/title.service';
 import { TaskService } from '../../../../core/services/task.service';
+import { TitleService } from '../../../../core/services/title.service';
 
 interface status {
   'SOLICITACAO': number;
@@ -34,6 +34,11 @@ export class TaskComponent implements OnInit {
   private _titleService = inject(TitleService);
   private _taskService = inject(TaskService);
 
+  // ========== FORMULÁRIOS ========== //
+  updateForm: FormGroup = new FormGroup({
+    status: new FormControl('', Validators.required)
+  });
+
   // ========== ESTADOS ========== //
   items: any[] = [];
   filteredItems: any[] = [];
@@ -46,6 +51,7 @@ export class TaskComponent implements OnInit {
   isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
+  isProcessing: boolean = false;
 
   isTaskOpen: boolean = false;
   isMenuOpen: boolean = false;
@@ -59,14 +65,12 @@ export class TaskComponent implements OnInit {
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
-  // ========== HOOK ========== //
   ngOnInit(): void {
+    this._titleService.setTitle('Tarefas');
     this.isTaskOpen = true;
     this.loadInitial();
-    this._titleService.setTitle('Tarefas');
-  }
+  };
 
-  // ========== LOADING INICIAL OTIMIZADO ========== //
   loadInitial(): void {
     this.items = [];
     this.isEmpty = false;
@@ -101,9 +105,8 @@ export class TaskComponent implements OnInit {
           this.setMessage('Não foi possível carregar os dados!', 'error');
         }
       });
-  }
+  };
 
-  // ========== FILTRO POR STATUS ========== //
   getByStatus(status: string): void {
     const statusKey = status as statusKey;
     this.selectedStatus = statusKey;
@@ -130,49 +133,69 @@ export class TaskComponent implements OnInit {
           this.setMessage('Erro ao carregar!', 'error');
         }
       });
-  }
+  };
 
+  update(): void {
+    this.isProcessing = true;
 
+    const request = {
+      id: this.employees.id,
+      status: this.updateForm.value.status
+    }
 
-
-
+    this._taskService.update(request)
+      .pipe(finalize(() => this.isProcessing = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isEditOpen = false;
+          this.updateForm.reset({ status: '' });
+          this.setMessage(res.message, 'success');
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.log('Não foi possível atualizar tarefa: ', err);
+        }
+      })
+  };
 
   openMenu(item: any): void {
     this.employees = item;
     this.isMenuOpen = true;
-  }
+  };
 
   openList() {
     this.isMenuOpen = false;
     this.isTaskOpen = false;
     this.isListOpen = true;
     this.calculateValueTask();
-  }
+  };
 
   openEdit() {
     this.isMenuOpen = false;
-    this.isListOpen = true;
-  }
+    this.isEditOpen = true;
+  };
 
   closeModal(): void {
     this.isMenuOpen = false;
-  }
+    this.isEditOpen = false;
+  };
 
   returnMenu(): void {
     this.isEditOpen = false;
     this.isListOpen = false;
     this.isMenuOpen = true;
-  }
+  };
 
   returnTask(): void {
-    this.isTaskOpen = false;
+    this.isListOpen = false;
     this.isTaskOpen = true;
-  }
+  };
 
   openClipboard(): void {
     const imageName = this.employees.foto_prancheta;
     window.open(`https://sameengenharia.com.br/api/task/file/${imageName}`, "_blank", "noopener,noreferrer");
-  }
+  };
 
   applyFilters() {
     let data = [...this.filteredItems];
@@ -186,7 +209,7 @@ export class TaskComponent implements OnInit {
 
     this.items = data;
     this.isEmpty = this.items.length === 0;
-  }
+  };
 
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
@@ -197,29 +220,21 @@ export class TaskComponent implements OnInit {
       this.showMessage = false;
       this.message = '';
     }, 3000);
-  }
-
-
-
-
-
+  };
 
   formateDate(date: string): string {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
-  }
+  };
 
   formateCPF(cpf: string): string {
     return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9, 11)}`;
-  }
+  };
 
   calculateValueTask(): void {
     return this.employees.participantes.reduce((acc: number, item: any) => {
       return acc + item.valor
     }, 0);
-  }
-
-
-
+  };
 }

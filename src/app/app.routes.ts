@@ -5,7 +5,6 @@ import { LoginComponent } from './pages/login/login.component';
 import { UpdateComponent } from './pages/update/update.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstLoginComponent } from './pages/first-login/first-login.component';
-import { TestComponent } from './components/workspace/reports/test/test.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BrkComponent } from './components/workspace/human-resources/brk/brk.component';
@@ -32,6 +31,7 @@ import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
+import { RentalComponent } from './components/workspace/reports/rental/rental.component';
 
 export const routes: Routes = [
   {
@@ -86,7 +86,7 @@ export const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
-      { path: 'test', component: TestComponent },
+      { path: 'rental', component: RentalComponent },
       {
         path: 'human-resources',
         component: HumanResourcesComponent

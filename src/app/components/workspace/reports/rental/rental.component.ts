@@ -20,7 +20,7 @@ interface status {
 type statusKey = keyof status;
 
 @Component({
-  selector: 'app-test',
+  selector: 'app-rental',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -28,10 +28,10 @@ type statusKey = keyof status;
     MatIconModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './test.component.html',
-  styleUrl: './test.component.scss'
+  templateUrl: './rental.component.html',
+  styleUrl: './rental.component.scss'
 })
-export class TestComponent implements OnInit {
+export class RentalComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private _equipamentService = inject(EquipmentRentalService);
@@ -69,12 +69,17 @@ export class TestComponent implements OnInit {
   // ========== ESTADOS ========== //
   items: any[] = [];
   rawItems: any[] = [];
+  compressItems: any[] = [];
+
   groupItems: any[] = [];
   filteredItems: any[] = [];
 
   userInfo: any = null;
 
   costCenters: any = null;
+
+  compress: boolean = false;
+  expand: boolean = true;
 
   selectedStatus: statusKey = 'ATIVO';
   status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0 };
@@ -139,6 +144,8 @@ export class TestComponent implements OnInit {
           this.filteredItems = this.convertJson(this.rawItems);
           this.items = [...this.filteredItems];
 
+          this.compressItems = res[1]?.result || [];
+
           this.costCenters = [...new Set(this.filteredItems.map((item) => item.centro_custo))];
 
           this.isEmpty = this.items.length === 0;
@@ -171,6 +178,7 @@ export class TestComponent implements OnInit {
           this.filteredItems = this.convertJson(this.rawItems);
 
           this.items = [...this.filteredItems];
+          this.compressItems = data;
 
           this.status[statusKey] = data.length;
           this.isEmpty = this.items.length === 0;
@@ -343,6 +351,16 @@ export class TestComponent implements OnInit {
           console.error('Erro ao atualizar contrato: ', err);
         }
       });
+  }
+
+  onCompress(): void {
+    this.compress = true;
+    this.expand = false;
+  }
+
+  onExpand(): void {
+    this.compress = false;
+    this.expand = true;
   }
 
   // ========== ABRIR MODAL ========== //

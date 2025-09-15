@@ -166,29 +166,21 @@
     }
 
     @if(isEditOpen) {
-    <form class="modal__backdrop">
+    <form [formGroup]="updateForm" (ngSubmit)="update()" class="modal__backdrop">
       <div class="modal__container">
         <div class="modal__header">
-          <h2 class="modal__title">Ativar Locação</h2>
+          <h2 class="modal__title">Editar Tarefa</h2>
           <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
         </div>
 
         <div class="modal__content">
           <div class="modal__group modal__group--full">
-            <label class="modal__label">Número do Contrato *</label>
-            <input type="number" formControlName="numero_contrato" placeholder="Insira o número do contrato"
-              class="modal__input">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">ID *</label>
-            <input type="number" formControlName="idmov" placeholder="Insira o idmov" class="modal__input">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Ordem de Compra *</label>
-            <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
-              class="modal__input">
+            <label class="modal__label">Status *</label>
+            <select formControlName="status" class="modal__input">
+              <option value="">Selecione uma opção</option>
+              <option value="ANDAMENTO">EM ANDAMENTO</option>
+              <option value="FINALIZADO">FINALIZADO</option>
+            </select>
           </div>
         </div>
 
@@ -198,7 +190,15 @@
           </button>
 
           <button type="submit" class="btn btn--primary">
-            Ativar
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Atualizar
+            }
           </button>
         </div>
       </div>

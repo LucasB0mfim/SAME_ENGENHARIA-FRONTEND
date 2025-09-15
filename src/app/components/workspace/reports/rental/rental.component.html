@@ -48,6 +48,22 @@
       </select>
     </div>
 
+    @if (expand) {
+    <div class="filter">
+      <button type="button" class="btn btn--primary" (click)="onCompress()">
+        <mat-icon>unfold_less</mat-icon>
+      </button>
+    </div>
+    }
+
+    @if (compress) {
+    <div class="filter">
+      <button type="button" class="btn btn--primary" (click)="onExpand()">
+        <mat-icon>unfold_more</mat-icon>
+      </button>
+    </div>
+    }
+
     <div class="filter">
       <button type="button" class="btn btn--primary" (click)="openMenu()">
         <mat-icon>settings</mat-icon>
@@ -56,6 +72,7 @@
   </div>
 
   <div class="container__card">
+    @if (expand) {
     <div *ngFor="let item of items" (click)="showHistory(item)" class="card">
       <div class="card__header">
         <div class="card__primary">
@@ -139,6 +156,72 @@
         </div>
       </div>
     </div>
+    }
+
+    @if (compress) {
+    <div *ngFor="let item of compressItems" class="card">
+      <div class="card__header card__header--secondary ">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__text">
+              <div class="card__title">{{ item.contrato_base.centro_custo || 'N/A'}}</div>
+            </div>
+          </div>
+          <div class="card__bottom">
+            <div class="card__subtitle">{{ item.contrato_base.fornecedor || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="card__subtitle">OC:</div>
+            <div class="card__title">{{ item.ordem_compra || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">MOV:</div>
+            <div class="card__title">{{ item.contrato_base.movimento || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">ID:</div>
+            <div class="card__title">{{ item.idmov || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">NC:</div>
+            <div class="card__title">{{ item.numero_contrato || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">PD:</div>
+            <div class="card__title">{{ item.periodo || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">DR:</div>
+            <div class="card__title">{{ item.contrato_base.unidade || 'N/A'}}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">PI:</div>
+            <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A' }}</div>
+            <div class="card__subtitle">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="card__subtitle">PF:</div>
+            <div class="card__title">{{ formateDate(item.data_final) || 'N/A' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
 
     @if (isMenuOpen) {
     <div class="modal__backdrop">
