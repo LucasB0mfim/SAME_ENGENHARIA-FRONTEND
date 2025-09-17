@@ -37,4 +37,15 @@ export class AdmissionService {
     const headers = this._createHeaders();
     return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/admission/delete/${id}`, { headers });
   }
+
+  generatePdf(id: number) {
+    const headers = this._createHeaders();
+    return this._httpClient.get(`https://sameengenharia.com.br/api/admission/generate-pdf/${id}`, {
+      headers,
+      responseType: 'blob',
+      observe: 'response'
+    });
+  }
+
+
 }

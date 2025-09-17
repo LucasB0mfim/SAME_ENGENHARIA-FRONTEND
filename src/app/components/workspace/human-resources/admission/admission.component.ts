@@ -6,6 +6,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../../core/services/title.service';
 import { AdmissionService } from '../../../../core/services/admission.service';
+import saveAs from 'file-saver';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-admission',
@@ -370,6 +372,14 @@ export class AdmissionComponent implements OnInit {
   // ========== MÉTODOS AUXILIARES ========== //
   buildImageUrl(imageName: string): string {
     return `https://sameengenharia.com.br/api/admission/documents/${imageName}`;
+  }
+
+  generatePdf(item: any) {
+    this._admissionService.generatePdf(item.id).subscribe((response: HttpResponse<Blob>) => {
+      const cd = response.headers.get('content-disposition');
+      const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'FICHA_ADMISSAO.pdf';
+      saveAs(response.body!, fileName);
+    });
   }
 
   formateDate(date: string) {

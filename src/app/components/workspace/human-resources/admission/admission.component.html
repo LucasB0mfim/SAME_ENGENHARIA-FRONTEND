@@ -161,6 +161,10 @@
             <mat-icon>edit</mat-icon>
           </button>
 
+          <button class="btn btn--open-image" (click)="generatePdf(item); $event.stopPropagation()">
+            <mat-icon>download</mat-icon>
+          </button>
+
           <button class="btn btn--trash" (click)="openModalDelete(item); $event.stopPropagation()">
             <mat-icon>delete</mat-icon>
           </button>
@@ -307,14 +311,14 @@
           </div>
 
           <!-- Comprovante de Residência -->
-          <div *ngIf="modalType === 'residence' && currentItem?.foto_certidao" class="modal__image-container">
-            <img [src]="buildImageUrl(currentItem.foto_certidao)" alt="Comprovante de Residência" class="modal__image">
+          <div *ngIf="modalType === 'residence' && currentItem?.foto_comprovante_residencia" class="modal__image-container">
+            <img [src]="buildImageUrl(currentItem.foto_comprovante_residencia)" alt="Comprovante de Residência" class="modal__image">
           </div>
 
           <!-- Certificado -->
-          <div *ngIf="modalType === 'certificate' && currentItem?.foto_comprovante_residencia"
+          <div *ngIf="modalType === 'certificate' && currentItem?.foto_certidao"
             class="modal__image-container">
-            <img [src]="buildImageUrl(currentItem.foto_comprovante_residencia)" alt="Certificado" class="modal__image">
+            <img [src]="buildImageUrl(currentItem.foto_certidao)" alt="Certificado" class="modal__image">
           </div>
 
           <!-- Vem -->
