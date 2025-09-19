@@ -39,8 +39,8 @@ export class EquipmentRentalService {
     return this._httpClient.put<any>('https://sameengenharia.com.br/api/equipment-rental/renew', request, { headers });
   }
 
-  archive(idmov: number): Observable<any> {
+  archive(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>(`https://sameengenharia.com.br/api/equipment-rental/${idmov}`, null, { headers });
+    return this._httpClient.put<any>(`https://sameengenharia.com.br/api/equipment-rental/`, request, { headers });
   }
 }

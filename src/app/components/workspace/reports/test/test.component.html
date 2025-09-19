@@ -1,0 +1,384 @@
+<div class="container">
+
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">
+    {{ message }}
+  </div>
+  }
+
+  <div class="container__filter">
+    <div class="filter">
+      <button (click)="getByStatus('NOVO')" [ngClass]="{'active': selectedStatus === 'NOVO'}" class="btn btn--count">
+        Novos
+        <span class="span span__counter">{{ status['NOVO'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button (click)="getByStatus('ATIVO')" [ngClass]="{'active': selectedStatus === 'ATIVO'}" class="btn btn--count">
+        Ativos
+        <span class="span span__counter">{{ status['ATIVO'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button (click)="getByStatus('VENCIDO')" [ngClass]="{'active': selectedStatus === 'VENCIDO'}"
+        class="btn btn--count">
+        Vencidos
+        <span class="span span__counter">{{ status['VENCIDO'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <button (click)="getByStatus('DEVOLVIDO')" [ngClass]="{'active': selectedStatus === 'DEVOLVIDO'}"
+        class="btn btn--count">
+        Devolvidos
+        <span class="span span__counter">{{ status['DEVOLVIDO'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
+      <input type="text" placeholder="Pesquisar" [(ngModel)]="idmov" (input)="applyFilters()"
+        class="input input__default">
+    </div>
+
+    <div class="filter">
+      <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input__default">
+        <option value="GERAL">Geral</option>
+        <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
+      </select>
+    </div>
+
+    <div class="filter">
+      <button type="button" class="btn btn--orange" (click)="openRegister()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="container__card">
+    <div class="card" *ngFor="let item of items" (click)="openMenu(item)">
+      <div class="card__header">
+        <div class="card__primary">
+          <div class="card__top">
+            <div class="card__text">
+              <div class="subtitle subtitle--md">{{ item.contrato_base.criador || 'N/A' }}</div>
+              <div class="subtitle subtitle--md">|</div>
+              <div class="title title--md">{{ item.contrato_base.fornecedor || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="card__bottom">
+            <div class="title title--md">{{ item.contrato_base.centro_custo || 'N/A' }}</div>
+          </div>
+        </div>
+        <div class="card__secondary">
+          <div class="card__text">
+            <div class="subtitle subtitle--md">DR:</div>
+            <div class="title title--md">{{ upperCase(item.contrato_base.unidade) || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">OC:</div>
+            <div class="title title--md">{{ item.ordem_compra || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">MOV:</div>
+            <div class="title title--md">{{ item.contrato_base.movimento || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">ID:</div>
+            <div class="title title--md">{{ item.idmov || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">NC:</div>
+            <div class="title title--md">{{ item.contrato_base.numero_contrato || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">DI:</div>
+            <div class="title title--md">{{ formateDate(item.data_inicial) || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">DF:</div>
+            <div class="title title--md">{{ formateDate(item.data_final) || 'N/A'}}</div>
+            <div class="subtitle subtitle--md">|</div>
+          </div>
+
+          <div class="card__text">
+            <div class="subtitle subtitle--md">PF:</div>
+            <div class="title title--md">{{ item.periodo || 'N/A'}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__item" *ngFor="let equipData of item.contrato_base.contrato_itens">
+          <div class="card__left">
+            <span class="card__icon"></span>
+            <span class="title title--md">{{ equipData.nome_equipamento || 'N/A' }}</span>
+          </div>
+
+          <div class="card__right">
+            <span class="card__span card__span--qty">{{ equipData.quantidade || 'N/A' }} UN</span>
+            <span class="card__span card__span--price">R$ {{ equipData.valor || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (isMenuOpen) {
+    <div class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="title title--bg">Menu</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          @if (this.selectedItem.status === 'NOVO') {
+          <div class="modal__group modal__group--full">
+            <button type="button" (click)="openActive()" class="btn btn--menu">
+              Ativar Locação
+            </button>
+          </div>
+          } @else if (this.selectedItem.status === 'DEVOLVIDO') {
+          <div class="modal__group">
+            <button type="button" (click)="openRenew()" class="btn btn--menu">
+              Renovar Locação
+            </button>
+          </div>
+          <div class="modal__group">
+            <button type="button" (click)="onHistory()" class="btn btn--menu">
+              Ver Histórico
+            </button>
+          </div>
+          } @else {
+          <div class="modal__group">
+            <button type="button" (click)="openRenew()" class="btn btn--menu">
+              Renovar Locação
+            </button>
+          </div>
+          <div class="modal__group">
+            <button type="button" (click)="onArchive()" class="btn btn--menu">
+              Devolver Locação
+            </button>
+          </div>
+          <div class="modal__group modal__group--full">
+            <button type="button" (click)="onHistory()" class="btn btn--menu">
+              Ver Histórico
+            </button>
+          </div>
+          }
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="closeModal()" class="btn btn--orange">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Sair
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+
+    @if(isActiveOpen) {
+    <form [formGroup]="activeForm" (ngSubmit)="onActive()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="title title--bg">Ativar Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group modal__group--full">
+            <label class="title title--sm">Número do Contrato *</label>
+            <input type="text" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="input input__modal" readonly>
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">ID *</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o idmov" class="input input__modal">
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">Ordem de Compra *</label>
+            <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
+              class="input input__modal">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--orange">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--orange">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Ativar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if(isRenewOpen) {
+    <form [formGroup]="renewForm" (ngSubmit)="onRenew()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="title title--bg">Renovar Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="title title--sm">ID Atual *</label>
+            <input type="number" formControlName="idmov_atual" placeholder="Insira o id atual"
+              class="input input__modal" readonly>
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">Número do Contrato *</label>
+            <input type="text" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="input input__modal" readonly>
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">ID Novo *</label>
+            <input type="number" formControlName="idmov_novo" placeholder="Insira o id novo" class="input input__modal">
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">Ordem de Compra *</label>
+            <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
+              class="input input__modal">
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <label class="title title--sm">Início do Contrato *</label>
+            <input type="date" formControlName="data_inicial" class="input input__modal">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--orange">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--orange">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Renovar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if(isRegisterOpen) {
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="title title--bg">Cadastrar Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="title title--sm">ID do Contrato*</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o idmov" class="input input__modal">
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">Número do Contrato *</label>
+            <input type="text" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="input input__modal">
+          </div>
+
+          <div class="modal__group modal__group--full">
+            <label class="modal__upload">
+
+              @if (uploadedFile) {
+              <span class="title title--sm">
+                {{ uploadedFile.name }}
+              </span>
+              } @else {
+              <mat-icon class="modal__icon">
+                cloud_upload
+              </mat-icon>
+
+              <span class="title title--sm">
+                Anexar Contrato
+              </span>
+              }
+
+              <input type="file" accept="image/*" (change)="onFileChange($event)"
+                class="input input--none">
+            </label>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--orange">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--orange">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Cadastrar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if (isLoading) {
+    <div class="loading">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+    }
+
+    @if (isEmpty) {
+    <div class="empty">
+      <mat-icon class="icon icon--bg">wrong_location</mat-icon>
+      <h2 class="subtitle subtitle--bg">Nenhum contrato foi encontrado</h2>
+    </div>
+    }
+  </div>
+</div>
