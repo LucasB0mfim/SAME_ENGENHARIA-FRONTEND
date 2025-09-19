@@ -7,8 +7,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { TitleService } from '../../../../core/services/title.service';
-import { DashboardService } from '../../../../core/services/dashboard.service';
 import { EquipmentRentalService } from '../../../../core/services/equipment-rental.service';
+import { DashboardService } from '../../../../core/services/dashboard.service';
 
 interface status {
   'NOVO': number;
@@ -32,11 +32,12 @@ type statusKey = keyof status;
   styleUrl: './test.component.scss'
 })
 export class TestComponent implements OnInit {
-
+// ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
-  private _userService = inject(DashboardService);
   private _equipamentService = inject(EquipmentRentalService);
+  private _userService = inject(DashboardService);
 
+  // ========== FORMULÁRIOS ========== //
   registerForm: FormGroup = new FormGroup({
     numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
     idmov: new FormControl('', [Validators.required, Validators.min(10000)])
@@ -56,16 +57,34 @@ export class TestComponent implements OnInit {
     data_inicial: new FormControl('', Validators.required),
   });
 
+  archiveForm: FormGroup = new FormGroup({
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
+  });
+
+  historyForm: FormGroup = new FormGroup({
+    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
+  });
+
+  // ========== ESTADOS ========== //
   items: any[] = [];
-  filteredItem: any[] = [];
-  selectedItem: any = [];
+  rawItems: any[] = [];
+  compressItems: any[] = [];
+
+  groupItems: any[] = [];
+  filteredItems: any[] = [];
 
   userInfo: any = null;
+
   costCenters: any = null;
+
+  compress: boolean = false;
+  expand: boolean = true;
 
   selectedStatus: statusKey = 'ATIVO';
   status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0 };
 
+  isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
   isProcessing: boolean = false;
@@ -73,7 +92,10 @@ export class TestComponent implements OnInit {
   isMenuOpen: boolean = false;
   isRegisterOpen: boolean = false;
   isActiveOpen: boolean = false;
+  isArchiveOpen: boolean = false;
   isRenewOpen: boolean = false;
+  isHistoryOpen: boolean = false;
+  isHistory: boolean = false;
 
   uploadedFile: File | null = null;
   compressedFile: File | null = null;
@@ -85,15 +107,18 @@ export class TestComponent implements OnInit {
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
+  // ===== CONFIGURAÇÕES FIXAS DE COMPRESSÃO ===== //
   private readonly MAX_WIDTH = 800;
   private readonly MAX_HEIGHT = 600;
   private readonly QUALITY = 0.3;
 
+  // ========== HOOK ========== //
   ngOnInit(): void {
     this.loadInitial();
     this._titleService.setTitle('Locação');
   }
 
+  // ========== LOADING INICIAL OTIMIZADO ========== //
   loadInitial(): void {
     this.items = [];
     this.isEmpty = false;
@@ -115,10 +140,14 @@ export class TestComponent implements OnInit {
             this.status[status] = data.length;
           });
 
-          this.items = res[1]?.result || [];
-          this.filteredItem = [...this.items];
+          this.rawItems = res[1]?.result || [];
+          this.filteredItems = this.convertJson(this.rawItems);
+          this.items = [...this.filteredItems];
 
-          this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
+          this.compressItems = res[1]?.result || [];
+
+          this.costCenters = [...new Set(this.filteredItems.map((item) => item.centro_custo))];
+
           this.isEmpty = this.items.length === 0;
 
           this.applyFilters();
@@ -130,6 +159,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== BUSCAR CONTRATO POR STATUS ========== //
   getByStatus(status: string): void {
     const statusKey = status as statusKey;
     this.selectedStatus = statusKey;
@@ -142,9 +172,15 @@ export class TestComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res) => {
-          this.items = res.result || [];
-          this.filteredItem = [...this.items];
-          this.status[statusKey] = this.items.length;
+          const data = res.result || [];
+
+          this.rawItems = data;
+          this.filteredItems = this.convertJson(this.rawItems);
+
+          this.items = [...this.filteredItems];
+          this.compressItems = data;
+
+          this.status[statusKey] = data.length;
           this.isEmpty = this.items.length === 0;
         },
         error: (err) => {
@@ -155,6 +191,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== BUSCAR DADOS DO USUÁRIO ========== //
   getUser(): void {
     this._userService.findAll().subscribe({
       next: (res) => {
@@ -167,43 +204,7 @@ export class TestComponent implements OnInit {
     });
   }
 
-  updateCountersAndCurrentList(): void {
-    this.items = [];
-    this.isEmpty = false;
-    this.isLoading = true;
-
-    const statusList: statusKey[] = ['NOVO', 'ATIVO', 'VENCIDO', 'DEVOLVIDO'];
-
-    const requests = statusList.map(status =>
-      this._equipamentService.findByStatus(status)
-    );
-
-    forkJoin(requests)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (res) => {
-          statusList.forEach((status: statusKey, index: number) => {
-            const data = res[index]?.result || [];
-            this.status[status] = data.length;
-          });
-
-          const currentStatusIndex = statusList.indexOf(this.selectedStatus);
-          this.items = res[currentStatusIndex]?.result || [];
-          this.filteredItem = [...this.items];
-
-          this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
-          this.isEmpty = this.items.length === 0;
-
-          this.applyFilters();
-        },
-        error: (err) => {
-          this.isEmpty = true;
-          console.error('Não foi possível buscar os contratos:', err);
-        }
-      });
-  }
-
-
+  // ========== REGISTRAR CONTRATO ========== //
   onRegister(): void {
     this.isProcessing = true;
 
@@ -225,9 +226,9 @@ export class TestComponent implements OnInit {
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
-          this.isRegisterOpen = false;
-          this.updateCountersAndCurrentList();
+          this.loadInitial();
           this.setMessage(res.message, 'success');
+          this.isRegisterOpen = false;
 
           this.registerForm.reset({
             idmov: '',
@@ -241,6 +242,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== REGISTRAR CONTRATO ========== //
   onActive(): void {
     this.isProcessing = true;
 
@@ -254,10 +256,9 @@ export class TestComponent implements OnInit {
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
+          this.loadInitial();
           this.isActiveOpen = false;
-          this.updateCountersAndCurrentList();
           this.setMessage(res.message, 'success');
-
           this.activeForm.reset({
             numero_contrato: '',
             idmov: '',
@@ -271,6 +272,7 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== RENOVAR CONTRATO ========== //
   onRenew(): void {
     this.isProcessing = true;
 
@@ -286,8 +288,8 @@ export class TestComponent implements OnInit {
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
+          this.loadInitial();
           this.isRenewOpen = false;
-          this.updateCountersAndCurrentList();
           this.setMessage(res.message, 'success');
 
           this.renewForm.reset({
@@ -305,109 +307,139 @@ export class TestComponent implements OnInit {
       });
   }
 
+  // ========== DEVOLVER CONTRATO ========== //
   onArchive(): void {
     this.isProcessing = true;
 
-    const request = {
-      idmov: this.selectedItem.idmov,
-      numero_contrato: this.selectedItem.numero_contrato
-    }
+    const idmov = this.archiveForm.value.idmov;
+    this._equipamentService.archive(idmov)
+      .pipe(finalize(() => this.isProcessing = false))
+      .subscribe({
+        next: (res) => {
+          this.loadInitial();
+          this.isArchiveOpen = false;
+          this.setMessage(res.message, 'success');
 
-    this._equipamentService.archive(request)
-    .pipe(finalize(() => this.isProcessing = false))
-    .subscribe({
-      next: (res) => {
-        this.isMenuOpen = false;
-        this.updateCountersAndCurrentList();
-        this.setMessage(res.message, 'success');
-      },
-      error: (err) => {
-        this.setMessage(err.error.message, 'error');
-        console.error('Erro ao atualizar contrato: ', err);
-      }
-    });
+          this.archiveForm.reset({
+            idmov: '',
+            numero_contrato: ''
+          });
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
   }
 
-  onHistory(): void {
-    this.isProcessing = true;
+  // ========== BUSCAR HISTÓRICO DO CONTRATO ========== //
+  onHistory(numeroContrato?: number): void {
 
-    const numero_contrato = this.selectedItem.numero_contrato;
+    const numero_contrato = this.historyForm.value.numero_contrato || numeroContrato
 
     this._equipamentService.findByContract(numero_contrato)
-    .pipe(finalize(() => this.isProcessing = false))
-    .subscribe({
-      next: (res) => {
-        this.items = res.result;
-        this.isMenuOpen = false;
-        this.setMessage(res.message, 'success');
-      },
-      error: (err) => {
-        this.setMessage(err.error.message, 'error');
-        console.error('Erro ao atualizar contrato: ', err);
-      }
-    });
+      .subscribe({
+        next: (res) => {
+          this.isHistory = true;
+          this.isHistoryOpen = false;
+
+          this.rawItems = res.result;
+          this.groupItems = [...this.rawItems];
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error');
+          console.error('Erro ao atualizar contrato: ', err);
+        }
+      });
   }
 
+  onCompress(): void {
+    this.compress = true;
+    this.expand = false;
+  }
 
-  openMenu(item: any): void {
-    this.selectedItem = item;
+  onExpand(): void {
+    this.compress = false;
+    this.expand = true;
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openMenu(): void {
     this.isMenuOpen = true;
   }
 
+  // ========== RETORNAR AO MENU ========== //
   returnMenu(): void {
+    this.isArchiveOpen = false;
     this.isActiveOpen = false;
+    this.isHistoryOpen = false;
     this.isRenewOpen = false;
     this.isRegisterOpen = false;
     this.isMenuOpen = true;
   }
 
+  // ========== ABRIR MODAL ========== //
+  openActive(): void {
+    this.isMenuOpen = false;
+    this.isActiveOpen = true;
+  }
+
+  // ========== ABRIR MODAL ========== //
   openRegister(): void {
     this.isMenuOpen = false;
     this.isRegisterOpen = true;
     this.getUser();
   }
 
-  openActive(): void {
-    this.isMenuOpen = false;
-    this.isActiveOpen = true;
-
-    this.activeForm.patchValue({
-      numero_contrato: this.selectedItem.numero_contrato
-    })
-  }
-
+  // ========== ABRIR MODAL ========== //
   openRenew(): void {
     this.isMenuOpen = false;
     this.isRenewOpen = true;
-
-    this.renewForm.patchValue({
-      idmov_atual: this.selectedItem.idmov,
-      numero_contrato: this.selectedItem.numero_contrato
-    });
   }
 
+  // ========== ABRIR MODAL ========== //
+  openArchive(): void {
+    this.isMenuOpen = false;
+    this.isArchiveOpen = true;
+  }
+
+  // ========== ABRIR MODAL ========== //
+  openHistory(): void {
+    this.isMenuOpen = false;
+    this.isHistoryOpen = true;
+  }
+
+  showHistory(item: any): void {
+    this.onHistory(item.numero_contrato);
+  }
+
+  // ========== FECHAR MODAL ========== //
   closeModal(): void {
     this.isMenuOpen = false;
     this.isActiveOpen = false;
     this.isRenewOpen = false;
+    this.isArchiveOpen = false;
+    this.isHistoryOpen = false;
     this.isRegisterOpen = false;
+    this.isHistory = false;
+
   }
 
-
+  // ========== FILTROS ========== //
   applyFilters() {
-    let data = [...this.filteredItem];
+    let data = [...this.filteredItems];
 
     if (this.idmov) {
       const inputValue = this.idmov.trim();
       data = data.filter(item =>
-        item.idmov && item.idmov.toString().includes(inputValue)
+        item.contrato.idmov && item.contrato.idmov.toString().includes(inputValue)
       );
     }
 
     if (this.costCenter && this.costCenter !== 'GERAL') {
       const inputValue = this.costCenter;
       data = data.filter(item =>
-        item.contrato_base.centro_custo && item.contrato_base.centro_custo.includes(inputValue)
+        item.centro_custo && item.centro_custo.includes(inputValue)
       );
     }
 
@@ -415,6 +447,7 @@ export class TestComponent implements OnInit {
     this.isEmpty = this.items.length === 0;
   }
 
+  // ========== MENSAGEM DINAMICA ========== //
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
     this.messageType = type;
@@ -426,23 +459,51 @@ export class TestComponent implements OnInit {
     }, 3000);
   }
 
-
+  // ========== FORMATAR DATA ========== //
   formateDate(date: string): string {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   }
 
+  // ========== CONVERTER PARA MAIUSCULO ========== //
   upperCase(string: string): string {
     return string.trim().toUpperCase();
   }
 
+  // ========== CONVERTER JSON ========== //
+  convertJson(data: any[]): any[] {
+    return data.flatMap(item => {
+      return item.contrato_base.contrato_itens.map((equip: any) => ({
+        ...equip,
+        centro_custo: item.contrato_base.centro_custo,
+        movimento: item.contrato_base.movimento,
+        criador: item.contrato_base.criador,
+        unidade: item.contrato_base.unidade,
+        foto_equipamento: item.contrato_base.foto_equipamento,
+        fornecedor: item.contrato_base.fornecedor,
+        contrato: {
+          contrato_id: item.contrato_id,
+          numero_contrato: item.numero_contrato,
+          periodo: item.periodo,
+          ordem_compra: item.ordem_compra,
+          idmov: item.idmov,
+          data_inicial: item.data_inicial,
+          data_final: item.data_final,
+          valor: item.valor,
+          status: item.status
+        }
+      }));
+    });
+  }
 
+  // ===== CAPTURAR E COMPRIMIR IMAGEM ===== //
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       this.uploadedFile = input.files[0];
 
+      // Comprimir a imagem automaticamente
       this.compressImage(this.uploadedFile)
         .then(compressedFile => {
           this.compressedFile = compressedFile;
@@ -450,12 +511,14 @@ export class TestComponent implements OnInit {
         })
         .catch(error => {
           console.error('Erro ao comprimir imagem:', error);
+          // Em caso de erro na compressão, usa a imagem original
           this.compressedFile = null;
         });
     }
   }
 
-  compressImage(file: File): Promise<File> {
+  // ===== FUNÇÃO SIMPLES DE COMPRESSÃO DE IMAGEM ===== //
+  private compressImage(file: File): Promise<File> {
     return new Promise((resolve, reject) => {
       if (!file.type.startsWith('image/')) {
         reject(new Error('Arquivo não é uma imagem'));
@@ -467,13 +530,17 @@ export class TestComponent implements OnInit {
       const img = new Image();
 
       img.onload = () => {
+        // Calcula as novas dimensões mantendo a proporção
         let { width, height } = this.calculateNewDimensions(img.width, img.height);
 
+        // Define o tamanho do canvas
         canvas.width = width;
         canvas.height = height;
 
+        // Desenha a imagem redimensionada no canvas
         ctx!.drawImage(img, 0, 0, width, height);
 
+        // Converte para JPEG com qualidade baixa
         canvas.toBlob(
           (blob) => {
             if (blob) {
@@ -503,10 +570,12 @@ export class TestComponent implements OnInit {
     });
   }
 
-  calculateNewDimensions(originalWidth: number, originalHeight: number): { width: number, height: number } {
+  // ===== CALCULAR NOVAS DIMENSÕES ===== //
+  private calculateNewDimensions(originalWidth: number, originalHeight: number): { width: number, height: number } {
     let width = originalWidth;
     let height = originalHeight;
 
+    // Redimensiona se exceder os limites máximos
     if (width > this.MAX_WIDTH) {
       height = (height * this.MAX_WIDTH) / width;
       width = this.MAX_WIDTH;
