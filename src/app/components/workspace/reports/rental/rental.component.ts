@@ -371,7 +371,8 @@ export class RentalComponent implements OnInit {
     this.isActiveOpen = true;
 
     this.activeForm.patchValue({
-      numero_contrato: this.selectedItem.numero_contrato
+      numero_contrato: this.selectedItem.numero_contrato,
+      idmov: this.selectedItem.idmov,
     })
   }
 
