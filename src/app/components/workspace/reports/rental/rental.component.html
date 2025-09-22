@@ -54,6 +54,20 @@
         <mat-icon>add</mat-icon>
       </button>
     </div>
+
+    <div class="filter">
+      <button type="button" class="btn btn--orange" (click)="downloadSheet()">
+        @if (isProcessing) {
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        } @else {
+        <mat-icon>download</mat-icon>
+        }
+      </button>
+    </div>
   </div>
 
   <div class="container__card">
@@ -341,8 +355,7 @@
               </span>
               }
 
-              <input type="file" accept="image/*" (change)="onFileChange($event)"
-                class="input input--none">
+              <input type="file" accept="image/*" (change)="onFileChange($event)" class="input input--none">
             </label>
           </div>
         </div>

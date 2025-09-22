@@ -9,6 +9,8 @@ import { ReactiveFormsModule, FormsModule, FormGroup, Validators, FormControl } 
 import { TitleService } from '../../../../core/services/title.service';
 import { DashboardService } from '../../../../core/services/dashboard.service';
 import { EquipmentRentalService } from '../../../../core/services/equipment-rental.service';
+import { HttpResponse } from '@angular/common/http';
+import saveAs from 'file-saver';
 
 interface status {
   'NOVO': number;
@@ -347,6 +349,17 @@ export class RentalComponent implements OnInit {
       });
   }
 
+  downloadSheet() {
+    this.isProcessing = true;
+
+    this._equipamentService.donwloadSheet()
+      .pipe(finalize(() => this.isProcessing = false))
+      .subscribe((response: HttpResponse<Blob>) => {
+        const cd = response.headers.get('content-disposition');
+        const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'REGISTRO_DE_LOCAÇÕES.xlsx';
+        saveAs(response.body!, fileName);
+      });
+  }
 
   openMenu(item: any): void {
     this.selectedItem = item;

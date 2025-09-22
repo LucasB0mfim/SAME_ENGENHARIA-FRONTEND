@@ -10,6 +10,7 @@ import { GeneralComponent } from './components/workspace/general/general.compone
 import { BrkComponent } from './components/workspace/human-resources/brk/brk.component';
 import { ErrorFormComponent } from './components/forms/error-form/error-form.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { RentalComponent } from './components/workspace/reports/rental/rental.component';
 import { FinancialComponent } from './components/workspace/financial/financial.component';
 import { TaskComponent } from './components/workspace/human-resources/task/task.component';
 import { SuccessFormComponent } from './components/forms/success-form/success-form.component';
@@ -31,8 +32,6 @@ import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
-import { RentalComponent } from './components/workspace/reports/rental/rental.component';
-import { TestComponent } from './components/workspace/reports/test/test.component';
 
 export const routes: Routes = [
   {
@@ -88,7 +87,6 @@ export const routes: Routes = [
       { path: 'experience', component: ExperienceComponent },
       { path: 'tracking', component: TrackingComponent },
       { path: 'rental', component: RentalComponent },
-      { path: 'test', component: TestComponent },
       {
         path: 'human-resources',
         component: HumanResourcesComponent
