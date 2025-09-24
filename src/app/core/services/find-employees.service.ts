@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class FindEmployeesService {
   private readonly _htppClient = inject(HttpClient);
-  private readonly _apiUrl = 'https://sameengenharia.com.br/api/employees';
+  private readonly _apiUrl = 'https://sameengenharia.com.br/api/user/employees';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

@@ -9,7 +9,7 @@ import { IEmployeeResponse } from '../interfaces/employee-response.interface';
 })
 export class DashboardService {
   private readonly _httpClient = inject(HttpClient);
-  private readonly _apiUrl = 'https://sameengenharia.com.br/api/employee';
+  private readonly _apiUrl = 'https://sameengenharia.com.br/api/user';
 
   private _createHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

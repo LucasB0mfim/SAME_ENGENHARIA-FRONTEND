@@ -16,7 +16,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const _router = inject(Router);
   const headers = _createHeaders();
   const _httpClient = inject(HttpClient);
-  const _apiUrl = 'https://sameengenharia.com.br/api/auth/validate-token';
+  const _apiUrl = 'https://sameengenharia.com.br/api/user/auth-token';
 
   return _httpClient.post<IValidateTokenResponse>(_apiUrl, body, {headers}).pipe(
     map(response => {

@@ -21,7 +21,7 @@ export const tempTokenGuard: CanActivateFn = (route, state) => {
   });
 
   return _httpClient.post<any>(
-    'https://sameengenharia.com.br/api/auth/validate-token', {}, { headers }).pipe(
+    'https://sameengenharia.com.br/api/user/auth-token', {}, { headers }).pipe(
       map(response => {
         if (response.success) {
           return true;
