@@ -37,6 +37,10 @@
 .title {
   font-weight: 600;
   color: var(--text-color);
+  max-width: 350px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &--bg {
     font-size: clamp(1rem, 1.2vw, 1.3rem);
@@ -202,46 +206,16 @@
 }
 
 .card {
-  cursor: pointer;
   display: flex;
   border-radius: 4px;
   flex-direction: column;
   background: var(--secondary-color);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  }
-
-  &__header {
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    cursor: pointer;
-    align-items: center;
-    justify-content: space-between;
-    border-top-left-radius: 4px;
-    border-left: 5px solid var(--orange-color);
-  }
-
-  &__primary {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__top,
-  &__bottom {
-    gap: 8px;
-    display: flex;
-  }
 
   &__left,
   &__right {
+    gap: 8px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-width: 0;
   }
 
   &__secondary {
@@ -263,10 +237,20 @@
     border-top: 2px solid var(--primary-color);
   }
 
-  &__item {
+  &__cc {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+
+    gap: 12px;
+    padding: 20px;
+
+    border-radius: 8px;
+    background-color: var(--secondary-color);
+  }
+
+  &__fornecedor {
+    display: flex;
+    flex-direction: column;
 
     gap: 12px;
     padding: 12px 14px;
@@ -275,24 +259,38 @@
     background-color: var(--primary-color);
   }
 
+  &__locacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    gap: 12px;
+    padding: 12px 14px;
+
+    border-radius: 8px;
+    background-color: var(--secondary-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+  }
+
   &__icon {
     width: 36px;
     height: 36px;
 
     border-radius: 8px;
 
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid var(--orange-color);
 
     color: var(--orange-color);
     background: transparent;
-
-    &::before {
-      content: "🔧";
-      font-size: 16px;
-      line-height: 1;
-    }
   }
 
   &__span {
@@ -309,7 +307,7 @@
     color: var(--text-color);
 
     &--qty {
-      background-color: var(--secondary-color);
+      background-color: var(--primary-color);
     }
 
     &--price {
