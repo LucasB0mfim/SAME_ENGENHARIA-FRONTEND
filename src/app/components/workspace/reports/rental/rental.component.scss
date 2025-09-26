@@ -5,10 +5,13 @@
   grid-template-rows: auto 1fr;
 
   &__filter {
-    gap: 8px;
     width: 100%;
-    padding: 0 1.3vw 0 0.7vw;
+    height: auto;
+
     display: flex;
+
+    gap: 8px;
+    padding: 0.7vw;
 
     :nth-child(5) {
       margin-left: auto;
@@ -16,11 +19,17 @@
   }
 
   &__card {
-    gap: 20px;
+    width: 100%;
+    height: auto;
+
     display: flex;
-    overflow-y: auto;
-    padding: 0.7vw 1vw 2vw 0.7vw;
+    justify-content: start;
     flex-direction: column;
+
+    gap: 20px;
+
+    padding: 0.7vw;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
       width: 5px;
@@ -207,37 +216,27 @@
 
 .card {
   display: flex;
-  border-radius: 4px;
+  border-radius: 8px;
   flex-direction: column;
   background: var(--secondary-color);
 
-  &__left,
-  &__right {
-    gap: 8px;
+  &__header {
+    width: auto;
+    height: auto;
+
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+
+    &--details {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
   }
 
-  &__secondary {
-    gap: 8px;
-    display: flex;
-  }
+  &__group {
+    width: auto;
+    height: auto;
 
-  &__text {
-    gap: 8px;
-    display: flex;
-  }
-
-  &__body {
-    gap: 8px;
-    display: flex;
-    flex-direction: column;
-
-    padding: 16px 20px 20px;
-    border-top: 2px solid var(--primary-color);
-  }
-
-  &__cc {
     display: flex;
     flex-direction: column;
 
@@ -246,35 +245,47 @@
 
     border-radius: 8px;
     background-color: var(--secondary-color);
+
+    &--dark {
+      background-color: var(--primary-color);
+    }
+
+    &--click {
+      cursor: pointer;
+      transition: all ease 0.2s;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
   }
 
-  &__fornecedor {
-    display: flex;
-    flex-direction: column;
+  &__left {
+    width: auto;
+    height: auto;
 
-    gap: 12px;
-    padding: 12px 14px;
-
-    border-radius: 8px;
-    background-color: var(--primary-color);
-  }
-
-  &__locacao {
+    gap: 8px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
 
-    gap: 12px;
-    padding: 12px 14px;
+    &--details {
+      display: grid;
+      justify-content: start;
+      grid-template-columns: auto 1fr;
+    }
+  }
 
-    border-radius: 8px;
-    background-color: var(--secondary-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &__right {
+    width: auto;
+    height: auto;
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    gap: 8px;
+
+    &--details {
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      grid-template-columns: repeat(9, 1fr);
     }
   }
 
@@ -291,11 +302,16 @@
 
     color: var(--orange-color);
     background: transparent;
+
+    &--click {
+      cursor: pointer;
+    }
   }
 
   &__span {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
 
     gap: 4px;
     padding: 6px 10px;

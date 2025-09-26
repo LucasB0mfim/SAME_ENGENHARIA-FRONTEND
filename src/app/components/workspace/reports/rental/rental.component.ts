@@ -86,6 +86,8 @@ export class RentalComponent implements OnInit {
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
+  isBodyVisible: boolean[] = [];
+
   private readonly MAX_WIDTH = 800;
   private readonly MAX_HEIGHT = 600;
   private readonly QUALITY = 0.3;
@@ -531,5 +533,9 @@ export class RentalComponent implements OnInit {
     }
 
     return { width: Math.round(width), height: Math.round(height) };
+  }
+
+  toggleBodyVisibility(index: number): void {
+    this.isBodyVisible[index] = !this.isBodyVisible[index];
   }
 }
