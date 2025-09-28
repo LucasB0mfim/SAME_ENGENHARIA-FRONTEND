@@ -228,6 +228,7 @@
     justify-content: space-between;
 
     &--details {
+      gap: 12px;
       display: grid;
       grid-template-columns: 1fr auto;
     }
@@ -283,9 +284,15 @@
 
     &--details {
       display: grid;
+      direction: rtl;
+      justify-self: end;
       align-items: center;
       justify-content: center;
       grid-template-columns: repeat(9, 1fr);
+
+      & > * {
+        direction: ltr;
+      }
     }
   }
 

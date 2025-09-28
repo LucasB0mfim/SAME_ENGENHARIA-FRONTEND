@@ -37,7 +37,7 @@ export class LoginComponent {
 
     const request = {
       email: this.loginForm.value.email,
-      password: this.loginForm.value.senha
+      senha: this.loginForm.value.senha
     }
 
     this._loginService.login(request)

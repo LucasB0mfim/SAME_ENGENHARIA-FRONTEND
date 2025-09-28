@@ -44,8 +44,7 @@ export class RentalComponent implements OnInit {
   });
 
   activeForm: FormGroup = new FormGroup({
-    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
+    locacao_id: new FormControl('', [Validators.required, Validators.min(10000)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
   });
 
@@ -55,6 +54,11 @@ export class RentalComponent implements OnInit {
     numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
     data_inicial: new FormControl('', Validators.required),
+  });
+
+  archiveForm: FormGroup = new FormGroup({
+    produto_id: new FormControl('', [Validators.required, Validators.min(10000)]),
+    data_final: new FormControl('', Validators.required),
   });
 
   items: any[] = [];
@@ -75,11 +79,11 @@ export class RentalComponent implements OnInit {
   isRegisterOpen: boolean = false;
   isActiveOpen: boolean = false;
   isRenewOpen: boolean = false;
+  isArchiveOpen: boolean = false;
 
   uploadedFile: File | null = null;
   compressedFile: File | null = null;
 
-  idmov: string = '';
   costCenter: string = 'GERAL';
 
   message: string = '';
@@ -121,7 +125,7 @@ export class RentalComponent implements OnInit {
           this.items = res[1]?.result || [];
           this.filteredItem = [...this.items];
 
-          this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
+          // this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
           this.isEmpty = this.items.length === 0;
 
           this.applyFilters();
@@ -194,7 +198,7 @@ export class RentalComponent implements OnInit {
           this.items = res[currentStatusIndex]?.result || [];
           this.filteredItem = [...this.items];
 
-          this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
+          // this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
           this.isEmpty = this.items.length === 0;
 
           this.applyFilters();
@@ -248,8 +252,7 @@ export class RentalComponent implements OnInit {
     this.isProcessing = true;
 
     const request = {
-      idmov: this.activeForm.value.idmov,
-      numero_contrato: this.activeForm.value.numero_contrato,
+      locacao_id: this.activeForm.value.locacao_id,
       ordem_compra: this.activeForm.value.ordem_compra
     }
 
@@ -312,17 +315,18 @@ export class RentalComponent implements OnInit {
     this.isProcessing = true;
 
     const request = {
-      idmov: this.selectedItem.idmov,
-      numero_contrato: this.selectedItem.numero_contrato
+      produto_id: this.archiveForm.value.produto_id,
+      data_final: this.archiveForm.value.data_final
     }
 
     this._equipamentService.archive(request)
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe({
         next: (res) => {
-          this.isMenuOpen = false;
+          this.isArchiveOpen = false;
           this.updateCountersAndCurrentList();
           this.setMessage(res.message, 'success');
+          this.archiveForm.patchValue({ data_final: '' });
         },
         error: (err) => {
           this.setMessage(err.error.message, 'error');
@@ -363,15 +367,18 @@ export class RentalComponent implements OnInit {
       });
   }
 
+
   openMenu(item: any): void {
     this.selectedItem = item;
     this.isMenuOpen = true;
+    console.log(item)
   }
 
   returnMenu(): void {
     this.isActiveOpen = false;
     this.isRenewOpen = false;
     this.isRegisterOpen = false;
+    this.isArchiveOpen = false;
     this.isMenuOpen = true;
   }
 
@@ -386,8 +393,7 @@ export class RentalComponent implements OnInit {
     this.isActiveOpen = true;
 
     this.activeForm.patchValue({
-      numero_contrato: this.selectedItem.numero_contrato,
-      idmov: this.selectedItem.idmov,
+      locacao_id: this.selectedItem.locacao_id,
     })
   }
 
@@ -401,23 +407,26 @@ export class RentalComponent implements OnInit {
     });
   }
 
+  openArchive(): void {
+    this.isMenuOpen = false;
+    this.isArchiveOpen = true;
+
+    this.archiveForm.patchValue({
+      produto_id: this.selectedItem.produto_id
+    });
+  }
+
   closeModal(): void {
     this.isMenuOpen = false;
     this.isActiveOpen = false;
     this.isRenewOpen = false;
     this.isRegisterOpen = false;
+    this.isArchiveOpen = false;
   }
 
 
   applyFilters() {
     let data = [...this.filteredItem];
-
-    if (this.idmov) {
-      const inputValue = this.idmov.trim();
-      data = data.filter(item =>
-        item.idmov && item.idmov.toString().includes(inputValue)
-      );
-    }
 
     if (this.costCenter && this.costCenter !== 'GERAL') {
       const inputValue = this.costCenter;

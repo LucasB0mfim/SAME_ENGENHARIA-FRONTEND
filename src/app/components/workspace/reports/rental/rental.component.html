@@ -38,11 +38,6 @@
     </div>
 
     <div class="filter">
-      <input type="text" placeholder="Pesquisar" [(ngModel)]="idmov" (input)="applyFilters()"
-        class="input input__default">
-    </div>
-
-    <div class="filter">
       <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input__default">
         <option value="GERAL">Geral</option>
         <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
@@ -89,27 +84,32 @@
         <div class="card__group card__group--dark" *ngFor="let locacao of item.locacoes">
           <div class="card__header">
             <div class="card__left">
-              <mat-icon class="card__icon">factory</mat-icon>
-              <span class="title title--md">{{ locacao.fornecedor || 'N/A' }}</span>
+              <mat-icon class="card__icon">{{ locacao.fornecedor ? 'factory' : 'assignment_add' }}</mat-icon>
+              <span class="title title--md">{{ locacao.fornecedor || 'EQUIPAMENTOS SEM ATIVAÇÃO' }}</span>
             </div>
           </div>
 
-          <div class="card__group card__group--click" *ngFor="let items of locacao.itens_locacao">
+          <div class="card__group card__group--click" *ngFor="let items of locacao.itens_locacao"
+            (click)="openMenu(items)">
             <div class="card__header card__header--details">
               <div class="card__left card__left--details">
                 <mat-icon class="card__icon">construction</mat-icon>
                 <span class="title title--md">{{ items.nome_equipamento || 'N/A' }}</span>
               </div>
               <div class="card__right card__right--details" *ngFor="let contract of locacao.contratos">
-                <span class="card__span card__span--qty">ID {{ contract.idmov || 'N/A' }}</span>
-                <span class="card__span card__span--qty">OC {{ contract.ordem_compra || 'N/A' }}</span>
-                <span class="card__span card__span--qty">{{ formateDate(items.data_inicial) || 'N/A' }}</span>
-                <span class="card__span card__span--qty">{{ formateDate(items.data_final) || 'N/A' }}</span>
-                <span class="card__span card__span--qty">NC {{ items.numero_contrato || 'N/A' }}</span>
-                <span class="card__span card__span--qty">{{ upperCase(items.unidade) || 'N/A' }}</span>
-                <span class="card__span card__span--price">PR {{ contract.periodo || 'N/A' }}</span>
+                @if (items.valor) {
+                <span class="card__span card__span--price">R$ {{ items.valor }}</span>
+                }
                 <span class="card__span card__span--price">{{ items.quantidade || 'N/A' }} UN</span>
-                <span class="card__span card__span--price">R$ {{ items.valor || 'N/A' }}</span>
+                <span class="card__span card__span--price">PR {{ contract.periodo || 'N/A' }}</span>
+                <span class="card__span card__span--qty">{{ upperCase(items.unidade) || 'N/A' }}</span>
+                <span class="card__span card__span--qty">{{ formateDate(items.data_final) || 'N/A' }}</span>
+                <span class="card__span card__span--qty">{{ formateDate(items.data_inicial) || 'N/A' }}</span>
+                <span class="card__span card__span--qty">NC {{ items.numero_contrato || 'N/A' }}</span>
+                @if (contract.ordem_compra) {
+                  <span class="card__span card__span--qty">OC {{ contract.ordem_compra }}</span>
+                }
+                <span class="card__span card__span--qty">ID {{ contract.idmov || 'N/A' }}</span>
               </div>
             </div>
 
@@ -152,7 +152,7 @@
             </button>
           </div>
           <div class="modal__group">
-            <button type="button" (click)="onArchive()" class="btn btn--menu">
+            <button type="button" (click)="openArchive()" class="btn btn--menu">
               Devolver Locação
             </button>
           </div>
@@ -190,19 +190,13 @@
         </div>
 
         <div class="modal__content">
-          <div class="modal__group modal__group--full">
-            <label class="title title--sm">Número do Contrato *</label>
-            <input type="text" formControlName="numero_contrato" placeholder="Insira o número do contrato"
-              class="input input__modal" readonly>
+          <div class="modal__group">
+            <label class="title title--sm">Id da locação *</label>
+            <input type="number" formControlName="locacao_id" class="input input__modal" readonly>
           </div>
 
           <div class="modal__group">
-            <label class="title title--sm">ID *</label>
-            <input type="number" formControlName="idmov" placeholder="Insira o id" class="input input__modal">
-          </div>
-
-          <div class="modal__group">
-            <label class="title title--sm">Ordem de Compra *</label>
+            <label class="title title--sm">Ordem de compra *</label>
             <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
               class="input input__modal">
           </div>
@@ -281,6 +275,48 @@
             </div>
             } @else {
             Renovar
+            }
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+
+    @if(isArchiveOpen) {
+    <form [formGroup]="archiveForm" (ngSubmit)="onArchive()" class="modal__backdrop">
+      <div class="modal__container">
+        <div class="modal__header">
+          <h2 class="title title--bg">Devolver Locação</h2>
+          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+        </div>
+
+        <div class="modal__content">
+          <div class="modal__group">
+            <label class="title title--sm">Id do produto *</label>
+            <input type="number" formControlName="produto_id" placeholder="Insira o id" class="input input__modal"
+              readonly>
+          </div>
+
+          <div class="modal__group">
+            <label class="title title--sm">Data da entrega *</label>
+            <input type="date" formControlName="data_final" class="input input__modal">
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" (click)="returnMenu()" class="btn btn--orange">
+            Voltar
+          </button>
+
+          <button type="submit" class="btn btn--orange">
+            @if (isProcessing) {
+            <div class="loading-dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            } @else {
+            Devolver
             }
           </button>
         </div>
