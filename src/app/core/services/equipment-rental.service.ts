@@ -36,7 +36,7 @@ export class EquipmentRentalService {
 
   renew(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('https://sameengenharia.com.br/api/equipment-rental/renew', request, { headers });
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/equipment-rental/renew', request, { headers });
   }
 
   archive(request: any): Observable<any> {

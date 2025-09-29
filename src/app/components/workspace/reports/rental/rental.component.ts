@@ -49,11 +49,10 @@ export class RentalComponent implements OnInit {
   });
 
   renewForm: FormGroup = new FormGroup({
+    locacao_id: new FormControl('', [Validators.required, Validators.min(10000)]),
     idmov_atual: new FormControl('', [Validators.required, Validators.min(10000)]),
     idmov_novo: new FormControl('', [Validators.required, Validators.min(10000)]),
-    numero_contrato: new FormControl('', [Validators.required, Validators.minLength(4)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
-    data_inicial: new FormControl('', Validators.required),
   });
 
   archiveForm: FormGroup = new FormGroup({
@@ -281,11 +280,10 @@ export class RentalComponent implements OnInit {
     this.isProcessing = true;
 
     const request = {
+      locacao_id: this.renewForm.value.locacao_id,
       idmov_atual: this.renewForm.value.idmov_atual,
       idmov_novo: this.renewForm.value.idmov_novo,
-      numero_contrato: this.renewForm.value.numero_contrato,
       ordem_compra: this.renewForm.value.ordem_compra,
-      data_inicial: this.renewForm.value.data_inicial,
     }
 
     this._equipamentService.renew(request)
@@ -402,8 +400,8 @@ export class RentalComponent implements OnInit {
     this.isRenewOpen = true;
 
     this.renewForm.patchValue({
+      locacao_id: this.selectedItem.locacao_id,
       idmov_atual: this.selectedItem.idmov,
-      numero_contrato: this.selectedItem.numero_contrato
     });
   }
 

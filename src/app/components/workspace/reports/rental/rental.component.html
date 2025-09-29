@@ -107,7 +107,7 @@
                 <span class="card__span card__span--qty">{{ formateDate(items.data_inicial) || 'N/A' }}</span>
                 <span class="card__span card__span--qty">NC {{ items.numero_contrato || 'N/A' }}</span>
                 @if (contract.ordem_compra) {
-                  <span class="card__span card__span--qty">OC {{ contract.ordem_compra }}</span>
+                <span class="card__span card__span--qty">OC {{ contract.ordem_compra }}</span>
                 }
                 <span class="card__span card__span--qty">ID {{ contract.idmov || 'N/A' }}</span>
               </div>
@@ -233,19 +233,19 @@
 
         <div class="modal__content">
           <div class="modal__group">
-            <label class="title title--sm">ID Atual *</label>
-            <input type="number" formControlName="idmov_atual" placeholder="Insira o id atual"
+            <label class="title title--sm">Id da locação *</label>
+            <input type="text" formControlName="locacao_id" placeholder="Insira o número do contrato"
               class="input input__modal" readonly>
           </div>
 
           <div class="modal__group">
-            <label class="title title--sm">Número do Contrato *</label>
-            <input type="text" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+            <label class="title title--sm">Idmov atual *</label>
+            <input type="text" formControlName="idmov_atual" placeholder="Insira o número do contrato"
               class="input input__modal" readonly>
           </div>
 
           <div class="modal__group">
-            <label class="title title--sm">ID Novo *</label>
+            <label class="title title--sm">Idmov novo *</label>
             <input type="number" formControlName="idmov_novo" placeholder="Insira o id novo" class="input input__modal">
           </div>
 
@@ -253,11 +253,6 @@
             <label class="title title--sm">Ordem de Compra *</label>
             <input type="number" formControlName="ordem_compra" placeholder="Insira a ordem de compra"
               class="input input__modal">
-          </div>
-
-          <div class="modal__group modal__group--full">
-            <label class="title title--sm">Início do Contrato *</label>
-            <input type="date" formControlName="data_inicial" class="input input__modal">
           </div>
         </div>
 
