@@ -13,10 +13,10 @@ import { HttpResponse } from '@angular/common/http';
 import saveAs from 'file-saver';
 
 interface status {
-  'NOVO': number;
-  'ATIVO': number;
-  'VENCIDO': number;
-  'DEVOLVIDO': number;
+  '0': number;
+  '1': number;
+  '3': number;
+  '4': number;
 }
 
 type statusKey = keyof status;
@@ -50,6 +50,7 @@ export class RentalComponent implements OnInit {
 
   renewForm: FormGroup = new FormGroup({
     locacao_id: new FormControl('', [Validators.required, Validators.min(10000)]),
+    numero_contrato: new FormControl('', [Validators.required, Validators.min(10000)]),
     idmov_atual: new FormControl('', [Validators.required, Validators.min(10000)]),
     idmov_novo: new FormControl('', [Validators.required, Validators.min(10000)]),
     ordem_compra: new FormControl('', [Validators.required, Validators.min(1000)]),
@@ -57,6 +58,7 @@ export class RentalComponent implements OnInit {
 
   archiveForm: FormGroup = new FormGroup({
     produto_id: new FormControl('', [Validators.required, Validators.min(10000)]),
+    idmov: new FormControl('', [Validators.required, Validators.min(10000)]),
     data_final: new FormControl('', Validators.required),
   });
 
@@ -67,8 +69,8 @@ export class RentalComponent implements OnInit {
   userInfo: any = null;
   costCenters: any = null;
 
-  selectedStatus: statusKey = 'ATIVO';
-  status: status = { 'NOVO': 0, 'ATIVO': 0, 'VENCIDO': 0, 'DEVOLVIDO': 0 };
+  selectedStatus: statusKey = '1';
+  status: status = { '0': 0, '1': 0, '3': 0, '4': 0 };
 
   isEmpty: boolean = false;
   isLoading: boolean = false;
@@ -105,7 +107,7 @@ export class RentalComponent implements OnInit {
     this.isEmpty = false;
     this.isLoading = true;
 
-    const statusList: statusKey[] = ['NOVO', 'ATIVO', 'VENCIDO', 'DEVOLVIDO'];
+    const statusList: statusKey[] = ['0', '1', '3', '4'];
 
     const requests = statusList.map(status =>
       this._equipamentService.findByStatus(status)
@@ -178,7 +180,7 @@ export class RentalComponent implements OnInit {
     this.isEmpty = false;
     this.isLoading = true;
 
-    const statusList: statusKey[] = ['NOVO', 'ATIVO', 'VENCIDO', 'DEVOLVIDO'];
+    const statusList: statusKey[] = ['0', '1', '3', '4'];
 
     const requests = statusList.map(status =>
       this._equipamentService.findByStatus(status)
@@ -281,6 +283,7 @@ export class RentalComponent implements OnInit {
 
     const request = {
       locacao_id: this.renewForm.value.locacao_id,
+      numero_contrato: this.renewForm.value.numero_contrato,
       idmov_atual: this.renewForm.value.idmov_atual,
       idmov_novo: this.renewForm.value.idmov_novo,
       ordem_compra: this.renewForm.value.ordem_compra,
@@ -314,6 +317,7 @@ export class RentalComponent implements OnInit {
 
     const request = {
       produto_id: this.archiveForm.value.produto_id,
+      idmov: this.archiveForm.value.idmov,
       data_final: this.archiveForm.value.data_final
     }
 
@@ -401,6 +405,7 @@ export class RentalComponent implements OnInit {
 
     this.renewForm.patchValue({
       locacao_id: this.selectedItem.locacao_id,
+      numero_contrato: this.selectedItem.numero_contrato,
       idmov_atual: this.selectedItem.idmov,
     });
   }
@@ -410,7 +415,8 @@ export class RentalComponent implements OnInit {
     this.isArchiveOpen = true;
 
     this.archiveForm.patchValue({
-      produto_id: this.selectedItem.produto_id
+      produto_id: this.selectedItem.produto_id,
+      idmov: this.selectedItem.idmov
     });
   }
 
@@ -544,5 +550,12 @@ export class RentalComponent implements OnInit {
 
   toggleBodyVisibility(index: number): void {
     this.isBodyVisible[index] = !this.isBodyVisible[index];
+  }
+
+  getContract(locacao: any, idmov: string): any {
+    if (!locacao || !locacao.contratos) {
+      return null;
+    }
+    return locacao.contratos.find((c: any) => c.idmov === idmov);
   }
 }

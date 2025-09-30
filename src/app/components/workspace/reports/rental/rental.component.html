@@ -8,32 +8,30 @@
 
   <div class="container__filter">
     <div class="filter">
-      <button (click)="getByStatus('NOVO')" [ngClass]="{'active': selectedStatus === 'NOVO'}" class="btn btn--count">
+      <button (click)="getByStatus('0')" [ngClass]="{'active': selectedStatus === '0'}" class="btn btn--count">
         Novos
-        <span class="span span__counter">{{ status['NOVO'] }}</span>
+        <span class="span span__counter">{{ status['0'] }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button (click)="getByStatus('ATIVO')" [ngClass]="{'active': selectedStatus === 'ATIVO'}" class="btn btn--count">
+      <button (click)="getByStatus('1')" [ngClass]="{'active': selectedStatus === '1'}" class="btn btn--count">
         Ativos
-        <span class="span span__counter">{{ status['ATIVO'] }}</span>
+        <span class="span span__counter">{{ status['1'] }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button (click)="getByStatus('VENCIDO')" [ngClass]="{'active': selectedStatus === 'VENCIDO'}"
-        class="btn btn--count">
+      <button (click)="getByStatus('3')" [ngClass]="{'active': selectedStatus === '3'}" class="btn btn--count">
         Vencidos
-        <span class="span span__counter">{{ status['VENCIDO'] }}</span>
+        <span class="span span__counter">{{ status['3'] }}</span>
       </button>
     </div>
 
     <div class="filter">
-      <button (click)="getByStatus('DEVOLVIDO')" [ngClass]="{'active': selectedStatus === 'DEVOLVIDO'}"
-        class="btn btn--count">
+      <button (click)="getByStatus('4')" [ngClass]="{'active': selectedStatus === '4'}" class="btn btn--count">
         Devolvidos
-        <span class="span span__counter">{{ status['DEVOLVIDO'] }}</span>
+        <span class="span span__counter">{{ status['4'] }}</span>
       </button>
     </div>
 
@@ -96,23 +94,24 @@
                 <mat-icon class="card__icon">construction</mat-icon>
                 <span class="title title--md">{{ items.nome_equipamento || 'N/A' }}</span>
               </div>
-              <div class="card__right card__right--details" *ngFor="let contract of locacao.contratos">
+
+              <div class="card__right card__right--details">
                 @if (items.valor) {
                 <span class="card__span card__span--price">R$ {{ items.valor }}</span>
                 }
                 <span class="card__span card__span--price">{{ items.quantidade || 'N/A' }} UN</span>
-                <span class="card__span card__span--price">PR {{ contract.periodo || 'N/A' }}</span>
+                <span class="card__span card__span--price">PR {{ items.periodo || 'N/A' }}</span>
                 <span class="card__span card__span--qty">{{ upperCase(items.unidade) || 'N/A' }}</span>
                 <span class="card__span card__span--qty">{{ formateDate(items.data_final) || 'N/A' }}</span>
                 <span class="card__span card__span--qty">{{ formateDate(items.data_inicial) || 'N/A' }}</span>
                 <span class="card__span card__span--qty">NC {{ items.numero_contrato || 'N/A' }}</span>
-                @if (contract.ordem_compra) {
-                <span class="card__span card__span--qty">OC {{ contract.ordem_compra }}</span>
+
+                @if (getContract(locacao, items.idmov)?.ordem_compra) {
+                <span class="card__span card__span--qty">OC {{ getContract(locacao, items.idmov).ordem_compra }}</span>
                 }
-                <span class="card__span card__span--qty">ID {{ contract.idmov || 'N/A' }}</span>
+                <span class="card__span card__span--qty">ID {{ items.idmov || 'N/A' }}</span>
               </div>
             </div>
-
           </div>
         </div>
         }
@@ -128,13 +127,13 @@
         </div>
 
         <div class="modal__content">
-          @if (this.selectedItem.status === 'NOVO') {
+          @if (this.selectedItem.status === '0') {
           <div class="modal__group modal__group--full">
             <button type="button" (click)="openActive()" class="btn btn--menu">
               Ativar Locação
             </button>
           </div>
-          } @else if (this.selectedItem.status === 'DEVOLVIDO') {
+          } @else if (this.selectedItem.status === '4') {
           <div class="modal__group">
             <button type="button" (click)="openRenew()" class="btn btn--menu">
               Renovar Locação
@@ -233,19 +232,18 @@
 
         <div class="modal__content">
           <div class="modal__group">
-            <label class="title title--sm">Id da locação *</label>
-            <input type="text" formControlName="locacao_id" placeholder="Insira o número do contrato"
-              class="input input__modal" readonly>
+            <label class="title title--sm">Id atual *</label>
+            <input type="text" formControlName="idmov_atual" placeholder="Insira o id" class="input input__modal">
           </div>
 
           <div class="modal__group">
-            <label class="title title--sm">Idmov atual *</label>
-            <input type="text" formControlName="idmov_atual" placeholder="Insira o número do contrato"
-              class="input input__modal" readonly>
+            <label class="title title--sm">Número do contrato *</label>
+            <input type="text" formControlName="numero_contrato" placeholder="Insira o número do contrato"
+              class="input input__modal">
           </div>
 
           <div class="modal__group">
-            <label class="title title--sm">Idmov novo *</label>
+            <label class="title title--sm">Id novo *</label>
             <input type="number" formControlName="idmov_novo" placeholder="Insira o id novo" class="input input__modal">
           </div>
 
@@ -287,12 +285,17 @@
 
         <div class="modal__content">
           <div class="modal__group">
-            <label class="title title--sm">Id do produto *</label>
+            <label class="title title--sm">Produto *</label>
             <input type="number" formControlName="produto_id" placeholder="Insira o id" class="input input__modal"
               readonly>
           </div>
 
           <div class="modal__group">
+            <label class="title title--sm">Id *</label>
+            <input type="number" formControlName="idmov" placeholder="Insira o id" class="input input__modal">
+          </div>
+
+          <div class="modal__group modal__group--full">
             <label class="title title--sm">Data da entrega *</label>
             <input type="date" formControlName="data_final" class="input input__modal">
           </div>
