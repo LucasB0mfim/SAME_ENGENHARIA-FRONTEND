@@ -96,19 +96,14 @@
               </div>
 
               <div class="card__right card__right--details">
-                @if (items.valor) {
                 <span class="card__span card__span--price">R$ {{ items.valor }}</span>
-                }
                 <span class="card__span card__span--price">{{ items.quantidade || 'N/A' }} UN</span>
                 <span class="card__span card__span--price">PR {{ items.periodo || 'N/A' }}</span>
                 <span class="card__span card__span--qty">{{ upperCase(items.unidade) || 'N/A' }}</span>
                 <span class="card__span card__span--qty">{{ formateDate(items.data_final) || 'N/A' }}</span>
                 <span class="card__span card__span--qty">{{ formateDate(items.data_inicial) || 'N/A' }}</span>
+                <span class="card__span card__span--qty">OC {{ items.ordem_compra || 'N/A' }}</span>
                 <span class="card__span card__span--qty">NC {{ items.numero_contrato || 'N/A' }}</span>
-
-                @if (getContract(locacao, items.idmov)?.ordem_compra) {
-                <span class="card__span card__span--qty">OC {{ getContract(locacao, items.idmov).ordem_compra }}</span>
-                }
                 <span class="card__span card__span--qty">ID {{ items.idmov || 'N/A' }}</span>
               </div>
             </div>

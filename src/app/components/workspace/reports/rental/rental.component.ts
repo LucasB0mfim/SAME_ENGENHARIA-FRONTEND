@@ -63,11 +63,11 @@ export class RentalComponent implements OnInit {
   });
 
   items: any[] = [];
+  allRentals: any[] = [];
   filteredItem: any[] = [];
   selectedItem: any = [];
 
   userInfo: any = null;
-  costCenters: any = null;
 
   selectedStatus: statusKey = '1';
   status: status = { '0': 0, '1': 0, '3': 0, '4': 0 };
@@ -86,6 +86,7 @@ export class RentalComponent implements OnInit {
   compressedFile: File | null = null;
 
   costCenter: string = 'GERAL';
+  costCenters: any = null;
 
   message: string = '';
   showMessage: boolean = false;
@@ -100,7 +101,7 @@ export class RentalComponent implements OnInit {
   ngOnInit(): void {
     this.loadInitial();
     this._titleService.setTitle('Locação');
-  }
+  };
 
   loadInitial(): void {
     this.items = [];
@@ -123,20 +124,20 @@ export class RentalComponent implements OnInit {
             this.status[status] = data.length;
           });
 
+          this.allRentals = res.flat().map((r: any) => r.result || []).flat();
+          this.costCenters = [...new Set(this.allRentals.map((item: any) => item.centro_custo))];
+
           this.items = res[1]?.result || [];
           this.filteredItem = [...this.items];
-
-          // this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
-          this.isEmpty = this.items.length === 0;
-
           this.applyFilters();
+          this.isEmpty = this.items.length === 0;
         },
         error: (err) => {
           this.isEmpty = true;
           console.error('Não foi possível buscar os contratos:', err);
         }
       });
-  }
+  };
 
   getByStatus(status: string): void {
     const statusKey = status as statusKey;
@@ -154,6 +155,7 @@ export class RentalComponent implements OnInit {
           this.filteredItem = [...this.items];
           this.status[statusKey] = this.items.length;
           this.isEmpty = this.items.length === 0;
+          this.applyFilters();
         },
         error: (err) => {
           this.isEmpty = true;
@@ -161,7 +163,7 @@ export class RentalComponent implements OnInit {
           this.setMessage('Erro ao buscar contratos!', 'error');
         }
       });
-  }
+  };
 
   getUser(): void {
     this._userService.findAll().subscribe({
@@ -173,7 +175,7 @@ export class RentalComponent implements OnInit {
         console.error('Erro ao carregar dados do colaborador: ', err);
       }
     });
-  }
+  };
 
   updateCountersAndCurrentList(): void {
     this.items = [];
@@ -195,21 +197,21 @@ export class RentalComponent implements OnInit {
             this.status[status] = data.length;
           });
 
+          this.allRentals = res.flat().map((r: any) => r.result || []).flat();
+          this.costCenters = [...new Set(this.allRentals.map((item: any) => item.centro_custo))];
+
           const currentStatusIndex = statusList.indexOf(this.selectedStatus);
           this.items = res[currentStatusIndex]?.result || [];
           this.filteredItem = [...this.items];
-
-          // this.costCenters = [...new Set(this.items.map((item) => item.contrato_base.centro_custo))];
-          this.isEmpty = this.items.length === 0;
-
           this.applyFilters();
+          this.isEmpty = this.items.length === 0;
         },
         error: (err) => {
           this.isEmpty = true;
           console.error('Não foi possível buscar os contratos:', err);
         }
       });
-  }
+  };
 
 
   onRegister(): void {
@@ -247,7 +249,7 @@ export class RentalComponent implements OnInit {
           console.error('Erro ao atualizar contrato: ', err);
         }
       });
-  }
+  };
 
   onActive(): void {
     this.isProcessing = true;
@@ -276,7 +278,7 @@ export class RentalComponent implements OnInit {
           console.error('Erro ao atualizar contrato: ', err);
         }
       });
-  }
+  };
 
   onRenew(): void {
     this.isProcessing = true;
@@ -310,7 +312,7 @@ export class RentalComponent implements OnInit {
           console.error('Erro ao atualizar contrato: ', err);
         }
       });
-  }
+  };
 
   onArchive(): void {
     this.isProcessing = true;
@@ -335,7 +337,7 @@ export class RentalComponent implements OnInit {
           console.error('Erro ao atualizar contrato: ', err);
         }
       });
-  }
+  };
 
   onHistory(): void {
     this.isProcessing = true;
@@ -355,7 +357,7 @@ export class RentalComponent implements OnInit {
           console.error('Erro ao atualizar contrato: ', err);
         }
       });
-  }
+  };
 
   downloadSheet() {
     this.isProcessing = true;
@@ -364,17 +366,17 @@ export class RentalComponent implements OnInit {
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe((response: HttpResponse<Blob>) => {
         const cd = response.headers.get('content-disposition');
-        const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'REGISTRO_DE_LOCAÇÕES.xlsx';
+        const fileName = cd?.match(/filename=\"?([^\\]+)\"?/)?.[1] || 'REGISTRO_DE_LOCAÇÕES.xlsx';
         saveAs(response.body!, fileName);
       });
-  }
+  };
 
 
   openMenu(item: any): void {
     this.selectedItem = item;
     this.isMenuOpen = true;
     console.log(item)
-  }
+  };
 
   returnMenu(): void {
     this.isActiveOpen = false;
@@ -382,13 +384,13 @@ export class RentalComponent implements OnInit {
     this.isRegisterOpen = false;
     this.isArchiveOpen = false;
     this.isMenuOpen = true;
-  }
+  };
 
   openRegister(): void {
     this.isMenuOpen = false;
     this.isRegisterOpen = true;
     this.getUser();
-  }
+  };
 
   openActive(): void {
     this.isMenuOpen = false;
@@ -397,7 +399,7 @@ export class RentalComponent implements OnInit {
     this.activeForm.patchValue({
       locacao_id: this.selectedItem.locacao_id,
     })
-  }
+  };
 
   openRenew(): void {
     this.isMenuOpen = false;
@@ -408,7 +410,7 @@ export class RentalComponent implements OnInit {
       numero_contrato: this.selectedItem.numero_contrato,
       idmov_atual: this.selectedItem.idmov,
     });
-  }
+  };
 
   openArchive(): void {
     this.isMenuOpen = false;
@@ -418,7 +420,7 @@ export class RentalComponent implements OnInit {
       produto_id: this.selectedItem.produto_id,
       idmov: this.selectedItem.idmov
     });
-  }
+  };
 
   closeModal(): void {
     this.isMenuOpen = false;
@@ -426,7 +428,7 @@ export class RentalComponent implements OnInit {
     this.isRenewOpen = false;
     this.isRegisterOpen = false;
     this.isArchiveOpen = false;
-  }
+  };
 
 
   applyFilters() {
@@ -435,13 +437,13 @@ export class RentalComponent implements OnInit {
     if (this.costCenter && this.costCenter !== 'GERAL') {
       const inputValue = this.costCenter;
       data = data.filter(item =>
-        item.contrato_base.centro_custo && item.contrato_base.centro_custo.includes(inputValue)
+        item.centro_custo && item.centro_custo.includes(inputValue)
       );
     }
 
     this.items = data;
     this.isEmpty = this.items.length === 0;
-  }
+  };
 
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
@@ -452,18 +454,18 @@ export class RentalComponent implements OnInit {
       this.showMessage = false;
       this.message = '';
     }, 3000);
-  }
+  };
 
 
   formateDate(date: string): string {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
-  }
+  };
 
   upperCase(string: string): string {
     return string.trim().toUpperCase();
-  }
+  };
 
 
   onFileChange(event: Event): void {
@@ -481,7 +483,7 @@ export class RentalComponent implements OnInit {
           this.compressedFile = null;
         });
     }
-  }
+  };
 
   compressImage(file: File): Promise<File> {
     return new Promise((resolve, reject) => {
@@ -498,8 +500,6 @@ export class RentalComponent implements OnInit {
         let { width, height } = this.calculateNewDimensions(img.width, img.height);
 
         canvas.width = width;
-        canvas.height = height;
-
         ctx!.drawImage(img, 0, 0, width, height);
 
         canvas.toBlob(
@@ -529,7 +529,7 @@ export class RentalComponent implements OnInit {
 
       img.src = URL.createObjectURL(file);
     });
-  }
+  };
 
   calculateNewDimensions(originalWidth: number, originalHeight: number): { width: number, height: number } {
     let width = originalWidth;
@@ -546,16 +546,10 @@ export class RentalComponent implements OnInit {
     }
 
     return { width: Math.round(width), height: Math.round(height) };
-  }
+  };
 
   toggleBodyVisibility(index: number): void {
     this.isBodyVisible[index] = !this.isBodyVisible[index];
-  }
-
-  getContract(locacao: any, idmov: string): any {
-    if (!locacao || !locacao.contratos) {
-      return null;
-    }
-    return locacao.contratos.find((c: any) => c.idmov === idmov);
-  }
+  };
 }
+
