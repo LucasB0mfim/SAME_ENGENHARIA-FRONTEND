@@ -20,8 +20,8 @@ export class LoginComponent {
 
   // ========== FORMULÁRIOS ========== //
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    senha: new FormControl('', Validators.required)
+    usuario: new FormControl('', [Validators.required, Validators.minLength(11)]),
+    senha: new FormControl('')
   });
 
   // ========== ESTADOS ========== //
@@ -36,7 +36,7 @@ export class LoginComponent {
     this.isLogin = true;
 
     const request = {
-      email: this.loginForm.value.email,
+      usuario: this.loginForm.value.usuario,
       senha: this.loginForm.value.senha
     }
 
