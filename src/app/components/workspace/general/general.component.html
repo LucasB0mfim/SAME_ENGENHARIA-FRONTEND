@@ -84,23 +84,22 @@
       <div class="comment-card__header">
         <img src="{{ comment.avatar }}" class="comment-card__avatar" />
         <div class="comment-card__info">
-          <div class="comment-card__username">{{ comment.username }}</div>
-          <div class="comment-card__date">{{ comment.created_at | date:'dd/MM/yyyy HH:mm' }}</div>
+          <div class="comment-card__username">{{ comment.usuario }}</div>
+          <div class="comment-card__date">{{ comment.data_criacao | date:'dd/MM/yyyy HH:mm' }}</div>
         </div>
       </div>
-      <div class="comment-card__comment">{{ comment.comment }}</div>
-      <img *ngIf="comment.image" src="{{ comment.image }}" class="comment-card__image" />
+      <div class="comment-card__comment">{{ comment.comentario }}</div>
     </div>
   </div>
 
   <div class="right__section">
     <div class="notice">
       <div class="notice__card" *ngFor="let notice of notices">
-        <h3 class="notice__title">{{ notice.title }}</h3>
-        <p class="notice__description">{{ notice.description }}</p>
+        <h3 class="notice__title">{{ notice.titulo }}</h3>
+        <p class="notice__description">{{ notice.descricao }}</p>
         <div class="notice__meta">
-          <span>{{ notice.creator }}</span>
-          <span class="date">{{ notice.created_at | date:'dd/MM/yyyy' }}</span>
+          <span>{{ notice.criador }}</span>
+          <span class="date">{{ notice.data_criacao | date:'dd/MM/yyyy' }}</span>
         </div>
       </div>
       <div class="notice__loading" *ngIf="loadingNotice">
