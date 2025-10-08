@@ -365,8 +365,22 @@ export class RentalComponent implements OnInit {
     this._equipamentService.donwloadSheet()
       .pipe(finalize(() => this.isProcessing = false))
       .subscribe((response: HttpResponse<Blob>) => {
+
+        let fileName = 'RELATORIO_DE_LOCACOES.xlsx';
         const cd = response.headers.get('content-disposition');
-        const fileName = cd?.match(/filename=\"?([^\\]+)\"?/)?.[1] || 'REGISTRO_DE_LOCAÇÕES.xlsx';
+
+        if (cd) {
+          const utf8Match = cd.match(/filename\*\=UTF-8''([^;]+)/);
+          const normalMatch = cd.match(/filename=\"?([^\";]+)\"?/);
+
+          if (utf8Match) {
+            fileName = decodeURIComponent(utf8Match[1]);
+          } else if (normalMatch) {
+            fileName = normalMatch[1];
+          }
+        }
+
+        fileName = fileName.replace(/_+(\.[^.]+)_*$/, '$1').trim();
         saveAs(response.body!, fileName);
       });
   };
