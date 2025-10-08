@@ -11,11 +11,9 @@ export const humanResourcesGuard: CanActivateFn = (route, state) => {
 
   return _dashboardService.findAll().pipe(
     map(response => {
-      if (response.employee.role === 'Recurso Humanos' || response.employee.role === 'Desenvolvedor') {
+      if (response.employee.setor === 'Recurso Humanos' || response.employee.setor === 'TI') {
         return true
-      } else if (response.employee.position === 'Diretor') {
-        return true
-      } else {
+      }  else {
         _router.navigate(['/dashboard']);
         console.log('Você não possui permissão para entrar...');
         alert('Você não possui permissão para entrar...');

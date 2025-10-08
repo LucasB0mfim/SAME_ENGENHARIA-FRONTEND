@@ -2,8 +2,6 @@ import { Observable } from 'rxjs';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { IEmployeeResponse } from '../interfaces/employee-response.interface';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -17,8 +15,8 @@ export class DashboardService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findAll(): Observable<IEmployeeResponse> {
+  findAll(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<IEmployeeResponse>(this._apiUrl, {headers});
+    return this._httpClient.get<any>(this._apiUrl, {headers});
   }
 }
