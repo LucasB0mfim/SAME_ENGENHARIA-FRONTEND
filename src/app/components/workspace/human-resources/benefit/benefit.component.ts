@@ -131,7 +131,7 @@ export class BenefitComponent implements OnInit {
       centro_custo: this.recordForm.value.centro_custo,
     };
 
-    this._benefitService.findRecord(request).subscribe({
+    this._benefitService.findMonth(request.data, request.centro_custo).subscribe({
       next: (data: any) => {
         this.items = data.result;
         this.filteredItem = [...this.items];
@@ -146,7 +146,7 @@ export class BenefitComponent implements OnInit {
       }
     });
 
-    this._benefitService.getBenefitMedia(request).subscribe({
+    this._benefitService.findMedia(request.data, request.centro_custo).subscribe({
       next: (data) => {
         const response = data.result;
 
@@ -195,7 +195,7 @@ export class BenefitComponent implements OnInit {
       return;
     }
 
-    this._benefitService.createRecord(request).subscribe({
+    this._benefitService.createMonth(request).subscribe({
       next: () => {
         this.setSuccessMessage('Registro criado com sucesso.');
         this.createRecordForm.reset();
@@ -211,46 +211,46 @@ export class BenefitComponent implements OnInit {
   }
 
   updateRecord(): void {
-    this.isUpdating = true;
+    // this.isUpdating = true;
 
-    const request = {
-      id: this.updateRecordForm.value.id,
-      data: this.updateRecordForm.value.data,
-      nome: this.removeSpace(this.updateRecordForm.value.nome),
-      reembolso: this.updateRecordForm.value.reembolso,
-      dias_uteis: this.updateRecordForm.value.dias_uteis,
-      dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis,
-      funcao: this.updateRecordForm.value.funcao,
-      setor: this.updateRecordForm.value.setor,
-      contrato: this.updateRecordForm.value.contrato,
-      centro_custo: this.updateRecordForm.value.centro_custo,
-      recebe_integral: this.updateRecordForm.value.recebe_integral,
-      vr_caju: this.updateRecordForm.value.vr_caju,
-      vr_caju_fixo: this.updateRecordForm.value.vr_caju_fixo,
-      vr_vr: this.updateRecordForm.value.vr_vr,
-      vr_vr_fixo: this.updateRecordForm.value.vr_vr_fixo,
-      vc_caju: this.updateRecordForm.value.vc_caju,
-      vc_caju_fixo: this.updateRecordForm.value.vc_caju_fixo,
-      vc_vr: this.updateRecordForm.value.vc_vr,
-      vc_vr_fixo: this.updateRecordForm.value.vc_vr_fixo,
-      vt_caju: this.updateRecordForm.value.vt_caju,
-      vt_caju_fixo: this.updateRecordForm.value.vt_caju_fixo,
-      vt_vem: this.updateRecordForm.value.vt_vem,
-      vt_vem_fixo: this.updateRecordForm.value.vt_vem_fixo,
-    }
+    // const request = {
+    //   id: this.updateRecordForm.value.id,
+    //   data: this.updateRecordForm.value.data,
+    //   nome: this.removeSpace(this.updateRecordForm.value.nome),
+    //   reembolso: this.updateRecordForm.value.reembolso,
+    //   dias_uteis: this.updateRecordForm.value.dias_uteis,
+    //   dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis,
+    //   funcao: this.updateRecordForm.value.funcao,
+    //   setor: this.updateRecordForm.value.setor,
+    //   contrato: this.updateRecordForm.value.contrato,
+    //   centro_custo: this.updateRecordForm.value.centro_custo,
+    //   recebe_integral: this.updateRecordForm.value.recebe_integral,
+    //   vr_caju: this.updateRecordForm.value.vr_caju,
+    //   vr_caju_fixo: this.updateRecordForm.value.vr_caju_fixo,
+    //   vr_vr: this.updateRecordForm.value.vr_vr,
+    //   vr_vr_fixo: this.updateRecordForm.value.vr_vr_fixo,
+    //   vc_caju: this.updateRecordForm.value.vc_caju,
+    //   vc_caju_fixo: this.updateRecordForm.value.vc_caju_fixo,
+    //   vc_vr: this.updateRecordForm.value.vc_vr,
+    //   vc_vr_fixo: this.updateRecordForm.value.vc_vr_fixo,
+    //   vt_caju: this.updateRecordForm.value.vt_caju,
+    //   vt_caju_fixo: this.updateRecordForm.value.vt_caju_fixo,
+    //   vt_vem: this.updateRecordForm.value.vt_vem,
+    //   vt_vem_fixo: this.updateRecordForm.value.vt_vem_fixo,
+    // }
 
-    this._benefitService.updateRecord(request).subscribe({
-      next: () => {
-        this.setSuccessMessage('Registro atualizado com sucesso.');
-        this.isUpdating = false;
-        this.updateRecordSection = false;
-      },
-      error: (error) => {
-        this.isUpdating = false;
-        console.log('Erro ao atualizar colaborador.', error);
-        this.isUpdating = false;
-      }
-    })
+    // this._benefitService.updateRecord(request).subscribe({
+    //   next: () => {
+    //     this.setSuccessMessage('Registro atualizado com sucesso.');
+    //     this.isUpdating = false;
+    //     this.updateRecordSection = false;
+    //   },
+    //   error: (error) => {
+    //     this.isUpdating = false;
+    //     console.log('Erro ao atualizar colaborador.', error);
+    //     this.isUpdating = false;
+    //   }
+    // })
   }
 
   deleteRecord(): void {
@@ -258,7 +258,7 @@ export class BenefitComponent implements OnInit {
 
     const id = this.updateRecordForm.value.id;
 
-    this._benefitService.deleteRecord(id).subscribe({
+    this._benefitService.deleteEmployee(id).subscribe({
       next: () => {
         this.setSuccessMessage('Colaborador deletado com sucesso.');
         this.isDeleting = false;

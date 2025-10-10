@@ -109,7 +109,7 @@ export class BrkComponent implements OnInit {
   // ========== HOOK ========== //
   ngOnInit(): void {
     this.loadInitialData();
-    this.getEmployeeInfo();
+    // this.getEmployeeInfo();
     this._titleService.setTitle('BRK');
   }
 
@@ -265,13 +265,13 @@ export class BrkComponent implements OnInit {
     });
   }
 
-  getEmployeeInfo(): void {
-    this._benefitService.findBasicInfo().subscribe({
-      next: (res) => {
-        this.employeeInfo = res.result;
-      }
-    });
-  }
+  // getEmployeeInfo(): void {
+  //   this._benefitService.findBasicInfo().subscribe({
+  //     next: (res) => {
+  //       this.employeeInfo = res.result;
+  //     }
+  //   });
+  // }
 
   // ========== FILTROS POR STATUS ========== //
   filterByStatus(status: string): void {

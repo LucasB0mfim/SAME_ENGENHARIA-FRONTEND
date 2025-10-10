@@ -114,19 +114,19 @@ export class EmployeeComponent implements OnInit {
 
   // ========== API ========== //
   getEmployee(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
 
-    this._benefitService.findFullInfo().subscribe({
-      next: (data) => {
-        this.isLoading = false;
-        this.items = data.result;
-        this.filteredItems = [...this.items];
-      },
-      error: (error) => {
-        this.isLoading = false;
-        console.error(error);
-      }
-    })
+    // this._benefitService.findFullInfo().subscribe({
+    //   next: (data) => {
+    //     this.isLoading = false;
+    //     this.items = data.result;
+    //     this.filteredItems = [...this.items];
+    //   },
+    //   error: (error) => {
+    //     this.isLoading = false;
+    //     console.error(error);
+    //   }
+    // })
   }
 
   getByCostCenter(): void {
@@ -136,19 +136,19 @@ export class EmployeeComponent implements OnInit {
 
     const request = { centro_custo: this.costCenterForm.value.centroCusto || 'GERAL' }
 
-    this._benefitService.findByCostCenter(request).subscribe({
-      next: (res) => {
-        this.items = res.result;
-        this.filteredItems = [...this.items];
-        this.isFind = false;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao consultar centros de custo!', error);
-        this.isFind = false;
-        this.isLoading = false;
-      }
-    });
+    // this._benefitService.findByCostCenter(request).subscribe({
+    //   next: (res) => {
+    //     this.items = res.result;
+    //     this.filteredItems = [...this.items];
+    //     this.isFind = false;
+    //     this.isLoading = false;
+    //   },
+    //   error: (error) => {
+    //     console.error('Erro ao consultar centros de custo!', error);
+    //     this.isFind = false;
+    //     this.isLoading = false;
+    //   }
+    // });
   }
 
   createEmployee(): void {
@@ -178,47 +178,47 @@ export class EmployeeComponent implements OnInit {
       vt_vem_fixo: this.createForm.value.vtVemFixo,
     }
 
-    this._benefitService.createEmployee(request).subscribe({
-      next: () => {
-        this.isCreating = false;
-        this.create = false;
-        this.createForm.reset({
-          nome: '',
-          chapa: '',
-          cpf: '',
-          dataNascimento: '',
-          funcao: '',
-          setor: '',
-          contrato: '',
-          centroCusto: '',
-          recebeIntegral: '',
-          vrCaju: null,
-          vrCajuFixo: '',
-          vcCaju: null,
-          vcCajuFixo: '',
-          vtCaju: null,
-          vtCajuFixo: '',
-          vrVr: null,
-          vrVrFixo: '',
-          vcVr: null,
-          vcVrFixo: '',
-          vtVem: null,
-          vtVemFixo: ''
-        })
-        this.employee = '';
-        this.getEmployee();
-        this.setMessage('Colaborador criado com sucesso!', 'success');
-      },
-      error: (error) => {
-        this.isCreating = false;
-        console.error('Falha ao criar colaborador: ', error);
-        if (error.status === 400) {
-          this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
-        } else {
-          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
-        }
-      }
-    });
+    // this._benefitService.createEmployee(request).subscribe({
+    //   next: () => {
+    //     this.isCreating = false;
+    //     this.create = false;
+    //     this.createForm.reset({
+    //       nome: '',
+    //       chapa: '',
+    //       cpf: '',
+    //       dataNascimento: '',
+    //       funcao: '',
+    //       setor: '',
+    //       contrato: '',
+    //       centroCusto: '',
+    //       recebeIntegral: '',
+    //       vrCaju: null,
+    //       vrCajuFixo: '',
+    //       vcCaju: null,
+    //       vcCajuFixo: '',
+    //       vtCaju: null,
+    //       vtCajuFixo: '',
+    //       vrVr: null,
+    //       vrVrFixo: '',
+    //       vcVr: null,
+    //       vcVrFixo: '',
+    //       vtVem: null,
+    //       vtVemFixo: ''
+    //     })
+    //     this.employee = '';
+    //     this.getEmployee();
+    //     this.setMessage('Colaborador criado com sucesso!', 'success');
+    //   },
+    //   error: (error) => {
+    //     this.isCreating = false;
+    //     console.error('Falha ao criar colaborador: ', error);
+    //     if (error.status === 400) {
+    //       this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+    //     } else {
+    //       this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+    //     }
+    //   }
+    // });
   }
 
   updateEmployee(): void {
@@ -249,24 +249,24 @@ export class EmployeeComponent implements OnInit {
       vt_vem_fixo: this.updateForm.value.vtVemFixo,
     }
 
-    this._benefitService.updateEmployee(request).subscribe({
-      next: () => {
-        this.update = false;
-        this.isUpdating = false;
-        this.employee = '';
-        this.getEmployee();
-        this.setMessage('Colaborador atualizado com sucesso!', 'success');
-      },
-      error: (error) => {
-        this.isUpdating = false;
-        console.error('Erro ao atualizar colaborador: ', error);
-        if (error.status === 400) {
-          this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
-        } else {
-          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
-        }
-      }
-    });
+    // this._benefitService.updateEmployee(request).subscribe({
+    //   next: () => {
+    //     this.update = false;
+    //     this.isUpdating = false;
+    //     this.employee = '';
+    //     this.getEmployee();
+    //     this.setMessage('Colaborador atualizado com sucesso!', 'success');
+    //   },
+    //   error: (error) => {
+    //     this.isUpdating = false;
+    //     console.error('Erro ao atualizar colaborador: ', error);
+    //     if (error.status === 400) {
+    //       this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
+    //     } else {
+    //       this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
+    //     }
+    //   }
+    // });
   }
 
   deleteEmployee(): void {

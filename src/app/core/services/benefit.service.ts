@@ -15,60 +15,42 @@ export class BenefitService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  findBasicInfo(): Observable<any> {
+  findMedia(data: any, centro_custo: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee/basic', { headers });
-  }
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/media', {
+      headers,
+      params: {
+        data,
+        centro_custo
+      }
+    });
+  };
 
-  findFullInfo(): Observable<any> {
+  findMonth(data: any, centro_custo: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/employee/full', { headers });
-  }
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/month', {
+      headers,
+      params: {
+        data,
+        centro_custo
+      }
+    });
+  };
 
-  createEmployee(request: any): Observable<any> {
+  createMonth(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/employee', request, { headers });
-  }
-
-  updateEmployee(request: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.put<any>('https://sameengenharia.com.br/api/benefit/employee', request, { headers });
-  }
-
-  deleteEmployee(id: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/delete/employee/${id}`, { headers });
-  }
-
-  deleteRecord(id: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/delete/record/${id}`, { headers });
-  }
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/month', request, { headers });
+  };
 
   deleteMonth(month: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/delete/${month}`, { headers });
-  }
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/month/:${month}`, { headers });
+  };
 
-  findRecord(request: any): Observable<any> {
+  deleteEmployee(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/find-report', request, { headers });
-  }
-
-  getBenefitMedia(request: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/medias', request, { headers });
-  }
-
-  createRecord(request: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/create-report', request, { headers });
-  }
-
-  updateRecord(request: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/update', request, { headers });
-  }
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/:${id}`, { headers });
+  };
 
   donwloadLayoutVr(request: any): Observable<Blob> {
     const headers = this._createHeaders();
@@ -76,7 +58,7 @@ export class BenefitService {
       responseType: 'blob' as 'blob',
       headers
     });
-  }
+  };
 
   donwloadLayoutCaju(request: any): Observable<Blob> {
     const headers = this._createHeaders();
@@ -84,7 +66,7 @@ export class BenefitService {
       responseType: 'blob' as 'blob',
       headers
     });
-  }
+  };
 
   donwloadLayoutVem(request: any): Observable<Blob> {
     const headers = this._createHeaders();
@@ -92,35 +74,5 @@ export class BenefitService {
       responseType: 'blob' as 'blob',
       headers
     });
-  }
-
-  stateHolidays(state: string, year: string): Observable<any> {
-    return this._httpClient.get<any>(
-      `https://feriados-brasileiros1.p.rapidapi.com/read_uf?estado=${state}&ano=${year}`,
-      {
-        headers: {
-          'x-rapidapi-key': '2166c88048msh1f7f56a1376afa1p1c65c8jsn21a0af250681',
-          'x-rapidapi-host': 'feriados-brasileiros1.p.rapidapi.com'
-        }
-      }
-    );
-  }
-
-  cityHolidays(city: string, state: string, year: string): Observable<any> {
-    return this._httpClient.get<any>(
-      `https://feriados-brasileiros1.p.rapidapi.com/read?cidade=${city}&estado=${state}&ano=${year}`,
-      {
-        headers: {
-          'x-rapidapi-key': '2166c88048msh1f7f56a1376afa1p1c65c8jsn21a0af250681',
-          'x-rapidapi-host': 'feriados-brasileiros1.p.rapidapi.com'
-        }
-      }
-    );
-  }
-
-  // ---------------------------- //
-  findByCostCenter(request: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/benefit/cost-center', request, { headers });
-  }
+  };
 }

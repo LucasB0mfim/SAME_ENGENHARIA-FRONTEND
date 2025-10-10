@@ -244,11 +244,11 @@ export class ResignationComponent implements OnInit {
   }
 
   getEmployeeInfo(): void {
-    this._benefitService.findBasicInfo().subscribe({
-      next: (res) => {
-        this.employeeData = res.result;
-      }
-    });
+  //   this._benefitService.findBasicInfo().subscribe({
+  //     next: (res) => {
+  //       this.employeeData = res.result;
+  //     }
+  //   });
   }
 
   // ========== FILTROS POR STATUS ========== //
