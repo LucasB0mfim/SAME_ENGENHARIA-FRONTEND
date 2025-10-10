@@ -29,6 +29,13 @@
     </div>
 
     <div class="filter">
+      <button (click)="getByStatus('5')" [ngClass]="{'active': selectedStatus === '5'}" class="btn btn--count">
+        Ativos & Vencidos
+        <span class="span span__counter">{{ status['5'] }}</span>
+      </button>
+    </div>
+
+    <div class="filter">
       <button (click)="getByStatus('4')" [ngClass]="{'active': selectedStatus === '4'}" class="btn btn--count">
         Devolvidos
         <span class="span span__counter">{{ status['4'] }}</span>

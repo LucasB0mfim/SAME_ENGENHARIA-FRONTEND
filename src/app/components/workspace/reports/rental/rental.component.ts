@@ -17,6 +17,7 @@ interface status {
   '1': number;
   '3': number;
   '4': number;
+  '5': number;
 }
 
 type statusKey = keyof status;
@@ -70,7 +71,7 @@ export class RentalComponent implements OnInit {
   userInfo: any = null;
 
   selectedStatus: statusKey = '1';
-  status: status = { '0': 0, '1': 0, '3': 0, '4': 0 };
+  status: status = { '0': 0, '1': 0, '3': 0, '4': 0, '5': 0 };
 
   isEmpty: boolean = false;
   isLoading: boolean = false;
@@ -108,7 +109,7 @@ export class RentalComponent implements OnInit {
     this.isEmpty = false;
     this.isLoading = true;
 
-    const statusList: statusKey[] = ['0', '1', '3', '4'];
+    const statusList: statusKey[] = ['0', '1', '3', '4', '5'];
 
     const requests = statusList.map(status =>
       this._equipamentService.findByStatus(status)
@@ -182,7 +183,7 @@ export class RentalComponent implements OnInit {
     this.isEmpty = false;
     this.isLoading = true;
 
-    const statusList: statusKey[] = ['0', '1', '3', '4'];
+    const statusList: statusKey[] = ['0', '1', '3', '4', '5'];
 
     const requests = statusList.map(status =>
       this._equipamentService.findByStatus(status)
