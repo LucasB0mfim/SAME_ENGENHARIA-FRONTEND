@@ -105,6 +105,7 @@ export class BenefitComponent implements OnInit {
   isUpdating: boolean = false;
 
   employee: string = '';
+  costCenters: any[] = [];
 
   addEmployee: boolean = false;
   editEmployee: boolean = false;
@@ -174,6 +175,20 @@ export class BenefitComponent implements OnInit {
         console.error(error)
       }
     })
+  }
+
+  findCentroCustoByData(): void {
+    const data = this.recordForm.value.data;
+
+    this._benefitService.findCostCenters(data).subscribe({
+      next: (res) => {
+        this.costCenters = res.result;
+      },
+      error: (err) => {
+        this.setErrorMessage(err.erro.message);
+        console.log('Não foi possível realizar consulta: ', err);
+      }
+    });
   }
 
   createRecord(): void {

@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../../core/services/title.service';
-import { BenefitService } from '../../../../core/services/benefit.service';
+import { EmployeeService } from '../../../../core/services/employee.service';
 
 @Component({
   selector: 'app-employee',
@@ -19,7 +19,7 @@ export class EmployeeComponent implements OnInit {
 
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
-  private readonly _benefitService = inject(BenefitService);
+  private readonly _employeeService = inject(EmployeeService);
 
   // ========== FORMULÁRIOS ========== //
   costCenterForm: FormGroup = new FormGroup({
@@ -114,181 +114,17 @@ export class EmployeeComponent implements OnInit {
 
   // ========== API ========== //
   getEmployee(): void {
-    // this.isLoading = true;
-
-    // this._benefitService.findFullInfo().subscribe({
-    //   next: (data) => {
-    //     this.isLoading = false;
-    //     this.items = data.result;
-    //     this.filteredItems = [...this.items];
-    //   },
-    //   error: (error) => {
-    //     this.isLoading = false;
-    //     console.error(error);
-    //   }
-    // })
-  }
-
-  getByCostCenter(): void {
-    this.items = [];
-    this.isFind = true;
     this.isLoading = true;
 
-    const request = { centro_custo: this.costCenterForm.value.centroCusto || 'GERAL' }
-
-    // this._benefitService.findByCostCenter(request).subscribe({
-    //   next: (res) => {
-    //     this.items = res.result;
-    //     this.filteredItems = [...this.items];
-    //     this.isFind = false;
-    //     this.isLoading = false;
-    //   },
-    //   error: (error) => {
-    //     console.error('Erro ao consultar centros de custo!', error);
-    //     this.isFind = false;
-    //     this.isLoading = false;
-    //   }
-    // });
-  }
-
-  createEmployee(): void {
-    this.isCreating = true;
-
-    const request = {
-      nome: this.createForm.value.nome,
-      chapa: this.createForm.value.chapa,
-      cpf: this.createForm.value.cpf,
-      data_nascimento: this.createForm.value.dataNascimento,
-      funcao: this.createForm.value.funcao,
-      setor: this.createForm.value.setor,
-      contrato: this.createForm.value.contrato,
-      centro_custo: this.createForm.value.centroCusto,
-      recebe_integral: this.createForm.value.recebeIntegral,
-      vr_caju: this.createForm.value.vrCaju,
-      vr_caju_fixo: this.createForm.value.vrCajuFixo,
-      vc_caju: this.createForm.value.vcCaju,
-      vc_caju_fixo: this.createForm.value.vcCajuFixo,
-      vt_caju: this.createForm.value.vtCaju,
-      vt_caju_fixo: this.createForm.value.vtCajuFixo,
-      vr_vr: this.createForm.value.vrVr,
-      vr_vr_fixo: this.createForm.value.vrVrFixo,
-      vc_vr: this.createForm.value.vcVr,
-      vc_vr_fixo: this.createForm.value.vcVrFixo,
-      vt_vem: this.createForm.value.vtVem,
-      vt_vem_fixo: this.createForm.value.vtVemFixo,
-    }
-
-    // this._benefitService.createEmployee(request).subscribe({
-    //   next: () => {
-    //     this.isCreating = false;
-    //     this.create = false;
-    //     this.createForm.reset({
-    //       nome: '',
-    //       chapa: '',
-    //       cpf: '',
-    //       dataNascimento: '',
-    //       funcao: '',
-    //       setor: '',
-    //       contrato: '',
-    //       centroCusto: '',
-    //       recebeIntegral: '',
-    //       vrCaju: null,
-    //       vrCajuFixo: '',
-    //       vcCaju: null,
-    //       vcCajuFixo: '',
-    //       vtCaju: null,
-    //       vtCajuFixo: '',
-    //       vrVr: null,
-    //       vrVrFixo: '',
-    //       vcVr: null,
-    //       vcVrFixo: '',
-    //       vtVem: null,
-    //       vtVemFixo: ''
-    //     })
-    //     this.employee = '';
-    //     this.getEmployee();
-    //     this.setMessage('Colaborador criado com sucesso!', 'success');
-    //   },
-    //   error: (error) => {
-    //     this.isCreating = false;
-    //     console.error('Falha ao criar colaborador: ', error);
-    //     if (error.status === 400) {
-    //       this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
-    //     } else {
-    //       this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
-    //     }
-    //   }
-    // });
-  }
-
-  updateEmployee(): void {
-    this.isUpdating = true;
-
-    const request = {
-      id: this.updateForm.value.id,
-      nome: this.updateForm.value.nome,
-      chapa: this.updateForm.value.chapa,
-      cpf: this.updateForm.value.cpf,
-      data_nascimento: this.updateForm.value.dataNascimento,
-      funcao: this.updateForm.value.funcao,
-      setor: this.updateForm.value.setor,
-      contrato: this.updateForm.value.contrato,
-      centro_custo: this.updateForm.value.centroCusto,
-      recebe_integral: this.updateForm.value.recebeIntegral,
-      vr_caju: this.updateForm.value.vrCaju,
-      vr_caju_fixo: this.updateForm.value.vrCajuFixo,
-      vc_caju: this.updateForm.value.vcCaju,
-      vc_caju_fixo: this.updateForm.value.vcCajuFixo,
-      vt_caju: this.updateForm.value.vtCaju,
-      vt_caju_fixo: this.updateForm.value.vtCajuFixo,
-      vr_vr: this.updateForm.value.vrVr,
-      vr_vr_fixo: this.updateForm.value.vrVrFixo,
-      vc_vr: this.updateForm.value.vcVr,
-      vc_vr_fixo: this.updateForm.value.vcVrFixo,
-      vt_vem: this.updateForm.value.vtVem,
-      vt_vem_fixo: this.updateForm.value.vtVemFixo,
-    }
-
-    // this._benefitService.updateEmployee(request).subscribe({
-    //   next: () => {
-    //     this.update = false;
-    //     this.isUpdating = false;
-    //     this.employee = '';
-    //     this.getEmployee();
-    //     this.setMessage('Colaborador atualizado com sucesso!', 'success');
-    //   },
-    //   error: (error) => {
-    //     this.isUpdating = false;
-    //     console.error('Erro ao atualizar colaborador: ', error);
-    //     if (error.status === 400) {
-    //       this.setMessage("Preencha todos os campos obrigatórios (*)", 'error');
-    //     } else {
-    //       this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
-    //     }
-    //   }
-    // });
-  }
-
-  deleteEmployee(): void {
-    this.isDeleting = true;
-    const id = this.deleteForm.value.id;
-
-    this._benefitService.deleteEmployee(id).subscribe({
-      next: () => {
-        this.isDeleting = false;
-        this.delete = false;
-        this.employee = '';
-        this.getEmployee();
-        this.setMessage('Colaborador deletado com sucesso!', 'success');
+    this._employeeService.findEmployees().subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.items = data.result;
+        this.filteredItems = [...this.items];
       },
       error: (error) => {
-        this.isDeleting = false;
-        console.error('Falha ao deletar colaborador: ', error);
-        if (error.status === 400) {
-          this.setMessage('Não foi possível encontrar o id do colaborador.', 'error');
-        } else {
-          this.setMessage('Erro interno! Tente novamente outra hora.', 'error');
-        }
+        this.isLoading = false;
+        console.error(error);
       }
     })
   }

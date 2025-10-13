@@ -31,39 +31,12 @@
       <div class="filter">
         <select formControlName="centro_custo" class="btn btn--tertiary">
           <option value="" selected>GERAL</option>
-          <option value="TST">TST</option>
-          <option value="EMLURB">EMLURB</option>
-          <option value="MÁQUINAS">MÁQUINAS</option>
-          <option value="BRK - HH">BRK - HH</option>
-          <option value="BRK - PV">BRK - PV</option>
-          <option value="BRK - PFIS">BRK - PFIS</option>
-          <option value="BRK - CABO">BRK - CABO</option>
-          <option value="ESCRITORIO">ESCRITÓRIO</option>
-          <option value="LUIZ WILSON">LUIZ WILSON</option>
-          <option value="BRK - HH 03">BRK - HH 03</option>
-          <option value="BRK - REDES">BRK - REDES</option>
-          <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-          <option value="BRK - CURADO">BRK - CURADO</option>
-          <option value="BRK - GOIANA">BRK - GOIANA</option>
-          <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-          <option value="BRK - CABANGA">BRK - CABANGA</option>
-          <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
-          <option value="BRK - ARAÇOIABA">BRK - ARAÇOIABA</option>
-          <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-          <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-          <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-          <option value="NOSSA SENHORA DO Ó">NOSSA SENHORA DO Ó</option>
-          <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-          <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
-          <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
-          <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
-          <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-          <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
+          <option *ngFor="let cc of costCenters" [value]="cc" selected>{{ cc }}</option>
         </select>
       </div>
 
       <div class="filter">
-        <input type="month" formControlName="data" class="btn btn--tertiary">
+        <input type="month" formControlName="data" (change)="findCentroCustoByData()" class="btn btn--tertiary">
       </div>
 
       <div class="filter">
@@ -350,54 +323,6 @@
             <label for="dias_nao_uteis">Dias Extras</label>
             <input type="number" id="dias_nao_uteis" name="dias_nao_uteis" placeholder="0"
               formControlName="dias_nao_uteis" class="form__input">
-          </div>
-
-          <div class="form__group">
-            <label for="funcao">Função</label>
-            <select id="funcao" formControlName="funcao" class="form__select">
-              <option value="" disabled selected>Selecione uma função</option>
-              <option value="ARMADOR">ARMADOR</option>
-              <option value="DIRETOR">DIRETOR</option>
-              <option value="SERVENTE">SERVENTE</option>
-              <option value="PEDREIRO">PEDREIRO</option>
-              <option value="AUXILIAR">AUXILIAR</option>
-              <option value="ENCANADOR">ENCANADOR</option>
-              <option value="ESTAGIÁRIO">ESTAGIÁRIO</option>
-              <option value="ALMOXARIFE">ALMOXARIFE</option>
-              <option value="ENGENHEIRO">ENGENHEIRO</option>
-              <option value="ELETRICISTA">ELETRICISTA</option>
-              <option value="COORDENADOR">COORDENADOR</option>
-              <option value="ENCARREGADO">ENCARREGADO</option>
-              <option value="DESENVOLVEDOR">DESENVOLVEDOR</option>
-              <option value="TÉCNICO DE SEGURANÇA">TÉCNICO DE SEGURANÇA</option>
-              <option value="OPERADOR DE MÁQUINAS">OPERADOR DE MÁQUINAS</option>
-            </select>
-          </div>
-
-          <div class="form__group">
-            <label for="setor">Setor</label>
-            <select id="setor" formControlName="setor" class="form__select">
-              <option value="" disabled selected>Selecione um setor</option>
-              <option value="T.I">T.I</option>
-              <option value="OBRA">OBRA</option>
-              <option value="COMPRAS">COMPRAS</option>
-              <option value="ORÇAMENTO">ORÇAMENTO</option>
-              <option value="QUALIDADE">QUALIDADE</option>
-              <option value="FINANCEIRO">FINANCEIRO</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="ADMINISTRATIVO">ADMINISTRATIVO</option>
-              <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
-            </select>
-          </div>
-
-          <div class="form__group">
-            <label for="contrato">Contrato</label>
-            <select id="contrato" formControlName="contrato" class="form__select">
-              <option value="" disabled selected>Selecione um tipo</option>
-              <option value="PJ">PJ</option>
-              <option value="CLT">CLT</option>
-              <option value="ESTÁGIO">ESTÁGIO</option>
-            </select>
           </div>
 
           <div class="form__group">

@@ -15,6 +15,16 @@ export class BenefitService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
+  findCostCenters(data: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/cost-centers', {
+      headers,
+      params: {
+        data
+      }
+    });
+  };
+
   findMedia(data: any, centro_custo: any): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/benefit/media', {
@@ -44,7 +54,12 @@ export class BenefitService {
 
   deleteMonth(month: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/month/:${month}`, { headers });
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/month`, {
+      headers,
+      params: {
+        month
+      }
+    });
   };
 
   deleteEmployee(id: any): Observable<any> {

@@ -18,7 +18,7 @@
     </div>
 
     <!-- FILTRO -->
-    <form [formGroup]="costCenterForm" (ngSubmit)="getByCostCenter()" class="filter">
+    <form [formGroup]="costCenterForm" class="filter">
       <select formControlName="centroCusto" class="select select--primary">
         <option value="GERAL">GERAL</option>
         <option value="EMLURB">EMLURB</option>
@@ -94,7 +94,7 @@
       </div>
     </div>
 
-    <form *ngIf="create" [formGroup]="createForm" (ngSubmit)="createEmployee()" class="modal__backdrop">
+    <form *ngIf="create" [formGroup]="createForm" class="modal__backdrop">
       <div class="modal__container">
 
         <div class="modal__header">
@@ -324,7 +324,7 @@
       </div>
     </form>
 
-    <form *ngIf="update" [formGroup]="updateForm" (ngSubmit)="updateEmployee()" class="modal__backdrop">
+    <form *ngIf="update" [formGroup]="updateForm" class="modal__backdrop">
       <div class="modal__container">
 
         <div class="modal__header">
@@ -558,7 +558,7 @@
       </div>
     </form>
 
-    <form *ngIf="delete" [formGroup]="deleteForm" (ngSubmit)="deleteEmployee()" class="modal__backdrop">
+    <form *ngIf="delete" [formGroup]="deleteForm" class="modal__backdrop">
       <div class="modal__container modal__container--secondary">
 
         <div class="modal__header">
