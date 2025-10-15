@@ -58,8 +58,8 @@ export class DashboardComponent implements OnInit {
 
   loadEmployeeData(): void {
     this._dashboardService.findAll().subscribe({
-      next: (response: IEmployeeResponse) => {
-        const employee = response.employee;
+      next: (response) => {
+        const employee = response.result;
         this.name = employee.name;
         this.username = employee.username || employee.name;
         this.hasCustomAvatar = !!employee.avatar;
