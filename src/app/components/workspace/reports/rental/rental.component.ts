@@ -169,7 +169,7 @@ export class RentalComponent implements OnInit {
   getUser(): void {
     this._userService.findAll().subscribe({
       next: (res) => {
-        this.userInfo = res.employee;
+        this.userInfo = res.result;
       },
       error: (err) => {
         this.setMessage(err.error.message, 'error');
@@ -259,6 +259,8 @@ export class RentalComponent implements OnInit {
       locacao_id: this.activeForm.value.locacao_id,
       ordem_compra: this.activeForm.value.ordem_compra
     }
+
+    console.log(request.locacao_id, request.ordem_compra);
 
     this._equipamentService.active(request)
       .pipe(finalize(() => this.isProcessing = false))
