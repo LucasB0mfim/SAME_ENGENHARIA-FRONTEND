@@ -11,7 +11,6 @@ import { BrkComponent } from './components/workspace/human-resources/brk/brk.com
 import { ErrorFormComponent } from './components/forms/error-form/error-form.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { RentalComponent } from './components/workspace/reports/rental/rental.component';
-import { FinancialComponent } from './components/workspace/financial/financial.component';
 import { TaskComponent } from './components/workspace/human-resources/task/task.component';
 import { SuccessFormComponent } from './components/forms/success-form/success-form.component';
 import { TrackingComponent } from './components/workspace/reports/tracking/tracking.component';
@@ -26,11 +25,10 @@ import { TimeSheetComponent } from './components/workspace/human-resources/time-
 import { CancellationFormComponent } from './components/forms/cancellation-form/cancellation-form.component';
 import { ResignationComponent } from './components/workspace/human-resources/resignation/resignation.component';
 import { UploadTimesheetComponent } from './components/workspace/human-resources/upload-timesheet/upload-timesheet.component';
-import { FinancialTrackingComponent } from './components/workspace/financial/financial-tracking/financial-tracking.component';
+import { CancelTransportComponent } from './components/workspace/human-resources/cancel-transport/cancel-transport.component';
 
 import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
-import { indicatorsGuard } from './core/guard/indicators.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 
 export const routes: Routes = [
@@ -132,18 +130,9 @@ export const routes: Routes = [
         canActivate: [humanResourcesGuard]
       },
       {
-        path: 'financial',
-        component: FinancialComponent
-      },
-      {
-        path: 'financial/tracking',
-        component: FinancialTrackingComponent,
-        canActivate: [indicatorsGuard]
-      },
-      {
-        path: 'financial/cost-center',
-        component: CostCenterComponent,
-        canActivate: [indicatorsGuard]
+        path: 'human-resources/cancel-transport',
+        component: CancelTransportComponent,
+        canActivate: [humanResourcesGuard]
       }
     ]
   }
