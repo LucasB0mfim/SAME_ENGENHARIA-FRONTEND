@@ -15,11 +15,12 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 
   gap: $gp-md;
   display: grid;
+  justify-content: center;
   grid-template-rows: auto 1fr;
 }
 
 .filters {
-  width: 100%;
+  width: 1280px;
   height: 100%;
 
   gap: $gp-md;
@@ -29,12 +30,26 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 }
 
 .cards {
-  width: 100%;
+  width: 1280px;
   height: 100%;
   gap: $gp-md;
 
   display: flex;
   flex-direction: column;
+}
+
+.display {
+  display: flex;
+
+  &--flex {
+    gap: $gp-sm;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &--column {
+    flex-direction: column;
+  }
 }
 
 .card {
@@ -47,7 +62,7 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
   &__header {
     display: flex;
     padding: $pd-md;
-    flex-direction: column;
+    justify-content: space-between;
 
     border-top-left-radius: $bd-df;
     border-left: $bd-df solid var(--orange-color);
@@ -76,12 +91,12 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 
 .title {
   font-size: $fs-md;
-  
+
   &--light {
     font-weight: 500;
     color: var(--gray-color);
   }
-  
+
   &--dark {
     font-weight: 600;
     color: var(--text-color);
@@ -89,9 +104,49 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 }
 
 .btn {
+  border: none;
+  font-size: $fs-md;
+  font-weight: 600;
+  padding: $pd-sm $pd-md;
+  border-radius: $bd-df;
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+  transition: all 0.2s ease;
   cursor: pointer;
 
-  border: none;
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &__launch {
+    border: $bd-sm solid transparent;
+
+    &:hover {
+      border-color: var(--orange-color);
+    }
+  }
+}
+
+.input {
+  cursor: text;
+  color: var(--text-color);
+
+  font-size: $fs-md;
+  font-weight: 500;
+  padding: $pd-sm $pd-md;
+
   border-radius: $bd-df;
+  border: $bd-sm solid transparent;
   background-color: var(--secondary-color);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--orange-color);
+  }
 }

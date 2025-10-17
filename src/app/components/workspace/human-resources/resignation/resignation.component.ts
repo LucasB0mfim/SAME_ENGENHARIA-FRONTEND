@@ -8,7 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angul
 
 import { TitleService } from '../../../../core/services/title.service';
 import { ResignationService } from '../../../../core/services/resignation.service';
-import { BenefitService } from '../../../../core/services/benefit.service';
+import { EmployeeService } from '../../../../core/services/employee.service';
 
 interface StatusCounts {
   'NOVA SOLICITAÇÃO': number;
@@ -31,7 +31,7 @@ export class ResignationComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _resignationService = inject(ResignationService);
-  private readonly _benefitService = inject(BenefitService);
+  private readonly _employeeService = inject(EmployeeService);
 
   // ========== FORMULÁRIOS ========== //
   createForm: FormGroup = new FormGroup({
@@ -244,11 +244,11 @@ export class ResignationComponent implements OnInit {
   }
 
   getEmployeeInfo(): void {
-  //   this._benefitService.findBasicInfo().subscribe({
-  //     next: (res) => {
-  //       this.employeeData = res.result;
-  //     }
-  //   });
+    this._employeeService.findEmployees().subscribe({
+      next: (res) => {
+        this.employeeData = res.result;
+      }
+    });
   }
 
   // ========== FILTROS POR STATUS ========== //
