@@ -15,12 +15,13 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 
   gap: $gp-md;
   display: grid;
-  justify-content: center;
+  justify-items: center;
   grid-template-rows: auto 1fr;
 }
 
 .filters {
-  width: 1280px;
+  max-width: 1280px;
+  width: 100%;
   height: 100%;
 
   gap: $gp-md;
@@ -30,7 +31,8 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 }
 
 .cards {
-  width: 1280px;
+  max-width: 1280px;
+  width: 100%;
   height: 100%;
   gap: $gp-md;
 
@@ -115,7 +117,6 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
   cursor: pointer;
 
   &:hover {
-    opacity: 0.9;
     transform: translateY(-1px);
   }
 

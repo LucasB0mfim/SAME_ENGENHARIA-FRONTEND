@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -45,18 +45,15 @@ export class BenefitComponent implements OnInit {
     contrato: new FormControl(''),
     centro_custo: new FormControl(''),
     recebe_integral: new FormControl(''),
-    vr_caju: new FormControl(null),
-    vr_vr: new FormControl(null),
-    vc_caju: new FormControl(null),
-    vc_vr: new FormControl(null),
-    vt_caju: new FormControl(null),
-    vt_vem: new FormControl(null),
-    vr_caju_fixo: new FormControl(''),
-    vr_vr_fixo: new FormControl(''),
-    vc_caju_fixo: new FormControl(''),
-    vc_vr_fixo: new FormControl(''),
-    vt_caju_fixo: new FormControl(''),
-    vt_vem_fixo: new FormControl('')
+    vr: new FormControl(null),
+    vc: new FormControl(null),
+    vt: new FormControl(null),
+    vr_card: new FormControl(''),
+    vc_card: new FormControl(''),
+    vt_card: new FormControl(''),
+    vr_fixed: new FormControl(''),
+    vc_fixed: new FormControl(''),
+    vt_fixed: new FormControl(''),
   })
 
   deleteMonthForm: FormGroup = new FormGroup({
@@ -226,46 +223,40 @@ export class BenefitComponent implements OnInit {
   }
 
   updateRecord(): void {
-    // this.isUpdating = true;
+    this.isUpdating = true;
 
-    // const request = {
-    //   id: this.updateRecordForm.value.id,
-    //   data: this.updateRecordForm.value.data,
-    //   nome: this.removeSpace(this.updateRecordForm.value.nome),
-    //   reembolso: this.updateRecordForm.value.reembolso,
-    //   dias_uteis: this.updateRecordForm.value.dias_uteis,
-    //   dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis,
-    //   funcao: this.updateRecordForm.value.funcao,
-    //   setor: this.updateRecordForm.value.setor,
-    //   contrato: this.updateRecordForm.value.contrato,
-    //   centro_custo: this.updateRecordForm.value.centro_custo,
-    //   recebe_integral: this.updateRecordForm.value.recebe_integral,
-    //   vr_caju: this.updateRecordForm.value.vr_caju,
-    //   vr_caju_fixo: this.updateRecordForm.value.vr_caju_fixo,
-    //   vr_vr: this.updateRecordForm.value.vr_vr,
-    //   vr_vr_fixo: this.updateRecordForm.value.vr_vr_fixo,
-    //   vc_caju: this.updateRecordForm.value.vc_caju,
-    //   vc_caju_fixo: this.updateRecordForm.value.vc_caju_fixo,
-    //   vc_vr: this.updateRecordForm.value.vc_vr,
-    //   vc_vr_fixo: this.updateRecordForm.value.vc_vr_fixo,
-    //   vt_caju: this.updateRecordForm.value.vt_caju,
-    //   vt_caju_fixo: this.updateRecordForm.value.vt_caju_fixo,
-    //   vt_vem: this.updateRecordForm.value.vt_vem,
-    //   vt_vem_fixo: this.updateRecordForm.value.vt_vem_fixo,
-    // }
+    const request = {
+      id: this.updateRecordForm.value.id,
+      data: this.updateRecordForm.value.data,
+      nome: this.updateRecordForm.value.nome,
+      reembolso: this.updateRecordForm.value.reembolso,
+      dias_uteis: this.updateRecordForm.value.dias_uteis,
+      dias_nao_uteis: this.updateRecordForm.value.dias_nao_uteis,
+      centro_custo: this.updateRecordForm.value.centro_custo,
+      recebe_integral: this.updateRecordForm.value.recebe_integral,
+      vr: this.updateRecordForm.value.vr,
+      vc: this.updateRecordForm.value.vc,
+      vt: this.updateRecordForm.value.vt,
+      vr_card: this.updateRecordForm.value.vr_card,
+      vc_card: this.updateRecordForm.value.vc_card,
+      vt_card: this.updateRecordForm.value.vt_card,
+      vr_fixed: this.updateRecordForm.value.vr_fixed,
+      vc_fixed: this.updateRecordForm.value.vc_fixed,
+      vt_fixed: this.updateRecordForm.value.vt_fixed
+    }
 
-    // this._benefitService.updateRecord(request).subscribe({
-    //   next: () => {
-    //     this.setSuccessMessage('Registro atualizado com sucesso.');
-    //     this.isUpdating = false;
-    //     this.updateRecordSection = false;
-    //   },
-    //   error: (error) => {
-    //     this.isUpdating = false;
-    //     console.log('Erro ao atualizar colaborador.', error);
-    //     this.isUpdating = false;
-    //   }
-    // })
+    this._benefitService.updateEmployee(request).subscribe({
+      next: () => {
+        this.setSuccessMessage('Registro atualizado com sucesso.');
+        this.isUpdating = false;
+        this.updateRecordSection = false;
+      },
+      error: (error) => {
+        this.isUpdating = false;
+        console.log('Erro ao atualizar colaborador.', error);
+        this.isUpdating = false;
+      }
+    })
   }
 
   deleteRecord(): void {
@@ -474,10 +465,6 @@ export class BenefitComponent implements OnInit {
   // ========== UTILITÁRIOS ========== //
   upperCase(string: string): string {
     return string.toUpperCase().trim();
-  }
-
-  removeSpace(value: string): string {
-    return value.trim();
   }
 
   formateDate(date: string): string {

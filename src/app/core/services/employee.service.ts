@@ -19,4 +19,9 @@ export class EmployeeService {
     const headers = this._createHeaders();
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee', { headers });
   };
+
+  findActiveCostCenters(): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/cost-centers', { headers });
+  };
 }

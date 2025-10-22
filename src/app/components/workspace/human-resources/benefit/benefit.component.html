@@ -300,7 +300,6 @@
             aria-label="Fechar modal">&times;</button>
         </div>
         <div class="form__content">
-
           <div class="form__group">
             <label for="nome">Nome</label>
             <input type="text" id="nome" name="nome" formControlName="nome" readonly placeholder="Nome Completo"
@@ -308,157 +307,98 @@
           </div>
 
           <div class="form__group">
-            <label for="reembolso">Reembolso</label>
-            <input type="number" id="reembolso" name="reembolso" placeholder="0" formControlName="reembolso"
-              class="form__input">
+            <label>Reembolso</label>
+            <input type="number" placeholder="0" formControlName="reembolso" class="form__input">
           </div>
 
           <div class="form__group">
-            <label for="dias_uteis">Dias Trabalhados</label>
-            <input type="number" id="dias_uteis" name="dias_uteis" placeholder="0" formControlName="dias_uteis"
-              class="form__input">
+            <label>Dias Úteis</label>
+            <input type="number" placeholder="0" formControlName="dias_uteis" class="form__input">
           </div>
 
           <div class="form__group">
-            <label for="dias_nao_uteis">Dias Extras</label>
-            <input type="number" id="dias_nao_uteis" name="dias_nao_uteis" placeholder="0"
-              formControlName="dias_nao_uteis" class="form__input">
+            <label>Dias Não Úteis</label>
+            <input type="number" placeholder="0" formControlName="dias_nao_uteis" class="form__input">
           </div>
 
           <div class="form__group">
-            <label for="centro_custo">Centro de Custo</label>
-            <select id="centro_custo" formControlName="centro_custo" class="form__select">
+            <label>Centro de Custo</label>
+            <select formControlName="centro_custo" class="form__select">
               <option value="" disabled selected>Selecione um centro de custo</option>
-              <option value="TST">TST</option>
-              <option value="EMLURB">EMLURB</option>
-              <option value="MÁQUINAS">MÁQUINAS</option>
-              <option value="BRK - HH">BRK - HH</option>
-              <option value="BRK - PV">BRK - PV</option>
-              <option value="BRK - PFIS">BRK - PFIS</option>
-              <option value="BRK - CABO">BRK - CABO</option>
-              <option value="ESCRITÓRIO">ESCRITÓRIO</option>
-              <option value="BRK - REDES">BRK - REDES</option>
-              <option value="LUIZ WILSON">LUIZ WILSON</option>
-              <option value="BRK - HH 03">BRK - HH 03</option>
-              <option value="IRMÃ DENIZE">IRMÃ DENIZE</option>
-              <option value="RODA DE FOGO">RODA DE FOGO</option>
-              <option value="BRK - CURADO">BRK - CURADO</option>
-              <option value="BRK - GOIANA">BRK - GOIANA</option>
-              <option value="PLANEJAMENTO">PLANEJAMENTO</option>
-              <option value="BRK - CABANGA">BRK - CABANGA</option>
-              <option value="BRK - ALAGOAS">BRK - ALAGOAS</option>
-              <option value="BRK - ARAÇOIABA">BRK - ARAÇOIABA</option>
-              <option value="BRK - PEIXINHOS">BRK - PEIXINHOS</option>
-              <option value="FRANCISCO AREIAS">FRANCISCO AREIAS</option>
-              <option value="NOSSA SENHORA DO Ó">NOSSA SENHORA DO Ó</option>
-              <option value="BRK - RUA BUTRIM">BRK - RUA BUTRIM</option>
-              <option value="BRK - OS PERMANENTE">BRK - OS PERMANENTE</option>
-              <option value="PRÉDIO - IMBIRIBEIRA">PRÉDIO - IMBIRIBEIRA</option>
-              <option value="HEINEKEN - REFLORESTAMENTO">HEINEKEN - REFLORESTAMENTO</option>
-              <option value="BRK - COMP. MURO ETES 04">BRK - COMP. MURO ETES 04</option>
-              <option value="BRK - EQUIPES DISPONÍVEIS">BRK - EQUIPES DISPONÍVEIS</option>
-              <option value="BRK - TANQUE CABANGA">BRK - TANQUE CABANGA</option>
+              <option *ngFor="let cc of costCenters" [value]="cc" selected>{{ cc }}</option>
             </select>
           </div>
 
           <div class="form__group">
-            <label for="recebe_integral">Recebe vale-refeição todo dia?</label>
-            <select id="recebe_integral" name="recebe_integral" formControlName="recebe_integral" class="form__select">
-              <option value="NÃO" selected>NÃO</option>
-              <option value="SIM">SIM</option>
+            <label>Recebe vale-refeição todo dia?</label>
+            <select formControlName="recebe_integral" class="form__select">
+              <option value="TRUE">SIM</option>
+              <option value="FALSE">NÃO</option>
             </select>
           </div>
 
           <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="vr_caju">Vale Refeição (CAJU)</label>
-              <input id="vr_caju" name="vr_caju" type="number" placeholder="0.00" formControlName="vr_caju"
-                class="form__input">
+            <div class="form__group">
+              <label>Vale Refeição</label>
+              <input type="number" placeholder="0.00" formControlName="vr" class="form__input">
             </div>
-            <div class="form__group form__group--sub">
-              <label for="vr_caju_fixo">Valor fixo?</label>
-              <select id="vr_caju_fixo" name="vr_caju_fixo" formControlName="vr_caju_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
+            <div class="form__group">
+              <label>Cartão</label>
+              <select formControlName="vr_card" class="form__select">
+                <option value="CAJU">CAJU</option>
+                <option value="VR">VR</option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label>Fixo</label>
+              <select formControlName="vr_fixed" class="form__select">
+                <option value="TRUE">SIM</option>
+                <option value="FALSE">NÃO</option>
               </select>
             </div>
           </div>
 
           <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="vc_caju">Vale Combustível (CAJU)</label>
-              <input id="vc_caju" name="vc_caju" type="number" placeholder="0.00" formControlName="vc_caju"
-                class="form__input">
+            <div class="form__group">
+              <label>Vale Combustível</label>
+              <input type="number" placeholder="0.00" formControlName="vc" class="form__input">
             </div>
-            <div class="form__group form__group--sub">
-              <label for="vc_caju_fixo">Valor fixo?</label>
-              <select id="vc_caju_fixo" name="vc_caju_fixo" formControlName="vc_caju_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
+            <div class="form__group">
+              <label>Cartão</label>
+              <select formControlName="vc_card" class="form__select">
+                <option value="CAJU">CAJU</option>
+                <option value="VR">VR</option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label>Fixo</label>
+              <select formControlName="vc_fixed" class="form__select">
+                <option value="TRUE">SIM</option>
+                <option value="FALSE">NÃO</option>
               </select>
             </div>
           </div>
 
           <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="vt_caju">Vale Transporte (CAJU)</label>
-              <input id="vt_caju" name="vt_caju" type="number" placeholder="0.00" formControlName="vt_caju"
-                class="form__input">
+            <div class="form__group">
+              <label>Vale Transporte</label>
+              <input type="number" placeholder="0.00" formControlName="vt" class="form__input">
             </div>
-            <div class="form__group form__group--sub">
-              <label for="vt_caju_fixo">Valor fixo?</label>
-              <select id="vt_caju_fixo" name="vt_caju_fixo" formControlName="vt_caju_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
+            <div class="form__group">
+              <label>Cartão</label>
+              <select formControlName="vt_card" class="form__select">
+                <option value="CAJU">CAJU</option>
+                <option value="VEM">VEM</option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label>Fixo</label>
+              <select formControlName="vt_fixed" class="form__select">
+                <option value="TRUE">SIM</option>
+                <option value="FALSE">NÃO</option>
               </select>
             </div>
           </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="vr_vr">Vale Refeição (VR)</label>
-              <input id="vr_vr" name="vr_vr" type="number" placeholder="0.00" formControlName="vr_vr"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="vr_vr_fixo">Valor fixo?</label>
-              <select id="vr_vr_fixo" name="vr_vr_fixo" formControlName="vr_vr_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="vc_vr">Vale Combustível (VR)</label>
-              <input id="vc_vr" name="vc_vr" type="number" placeholder="0.00" formControlName="vc_vr"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="vc_vr_fixo">Valor fixo?</label>
-              <select id="vc_vr_fixo" name="vc_vr_fixo" formControlName="vc_vr_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group form__group--flex">
-            <div class="form__group form__group--sub">
-              <label for="vt_vem">Vale Transporte (VEM)</label>
-              <input id="vt_vem" name="vt_vem" type="number" placeholder="0.00" formControlName="vt_vem"
-                class="form__input">
-            </div>
-            <div class="form__group form__group--sub">
-              <label for="vt_vem_fixo">Valor fixo?</label>
-              <select id="vt_vem_fixo" name="vt_vem_fixo" formControlName="vt_vem_fixo" class="form__select">
-                <option value="NÃO" selected>NÃO</option>
-                <option value="SIM">SIM</option>
-              </select>
-            </div>
-          </div>
-
         </div>
         <div class="form__footer">
           @if (showError) {
