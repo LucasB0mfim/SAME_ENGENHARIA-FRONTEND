@@ -18,18 +18,17 @@ import { BenefitComponent } from './components/workspace/human-resources/benefit
 import { AdmissionFormComponent } from './components/forms/admission-form/admission-form.component';
 import { ExperienceComponent } from './components/workspace/reports/experience/experience.component';
 import { EmployeeComponent } from './components/workspace/human-resources/employee/employee.component';
-import { CostCenterComponent } from './components/workspace/financial/cost-center/cost-center.component';
 import { AdmissionComponent } from './components/workspace/human-resources/admission/admission.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { TimeSheetComponent } from './components/workspace/human-resources/time-sheet/time-sheet.component';
 import { CancellationFormComponent } from './components/forms/cancellation-form/cancellation-form.component';
 import { ResignationComponent } from './components/workspace/human-resources/resignation/resignation.component';
 import { UploadTimesheetComponent } from './components/workspace/human-resources/upload-timesheet/upload-timesheet.component';
-import { CancelTransportComponent } from './components/workspace/human-resources/cancel-transport/cancel-transport.component';
 
 import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
+import { TransportComponent } from './components/workspace/human-resources/transport/transport.component';
 
 export const routes: Routes = [
   {
@@ -130,8 +129,8 @@ export const routes: Routes = [
         canActivate: [humanResourcesGuard]
       },
       {
-        path: 'human-resources/cancel-transport',
-        component: CancelTransportComponent,
+        path: 'human-resources/transport',
+        component: TransportComponent,
         canActivate: [humanResourcesGuard]
       }
     ]

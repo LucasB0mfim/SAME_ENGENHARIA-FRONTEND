@@ -197,16 +197,6 @@ export class BenefitComponent implements OnInit {
       dias_nao_uteis: this.createRecordForm.value.dias_nao_uteis
     }
 
-    if (request.dias_uteis < 20) {
-      this.setErrorMessage('Define uma quantidade válida.');
-      return;
-    }
-
-    if (request.dias_nao_uteis < 7) {
-      this.setErrorMessage('Define uma quantidade válida.');
-      return;
-    }
-
     this._benefitService.createMonth(request).subscribe({
       next: () => {
         this.setSuccessMessage('Registro criado com sucesso.');

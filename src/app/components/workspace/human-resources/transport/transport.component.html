@@ -1,0 +1,72 @@
+<div class="container">
+
+  <div class="filters">
+    <input type="text" placeholder="Buscar" class="input">
+
+    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'NOVO'"
+      (click)="filterByStatus('NOVO')">
+      Novos
+    </button>
+
+    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'ANDAMENTO'"
+      (click)="filterByStatus('ANDAMENTO')">
+      Em andamento
+    </button>
+
+    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'FINALIZADO'"
+      (click)="filterByStatus('FINALIZADO')">
+      Concluídos
+    </button>
+
+    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'CANCELADO'"
+      (click)="filterByStatus('CANCELADO')">
+      Cancelados
+    </button>
+  </div>
+
+  <div class="cards">
+    <div class="card" *ngFor="let item of items">
+      <div class="card__header">
+        <div class="display display--column">
+          <div class="card__group card__group--row">
+            <h3 class="title title--dark">{{ item.nome }}</h3>
+            <h3 class="title title--light">|</h3>
+            <h3 class="title title--light">{{ item.funcao }}</h3>
+          </div>
+          <div class="card__group card__group--row">
+            <h3 class="title title--light">{{ item.centro_custo }}</h3>
+          </div>
+        </div>
+        <div class="display display--flex">
+          <div class="card__group card__group--row">
+            <h3 class="title title--dark">{{ item.tipo }}</h3>
+          </div>
+          <div class="card__group card__group--row">
+            <h3 class="title title--light">|</h3>
+          </div>
+          <div class="card__group card__group--row">
+            <h3 class="title title--light">{{ formateDate(item.data_criacao) }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="card__group card__group--column">
+          <h3 class="title title--light">MOTIVO</h3>
+          <h3 class="title title--dark">{{ item.motivo }}</h3>
+        </div>
+        <div class="card__group card__group--column">
+          <h3 class="title title--light">ENDEREÇO</h3>
+          <h3 class="title title--dark">{{ item.endereco }}</h3>
+        </div>
+        <div class="card__group card__group--column" *ngIf="item.transporte">
+          <h3 class="title title--light">TRANSPORTE</h3>
+          <h3 class="title title--dark">{{ item.transporte }}</h3>
+        </div>
+        <div class="card__group card__group--column" *ngIf="item.quantidade">
+          <h3 class="title title--light">QUANTIDADE</h3>
+          <h3 class="title title--dark">{{ item.quantidade }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
