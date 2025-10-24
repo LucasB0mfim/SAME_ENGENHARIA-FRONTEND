@@ -374,19 +374,7 @@ export class BenefitComponent implements OnInit {
       setor: employee.setor,
       contrato: employee.contrato,
       centro_custo: employee.centro_custo,
-      recebe_integral: employee.recebe_integral,
-      vr_caju: employee.vr_caju,
-      vr_vr: employee.vr_vr,
-      vc_caju: employee.vc_caju,
-      vc_vr: employee.vc_vr,
-      vt_caju: employee.vt_caju,
-      vt_vem: employee.vt_vem,
-      vr_caju_fixo: employee.vr_caju_fixo,
-      vr_vr_fixo: employee.vr_vr_fixo,
-      vc_caju_fixo: employee.vc_caju_fixo,
-      vc_vr_fixo: employee.vc_vr_fixo,
-      vt_caju_fixo: employee.vt_caju_fixo,
-      vt_vem_fixo: employee.vt_vem_fixo
+      recebe_integral: employee.recebe_integral
     });
   }
 
