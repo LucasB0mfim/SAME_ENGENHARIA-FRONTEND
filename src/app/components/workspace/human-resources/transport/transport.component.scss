@@ -1,13 +1,20 @@
 $gp-sm: clamp(0.5rem, 0.5rem + 0vw, 0.5rem);
 $gp-md: clamp(1rem, 1rem + 0vw, 1rem);
+$gp-lg: clamp(1.5rem, 1.5rem + 0vw, 1.5rem);
 
 $pd-sm: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 $pd-md: clamp(1.25rem, 1.25rem + 0vw, 1.25rem);
 
 $bd-sm: 2px;
 $bd-df: 4px;
+$bd-lg: 6px;
+$bd-xx: 8px;
 
 $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
+$fs-lg: clamp(1.125rem, 1.125rem + 0vw, 1.125rem);
+
+$icon-sm: 24px;
+$icon-lg: 80px;
 
 .container {
   width: 100%;
@@ -19,7 +26,7 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
   grid-template-rows: auto 1fr;
 }
 
-.filters {
+.aside {
   max-width: 1280px;
   width: 100%;
   height: 100%;
@@ -30,14 +37,27 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
   justify-content: start;
 }
 
-.cards {
-  max-width: 1280px;
-  width: 100%;
-  height: 100%;
-  gap: $gp-md;
-
+.main {
   display: flex;
   flex-direction: column;
+  padding-right: $pd-sm;
+
+  width: 100%;
+  max-width: 1280px;
+  height: 100%;
+
+  gap: $gp-md;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: $bd-sm;
+    background: var(--orange-color);
+  }
 }
 
 .display {
@@ -57,7 +77,6 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
 .card {
   width: 100%;
   height: auto;
-
   border-radius: $bd-df;
   background-color: var(--secondary-color);
 
@@ -66,14 +85,15 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
     padding: $pd-md;
     justify-content: space-between;
 
+    cursor: pointer;
     border-top-left-radius: $bd-df;
     border-left: $bd-df solid var(--orange-color);
   }
 
   &__body {
-    display: grid;
+    display: flex;
+    gap: $gp-lg;
     padding: $pd-md;
-    grid-template-columns: repeat(5, 1fr);
     border-top: $bd-sm solid var(--primary-color);
   }
 
@@ -87,8 +107,15 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
     &--column {
       display: flex;
       flex-direction: column;
+      justify-content: center;
     }
   }
+}
+
+.bubble {
+  border-radius: $bd-xx;
+  padding: 0 $pd-sm;
+  background-color: rgb(255, 111, 0, 0.2);
 }
 
 .title {
@@ -103,45 +130,112 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
     font-weight: 600;
     color: var(--text-color);
   }
+
+  &--dark-orange {
+    font-weight: 600;
+    color: var(--orange-color);
+  }
+
+  &--large {
+    font-size: $fs-lg;
+  }
 }
 
-.btn {
+.icon {
+  width: auto;
+  height: auto;
+
   border: none;
-  font-size: $fs-md;
-  font-weight: 600;
-  padding: $pd-sm $pd-md;
-  border-radius: $bd-df;
-  color: var(--text-color);
-  background-color: var(--secondary-color);
-  transition: all 0.2s ease;
-  cursor: pointer;
+  outline: none;
+  background-color: transparent;
 
-  &:hover {
-    transform: translateY(-1px);
+  mat-icon {
+    width: 100%;
+    height: 100%;
   }
 
-  &:active {
-    transform: translateY(0);
+  &--small {
+    font-size: $icon-sm;
   }
 
-  &__launch {
-    border: $bd-sm solid transparent;
+  &--large {
+    font-size: $icon-lg;
+  }
+
+  &--light {
+    color: var(--gray-color);
+  }
+
+  &--dark {
+    color: var(--text-color);
+  }
+
+  &--orange {
+    color: var(--orange-color);
+  }
+
+  &--close {
+    cursor: pointer;
+    font-size: $icon-sm;
+    color: var(--gray-color);
 
     &:hover {
-      border-color: var(--orange-color);
+      color: var(--text-color);
     }
   }
 }
 
-.input {
-  cursor: text;
+.btn {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: $fs-md;
   color: var(--text-color);
 
+  border: none;
+  background-color: var(--secondary-color);
+  transition: all 0.2s ease;
+
+  &.active {
+    color: var(--white-color);
+    transform: translateY(-4px);
+    background-color: var(--orange-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &__launch {
+    border-radius: $bd-lg;
+    padding: $pd-sm $pd-md;
+    border: $bd-sm solid transparent;
+
+    &:hover {
+      color: var(--orange-color);
+      border-color: var(--orange-color);
+      transform: translateY(-1px);
+    }
+  }
+
+  &__action {
+    border-radius: $bd-lg;
+    padding: $pd-sm $pd-md;
+    border: $bd-sm solid transparent;
+    background-color: var(--primary-color);
+
+    &:hover {
+      color: var(--orange-color);
+      border-color: var(--orange-color);
+      transform: translateY(-1px);
+    }
+  }
+
+}
+
+.input {
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm $pd-md;
+  color: var(--text-color);
 
-  border-radius: $bd-df;
+  border-radius: $bd-lg;
   border: $bd-sm solid transparent;
   background-color: var(--secondary-color);
   transition: all 0.2s ease;
@@ -149,5 +243,98 @@ $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
   &:focus {
     outline: none;
     border-color: var(--orange-color);
+  }
+}
+
+.select {
+  cursor: pointer;
+  font-size: $fs-md;
+  font-weight: 500;
+  padding: $pd-sm $pd-md;
+  color: var(--text-color);
+
+  border-radius: $bd-lg;
+  border: $bd-sm solid transparent;
+  background-color: var(--secondary-color);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--orange-color);
+  }
+
+  &__modal {
+    padding: $pd-sm;
+
+    &--dark {
+      background-color: var(--primary-color);
+    }
+  }
+}
+
+.centralized {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--column {
+    gap: $gp-sm;
+    flex-direction: column;
+  }
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
+}
+
+.blurred-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal {
+  max-width: 1024px;
+  min-width: 600px;
+
+  width: auto;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: $gp-md;
+
+  padding: $pd-md;
+  border-radius: $bd-lg;
+  background-color: var(--secondary-color);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $gp-sm;
   }
 }

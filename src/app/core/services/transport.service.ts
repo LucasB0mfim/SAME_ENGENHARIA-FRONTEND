@@ -20,4 +20,13 @@ export class TransportService {
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/transport/', { headers });
   };
 
+  findByStatus(status: string): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/transport/${status}`, { headers });
+  };
+
+  update(request: any): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.put<any>(`https://sameengenharia.com.br/api/transport`, request, { headers });
+  };
 }

@@ -9,7 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angul
 
 import { BrkService } from '../../../../core/services/brk.service';
 import { TitleService } from '../../../../core/services/title.service';
-import { BenefitService } from '../../../../core/services/benefit.service';
+import { EmployeeService } from '../../../../core/services/employee.service';
 
 // Interface para tipagem dos contadores
 interface StatusCounts {
@@ -37,7 +37,7 @@ export class BrkComponent implements OnInit {
   // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private _titleService = inject(TitleService);
   private readonly _brkService = inject(BrkService);
-  private readonly _benefitService = inject(BenefitService);
+  private readonly _employeeService = inject(EmployeeService);
 
   // ========== FORMULÁRIOS ========== //
   findForm: FormGroup = new FormGroup({
@@ -75,7 +75,7 @@ export class BrkComponent implements OnInit {
   currentItem: any = null;
   filteredItems: any[] = [];
 
-  employeeInfo: any[] = [];
+  functions: any[] = [];
 
   employee: string = '';
   selectedStatus: StatusKey = 'NOVO';
@@ -109,7 +109,7 @@ export class BrkComponent implements OnInit {
   // ========== HOOK ========== //
   ngOnInit(): void {
     this.loadInitialData();
-    // this.getEmployeeInfo();
+    this.getEmployeeInfo();
     this._titleService.setTitle('BRK');
   }
 
@@ -265,13 +265,13 @@ export class BrkComponent implements OnInit {
     });
   }
 
-  // getEmployeeInfo(): void {
-  //   this._benefitService.findBasicInfo().subscribe({
-  //     next: (res) => {
-  //       this.employeeInfo = res.result;
-  //     }
-  //   });
-  // }
+  getEmployeeInfo(): void {
+    this._employeeService.findFunctions().subscribe({
+      next: (res) => {
+        this.functions = res.result;
+      }
+    });
+  }
 
   // ========== FILTROS POR STATUS ========== //
   filterByStatus(status: string): void {

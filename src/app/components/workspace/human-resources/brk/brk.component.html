@@ -209,7 +209,7 @@
             <label class="modal__label">Função *</label>
             <select formControlName="funcao" class="modal__select">
               <option value="" disabled>Selecione uma opção</option>
-              <option *ngFor="let emp of employeeInfo" [value]="emp.funcao">{{ emp.funcao }}</option>
+              <option *ngFor="let function of functions" [value]="function">{{ function }}</option>
             </select>
           </div>
 
@@ -283,7 +283,7 @@
             <label class="modal__label">Função *</label>
             <select formControlName="funcao" class="modal__select">
               <option value="" disabled>Selecione uma opção</option>
-              <option *ngFor="let emp of employeeInfo" [value]="emp.funcao">{{ emp.funcao }}</option>
+              <option *ngFor="let function of functions" [value]="function">{{ function }}</option>
             </select>
           </div>
 

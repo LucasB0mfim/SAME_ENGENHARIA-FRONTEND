@@ -1,72 +1,130 @@
 <div class="container">
-
-  <div class="filters">
+  <div class="aside">
     <input type="text" placeholder="Buscar" class="input">
 
-    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'NOVO'"
-      (click)="filterByStatus('NOVO')">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
+      [class.active]="activeStatus === 'NOVO'">
       Novos
     </button>
 
-    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'ANDAMENTO'"
-      (click)="filterByStatus('ANDAMENTO')">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
+      [class.active]="activeStatus === 'ANDAMENTO'">
       Em andamento
     </button>
 
-    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'FINALIZADO'"
-      (click)="filterByStatus('FINALIZADO')">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
+      [class.active]="activeStatus === 'CONCLUIDO'">
       Concluídos
     </button>
 
-    <button type="button" class="btn btn__launch" [class.active]="activeStatus === 'CANCELADO'"
-      (click)="filterByStatus('CANCELADO')">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
+      [class.active]="activeStatus === 'CANCELADO'">
       Cancelados
     </button>
   </div>
 
-  <div class="cards">
+  <div class="main">
     <div class="card" *ngFor="let item of items">
-      <div class="card__header">
+      <div class="card__header" (click)="openModal(item)" [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
         <div class="display display--column">
           <div class="card__group card__group--row">
             <h3 class="title title--dark">{{ item.nome }}</h3>
-            <h3 class="title title--light">|</h3>
-            <h3 class="title title--light">{{ item.funcao }}</h3>
           </div>
           <div class="card__group card__group--row">
-            <h3 class="title title--light">{{ item.centro_custo }}</h3>
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
+            </div>
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
+            </div>
           </div>
         </div>
         <div class="display display--flex">
-          <div class="card__group card__group--row">
-            <h3 class="title title--dark">{{ item.tipo }}</h3>
-          </div>
-          <div class="card__group card__group--row">
-            <h3 class="title title--light">|</h3>
-          </div>
-          <div class="card__group card__group--row">
-            <h3 class="title title--light">{{ formateDate(item.data_criacao) }}</h3>
+          <div class="card__group card__group--column">
+            <h3 class="title title--light">CRIADO EM</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_criacao) }}</h3>
           </div>
         </div>
       </div>
       <div class="card__body">
-        <div class="card__group card__group--column">
-          <h3 class="title title--light">MOTIVO</h3>
-          <h3 class="title title--dark">{{ item.motivo }}</h3>
+        <div class="card__group card__group--row">
+          <div class="card__group--column">
+            <mat-icon class="icon icon--small icon--orange">
+              category
+            </mat-icon>
+          </div>
+          <div class="card__group--column">
+            <h3 class="title title--light">TIPO</h3>
+            <h3 class="title title--dark">{{ item.tipo }}</h3>
+          </div>
         </div>
-        <div class="card__group card__group--column">
-          <h3 class="title title--light">ENDEREÇO</h3>
-          <h3 class="title title--dark">{{ item.endereco }}</h3>
+        <div class="card__group card__group--row">
+          <div class="card__group card__group--column">
+            <mat-icon class="icon icon--small icon--orange">
+              description
+            </mat-icon>
+          </div>
+          <div class="card__group card__group--column">
+            <h3 class="title title--light">MOTIVO</h3>
+            <h3 class="title title--dark">{{ item.motivo }}</h3>
+          </div>
         </div>
-        <div class="card__group card__group--column" *ngIf="item.transporte">
-          <h3 class="title title--light">TRANSPORTE</h3>
-          <h3 class="title title--dark">{{ item.transporte }}</h3>
+        <div class="card__group card__group--row">
+          <div class="card__group card__group--column">
+            <mat-icon class="icon icon--small icon--orange">
+              location_on
+            </mat-icon>
+          </div>
+          <div class="card__group card__group--column">
+            <h3 class="title title--light">ENDEREÇO</h3>
+            <h3 class="title title--dark">{{ item.endereco }}</h3>
+          </div>
         </div>
-        <div class="card__group card__group--column" *ngIf="item.quantidade">
-          <h3 class="title title--light">QUANTIDADE</h3>
-          <h3 class="title title--dark">{{ item.quantidade }}</h3>
+        <div class="card__group card__group--row" *ngIf="item.transporte">
+          <div class="card__group card__group--column">
+            <mat-icon class="icon icon--small icon--orange">
+              commute
+            </mat-icon>
+          </div>
+          <div class="card__group card__group--column">
+            <h3 class="title title--light">TRANSPORTE</h3>
+            <h3 class="title title--dark">{{ item.quantidade }} {{ item.transporte }}</h3>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div class="blurred-background" *ngIf="modalOpen">
+      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
+        <div class="modal__header">
+          <h3 class="title title--large title--dark">Atualizar</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModal()">&times;</button>
+        </div>
+        <div class="modal__body">
+          <div class="card__group card__group--column">
+            <label class="title title title--dark">Status</label>
+            <select class="select select__modal select__modal--dark" formControlName="status">
+              <option value="">Selecione uma opção</option>
+              <option value="ANDAMENTO">Em andamento</option>
+              <option value="CONCLUIDO">Concluído</option>
+              <option value="CANCELADO">Cancelado</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="closeModal()">Fechar</button>
+          <button type="submit" class="btn btn__action">Atualizar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="centralized" *ngIf="isSearching">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div class="centralized centralized--column" *ngIf="isEmpty">
+      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
+      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
     </div>
   </div>
 </div>
