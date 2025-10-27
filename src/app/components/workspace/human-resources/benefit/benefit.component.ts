@@ -391,7 +391,16 @@ export class BenefitComponent implements OnInit {
       setor: employee.setor,
       contrato: employee.contrato,
       centro_custo: employee.centro_custo,
-      recebe_integral: employee.recebe_integral
+      recebe_integral: employee.recebe_integral,
+      vr: employee.vr_caju + employee.vr_vr,
+      vt: employee.vt_caju + employee.vt_vem,
+      vc: employee.vc_caju + employee.vc_vr,
+      vr_fixed: employee.vr_fixo,
+      vt_fixed: employee.vt_fixo,
+      vc_fixed: employee.vc_fixo,
+      vr_card: employee.vr_caju > 0 ? 'CAJU' : 'VR',
+      vt_card: employee.vt_caju > 0 ? 'CAJU' : employee.vt_vem > 0 ? 'VEM' : '',
+      vc_card: employee.vc_caju > 0 ? 'CAJU' : employee.vc_vem > 0 ? 'VR' : '',
     });
   }
 
@@ -445,18 +454,6 @@ export class BenefitComponent implements OnInit {
     }, 3000);
   }
 
-  // ========== GRÁFICO ========== //
-  formatCurrency(value: number): string {
-    if (!value) {
-      return '0,00'
-    } else {
-      return value.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-    }
-  }
-
   // ========== UTILITÁRIOS ========== //
   upperCase(string: string): string {
     return string.toUpperCase().trim();
@@ -481,5 +478,16 @@ export class BenefitComponent implements OnInit {
       beneficioCaju: '',
       centro_custo: ''
     });
-  }
+  };
+
+  toBRL(valueInCents: number): string {
+    if (!valueInCents) {
+      return 'R$ 0,00'
+    } else {
+      return (valueInCents / 100).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+    }
+  };
 }

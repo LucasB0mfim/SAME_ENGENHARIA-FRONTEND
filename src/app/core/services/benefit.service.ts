@@ -69,7 +69,7 @@ export class BenefitService {
 
   deleteEmployee(id: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/:${id}`, { headers });
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/benefit/employee/${id}`, { headers });
   };
 
   donwloadLayoutVr(request: any): Observable<Blob> {

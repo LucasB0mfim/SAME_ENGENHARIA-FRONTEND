@@ -68,7 +68,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.total_caju) }}</span>
+          <span class="value">{{ toBRL(grafic.total_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -79,7 +79,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vr_caju) }}</span>
+          <span class="value">{{ toBRL(grafic.vr_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -90,7 +90,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vc_caju) }}</span>
+          <span class="value">{{ toBRL(grafic.vc_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -101,7 +101,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vt_caju) }}</span>
+          <span class="value">{{ toBRL(grafic.vt_caju) }}</span>
           <span class="label">CAJU</span>
         </div>
       </div>
@@ -112,7 +112,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.total_vr) }}</span>
+          <span class="value">{{ toBRL(grafic.total_vr) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -123,7 +123,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vr_vr) }}</span>
+          <span class="value">{{ toBRL(grafic.vr_vr) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -134,7 +134,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vc_vr) }}</span>
+          <span class="value">{{ toBRL(grafic.vc_vr) }}</span>
           <span class="label">VR</span>
         </div>
       </div>
@@ -145,7 +145,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.vt_vem) }}</span>
+          <span class="value">{{ toBRL(grafic.vt_vem) }}</span>
           <span class="label">VEM</span>
         </div>
       </div>
@@ -156,7 +156,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.sum_all) }}</span>
+          <span class="value">{{ toBRL(grafic.sum_all) }}</span>
           <span class="label">TOTAL</span>
         </div>
       </div>
@@ -167,7 +167,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.media_all) }}</span>
+          <span class="value">{{ toBRL(grafic.media_all) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -178,7 +178,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.media_vr) }}</span>
+          <span class="value">{{ toBRL(grafic.media_vr) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -189,7 +189,7 @@
       <div class="grafic__circle">
         <div class="circle-content">
           <span class="currency">R$</span>
-          <span class="value">{{ formatCurrency(grafic.media_vt) }}</span>
+          <span class="value">{{ toBRL(grafic.media_vt) }}</span>
           <span class="label">MÉDIA</span>
         </div>
       </div>
@@ -242,35 +242,35 @@
         <div class="card__content">
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO DIA</div>
-            <div class="card__title">R$ {{ item.vr_day }}</div>
+            <div class="card__title">{{ toBRL(item.vr_day) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE REFEIÇÃO MÊS</div>
-            <div class="card__title">R$ {{ item.vr_month }}</div>
+            <div class="card__title">{{ toBRL(item.vr_month) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE DIA</div>
-            <div class="card__title">R$ {{ item.vt_day }}</div>
+            <div class="card__title">{{ toBRL(item.vt_day) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE TRANSPORTE MÊS</div>
-            <div class="card__title">R$ {{ item.vt_month }}</div>
+            <div class="card__title">{{ toBRL(item.vt_month) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL DIA</div>
-            <div class="card__title">R$ {{ item.vc_day }}</div>
+            <div class="card__title">{{ toBRL(item.vc_day) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALE COMBUSTÍVEL MÊS</div>
-            <div class="card__title">R$ {{ item.vc_month }}</div>
+            <div class="card__title">{{ toBRL(item.vc_month) }}</div>
           </div>
           <div>
             <div class="card__subtitle">REEMBOLSO</div>
-            <div class="card__title">R$ {{ item.reembolso }}</div>
+            <div class="card__title">{{ toBRL(item.reembolso) }}</div>
           </div>
           <div>
             <div class="card__subtitle">VALOR TOTAL</div>
-            <div class="card__title">R$ {{ item.total_benefit }}</div>
+            <div class="card__title">{{ toBRL(item.total_benefit) }}</div>
           </div>
         </div>
       </div>
