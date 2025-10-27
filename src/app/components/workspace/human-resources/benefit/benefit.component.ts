@@ -199,10 +199,9 @@ export class BenefitComponent implements OnInit {
 
     this._benefitService.createMonth(request).subscribe({
       next: () => {
-        this.setSuccessMessage('Registro criado com sucesso.');
-        this.createRecordForm.reset();
-        this.createRecordSection = false;
         this.isCreating = false;
+        this.createRecordSection = false;
+        this.setSuccessMessage('Registro criado com sucesso.');
       },
       error: (error) => {
         console.error(error);
@@ -240,6 +239,24 @@ export class BenefitComponent implements OnInit {
         this.setSuccessMessage('Registro atualizado com sucesso.');
         this.isUpdating = false;
         this.updateRecordSection = false;
+
+        this.updateRecordForm.reset({
+          nome: '',
+          reembolso: '',
+          dias_uteis: '',
+          dias_nao_uteis: '',
+          centro_custo: '',
+          recebe_integral: '',
+          vr: '',
+          vr_card: '',
+          vr_fixed: '',
+          vc: '',
+          vc_card: '',
+          vc_fixed: '',
+          vt: '',
+          vt_card: '',
+          vt_fixed: '',
+        });
       },
       error: (error) => {
         this.isUpdating = false;
