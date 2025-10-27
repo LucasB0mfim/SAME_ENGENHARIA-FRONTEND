@@ -29,6 +29,7 @@ import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TransportComponent } from './components/workspace/human-resources/transport/transport.component';
+import { DisciplinaryMeasureComponent } from './components/workspace/human-resources/disciplinary-measure/disciplinary-measure.component';
 
 export const routes: Routes = [
   {
@@ -131,6 +132,11 @@ export const routes: Routes = [
       {
         path: 'human-resources/transport',
         component: TransportComponent,
+        canActivate: [humanResourcesGuard]
+      },
+      {
+        path: 'human-resources/disciplinary-measure',
+        component: DisciplinaryMeasureComponent,
         canActivate: [humanResourcesGuard]
       }
     ]

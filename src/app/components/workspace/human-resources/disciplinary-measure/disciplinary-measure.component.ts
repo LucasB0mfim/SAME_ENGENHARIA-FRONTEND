@@ -3,14 +3,14 @@ import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../../core/services/title.service';
-import { TransportService } from '../../../../core/services/transport.service';
+import { DisciplinaryMeasureService } from '../../../../core/services/disciplinary-measure.service';
 
 @Component({
-  selector: 'app-transport',
+  selector: 'app-disciplinary-measure',
   imports: [
     FormsModule,
     CommonModule,
@@ -19,13 +19,12 @@ import { TransportService } from '../../../../core/services/transport.service';
     ɵInternalFormsSharedModule,
     ReactiveFormsModule
   ],
-  templateUrl: './transport.component.html',
-  styleUrls: ['./transport.component.scss']
+  templateUrl: './disciplinary-measure.component.html',
+  styleUrl: './disciplinary-measure.component.scss'
 })
-export class TransportComponent implements OnInit {
-
+export class DisciplinaryMeasureComponent implements OnInit {
   private readonly _titleService = inject(TitleService);
-  private readonly _transportService = inject(TransportService);
+  private readonly _disciplinaryMeasureService = inject(DisciplinaryMeasureService);
 
   updateForm: FormGroup = new FormGroup({
     status: new FormControl('', Validators.required),
@@ -46,7 +45,7 @@ export class TransportComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
-    this._titleService.setTitle('Vale Transporte');
+    this._titleService.setTitle('Medidas Disciplinares');
   }
 
   findByStatus(status: string): void {
@@ -54,7 +53,7 @@ export class TransportComponent implements OnInit {
     this.isEmpty = false;
     this.isSearching = true;
 
-    this._transportService.findByStatus(status)
+    this._disciplinaryMeasureService.findByStatus(status)
       .pipe(finalize(() => this.isSearching = false))
       .subscribe({
         next: (res) => {
@@ -100,7 +99,7 @@ export class TransportComponent implements OnInit {
       status: this.updateForm.value.status
     }
 
-    this._transportService.update(request)
+    this._disciplinaryMeasureService.update(request)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: () => {
@@ -123,17 +122,18 @@ export class TransportComponent implements OnInit {
         .replace(/[\u0300-\u036f]/g, '');
 
       data = data.filter(item => {
-        if (!item.nome) return false;
+        if (!item.colaborador) return false;
 
-        const nome = item.nome
+        const colaborador = item.colaborador
           .toUpperCase()
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '');
 
-        return nome.includes(inputValue);
+        return colaborador.includes(inputValue);
       });
     }
 
     this.items = data;
   };
+
 }

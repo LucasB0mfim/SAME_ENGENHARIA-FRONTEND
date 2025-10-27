@@ -2,6 +2,7 @@
   <div class="aside">
     <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
 
+
     <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
       [class.active]="activeStatus === 'NOVO'">
       Novos
@@ -25,10 +26,13 @@
 
   <div class="main">
     <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openModal(item)" [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
+      <div class="card__header" (click)="openModal(item)"
+        [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
         <div class="display display--column">
           <div class="card__group card__group--row">
-            <h3 class="title title--dark">{{ item.nome }}</h3>
+            <h3 class="title title--light">{{ item.criador }}</h3>
+            <h3 class="title title--light">|</h3>
+            <h3 class="title title--dark">{{ item.colaborador }}</h3>
           </div>
           <div class="card__group card__group--row">
             <div class="bubble">
@@ -41,55 +45,15 @@
         </div>
         <div class="display display--flex">
           <div class="card__group card__group--column">
-            <h3 class="title title--light">CRIADO EM</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_criacao) }}</h3>
+            <h3 class="title title--light">OCORRIDO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_ocorrido) }}</h3>
           </div>
         </div>
       </div>
       <div class="card__body">
-        <div class="card__group card__group--row">
-          <div class="card__group--column">
-            <mat-icon class="icon icon--small icon--orange">
-              category
-            </mat-icon>
-          </div>
-          <div class="card__group--column">
-            <h3 class="title title--light">TIPO</h3>
-            <h3 class="title title--dark">{{ item.tipo }}</h3>
-          </div>
-        </div>
-        <div class="card__group card__group--row">
-          <div class="card__group card__group--column">
-            <mat-icon class="icon icon--small icon--orange">
-              description
-            </mat-icon>
-          </div>
-          <div class="card__group card__group--column">
-            <h3 class="title title--light">MOTIVO</h3>
-            <h3 class="title title--dark">{{ item.motivo }}</h3>
-          </div>
-        </div>
-        <div class="card__group card__group--row">
-          <div class="card__group card__group--column">
-            <mat-icon class="icon icon--small icon--orange">
-              location_on
-            </mat-icon>
-          </div>
-          <div class="card__group card__group--column">
-            <h3 class="title title--light">ENDEREÇO</h3>
-            <h3 class="title title--dark">{{ item.endereco }}</h3>
-          </div>
-        </div>
-        <div class="card__group card__group--row" *ngIf="item.transporte">
-          <div class="card__group card__group--column">
-            <mat-icon class="icon icon--small icon--orange">
-              commute
-            </mat-icon>
-          </div>
-          <div class="card__group card__group--column">
-            <h3 class="title title--light">TRANSPORTE</h3>
-            <h3 class="title title--dark">{{ item.quantidade }} {{ item.transporte }}</h3>
-          </div>
+        <div class="card__group card__group--column">
+          <h3 class="title title--light">MOTIVO</h3>
+          <h3 class="title title--dark">{{ item.motivo }}</h3>
         </div>
       </div>
     </div>
