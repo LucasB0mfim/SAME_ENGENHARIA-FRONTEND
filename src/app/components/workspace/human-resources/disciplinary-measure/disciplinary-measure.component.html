@@ -1,7 +1,12 @@
 <div class="container">
+
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
+
   <div class="aside">
     <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
-
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
       [class.active]="activeStatus === 'NOVO'">
@@ -30,16 +35,14 @@
         [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
         <div class="display display--column">
           <div class="card__group card__group--row">
-            <h3 class="title title--light">{{ item.criador }}</h3>
-            <h3 class="title title--light">|</h3>
-            <h3 class="title title--dark">{{ item.colaborador }}</h3>
+            <h3 class="title title--dark">{{ item.empData.nome }}</h3>
           </div>
           <div class="card__group card__group--row">
             <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
+              <h3 class="title title--dark-orange">{{ item.empData.funcao }}</h3>
             </div>
             <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
+              <h3 class="title title--dark-orange">{{ item.empData.centro_custo }}</h3>
             </div>
           </div>
         </div>
@@ -64,9 +67,13 @@
           <h3 class="title title--large title--dark">Atualizar</h3>
           <button class="icon icon--close icon--dark" (click)="closeModal()">&times;</button>
         </div>
-        <div class="modal__body">
+        <div class="modal__body modal__body--double">
           <div class="card__group card__group--column">
-            <label class="title title title--dark">Status</label>
+            <label class="title title--medium title--light">Solicitante</label>
+            <input type="text" [value]="currentItem.criador" class="input input__modal--dark" readonly>
+          </div>
+          <div class="card__group card__group--column">
+            <label class="title title--medium title--light">Status</label>
             <select class="select select__modal select__modal--dark" formControlName="status">
               <option value="">Selecione uma opção</option>
               <option value="ANDAMENTO">Em andamento</option>

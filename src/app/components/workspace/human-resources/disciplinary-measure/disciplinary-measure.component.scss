@@ -11,6 +11,7 @@ $bd-lg: 6px;
 $bd-xx: 8px;
 
 $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
+$fs-mdx: clamp(0.8125rem, 0.8125rem + 0vw, 0.8125rem);
 $fs-lg: clamp(1.125rem, 1.125rem + 0vw, 1.125rem);
 
 $icon-sm: 24px;
@@ -136,6 +137,10 @@ $icon-lg: 80px;
     color: var(--orange-color);
   }
 
+  &--medium {
+    font-size: $fs-mdx;
+  }
+
   &--large {
     font-size: $fs-lg;
   }
@@ -195,13 +200,6 @@ $icon-lg: 80px;
   background-color: var(--secondary-color);
   transition: all 0.2s ease;
 
-  &.active {
-    color: var(--white-color);
-    transform: translateY(-4px);
-    background-color: var(--orange-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
   &__launch {
     border-radius: $bd-lg;
     padding: $pd-sm $pd-md;
@@ -227,6 +225,12 @@ $icon-lg: 80px;
     }
   }
 
+  &.active {
+    color: var(--white-color);
+    transform: translateY(-4px);
+    background-color: var(--orange-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .input {
@@ -243,6 +247,14 @@ $icon-lg: 80px;
   &:focus {
     outline: none;
     border-color: var(--orange-color);
+  }
+
+  &__modal {
+    padding: $pd-sm;
+
+    &--dark {
+      background-color: var(--primary-color);
+    }
   }
 }
 
@@ -331,10 +343,49 @@ $icon-lg: 80px;
     justify-content: space-between;
   }
 
+  &__body {
+    width: 100%;
+    height: 100%;
+    display: grid;
+
+    &--single {
+      grid-template-columns: 1fr;
+    }
+
+    &--double {
+      gap: $gp-lg;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   &__footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: $gp-sm;
+  }
+}
+
+.message {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 8px;
+  display: flex;
+  font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
+  padding: min(1em, 5%);
+  border-radius: 8px;
+  align-items: center;
+  z-index: 1000;
+
+  &.success {
+    color: var(--white-color);
+    background: #4bd28f;
+  }
+
+  &.error {
+    color: var(--white-color);
+    background: #ff5757;
   }
 }

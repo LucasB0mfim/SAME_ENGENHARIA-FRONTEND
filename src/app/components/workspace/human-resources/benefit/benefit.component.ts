@@ -113,8 +113,6 @@ export class BenefitComponent implements OnInit {
   showSuccess: boolean = false;
   successMessage: string = '';
 
-  userEmail = localStorage.getItem('email');
-
   // ========== HOOK ========== //
   ngOnInit(): void {
     this._titleService.setTitle('Periféricos');
@@ -400,7 +398,7 @@ export class BenefitComponent implements OnInit {
       vc_fixed: employee.vc_fixo,
       vr_card: employee.vr_caju > 0 ? 'CAJU' : 'VR',
       vt_card: employee.vt_caju > 0 ? 'CAJU' : employee.vt_vem > 0 ? 'VEM' : '',
-      vc_card: employee.vc_caju > 0 ? 'CAJU' : employee.vc_vem > 0 ? 'VR' : '',
+      vc_card: employee.vc_caju > 0 ? 'CAJU' : employee.vc_vr > 0 ? 'VR' : '',
     });
   }
 

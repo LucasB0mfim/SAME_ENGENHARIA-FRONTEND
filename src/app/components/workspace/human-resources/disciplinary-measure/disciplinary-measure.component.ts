@@ -37,11 +37,15 @@ export class DisciplinaryMeasureComponent implements OnInit {
   employee: string = '';
   activeStatus: string = '';
 
+  modalOpen: boolean = false;
+
   isEmpty: boolean = false;
   isLoading: boolean = false;
   isSearching: boolean = false;
 
-  modalOpen: boolean = false;
+  message: string = '';
+  showMessage: boolean = false;
+  messageType: 'success' | 'error' = 'success';
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
@@ -68,29 +72,6 @@ export class DisciplinaryMeasureComponent implements OnInit {
       });
   };
 
-  formateDate(date: string) {
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
-  };
-
-  setBorderColor(tipo: string): string {
-    switch (tipo) {
-      case 'SOLICITACAO': return '#28a745';
-      case 'CANCELAMENTO': return '#dc3545';
-      case 'ALTERACAO': return '#007bff';
-      default: return '#FF6F00';
-    }
-  };
-
-  openModal(item: any): void {
-    this.modalOpen = true;
-    this.currentItem = item;
-  };
-
-  closeModal(): void {
-    this.modalOpen = false;
-  };
-
   update(): void {
     this.isLoading = true;
 
@@ -102,12 +83,14 @@ export class DisciplinaryMeasureComponent implements OnInit {
     this._disciplinaryMeasureService.update(request)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.modalOpen = false;
           this.findByStatus(this.activeStatus);
+          this.setMessage(res.message, 'success');
         },
         error: (err) => {
           console.log(err.error.message);
+          this.setMessage(err.error.message, 'error');
         }
       });
   };
@@ -136,4 +119,37 @@ export class DisciplinaryMeasureComponent implements OnInit {
     this.items = data;
   };
 
+  openModal(item: any): void {
+    this.modalOpen = true;
+    this.currentItem = item;
+  };
+
+  closeModal(): void {
+    this.modalOpen = false;
+  };
+
+  formateDate(date: string) {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
+  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
+    this.message = message;
+    this.messageType = type;
+    this.showMessage = true;
+
+    setTimeout(() => {
+      this.showMessage = false;
+      this.message = '';
+    }, 3000);
+  };
+
+  setBorderColor(tipo: string): string {
+    switch (tipo) {
+      case 'SOLICITACAO': return '#28a745';
+      case 'CANCELAMENTO': return '#dc3545';
+      case 'ALTERACAO': return '#007bff';
+      default: return '#FF6F00';
+    }
+  };
 }
