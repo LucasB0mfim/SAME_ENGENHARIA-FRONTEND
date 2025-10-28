@@ -17,7 +17,7 @@
         <div class="form__group">
           <label class="form__label">CPF</label>
           <input type="text" formControlName="cpf" placeholder="000.000.000-00" mask="000.000.000-00"
-            class="form__input">
+            inputmode="numeric" class="form__input">
           <div *ngIf="hasError('cpf')" class="form__error">
             {{ getErrorMessage('cpf') }}
           </div>
@@ -36,13 +36,12 @@
 
         <div class="form__group">
           <label class="form__label">RG</label>
-          <input type="text" formControlName="rg" class="form__input" placeholder="Digite o RG">
+          <input type="text" formControlName="rg" class="form__input" placeholder="Apenas números" inputmode="numeric">
         </div>
 
         <div class="form__group">
           <label class="form__label">PIS - Opcional</label>
-          <input type="text" formControlName="pis" placeholder="000.00000.00-0" class="form__input"
-            mask="000.00000.00-00">
+          <input type="text" formControlName="pis" class="form__input" placeholder="Apenas números" inputmode="numeric">
         </div>
 
         <div class="form__group">
@@ -169,8 +168,8 @@
 
         <div class="form__group" *ngIf="createForm.get('possui_vem')?.value === 'SIM'">
           <label class="form__label">Número do Cartão VEM</label>
-          <input type="text" formControlName="numero_vem" placeholder="00.00.00000000-0" mask="00.00.00000000-0"
-            class="form__input">
+          <input type="text" formControlName="numero_vem" placeholder="Apenas números" mask="00.00.00000000-0"
+            class="form__input" inputmode="numeric">
         </div>
       </div>
     </div>
@@ -337,7 +336,7 @@
         <div class="form__group">
           <label class="form__label">Número de contato</label>
           <input type="text" formControlName="numero_contato_emergencia" placeholder="(00) 00000-0000"
-            mask="(00) 00000-0000" class="form__input">
+            mask="(00) 00000-0000" inputmode="numeric" class="form__input">
         </div>
       </div>
     </div>
@@ -390,7 +389,6 @@
         Enviar formulário
       </button>
     </div>
-
   </form>
 
   <div class="loading" *ngIf="isLoading">
