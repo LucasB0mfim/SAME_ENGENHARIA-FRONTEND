@@ -398,14 +398,6 @@ export class AdmissionComponent implements OnInit {
     return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9, 11)}`;
   }
 
-  formatePIS(pis: string): string {
-    if (!pis) {
-      return '';
-    } else {
-      return `${pis.slice(0, 3)}.${pis.slice(3, 8)}.${pis.slice(8, 10)}-${pis.slice(10, 11)}`;
-    }
-  }
-
   formateVEM(vem: string): string {
     return `${vem.slice(0, 2)}.${vem.slice(2, 4)}.${vem.slice(4, 11)}-${vem.slice(11, 12)}`;
   }
