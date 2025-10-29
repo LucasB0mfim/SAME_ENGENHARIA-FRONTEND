@@ -8,6 +8,8 @@ import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedM
 
 import { TitleService } from '../../../../core/services/title.service';
 import { DisciplinaryMeasureService } from '../../../../core/services/disciplinary-measure.service';
+import { HttpResponse } from '@angular/common/http';
+import saveAs from 'file-saver';
 
 @Component({
   selector: 'app-disciplinary-measure',
@@ -152,4 +154,14 @@ export class DisciplinaryMeasureComponent implements OnInit {
       default: return '#FF6F00';
     }
   };
+
+  download() {
+    const id = this.currentItem.id;
+
+    this._disciplinaryMeasureService.download(id).subscribe((response: HttpResponse<Blob>) => {
+      const cd = response.headers.get('content-disposition');
+      const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'MEDIDA_DISCIPLINAR.pdf';
+      saveAs(response.body!, fileName);
+    });
+  }
 }
