@@ -29,7 +29,11 @@ export class DisciplinaryMeasureComponent implements OnInit {
   private readonly _disciplinaryMeasureService = inject(DisciplinaryMeasureService);
 
   updateForm: FormGroup = new FormGroup({
+    id: new FormControl(''),
+    criador: new FormControl(''),
     status: new FormControl('', Validators.required),
+    advertencia: new FormControl('', Validators.required),
+    observacao: new FormControl('', Validators.required),
   });
 
   items: any[] = [];
@@ -39,11 +43,15 @@ export class DisciplinaryMeasureComponent implements OnInit {
   employee: string = '';
   activeStatus: string = '';
 
-  modalOpen: boolean = false;
+  menuModalOpen: boolean = false;
+  updateModalOpen: boolean = false;
 
   isEmpty: boolean = false;
   isLoading: boolean = false;
   isSearching: boolean = false;
+
+  isUpdating: boolean = false;
+  isDownloading: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
@@ -79,14 +87,17 @@ export class DisciplinaryMeasureComponent implements OnInit {
 
     const request = {
       id: this.currentItem.id,
-      status: this.updateForm.value.status
+      status: this.updateForm.value.status,
+      advertencia: this.updateForm.value.advertencia,
+      observacao: this.updateForm.value.observacao
     }
 
     this._disciplinaryMeasureService.update(request)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res) => {
-          this.modalOpen = false;
+          this.resetUpdateForm();
+          this.updateModalOpen = false;
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
@@ -121,14 +132,32 @@ export class DisciplinaryMeasureComponent implements OnInit {
     this.items = data;
   };
 
-  openModal(item: any): void {
-    this.modalOpen = true;
+  openMenu(item: any): void {
+    this.menuModalOpen = true;
     this.currentItem = item;
   };
 
-  closeModal(): void {
-    this.modalOpen = false;
+  closeModals(): void {
+    this.menuModalOpen = false;
+    this.updateModalOpen = false;
   };
+
+  openUpdateModal(): void {
+    this.menuModalOpen = false;
+    this.updateModalOpen = true;
+    this.updateForm.patchValue({
+      id: this.currentItem.id,
+      criador: this.currentItem.criador,
+      status: this.currentItem.status,
+      advertencia: this.currentItem.advertencia,
+      observacao: this.currentItem.observacao,
+    });
+  }
+
+  returnModal(): void {
+    this.menuModalOpen = true;
+    this.updateModalOpen = false;
+  }
 
   formateDate(date: string) {
     const [year, month, day] = date.split('-');
@@ -156,12 +185,22 @@ export class DisciplinaryMeasureComponent implements OnInit {
   };
 
   download() {
-    const id = this.currentItem.id;
+    this.isDownloading = true;
+    this._disciplinaryMeasureService.download(this.currentItem.id)
+      .pipe(finalize(() => this.isDownloading = false))
+      .subscribe((response: HttpResponse<Blob>) => {
+        const cd = response.headers.get('content-disposition');
+        const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'MEDIDA_DISCIPLINAR.pdf';
+        saveAs(response.body!, fileName);
+      });
+  }
 
-    this._disciplinaryMeasureService.download(id).subscribe((response: HttpResponse<Blob>) => {
-      const cd = response.headers.get('content-disposition');
-      const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'MEDIDA_DISCIPLINAR.pdf';
-      saveAs(response.body!, fileName);
-    });
+  resetUpdateForm(): void {
+    this.updateForm.reset({
+      criador: '',
+      status: '',
+      advertencia: '',
+      observacao: ''
+    })
   }
 }
