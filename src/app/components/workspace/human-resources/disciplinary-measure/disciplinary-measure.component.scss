@@ -99,7 +99,7 @@ $icon-lg: 80px;
 
   &__body {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: $gp-lg;
     padding: $pd-md;
     border-top: $bd-sm solid var(--primary-color);
@@ -113,7 +113,6 @@ $icon-lg: 80px;
     &--body {
       padding: $pd-sm;
       border-radius: $bd-lg;
-      border: 1px dashed var(--orange-color);
       background-color: var(--primary-color);
     }
 

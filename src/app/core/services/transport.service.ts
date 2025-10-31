@@ -29,4 +29,13 @@ export class TransportService {
     const headers = this._createHeaders();
     return this._httpClient.put<any>(`https://sameengenharia.com.br/api/transport`, request, { headers });
   };
+
+  download(id: number) {
+    const headers = this._createHeaders();
+    return this._httpClient.get(`https://sameengenharia.com.br/api/transport/download/${id}`, {
+      headers,
+      responseType: 'blob',
+      observe: 'response'
+    });
+  }
 }

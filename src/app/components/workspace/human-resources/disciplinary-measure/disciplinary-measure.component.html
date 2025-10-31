@@ -61,23 +61,23 @@
         <div class="card__group card__group--body">
           <div class="card__group card__group--icon">
             <mat-icon class="icon icon--small icon--orange">
-              category
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TIPO DE ADVERTÊNCIA</h3>
-            <h3 class="title title--dark">{{ item.advertencia || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
-            <mat-icon class="icon icon--small icon--orange">
               calendar_today
             </mat-icon>
           </div>
           <div class="">
             <h3 class="title title--light">DATA DO OCORRIDO</h3>
             <h3 class="title title--dark">{{ formateDate(item.data_ocorrido) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              category
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">TIPO DE ADVERTÊNCIA</h3>
+            <h3 class="title title--dark">{{ item.advertencia || 'N/A' }}</h3>
           </div>
         </div>
         <div class="card__group card__group--body">
@@ -91,7 +91,8 @@
             <h3 class="title title--dark">{{ item.motivo }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--large card__group--body">
+        @if (item.observacao) {
+          <div class="card__group card__group--full card__group--body">
           <div class="card__group card__group--icon">
             <mat-icon class="icon icon--small icon--orange">
               notes
@@ -102,6 +103,7 @@
             <h3 class="title title--dark">{{ item.observacao || 'N/A' }}</h3>
           </div>
         </div>
+        }
       </div>
     </div>
 

@@ -10,7 +10,9 @@ $bd-df: 4px;
 $bd-lg: 6px;
 $bd-xx: 8px;
 
+$fs-sm: clamp(0.5rem, 0.5rem + 0vw, 0.5rem);
 $fs-md: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);
+$fs-mdx: clamp(0.8125rem, 0.8125rem + 0vw, 0.8125rem);
 $fs-lg: clamp(1.125rem, 1.125rem + 0vw, 1.125rem);
 
 $icon-sm: 24px;
@@ -34,13 +36,18 @@ $icon-lg: 80px;
   gap: $gp-md;
   display: flex;
   align-items: start;
+  padding-right: $pd-sm;
   justify-content: start;
+
+  :last-child {
+    margin-left: auto;
+  }
 }
 
 .main {
   display: flex;
-  flex-direction: column;
   padding-right: $pd-sm;
+  flex-direction: column;
 
   width: 100%;
   // max-width: 1280px;
@@ -91,23 +98,41 @@ $icon-lg: 80px;
   }
 
   &__body {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: $gp-lg;
     padding: $pd-md;
     border-top: $bd-sm solid var(--primary-color);
   }
 
   &__group {
+    gap: $gp-sm;
     display: flex;
+    align-items: center;
 
-    &--row {
-      gap: $gp-sm;
+    &--body {
+      padding: $pd-sm;
+      border-radius: $bd-lg;
+      background-color: var(--primary-color);
+    }
+
+    &--icon {
+      padding: $pd-sm;
+      border-radius: $bd-lg;
+      background-color: rgb(255, 111, 0, 0.1);
     }
 
     &--column {
-      display: flex;
+      align-items: start;
       flex-direction: column;
-      justify-content: center;
+    }
+
+    &--large {
+      grid-column: -1/2;
+    }
+
+    &--full {
+      grid-column: -1/1;
     }
   }
 }
@@ -134,6 +159,10 @@ $icon-lg: 80px;
   &--dark-orange {
     font-weight: 600;
     color: var(--orange-color);
+  }
+
+  &--medium {
+    font-size: $fs-mdx;
   }
 
   &--large {
@@ -186,21 +215,21 @@ $icon-lg: 80px;
 }
 
 .btn {
+  width: auto;
+  height: 100%;
+
   cursor: pointer;
   font-weight: 600;
   font-size: $fs-md;
   color: var(--text-color);
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   border: none;
   background-color: var(--secondary-color);
   transition: all 0.2s ease;
-
-  &.active {
-    color: var(--white-color);
-    transform: translateY(-4px);
-    background-color: var(--orange-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
 
   &__launch {
     border-radius: $bd-lg;
@@ -227,30 +256,18 @@ $icon-lg: 80px;
     }
   }
 
+  &.active {
+    color: var(--white-color);
+    transform: translateY(-4px);
+    background-color: var(--orange-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .input {
   font-size: $fs-md;
   font-weight: 500;
-  padding: $pd-sm $pd-md;
-  color: var(--text-color);
-
-  border-radius: $bd-lg;
-  border: $bd-sm solid transparent;
-  background-color: var(--secondary-color);
-  transition: all 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: var(--orange-color);
-  }
-}
-
-.select {
-  cursor: pointer;
-  font-size: $fs-md;
-  font-weight: 500;
-  padding: $pd-sm $pd-md;
+  padding: $pd-sm;
   color: var(--text-color);
 
   border-radius: $bd-lg;
@@ -264,7 +281,79 @@ $icon-lg: 80px;
   }
 
   &__modal {
+    width: 100%;
+    height: 100%;
     padding: $pd-sm;
+
+    &--dark {
+      background-color: var(--primary-color);
+    }
+  }
+}
+
+.select {
+  cursor: pointer;
+  font-size: $fs-md;
+  font-weight: 500;
+  padding: $pd-sm;
+  color: var(--text-color);
+
+  border-radius: $bd-lg;
+  border: $bd-sm solid transparent;
+  background-color: var(--secondary-color);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--orange-color);
+  }
+
+  &__modal {
+    width: 100%;
+    height: 100%;
+    padding: $pd-sm;
+
+    &--dark {
+      background-color: var(--primary-color);
+    }
+  }
+}
+
+.textarea {
+  font-size: $fs-md;
+  font-weight: 500;
+  padding: $pd-sm;
+  color: var(--text-color);
+
+  resize: none;
+  outline: none;
+  border-radius: $bd-lg;
+  border: $bd-sm solid transparent;
+  background-color: var(--secondary-color);
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: $bd-sm;
+    background: var(--secondary-color);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--orange-color);
+  }
+
+  &__modal {
+    width: 100%;
+    height: 100%;
+    padding: $pd-sm;
+
+    &--light {
+      background-color: var(--secondary-color);
+    }
 
     &--dark {
       background-color: var(--primary-color);
@@ -284,16 +373,6 @@ $icon-lg: 80px;
     gap: $gp-sm;
     flex-direction: column;
   }
-}
-
-:host ::ng-deep mat-progress-spinner {
-  width: 3vw !important;
-  height: 3vw !important;
-}
-
-:host ::ng-deep mat-progress-spinner circle {
-  stroke: var(--orange-color);
-  stroke-width: 8%;
 }
 
 .blurred-background {
@@ -331,10 +410,90 @@ $icon-lg: 80px;
     justify-content: space-between;
   }
 
+  &__body {
+    width: 100%;
+    height: 100%;
+
+    gap: $gp-lg;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    width: 100%;
+    height: 47px;
+
     gap: $gp-sm;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.message {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 8px;
+  display: flex;
+  font-size: clamp(0.9375rem, 0.9375rem + 0vw, 0.9375rem);
+  padding: min(1em, 5%);
+  border-radius: 8px;
+  align-items: center;
+  z-index: 1000;
+
+  &.success {
+    color: var(--white-color);
+    background: #4bd28f;
+  }
+
+  &.error {
+    color: var(--white-color);
+    background: #ff5757;
+  }
+}
+
+.dot {
+  width: $fs-sm;
+  height: $fs-sm;
+  border-radius: 50%;
+  background-color: var(--white-color);
+  animation: bounce 1.2s infinite ease-in-out;
+
+  &:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+:host ::ng-deep mat-progress-spinner {
+  width: 3vw !important;
+  height: 3vw !important;
+}
+
+:host ::ng-deep mat-progress-spinner circle {
+  stroke: var(--orange-color);
+  stroke-width: 8%;
+}
+
+@keyframes bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

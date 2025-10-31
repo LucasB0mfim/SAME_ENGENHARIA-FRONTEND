@@ -1,7 +1,11 @@
 <div class="container">
-  <div class="aside">
-    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
 
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
+
+  <div class="aside">
     <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
       [class.active]="activeStatus === 'NOVO'">
       Novos
@@ -21,11 +25,13 @@
       [class.active]="activeStatus === 'CANCELADO'">
       Cancelados
     </button>
+
+    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
   </div>
 
   <div class="main">
     <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openModal(item)" [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
+      <div class="card__header" (click)="openMenu(item)" [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
         <div class="display display--column">
           <div class="card__group card__group--row">
             <h3 class="title title--dark">{{ item.nome }}</h3>
@@ -39,70 +45,135 @@
             </div>
           </div>
         </div>
-        <div class="display display--flex">
-          <div class="card__group card__group--column">
-            <h3 class="title title--light">CRIADO EM</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_criacao) }}</h3>
-          </div>
-        </div>
       </div>
       <div class="card__body">
-        <div class="card__group card__group--row">
-          <div class="card__group--column">
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
             <mat-icon class="icon icon--small icon--orange">
               category
             </mat-icon>
           </div>
-          <div class="card__group--column">
+          <div class="">
             <h3 class="title title--light">TIPO</h3>
             <h3 class="title title--dark">{{ item.tipo }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--row">
-          <div class="card__group card__group--column">
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
             <mat-icon class="icon icon--small icon--orange">
-              description
+              calendar_today
             </mat-icon>
           </div>
-          <div class="card__group card__group--column">
-            <h3 class="title title--light">MOTIVO</h3>
-            <h3 class="title title--dark">{{ item.motivo }}</h3>
+          <div class="">
+            <h3 class="title title--light">DATA DA SOLICITAÇÃO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_criacao) || 'N/A' }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--row">
-          <div class="card__group card__group--column">
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
             <mat-icon class="icon icon--small icon--orange">
-              location_on
+              article
             </mat-icon>
           </div>
-          <div class="card__group card__group--column">
+          <div class="">
+            <h3 class="title title--light">MOTIVO</h3>
+            <h3 class="title title--dark">{{ item.motivo || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              add_location
+            </mat-icon>
+          </div>
+          <div class="">
             <h3 class="title title--light">ENDEREÇO</h3>
             <h3 class="title title--dark">{{ item.endereco }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--row" *ngIf="item.transporte">
-          <div class="card__group card__group--column">
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
             <mat-icon class="icon icon--small icon--orange">
               commute
             </mat-icon>
           </div>
-          <div class="card__group card__group--column">
-            <h3 class="title title--light">TRANSPORTE</h3>
-            <h3 class="title title--dark">{{ item.quantidade }} {{ item.transporte }}</h3>
+          <div class="">
+            <h3 class="title title--light">TIPO DE TRANSPORTE</h3>
+            <h3 class="title title--dark">{{ item.transporte || 'N/A' }}</h3>
           </div>
         </div>
+        <div class="card__group card__group--body">
+          <div class="card__group card__group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              credit_card
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">QUANTIDADE DE VT</h3>
+            <h3 class="title title--dark">{{ item.quantidade || 'N/A' }}</h3>
+          </div>
+        </div>
+        @if (item.observacao) {
+          <div class="card__group card__group--full card__group--body">
+          <div class="card__group card__group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              notes
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">OBSERVAÇÃO</h3>
+            <h3 class="title title--dark">{{ item.observacao || 'N/A' }}</h3>
+          </div>
+        </div>
+        }
       </div>
     </div>
 
-    <div class="blurred-background" *ngIf="modalOpen">
+    <div class="blurred-background" *ngIf="menuModalOpen">
+      <form class="modal">
+        <div class="modal__header">
+          <h3 class="title title--large title--dark">Menu</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
+        </div>
+        <div class="modal__body">
+          <button type="button" class="btn btn__action" (click)="download()">
+            @if (isDownloading) {
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            } @else {
+            Gerar PDF
+            }
+          </button>
+          <button type="button" class="btn btn__action" (click)="openUpdateModal()">
+            Atualizar Registro
+          </button>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="closeModals()">
+            Fechar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="blurred-background" *ngIf="updateModalOpen">
       <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
         <div class="modal__header">
           <h3 class="title title--large title--dark">Atualizar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModal()">&times;</button>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
         </div>
         <div class="modal__body">
           <div class="card__group card__group--column">
-            <label class="title title title--dark">Status</label>
+            <label class="title title--medium title--light">Colaborador</label>
+            <input type="text" class="input input__modal input__modal--dark" formControlName="nome" readonly>
+          </div>
+          <div class="card__group card__group--column">
+            <label class="title title--medium title--light">Status</label>
             <select class="select select__modal select__modal--dark" formControlName="status">
               <option value="">Selecione uma opção</option>
               <option value="ANDAMENTO">Em andamento</option>
@@ -110,10 +181,24 @@
               <option value="CANCELADO">Cancelado</option>
             </select>
           </div>
+          <div class="card__group card__group--column card__group--full">
+            <label class="title title--medium title--light">Observação</label>
+            <textarea formControlName="observacao" class="textarea textarea__modal textarea__modal--dark"></textarea>
+          </div>
         </div>
         <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModal()">Fechar</button>
-          <button type="submit" class="btn btn__action">Atualizar</button>
+          <button type="button" class="btn btn__action" (click)="returnModal()">
+            Voltar
+          </button>
+          <button type="submit" class="btn btn__action">
+            @if (isLoading) {
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            } @else {
+            Atualizar
+            }
+          </button>
         </div>
       </form>
     </div>
