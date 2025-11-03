@@ -175,15 +175,6 @@ export class DisciplinaryMeasureComponent implements OnInit {
     }, 3000);
   };
 
-  setBorderColor(tipo: string): string {
-    switch (tipo) {
-      case 'SOLICITACAO': return '#28a745';
-      case 'CANCELAMENTO': return '#dc3545';
-      case 'ALTERACAO': return '#007bff';
-      default: return '#FF6F00';
-    }
-  };
-
   download() {
     this.isDownloading = true;
     this._disciplinaryMeasureService.download(this.currentItem.id)

@@ -31,7 +31,7 @@
 
   <div class="main">
     <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openMenu(item)" [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
+      <div class="card__header" (click)="openMenu(item)">
         <div class="display display--column">
           <div class="card__group card__group--row">
             <h3 class="title title--dark">{{ item.empData.nome }}</h3>
