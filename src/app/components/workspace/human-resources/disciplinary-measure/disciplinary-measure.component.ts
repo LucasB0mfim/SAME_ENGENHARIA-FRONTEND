@@ -1,3 +1,4 @@
+import saveAs from 'file-saver';
 import { finalize } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
@@ -8,8 +9,8 @@ import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedM
 
 import { TitleService } from '../../../../core/services/title.service';
 import { DisciplinaryMeasureService } from '../../../../core/services/disciplinary-measure.service';
+
 import { HttpResponse } from '@angular/common/http';
-import saveAs from 'file-saver';
 
 @Component({
   selector: 'app-disciplinary-measure',
@@ -25,6 +26,7 @@ import saveAs from 'file-saver';
   styleUrl: './disciplinary-measure.component.scss'
 })
 export class DisciplinaryMeasureComponent implements OnInit {
+
   private readonly _titleService = inject(TitleService);
   private readonly _disciplinaryMeasureService = inject(DisciplinaryMeasureService);
 
@@ -49,9 +51,6 @@ export class DisciplinaryMeasureComponent implements OnInit {
   isEmpty: boolean = false;
   isLoading: boolean = false;
   isSearching: boolean = false;
-
-  isUpdating: boolean = false;
-  isDownloading: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
@@ -176,9 +175,9 @@ export class DisciplinaryMeasureComponent implements OnInit {
   };
 
   download() {
-    this.isDownloading = true;
+    this.isLoading = true;
     this._disciplinaryMeasureService.download(this.currentItem.id)
-      .pipe(finalize(() => this.isDownloading = false))
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe((response: HttpResponse<Blob>) => {
         const cd = response.headers.get('content-disposition');
         const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'MEDIDA_DISCIPLINAR.pdf';

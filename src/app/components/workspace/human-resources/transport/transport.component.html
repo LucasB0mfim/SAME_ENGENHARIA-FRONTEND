@@ -31,12 +31,12 @@
 
   <div class="main">
     <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openMenu(item)" [ngStyle]="{ 'border-left-color': setBorderColor(item.tipo) }">
+      <div class="card__header" (click)="openMenu(item)">
         <div class="display display--column">
-          <div class="card__group card__group--row">
+          <div class="group">
             <h3 class="title title--dark">{{ item.nome }}</h3>
           </div>
-          <div class="card__group card__group--row">
+          <div class="group">
             <div class="bubble">
               <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
             </div>
@@ -47,8 +47,8 @@
         </div>
       </div>
       <div class="card__body">
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               category
             </mat-icon>
@@ -58,8 +58,8 @@
             <h3 class="title title--dark">{{ item.tipo }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               calendar_today
             </mat-icon>
@@ -69,8 +69,8 @@
             <h3 class="title title--dark">{{ formateDate(item.data_criacao) || 'N/A' }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               article
             </mat-icon>
@@ -80,8 +80,8 @@
             <h3 class="title title--dark">{{ item.motivo || 'N/A' }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               add_location
             </mat-icon>
@@ -91,31 +91,31 @@
             <h3 class="title title--dark">{{ item.endereco }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               commute
             </mat-icon>
           </div>
           <div class="">
             <h3 class="title title--light">TIPO DE TRANSPORTE</h3>
-            <h3 class="title title--dark">{{ item.transporte || 'N/A' }}</h3>
+            <h3 class="title title--dark">{{ item.transporte }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               credit_card
             </mat-icon>
           </div>
           <div class="">
             <h3 class="title title--light">QUANTIDADE DE VT</h3>
-            <h3 class="title title--dark">{{ item.quantidade || 'N/A' }}</h3>
+            <h3 class="title title--dark">{{ item.quantidade }}</h3>
           </div>
         </div>
         @if (item.observacao) {
-          <div class="card__group card__group--full card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--full group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               notes
             </mat-icon>
@@ -138,18 +138,20 @@
           </button>
         </div>
         <div class="modal__body">
-          <button type="button" class="btn btn__action" (click)="download()">
-            @if (isDownloading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Gerar PDF
-            }
-          </button>
-          <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-            Atualizar Registro
-          </button>
+          <div class="grid grid--double">
+            <button type="button" class="btn btn__action" (click)="download()">
+              @if (isLoading) {
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              } @else {
+              Gerar PDF
+              }
+            </button>
+            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
+              Atualizar Registro
+            </button>
+          </div>
         </div>
         <div class="modal__footer">
           <button type="button" class="btn btn__action" (click)="closeModals()">
@@ -168,22 +170,20 @@
           </button>
         </div>
         <div class="modal__body">
-          <div class="card__group card__group--column">
-            <label class="title title--medium title--light">Colaborador</label>
-            <input type="text" class="input input__modal input__modal--dark" formControlName="nome" readonly>
-          </div>
-          <div class="card__group card__group--column">
-            <label class="title title--medium title--light">Status</label>
-            <select class="select select__modal select__modal--dark" formControlName="status">
-              <option value="">Selecione uma opção</option>
-              <option value="ANDAMENTO">Em andamento</option>
-              <option value="CONCLUIDO">Concluído</option>
-              <option value="CANCELADO">Cancelado</option>
-            </select>
-          </div>
-          <div class="card__group card__group--column card__group--full">
-            <label class="title title--medium title--light">Observação</label>
-            <textarea formControlName="observacao" class="textarea textarea__modal textarea__modal--dark"></textarea>
+          <div class="grid grid--double">
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Status</label>
+              <select class="select" formControlName="status">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="ANDAMENTO">Em andamento</option>
+                <option value="CONCLUIDO">Concluído</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Observação</label>
+              <textarea formControlName="observacao" class="textarea"></textarea>
+            </div>
           </div>
         </div>
         <div class="modal__footer">

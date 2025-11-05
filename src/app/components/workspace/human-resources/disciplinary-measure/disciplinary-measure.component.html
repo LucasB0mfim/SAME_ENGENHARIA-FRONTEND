@@ -33,10 +33,10 @@
     <div class="card" *ngFor="let item of items">
       <div class="card__header" (click)="openMenu(item)">
         <div class="display display--column">
-          <div class="card__group card__group--row">
+          <div class="group">
             <h3 class="title title--dark">{{ item.empData.nome }}</h3>
           </div>
-          <div class="card__group card__group--row">
+          <div class="group">
             <div class="bubble">
               <h3 class="title title--dark-orange">{{ item.empData.funcao }}</h3>
             </div>
@@ -47,8 +47,8 @@
         </div>
       </div>
       <div class="card__body">
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               person
             </mat-icon>
@@ -58,8 +58,8 @@
             <h3 class="title title--dark">{{ item.criador }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               calendar_today
             </mat-icon>
@@ -69,8 +69,8 @@
             <h3 class="title title--dark">{{ formateDate(item.data_ocorrido) || 'N/A' }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               category
             </mat-icon>
@@ -80,8 +80,8 @@
             <h3 class="title title--dark">{{ item.advertencia || 'N/A' }}</h3>
           </div>
         </div>
-        <div class="card__group card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               article
             </mat-icon>
@@ -92,8 +92,8 @@
           </div>
         </div>
         @if (item.observacao) {
-          <div class="card__group card__group--full card__group--body">
-          <div class="card__group card__group--icon">
+        <div class="group group--full group--body">
+          <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               notes
             </mat-icon>
@@ -116,18 +116,20 @@
           </button>
         </div>
         <div class="modal__body">
-          <button type="button" class="btn btn__action" (click)="download()">
-            @if (isDownloading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Gerar PDF
-            }
-          </button>
-          <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-            Atualizar Registro
-          </button>
+          <div class="grid grid--double">
+            <button type="button" class="btn btn__action" (click)="download()">
+              @if (isLoading) {
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              } @else {
+              Gerar PDF
+              }
+            </button>
+            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
+              Atualizar Registro
+            </button>
+          </div>
         </div>
         <div class="modal__footer">
           <button type="button" class="btn btn__action" (click)="closeModals()">
@@ -146,27 +148,29 @@
           </button>
         </div>
         <div class="modal__body">
-          <div class="card__group card__group--column">
-            <label class="title title--medium title--light">Status</label>
-            <select class="select select__modal select__modal--dark" formControlName="status">
-              <option value="">Selecione uma opção</option>
-              <option value="ANDAMENTO">Em andamento</option>
-              <option value="CONCLUIDO">Concluído</option>
-              <option value="CANCELADO">Cancelado</option>
-            </select>
-          </div>
-          <div class="card__group card__group--column">
-            <label class="title title--medium title--light">Tipo de advertência</label>
-            <select class="select select__modal select__modal--dark" formControlName="advertencia">
-              <option value="">Selecione uma opção</option>
-              <option value="VERBAL">Verbal</option>
-              <option value="ESCRITA">Escrita</option>
-              <option value="SUSPENSAO">Suspensão</option>
-            </select>
-          </div>
-          <div class="card__group card__group--column card__group--full">
-            <label class="title title--medium title--light">Observação</label>
-            <textarea formControlName="observacao" class="textarea textarea__modal textarea__modal--dark"></textarea>
+          <div class="grid grid--double">
+            <div class="group group--column">
+              <label class="title title--medium title--light">Status</label>
+              <select class="select" formControlName="status">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="ANDAMENTO">Em andamento</option>
+                <option value="CONCLUIDO">Concluído</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+            <div class="group group--column">
+              <label class="title title--medium title--light">Tipo de advertência</label>
+              <select class="select" formControlName="advertencia">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="VERBAL">Verbal</option>
+                <option value="ESCRITA">Escrita</option>
+                <option value="SUSPENSAO">Suspensão</option>
+              </select>
+            </div>
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Observação</label>
+              <textarea formControlName="observacao" class="textarea"></textarea>
+            </div>
           </div>
         </div>
         <div class="modal__footer">

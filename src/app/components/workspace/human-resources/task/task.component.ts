@@ -1,214 +1,166 @@
-import { forkJoin } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs';
+
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TaskService } from '../../../../core/services/task.service';
 import { TitleService } from '../../../../core/services/title.service';
 
-interface status {
-  'SOLICITACAO': number;
-  'ANDAMENTO': number;
-  'FINALIZADO': number
-}
-
-type statusKey = keyof status;
-
 @Component({
   selector: 'app-task',
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
     FormsModule,
+    CommonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ɵInternalFormsSharedModule,
+    ReactiveFormsModule
   ],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss'
 })
 export class TaskComponent implements OnInit {
-  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
-  private _titleService = inject(TitleService);
-  private _taskService = inject(TaskService);
 
-  // ========== FORMULÁRIOS ========== //
+  private readonly _titleService = inject(TitleService);
+  private readonly _taskService = inject(TaskService);
+
   updateForm: FormGroup = new FormGroup({
-    status: new FormControl('', Validators.required)
+    id: new FormControl(''),
+    status: new FormControl('', Validators.required),
+    observacao: new FormControl('', Validators.required),
   });
 
-  // ========== ESTADOS ========== //
   items: any[] = [];
+  currentItem: any = {};
   filteredItems: any[] = [];
 
-  employees: any = null;
+  employee: string = '';
+  activeStatus: string = '';
 
-  selectedStatus: statusKey = 'SOLICITACAO';
-  status: status = { 'SOLICITACAO': 0, 'ANDAMENTO': 0, 'FINALIZADO': 0 };
+  menuModalOpen: boolean = false;
+  updateModalOpen: boolean = false;
+  employeesModalOpen: boolean = false;
 
-  isFind: boolean = false;
   isEmpty: boolean = false;
   isLoading: boolean = false;
-  isProcessing: boolean = false;
-
-  isTaskOpen: boolean = false;
-  isMenuOpen: boolean = false;
-  isEditOpen: boolean = false;
-  isListOpen: boolean = false;
-
-  costCenters: any = null;
-  costCenter: string = 'GERAL';
+  isSearching: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
   messageType: 'success' | 'error' = 'success';
 
   ngOnInit(): void {
+    this.findByStatus('NOVO');
     this._titleService.setTitle('Tarefas');
-    this.isTaskOpen = true;
-    this.loadInitial();
-  };
+  }
 
-  loadInitial(): void {
+  findByStatus(status: string): void {
     this.items = [];
     this.isEmpty = false;
-    this.isLoading = true;
-
-    const statusList: statusKey[] = ['SOLICITACAO', 'ANDAMENTO', 'FINALIZADO'];
-
-    const requests = statusList.map(status =>
-      this._taskService.findByStatus(status)
-    );
-
-    forkJoin(requests)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe({
-        next: (res) => {
-
-          statusList.forEach((status: statusKey, index: number) => {
-            const data = res[index]?.result || [];
-            this.status[status] = data.length;
-          });
-
-          this.items = res[0]?.result || [];
-          this.filteredItems = [...this.items];
-          this.costCenters = [...new Set(this.items.map((item) => item.centro_custo))];
-
-          this.isEmpty = this.items.length === 0;
-          this.applyFilters();
-        },
-        error: (err) => {
-          this.isEmpty = true;
-          console.log('Erro ao carregar dados: ', err);
-          this.setMessage('Não foi possível carregar os dados!', 'error');
-        }
-      });
-  };
-
-  getByStatus(status: string): void {
-    const statusKey = status as statusKey;
-    this.selectedStatus = statusKey;
-
-    this.items = [];
-    this.isEmpty = false;
-    this.isLoading = true;
+    this.isSearching = true;
 
     this._taskService.findByStatus(status)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => this.isSearching = false))
       .subscribe({
         next: (res) => {
-          const data = res.result || [];
-
-          this.items = data;
+          this.items = res.result;
           this.filteredItems = [...this.items];
-
-          this.status[statusKey] = data.length;
           this.isEmpty = this.items.length === 0;
+          this.activeStatus = status;
         },
         error: (err) => {
-          this.isEmpty = true;
-          console.error('Erro ao carregar:', err);
-          this.setMessage('Erro ao carregar!', 'error');
+          console.error(err.error.message, err);
         }
       });
   };
 
   update(): void {
-    this.isProcessing = true;
+    this.isLoading = true;
 
     const request = {
-      id: this.employees.id,
-      status: this.updateForm.value.status
+      id: this.currentItem.id,
+      status: this.updateForm.value.status,
+      observacao: this.updateForm.value.observacao
     }
 
     this._taskService.update(request)
-      .pipe(finalize(() => this.isProcessing = false))
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res) => {
-          this.loadInitial();
-          this.isEditOpen = false;
-          this.updateForm.reset({ status: '' });
+          this.resetUpdateForm();
+          this.updateModalOpen = false;
+          this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
         error: (err) => {
+          console.log(err.error.message);
           this.setMessage(err.error.message, 'error');
-          console.log('Não foi possível atualizar tarefa: ', err);
         }
-      })
-  };
-
-  openMenu(item: any): void {
-    this.employees = item;
-    this.isMenuOpen = true;
-  };
-
-  openList() {
-    this.isMenuOpen = false;
-    this.isTaskOpen = false;
-    this.isListOpen = true;
-    this.calculateValueTask();
-  };
-
-  openEdit() {
-    this.isMenuOpen = false;
-    this.isEditOpen = true;
-  };
-
-  closeModal(): void {
-    this.isMenuOpen = false;
-    this.isEditOpen = false;
-  };
-
-  returnMenu(): void {
-    this.isEditOpen = false;
-    this.isListOpen = false;
-    this.isMenuOpen = true;
-  };
-
-  returnTask(): void {
-    this.isListOpen = false;
-    this.isTaskOpen = true;
-  };
-
-  openClipboard(): void {
-    const imageName = this.employees.foto_prancheta;
-    window.open(`https://sameengenharia.com.br/api/task/file/${imageName}`, "_blank", "noopener,noreferrer");
+      });
   };
 
   applyFilters() {
     let data = [...this.filteredItems];
 
-    if (this.costCenter && this.costCenter !== 'GERAL') {
-      const inputValue = this.costCenter;
-      data = data.filter(item =>
-        item.centro_custo && item.centro_custo.includes(inputValue)
-      );
+    if (this.employee) {
+      const inputValue = this.employee
+        .toUpperCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      data = data.filter(item => {
+        if (!item.colaborador) return false;
+
+        const colaborador = item.colaborador
+          .toUpperCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+
+        return colaborador.includes(inputValue);
+      });
     }
 
     this.items = data;
-    this.isEmpty = this.items.length === 0;
+  };
+
+  openMenu(item: any): void {
+    this.menuModalOpen = true;
+    this.currentItem = item;
+  };
+
+  closeModals(): void {
+    this.menuModalOpen = false;
+    this.updateModalOpen = false;
+    this.employeesModalOpen = false;
+  };
+
+  openUpdateModal(): void {
+    this.menuModalOpen = false;
+    this.updateModalOpen = true;
+
+    this.updateForm.patchValue({
+      id: this.currentItem.id,
+      status: this.currentItem.status,
+      observacao: this.currentItem.observacao,
+    });
+  }
+
+  openEmployeesModal(): void {
+    this.menuModalOpen = false;
+    this.employeesModalOpen = true;
+  }
+
+  returnModal(): void {
+    this.menuModalOpen = true;
+    this.updateModalOpen = false;
+  }
+
+  formateDate(date: string) {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
   };
 
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
@@ -222,19 +174,18 @@ export class TaskComponent implements OnInit {
     }, 3000);
   };
 
-  formateDate(date: string): string {
-    if (!date) return '';
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
+  openClipboard(): void {
+    const photo = this.currentItem.foto_prancheta;
+    window.open(`https://sameengenharia.com.br/api/task/file/${photo}`, "_blank", "noopener,noreferrer");
   };
 
-  formateCPF(cpf: string): string {
-    return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9, 11)}`;
-  };
-
-  calculateValueTask(): void {
-    return this.employees.participantes.reduce((acc: number, item: any) => {
-      return acc + item.valor
-    }, 0);
-  };
+  resetUpdateForm(): void {
+    this.updateForm.reset({
+      criador: '',
+      status: '',
+      advertencia: '',
+      observacao: ''
+    })
+  }
 }
+

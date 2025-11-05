@@ -1,3 +1,6 @@
+// ========================================
+// VARIABLES
+// ========================================
 $gp-sm: clamp(0.5rem, 0.5rem + 0vw, 0.5rem);
 $gp-md: clamp(1rem, 1rem + 0vw, 1rem);
 $gp-lg: clamp(1.5rem, 1.5rem + 0vw, 1.5rem);
@@ -18,10 +21,20 @@ $fs-lg: clamp(1.125rem, 1.125rem + 0vw, 1.125rem);
 $icon-sm: 24px;
 $icon-lg: 80px;
 
+$bp-tablet: 1024px;
+$bp-desktop: 1440px;
+$bp-large: 1920px;
+
+// Breakpoints max (para evitar calc em media queries)
+$bp-tablet-max: 1439px;
+$bp-desktop-max: 1919px;
+
+// ========================================
+// LAYOUT
+// ========================================
 .container {
   width: 100%;
   height: 100%;
-
   gap: $gp-md;
   display: grid;
   justify-items: center;
@@ -29,18 +42,21 @@ $icon-lg: 80px;
 }
 
 .aside {
-  // max-width: 1280px;
   width: 100%;
   height: 100%;
-
   gap: $gp-md;
   display: flex;
   align-items: start;
   padding-right: $pd-sm;
   justify-content: start;
+  flex-wrap: nowrap;
 
   :last-child {
     margin-left: auto;
+  }
+
+  @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+    gap: $gp-sm;
   }
 }
 
@@ -48,11 +64,8 @@ $icon-lg: 80px;
   display: flex;
   padding-right: $pd-sm;
   flex-direction: column;
-
   width: 100%;
-  // max-width: 1280px;
   height: 100%;
-
   gap: $gp-md;
   overflow-y: auto;
 
@@ -65,22 +78,120 @@ $icon-lg: 80px;
     border-radius: $bd-sm;
     background: var(--orange-color);
   }
+
+  @media (min-width: $bp-desktop) {
+    gap: $gp-lg;
+  }
 }
 
+// ========================================
+// GENERIC COMPONENTS
+// ========================================
+
+// Display utilities
 .display {
   display: flex;
-
-  &--flex {
-    gap: $gp-sm;
-    align-items: center;
-    justify-content: center;
-  }
 
   &--column {
     flex-direction: column;
   }
+
+  &--center {
+    gap: $gp-sm;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
+// Group (generic flex container)
+.group {
+  gap: $gp-sm;
+  display: flex;
+  align-items: center;
+
+  &--column {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  &--body {
+    padding: $pd-sm;
+    border-radius: $bd-lg;
+    background-color: var(--primary-color);
+  }
+
+  &--icon {
+    padding: $pd-sm;
+    border-radius: $bd-lg;
+    background-color: rgb(255, 111, 0, 0.1);
+  }
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+}
+
+// Grid system
+.grid {
+  width: 100%;
+  height: 100%;
+  gap: $gp-lg;
+  display: grid;
+
+  &--single {
+    grid-template-columns: 1fr;
+  }
+
+  &--double {
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      grid-template-columns: 1fr;
+      gap: $gp-md;
+    }
+  }
+
+  &--triple {
+    grid-template-columns: repeat(3, 1fr);
+
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $gp-md;
+    }
+  }
+
+  &--quad {
+    grid-template-columns: repeat(4, 1fr);
+
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $gp-md;
+    }
+
+    @media (min-width: $bp-desktop) and (max-width: $bp-desktop-max) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &--quint {
+    grid-template-columns: repeat(5, 1fr);
+
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $gp-md;
+    }
+
+    @media (min-width: $bp-desktop) and (max-width: $bp-desktop-max) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+// ========================================
+// SPECIFIC COMPONENTS
+// ========================================
+
+// Card
 .card {
   width: 100%;
   height: auto;
@@ -91,10 +202,13 @@ $icon-lg: 80px;
     display: flex;
     padding: $pd-md;
     justify-content: space-between;
-
     cursor: pointer;
     border-top-left-radius: $bd-df;
     border-left: $bd-df solid var(--orange-color);
+
+    @media (min-width: $bp-desktop) {
+      padding: $pd-md calc($pd-md * 1.5);
+    }
   }
 
   &__body {
@@ -103,36 +217,15 @@ $icon-lg: 80px;
     gap: $gp-lg;
     padding: $pd-md;
     border-top: $bd-sm solid var(--primary-color);
-  }
 
-  &__group {
-    gap: $gp-sm;
-    display: flex;
-    align-items: center;
-
-    &--body {
-      padding: $pd-sm;
-      border-radius: $bd-lg;
-      background-color: var(--primary-color);
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      grid-template-columns: 1fr;
+      gap: $gp-md;
     }
 
-    &--icon {
-      padding: $pd-sm;
-      border-radius: $bd-lg;
-      background-color: rgb(255, 111, 0, 0.1);
-    }
-
-    &--column {
-      align-items: start;
-      flex-direction: column;
-    }
-
-    &--large {
-      grid-column: -1/2;
-    }
-
-    &--full {
-      grid-column: -1/1;
+    @media (min-width: $bp-desktop) {
+      padding: $pd-md calc($pd-md * 1.5);
+      gap: calc($gp-lg * 1.2);
     }
   }
 }
@@ -143,6 +236,9 @@ $icon-lg: 80px;
   background-color: rgb(255, 111, 0, 0.2);
 }
 
+// ========================================
+// TYPOGRAPHY
+// ========================================
 .title {
   font-size: $fs-md;
 
@@ -170,10 +266,12 @@ $icon-lg: 80px;
   }
 }
 
+// ========================================
+// ICONS
+// ========================================
 .icon {
   width: auto;
   height: auto;
-
   border: none;
   outline: none;
   background-color: transparent;
@@ -214,22 +312,23 @@ $icon-lg: 80px;
   }
 }
 
+// ========================================
+// BUTTONS
+// ========================================
 .btn {
   width: auto;
   height: 100%;
-
   cursor: pointer;
   font-weight: 600;
   font-size: $fs-md;
   color: var(--text-color);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: none;
   background-color: var(--secondary-color);
   transition: all 0.2s ease;
+  white-space: nowrap;
 
   &__launch {
     border-radius: $bd-lg;
@@ -240,6 +339,11 @@ $icon-lg: 80px;
       color: var(--orange-color);
       border-color: var(--orange-color);
       transform: translateY(-1px);
+    }
+
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      padding: $pd-sm;
+      font-size: $fs-sm;
     }
   }
 
@@ -264,12 +368,14 @@ $icon-lg: 80px;
   }
 }
 
+// ========================================
+// FORM CONTROLS
+// ========================================
 .input {
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm;
   color: var(--text-color);
-
   border-radius: $bd-lg;
   border: $bd-sm solid transparent;
   background-color: var(--secondary-color);
@@ -280,56 +386,40 @@ $icon-lg: 80px;
     border-color: var(--orange-color);
   }
 
-  &__modal {
-    width: 100%;
-    height: 100%;
-    padding: $pd-sm;
-
-    &--dark {
-      background-color: var(--primary-color);
-    }
+  @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+    min-width: 150px;
   }
 }
 
 .select {
+  width: 100%;
   cursor: pointer;
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm;
   color: var(--text-color);
-
   border-radius: $bd-lg;
   border: $bd-sm solid transparent;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   transition: all 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: var(--orange-color);
   }
-
-  &__modal {
-    width: 100%;
-    height: 100%;
-    padding: $pd-sm;
-
-    &--dark {
-      background-color: var(--primary-color);
-    }
-  }
 }
 
 .textarea {
+  width: 100%;
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm;
   color: var(--text-color);
-
   resize: none;
   outline: none;
   border-radius: $bd-lg;
   border: $bd-sm solid transparent;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -345,36 +435,11 @@ $icon-lg: 80px;
     outline: none;
     border-color: var(--orange-color);
   }
-
-  &__modal {
-    width: 100%;
-    height: 100%;
-    padding: $pd-sm;
-
-    &--light {
-      background-color: var(--secondary-color);
-    }
-
-    &--dark {
-      background-color: var(--primary-color);
-    }
-  }
 }
 
-.centralized {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &--column {
-    gap: $gp-sm;
-    flex-direction: column;
-  }
-}
-
+// ========================================
+// MODAL
+// ========================================
 .blurred-background {
   position: fixed;
   top: 0;
@@ -387,22 +452,42 @@ $icon-lg: 80px;
   justify-content: center;
   z-index: 2;
   animation: fadeIn 0.3s ease;
+  padding: $pd-md;
 }
 
 .modal {
-  max-width: 1024px;
-  min-width: 600px;
-
+  max-width: min(90vw, 1024px);
+  min-width: min(600px, 90vw);
   width: auto;
   height: auto;
-
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
   gap: $gp-md;
-
   padding: $pd-md;
   border-radius: $bd-lg;
   background-color: var(--secondary-color);
+  max-height: 90vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: $bd-sm;
+    background: var(--orange-color);
+  }
+
+  @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+    min-width: min(500px, 90vw);
+    padding: $pd-sm $pd-md;
+  }
+
+  @media (min-width: $bp-desktop) {
+    padding: calc($pd-md * 1.5);
+    gap: $gp-lg;
+  }
 
   &__header {
     display: flex;
@@ -413,19 +498,36 @@ $icon-lg: 80px;
   &__body {
     width: 100%;
     height: 100%;
-
-    gap: $gp-lg;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
   }
 
   &__footer {
     width: 100%;
-    height: 47px;
-
+    height: auto;
+    min-height: 47px;
     gap: $gp-sm;
     display: flex;
     justify-content: flex-end;
+    flex-wrap: wrap;
+
+    @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+      gap: $gp-sm;
+    }
+  }
+}
+
+// ========================================
+// UTILITIES
+// ========================================
+.centralized {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--column {
+    gap: $gp-sm;
+    flex-direction: column;
   }
 }
 
@@ -473,6 +575,9 @@ $icon-lg: 80px;
   }
 }
 
+// ========================================
+// ANGULAR MATERIAL OVERRIDES
+// ========================================
 :host ::ng-deep mat-progress-spinner {
   width: 3vw !important;
   height: 3vw !important;
@@ -483,6 +588,9 @@ $icon-lg: 80px;
   stroke-width: 8%;
 }
 
+// ========================================
+// ANIMATIONS
+// ========================================
 @keyframes bounce {
 
   0%,
@@ -494,6 +602,16 @@ $icon-lg: 80px;
 
   40% {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
     opacity: 1;
   }
 }

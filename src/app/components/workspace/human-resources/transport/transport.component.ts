@@ -2,7 +2,6 @@ import saveAs from 'file-saver';
 import { finalize } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
-import { HttpResponse } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -11,8 +10,10 @@ import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedM
 import { TitleService } from '../../../../core/services/title.service';
 import { TransportService } from '../../../../core/services/transport.service';
 
+import { HttpResponse } from '@angular/common/http';
+
 @Component({
-  selector: 'app-disciplinary-measure',
+  selector: 'app-transport',
   imports: [
     FormsModule,
     CommonModule,
@@ -25,13 +26,15 @@ import { TransportService } from '../../../../core/services/transport.service';
   styleUrl: './transport.component.scss'
 })
 export class TransportComponent implements OnInit {
+
   private readonly _titleService = inject(TitleService);
   private readonly _transportService = inject(TransportService);
 
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
-    nome: new FormControl(''),
+    criador: new FormControl(''),
     status: new FormControl('', Validators.required),
+    advertencia: new FormControl('', Validators.required),
     observacao: new FormControl('', Validators.required),
   });
 
@@ -48,9 +51,6 @@ export class TransportComponent implements OnInit {
   isEmpty: boolean = false;
   isLoading: boolean = false;
   isSearching: boolean = false;
-
-  isUpdating: boolean = false;
-  isDownloading: boolean = false;
 
   message: string = '';
   showMessage: boolean = false;
@@ -87,6 +87,7 @@ export class TransportComponent implements OnInit {
     const request = {
       id: this.currentItem.id,
       status: this.updateForm.value.status,
+      advertencia: this.updateForm.value.advertencia,
       observacao: this.updateForm.value.observacao
     }
 
@@ -133,7 +134,6 @@ export class TransportComponent implements OnInit {
   openMenu(item: any): void {
     this.menuModalOpen = true;
     this.currentItem = item;
-    console.log(this.currentItem)
   };
 
   closeModals(): void {
@@ -144,11 +144,11 @@ export class TransportComponent implements OnInit {
   openUpdateModal(): void {
     this.menuModalOpen = false;
     this.updateModalOpen = true;
-
     this.updateForm.patchValue({
       id: this.currentItem.id,
-      nome: this.currentItem.nome,
+      criador: this.currentItem.criador,
       status: this.currentItem.status,
+      advertencia: this.currentItem.advertencia,
       observacao: this.currentItem.observacao,
     });
   }
@@ -174,19 +174,10 @@ export class TransportComponent implements OnInit {
     }, 3000);
   };
 
-  setBorderColor(tipo: string): string {
-    switch (tipo) {
-      case 'SOLICITACAO': return '#28a745';
-      case 'CANCELAMENTO': return '#dc3545';
-      case 'ALTERACAO': return '#007bff';
-      default: return '#FF6F00';
-    }
-  };
-
   download() {
-    this.isDownloading = true;
+    this.isLoading = true;
     this._transportService.download(this.currentItem.id)
-      .pipe(finalize(() => this.isDownloading = false))
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe((response: HttpResponse<Blob>) => {
         const cd = response.headers.get('content-disposition');
         const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'VALE_TRANSPORTE.pdf';
@@ -196,9 +187,9 @@ export class TransportComponent implements OnInit {
 
   resetUpdateForm(): void {
     this.updateForm.reset({
-      id: '',
-      nome: '',
+      criador: '',
       status: '',
+      advertencia: '',
       observacao: ''
     })
   }

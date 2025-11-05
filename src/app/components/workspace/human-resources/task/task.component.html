@@ -1,220 +1,227 @@
 <div class="container">
 
+  <!-- MENSAGEM -->
   @if (showMessage) {
   <div class="message" [ngClass]="messageType">{{ message }}</div>
   }
 
-  <div class="container__filter">
-    @if (isTaskOpen) {
-    <!-- FILTRO -->
-    <div class="filter">
-      <button (click)="getByStatus('SOLICITACAO')" [ngClass]="{'active': selectedStatus === 'SOLICITACAO'}"
-        class="btn btn--third">
-        Solicitações
-        <span class="counter">{{ status['SOLICITACAO'] }}</span>
-      </button>
-    </div>
+  <div class="aside">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
+      [class.active]="activeStatus === 'NOVO'">
+      Novos
+    </button>
 
-    <!-- FILTRO -->
-    <div class="filter">
-      <button (click)="getByStatus('ANDAMENTO')" [ngClass]="{'active': selectedStatus === 'ANDAMENTO'}"
-        class="btn btn--third">
-        Em andamento
-        <span class="counter">{{ status['ANDAMENTO'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
+      [class.active]="activeStatus === 'ANDAMENTO'">
+      Em andamento
+    </button>
 
-    <!-- FILTRO -->
-    <div class="filter">
-      <button (click)="getByStatus('FINALIZADO')" [ngClass]="{'active': selectedStatus === 'FINALIZADO'}"
-        class="btn btn--third">
-        Finalizadas
-        <span class="counter">{{ status['FINALIZADO'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
+      [class.active]="activeStatus === 'CONCLUIDO'">
+      Concluídos
+    </button>
 
-    <!-- FILTRO -->
-    <div class="filter filter--right">
-      <select [(ngModel)]="costCenter" (change)="applyFilters()" class="input input--primary">
-        <option value="GERAL">Geral</option>
-        <option *ngFor="let cc of costCenters" [value]="cc">{{ cc }}</option>
-      </select>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
+      [class.active]="activeStatus === 'CANCELADO'">
+      Cancelados
+    </button>
 
-    <div class="filter">
-      <button class="btn btn--primary" (click)="loadInitial()">
-        <mat-icon>refresh</mat-icon>
-      </button>
-    </div>
-    }
-
-    @if (isListOpen) {
-    <div class="filter">
-      <span class="filter__span">R$ {{ calculateValueTask() }}</span>
-    </div>
-
-    <div class="filter filter--right">
-      <button class="btn btn--primary" (click)="openClipboard()">
-        <mat-icon>content_paste</mat-icon>
-      </button>
-    </div>
-
-    <div class="filter">
-      <button class="btn btn--primary" (click)="returnTask()">
-        <mat-icon>reset_tv</mat-icon>
-      </button>
-    </div>
-    }
+    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
   </div>
 
-  <div class="container__card">
-    @if (isTaskOpen) {
-    <div *ngFor="let item of items" (click)="openMenu(item)" class="card">
-      <div class="card__header">
-        <div class="card__primary">
-          <div class="card__top">
-            <div class="card__title">{{ item.criador || 'N/A' }}</div>
+  <div class="main">
+    <div class="card" *ngFor="let item of items">
+      <div class="card__header" (click)="openMenu(item)">
+        <div class="display display--column">
+          <div class="group">
+            <h3 class="title title--dark">{{ item.empData.nome }}</h3>
           </div>
-          <div class="card__bottom">
-            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
-          </div>
-        </div>
-        <div class="card__secondary">
-          <div class="card__text">
-            <div class="card__subtitle">SL:</div>
-            <div class="card__title">{{ formateDate(item.data_criacao) || 'N/A'}}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">DI:</div>
-            <div class="card__title">{{ formateDate(item.data_inicial) || 'N/A'}}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">DF:</div>
-            <div class="card__title">{{ formateDate(item.data_final) || 'N/A'}}</div>
+          <div class="group">
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.empData.funcao }}</h3>
+            </div>
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.empData.centro_custo }}</h3>
+            </div>
           </div>
         </div>
       </div>
       <div class="card__body">
-        <div class="card__content">
-          <div class="card__subtitle">DESCRIÇÃO</div>
-          <div class="card__title">{{ item.descricao || 'N/A' }}</div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DATA DA SOLICITAÇÃO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_criacao) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              article
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">CENTRO DE CUSTO</h3>
+            <h3 class="title title--dark">{{ item.centro_custo || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DATA INICIAL</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_inicial) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DATA FINAL</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_final) }}</h3>
+          </div>
+        </div>
+        <div class="group group--full group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              notes
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DESCRIÇÃO</h3>
+            <h3 class="title title--dark">{{ item.descricao || 'N/A' }}</h3>
+          </div>
         </div>
       </div>
     </div>
-    }
 
-    @if (isMenuOpen) {
-    <div class="modal__backdrop">
-      <div class="modal__container">
+    <div class="blurred-background" *ngIf="menuModalOpen">
+      <form class="modal">
         <div class="modal__header">
-          <h2 class="modal__title">Mais Opções</h2>
-          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
-        </div>
-
-        <div class="modal__content">
-          <div class="modal__group">
-            <button type="button" (click)="openEdit()" class="btn btn--secondary">
-              Atualizar Status
-            </button>
-          </div>
-
-          <div class="modal__group">
-            <button type="button" (click)="openList()" class="btn btn--secondary">
-              Visualizar Participantes
-            </button>
-          </div>
-        </div>
-
-        <div class="modal__footer">
-          <button type="button" (click)="closeModal()" class="btn btn--secondary">
-            Sair
+          <h3 class="title title--large title--dark">Menu</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
           </button>
         </div>
-      </div>
-    </div>
-    }
-
-    @if (isListOpen) {
-    <div *ngFor="let emp of employees.participantes" class="card">
-      <div class="card__header card__header--border">
-        <div class="card__primary">
-          <div class="card__top">
-            <div class="card__title">{{ emp.nome || 'N/A' }}</div>
-          </div>
-          <div class="card__bottom">
-            <div class="card__subtitle">{{ emp.funcao || 'N/A' }}</div>
+        <div class="modal__body">
+          <div class="grid grid--double">
+            <button type="button" class="btn btn__action" (click)="openClipboard()">
+              Visualizar Prancheta
+            </button>
+            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
+              Atualizar Registro
+            </button>
+            <button type="button" class="btn btn--full btn__action" (click)="openEmployeesModal()">
+              Ver Colaboradores
+            </button>
           </div>
         </div>
-        <div class="card__secondary">
-          <div class="card__text">
-            <div class="card__subtitle">VALOR:</div>
-            <div class="card__title">R$ {{ emp.valor || 'N/A'}}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">CPF:</div>
-            <div class="card__title">{{ formateCPF(emp.cpf) || 'N/A'}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    }
-
-    @if(isEditOpen) {
-    <form [formGroup]="updateForm" (ngSubmit)="update()" class="modal__backdrop">
-      <div class="modal__container">
-        <div class="modal__header">
-          <h2 class="modal__title">Editar Tarefa</h2>
-          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
-        </div>
-
-        <div class="modal__content">
-          <div class="modal__group modal__group--full">
-            <label class="modal__label">Status *</label>
-            <select formControlName="status" class="modal__input">
-              <option value="">Selecione uma opção</option>
-              <option value="ANDAMENTO">EM ANDAMENTO</option>
-              <option value="FINALIZADO">FINALIZADO</option>
-            </select>
-          </div>
-        </div>
-
         <div class="modal__footer">
-          <button type="button" (click)="returnMenu()" class="btn btn--secondary">
+          <button type="button" class="btn btn__action" (click)="closeModals()">
+            Fechar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="blurred-background" *ngIf="updateModalOpen">
+      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
+        <div class="modal__header">
+          <h3 class="title title--large title--dark">Atualizar</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
+        </div>
+        <div class="modal__body">
+          <div class="grid grid--double">
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Status</label>
+              <select class="select" formControlName="status">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="ANDAMENTO">Em andamento</option>
+                <option value="CONCLUIDO">Concluído</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Observação</label>
+              <textarea formControlName="observacao" class="textarea"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="returnModal()">
             Voltar
           </button>
-
-          <button type="submit" class="btn btn--primary">
-            @if (isProcessing) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
+          <button type="submit" class="btn btn__action">
+            @if (isLoading) {
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
             } @else {
             Atualizar
             }
           </button>
         </div>
-      </div>
-    </form>
-    }
+      </form>
+    </div>
 
-    @if (isLoading) {
-    <div class="loading">
+    <div class="blurred-background" *ngIf="employeesModalOpen">
+      <div class="modal" *ngFor="let item of items">
+        <div class="modal__header">
+          <h3 class="title title--large title--dark">Lista de Colaboradores</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
+        </div>
+        <div class="modal__body" *ngFor="let emp of item.participantes">
+          <div class="group group--body">
+            <div class="group group--icon">
+              <mat-icon class="icon icon--small icon--orange">
+                person
+              </mat-icon>
+            </div>
+            <div class="">
+              <h3 class="title title--dark">{{ emp.nome || 'N/A' }}</h3>
+              <div class="group">
+                <div class="bubble">
+                  <h3 class="title title--dark-orange">{{ emp.funcao }}</h3>
+                </div>
+                <div class="bubble">
+                  <h3 class="title title--dark-orange">{{ emp.cpf }}</h3>
+                </div>
+                <div class="bubble">
+                  <h3 class="title title--dark-orange">{{ emp.valor | currency:'BRL':'symbol':'1.2-2' }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="returnModal()">
+            Voltar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="centralized" *ngIf="isSearching">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
-    }
 
-    @if (isEmpty) {
-    <div class="empty">
-      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    <div class="centralized centralized--column" *ngIf="isEmpty">
+      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
+      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
     </div>
-    }
   </div>
 </div>
