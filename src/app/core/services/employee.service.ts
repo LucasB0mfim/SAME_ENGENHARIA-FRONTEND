@@ -25,6 +25,11 @@ export class EmployeeService {
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/cost-centers', { headers });
   };
 
+  findActiveNames(): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/active-names', { headers });
+  };
+
   findFunctions(): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/functions', { headers });
