@@ -19,9 +19,9 @@ export class BrkService {
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/brk/centroCusto?centroCusto=${centro_custo}`, { headers });
   }
 
-  findItemsByStatus(centroCusto: any, status: any): Observable<any> {
+  findByStatus(status: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/brk/items?centroCusto=${centroCusto}&status=${status}`, { headers });
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/brk/${status}`, { headers });
   }
 
   create(request: any): Observable<any> {

@@ -112,14 +112,14 @@ export class TaskComponent implements OnInit {
         .replace(/[\u0300-\u036f]/g, '');
 
       data = data.filter(item => {
-        if (!item.colaborador) return false;
+        if (!item.empData.nome) return false;
 
-        const colaborador = item.colaborador
+        const nome = item.empData.nome
           .toUpperCase()
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '');
 
-        return colaborador.includes(inputValue);
+        return nome.includes(inputValue);
       });
     }
 
@@ -173,6 +173,16 @@ export class TaskComponent implements OnInit {
       this.message = '';
     }, 3000);
   };
+
+  totalValue(): number {
+    return this.currentItem.participantes.reduce((acc: number, item: any) => {
+      return acc + item.valor
+    }, 0);
+  };
+
+  formatCPF(cpf: string): string {
+    return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9, 11)}`;
+  }
 
   openClipboard(): void {
     const photo = this.currentItem.foto_prancheta;

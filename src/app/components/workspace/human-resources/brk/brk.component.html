@@ -5,411 +5,442 @@
   <div class="message" [ngClass]="messageType">{{ message }}</div>
   }
 
-  <div class="container__filter">
+  <div class="aside">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
+      [class.active]="activeStatus === 'NOVO'">
+      Novos
+    </button>
 
-    <!-- FILTRO -->
-    <div class="filter">
-      <input type="text" class="input input--primary" placeholder="Pesquisar" [(ngModel)]="employee"
-        (input)="applyFilters()">
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('PESQUISA SOCIAL')"
+      [class.active]="activeStatus === 'PESQUISA SOCIAL'">
+      Pesquisa Social
+    </button>
 
-    <!-- NAVEGAÇÃO POR STATUS -->
-    <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'NOVO'}" (click)="filterByStatus('NOVO')">
-        Novo
-        <span class="counter">{{ statusCounts['NOVO'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('DOCUMENTACAO')"
+      [class.active]="activeStatus === 'DOCUMENTACAO'">
+      Documentação
+    </button>
 
-    <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'PESQUISA SOCIAL'}"
-        (click)="filterByStatus('PESQUISA SOCIAL')">
-        P. Social
-        <span class="counter">{{ statusCounts['PESQUISA SOCIAL'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('INTEGRACAO')"
+      [class.active]="activeStatus === 'INTEGRACAO'">
+      Integração
+    </button>
 
-    <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'DOCUMENTAÇÃO'}"
-        (click)="filterByStatus('DOCUMENTAÇÃO')">
-        Documentação
-        <span class="counter">{{ statusCounts['DOCUMENTAÇÃO'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('LIBERADO')"
+      [class.active]="activeStatus === 'LIBERADO'">
+      Liberados
+    </button>
 
-    <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'INTEGRAÇÃO'}"
-        (click)="filterByStatus('INTEGRAÇÃO')">
-        Integração
-        <span class="counter">{{ statusCounts['INTEGRAÇÃO'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('PAUSADO')"
+      [class.active]="activeStatus === 'PAUSADO'">
+      Pausados
+    </button>
 
-    <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'LIBERADO'}"
-        (click)="filterByStatus('LIBERADO')">
-        Liberado
-        <span class="counter">{{ statusCounts['LIBERADO'] }}</span>
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
+      [class.active]="activeStatus === 'CANCELADO'">
+      Cancelados
+    </button>
 
-    <div class="filter">
-      <button class="btn btn--third" [ngClass]="{'active': selectedStatus === 'OUTRO'}" (click)="filterByOtherStatus()">
-        Outros
-        <span class="counter">{{ statusCounts['PAUSADO'] + statusCounts['CANCELADO'] }}</span>
-      </button>
-    </div>
+    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
 
-    <!-- FILTRO -->
-    <form [formGroup]="findForm" (ngSubmit)="findByCC()" class="filter">
-      <select formControlName="centroCusto" class="select select--primary">
-        <option value="GERAL">GERAL</option>
-        <option value="BRK - RECIFE">BRK - RECIFE</option>
-        <option value="BRK - MACEIO">BRK - MACEIO</option>
-      </select>
-      <button type="submit" class="btn btn--primary">
-        @if (isFind) {
-        <div class="loading-dots">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-        } @else {
-        <mat-icon>search</mat-icon>
-        }
-      </button>
-    </form>
-
-    <div class="filter">
-      <button class="btn btn--primary" (click)="openModalCreate()">
-        <mat-icon>add_circle</mat-icon>
-      </button>
-    </div>
+    <button class="btn btn__action btn__action--dark" (click)="openCreator()">
+      <mat-icon class="icon icon">add</mat-icon>
+    </button>
   </div>
 
-  <div class="container__card">
-    <!-- CARD -->
-    <div *ngFor="let item of items; let i = index" (click)="openModalEdit(item)" class="card">
-      <div class="card__header">
-        <div class="card__primary">
-          <div class="card__top">
-            <div class="card__title">{{ item.nome || 'N/A' }}</div>
+  <div class="main">
+    <div class="card" *ngFor="let item of items">
+      <div class="card__header" (click)="openMenu(item)">
+        <div class="display display--column">
+          <div class="group">
+            <h3 class="title title--dark">{{ item.nome }}</h3>
           </div>
-          <div class="card__bottom">
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
-          </div>
-        </div>
-        <div class="card__secondary">
-
-          <div class="card__text">
-            <div class="card__subtitle">ASO:</div>
-            <div class="card__title">
-              @if (item.aso === 'CONCLUIDO') {
-              <mat-icon>check</mat-icon>
-              } @else {
-              <mat-icon>close</mat-icon>
-              }
+          <div class="group">
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
             </div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">FICHA DE EPI:</div>
-            <div class="card__title">
-              @if (item.ficha_epi === 'CONCLUIDO') {
-              <mat-icon>check</mat-icon>
-              } @else {
-              <mat-icon>close</mat-icon>
-              }
-            </div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">TREINAMENTO:</div>
-            <div class="card__title">
-              @if (item.treinamento === 'CONCLUIDO') {
-              <mat-icon>check</mat-icon>
-              } @else {
-              <mat-icon>close</mat-icon>
-              }
-            </div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">ORDEM DE SERVIÇO:</div>
-            <div class="card__title">
-              @if (item.os === 'CONCLUIDO') {
-              <mat-icon>check</mat-icon>
-              } @else {
-              <mat-icon>close</mat-icon>
-              }
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
             </div>
           </div>
         </div>
       </div>
       <div class="card__body">
-        <div class="card__body-top">
-          <div class="card__content">
-            <div class="card__subtitle">OBSERVAÇÃO</div>
-            <div class="card__title">{{ item.observacao || 'N/A' }}</div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              article
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">NÚMERO DO CONTRATO</h3>
+            <h3 class="title title--dark">{{ item.contrato || 'N/A' }}</h3>
           </div>
         </div>
-        <div class="card__body-bottom">
-          <div class="card__content">
-            <div class="card__subtitle">NUM. DO CONTRATO</div>
-            <div class="card__title">{{ item.contrato || 'N/A' }}</div>
+        <div class="group group--body" (click)="managerLink(item.link)">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              link
+            </mat-icon>
           </div>
-          <div class="card__content">
-            <div class="card__subtitle">PESQUISA SOCIAL</div>
-            <div class="card__title">{{ formateDate(item.dt_envio_pesq_social) || 'N/A' }}</div>
-          </div>
-          <div class="card__content">
-            <div class="card__subtitle">PREV. DE APROVAÇÃO</div>
-            <div class="card__title">{{ formateDate(item.dt_prev_aprov_pesq_social) || 'N/A' }}</div>
-          </div>
-          <div class="card__content">
-            <div class="card__subtitle">ENVIO DO DOCUMENTO</div>
-            <div class="card__title">{{ formateDate(item.dt_envio_doc) || 'N/A' }}</div>
-          </div>
-          <div class="card__content">
-            <div class="card__subtitle">PREV. DE APROVAÇÃO</div>
-            <div class="card__title">{{ formateDate(item.dt_prev_aprov_doc) || 'N/A' }}</div>
-          </div>
-          <div class="card__content">
-            <div class="card__subtitle">REENVIO DO DOCUMENTO</div>
-            <div class="card__title">{{ formateDate(item.dt_reenvio_doc) || 'N/A' }}</div>
-          </div>
-          <div class="card__content">
-            <div class="card__subtitle">PREV. DE APROVAÇÃO</div>
-            <div class="card__title">{{ formateDate(item.dt_prev_aprov_reenvio_doc) || 'N/A' }}</div>
+          <div>
+            <h3 class="title title--light">LINK</h3>
+            <h3 class="title title--dark">{{ item.link ? 'Clique aqui para acessar o link' : 'N/A' }}</h3>
           </div>
         </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">PESQUISA SOCIAL</h3>
+            <h3 class="title title--dark">{{ formateDate(item.dt_envio_pesq_social) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">PREVISÃO DE APROVAÇÃO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_pesq_social) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">ENVIO DO DOCUMENTO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.dt_envio_doc) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">PREVISÃO DE APROVAÇÃO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_doc) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">REENVIO DO DOCUMENTO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.dt_reenvio_doc) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">PREVISÃO DE APROVAÇÃO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_reenvio_doc) || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              settings
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">ASO</h3>
+            <h3 class="title title--dark">{{ item.aso }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              settings
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">FILHA DE EPI</h3>
+            <h3 class="title title--dark">{{ item.epi }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              settings
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">TREINAMENTO</h3>
+            <h3 class="title title--dark">{{ item.treinamento }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              settings
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">ORDEM DE SERVIÇO</h3>
+            <h3 class="title title--dark">{{ item.os }}</h3>
+          </div>
+        </div>
+        @if (item.observacao) {
+        <div class="group group--body group--full">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              settings
+            </mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">OBSERVACAO</h3>
+            <h3 class="title title--dark">{{ item.observacao }}</h3>
+          </div>
+        </div>
+        }
       </div>
     </div>
 
-    <!-- MODAL -->
-    <form *ngIf="isModalCreate" [formGroup]="createForm" (ngSubmit)="create()" class="modal__backdrop">
-      <div class="modal__container modal__container--small">
+    <div class="blurred-background" *ngIf="createModalOpen">
+      <form class="modal" [formGroup]="createForm" (ngSubmit)="create()">
         <div class="modal__header">
-          <h2 class="modal__title">Criar colaborador</h2>
-          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
+          <h3 class="title title--large title--dark">Criar</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
         </div>
-
-        <div class="modal__content modal__content--small">
-          <div class="modal__group modal__group--full">
-            <label class="modal__label">Nome *</label>
-            <input type="text" placeholder="Nome completo" formControlName="nome" class="modal__input">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Função *</label>
-            <select formControlName="funcao" class="modal__select">
-              <option value="" disabled>Selecione uma opção</option>
-              <option *ngFor="let function of functions" [value]="function">{{ function }}</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Contrato *</label>
-            <input type="text" class="modal__input" formControlName="contrato" placeholder="CW00000" mask="AA00000">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Cento de custo *</label>
-            <select class="modal__select" formControlName="centroCusto">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="BRK - RECIFE">BRK - RECIFE</option>
-              <option value="BRK - MACEIO">BRK - MACEIO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Status *</label>
-            <select class="modal__select" formControlName="status">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="NOVO">NOVO</option>
-              <option value="PESQUISA SOCIAL">PESQUISA SOCIAL</option>
-              <option value="DOCUMENTAÇÃO">DOCUMENTAÇÃO</option>
-              <option value="INTEGRAÇÃO">INTEGRAÇÃO</option>
-              <option value="LIBERADO">LIBERADO</option>
-              <option value="PAUSADO">PAUSADO</option>
-              <option value="CANCELADO">CANCELADO</option>
-            </select>
-          </div>
-
-          <div class="modal__group modal__group--full">
-            <label class="modal__label">Observação</label>
-            <textarea formControlName="observacao" placeholder="Digito algo..." class="modal__input"></textarea>
-          </div>
-        </div>
-
-        <div class="modal__footer">
-          <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
-          <button type="submit" class="btn btn--primary">
-            @if (isCreate) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
+        <div class="modal__body">
+          <div class="grid grid--double">
+            <div class="group group--column">
+              <label class="title title--medium title--light">Nome Completo *</label>
+              <input type="text" class="input input--dark input--full" placeholder="Insira o nome"
+                formControlName="nome">
             </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Função *</label>
+              <select class="select" formControlName="funcao">
+                <option value="" disabled>Selecione uma opção</option>
+                <option *ngFor="let function of listOfFunctions" [value]="function">{{ function }}</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Contrato *</label>
+              <input type="text" class="input input--dark input--full" placeholder="Insira o contrato"
+                formControlName="contrato">
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Centro de Custo *</label>
+              <select class="select" formControlName="centroCusto">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="BRK - RECIFE">BRK - RECIFE</option>
+                <option value="BRK - MACEIO">BRK - MACEIO</option>
+              </select>
+            </div>
+
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Observação</label>
+              <textarea class="textarea" placeholder="Comente sobre algo..." formControlName="observacao"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="returnModal()">
+            Voltar
+          </button>
+          <button type="submit" class="btn btn__action">
+            @if (isLoading) {
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
             } @else {
             Criar
             }
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
 
-    <!-- MODAL -->
-    <form *ngIf="isModalEdit" [formGroup]="updateForm" (ngSubmit)="update()" class="modal__backdrop">
-      <div class="modal__container">
+    <div class="blurred-background" *ngIf="menuModalOpen">
+      <form class="modal">
         <div class="modal__header">
-          <h2 class="modal__title">Atualizar colaborador</h2>
-          <button type="button" (click)="closeModal()" class="btn btn--close">&times;</button>
-        </div>
-
-        <div class="modal__content">
-
-          <div class="modal__group">
-            <label class="modal__label">Nome *</label>
-            <input type="text" formControlName="nome" placeholder="Nome completo" class="modal__input" readonly>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Função *</label>
-            <select formControlName="funcao" class="modal__select">
-              <option value="" disabled>Selecione uma opção</option>
-              <option *ngFor="let function of functions" [value]="function">{{ function }}</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Contrato *</label>
-            <input type="text" class="modal__input" formControlName="contrato" placeholder="CW00000">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Status *</label>
-            <select class="modal__select" formControlName="status">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="NOVO">NOVO</option>
-              <option value="PESQUISA SOCIAL">PESQUISA SOCIAL</option>
-              <option value="DOCUMENTAÇÃO">DOCUMENTAÇÃO</option>
-              <option value="INTEGRAÇÃO">INTEGRAÇÃO</option>
-              <option value="LIBERADO">LIBERADO</option>
-              <option value="PAUSADO">PAUSADO</option>
-              <option value="CANCELADO">CANCELADO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Cento de custo *</label>
-            <select class="modal__select" formControlName="centroCusto">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="BRK - RECIFE">BRK - RECIFE</option>
-              <option value="BRK - MACEIO">BRK - MACEIO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Pesquisa social</label>
-            <input type="date" class="modal__input" formControlName="pesquisaSocial">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Envio do documento</label>
-            <input type="date" class="modal__input" formControlName="envioDoc">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Reenvio do documento</label>
-            <input type="date" class="modal__input" formControlName="reenvioDoc">
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">ASO</label>
-            <select class="modal__select" formControlName="aso">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Ficha de EPI</label>
-            <select class="modal__select" formControlName="fichaEPI">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Treinamento</label>
-            <select class="modal__select" formControlName="treinamento">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group">
-            <label class="modal__label">Ordem de serviço</label>
-            <select class="modal__select" formControlName="os">
-              <option value="" disabled>Selecione uma opção</option>
-              <option value="CONCLUIDO">CONCLUIDO</option>
-              <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-            </select>
-          </div>
-
-          <div class="modal__group modal__group--full">
-            <label class="modal__label">Observação</label>
-            <textarea formControlName="observacao" placeholder="Digito algo..." class="modal__input"></textarea>
-          </div>
-        </div>
-
-        <div class="modal__footer">
-          <button (click)="closeModal()" class="btn btn--secondary">Cancelar</button>
-
-          <button type="button" (click)="delete()" class="btn btn--danger">
-            @if (isDelete) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Deletar
-            }
+          <h3 class="title title--large title--dark">Menu</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
           </button>
+        </div>
+        <div class="modal__body">
+          <div class="grid grid--double">
+            <button type="button" class="btn btn__action">
+              @if (isLoading) {
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              } @else {
+              Gerar PDF
+              }
+            </button>
+            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
+              Atualizar Registro
+            </button>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="closeModals()">
+            Fechar
+          </button>
+        </div>
+      </form>
+    </div>
 
-          <button type="submit" class="btn btn--primary">
-            @if (isUpdate) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
+    <div class="blurred-background" *ngIf="updateModalOpen">
+      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
+        <div class="modal__header">
+          <h3 class="title title--large title--dark">Atualizar</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
+        </div>
+        <div class="modal__body">
+          <div class="grid grid--quad">
+            <div class="group group--column">
+              <label class="title title--medium title--light">Função *</label>
+              <select class="select" formControlName="funcao">
+                <option value="" disabled>Selecione uma opção</option>
+                <option *ngFor="let function of listOfFunctions" [value]="function">{{ function }}</option>
+              </select>
             </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Contrato *</label>
+              <input type="text" class="input input--dark input--full" formControlName="contrato">
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Status *</label>
+              <select class="select" formControlName="status">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="NOVO">NOVO</option>
+                <option value="PESQUISA SOCIAL">PESQUISA SOCIAL</option>
+                <option value="DOCUMENTACAO">DOCUMENTACAO</option>
+                <option value="INTEGRACAO">INTEGRACAO</option>
+                <option value="LIBERADO">LIBERADO</option>
+                <option value="PAUSADO">PAUSADO</option>
+                <option value="CANCELADO">CANCELADO</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Centro de Custo *</label>
+              <select class="select" formControlName="centroCusto">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="BRK - RECIFE">BRK - RECIFE</option>
+                <option value="BRK - MACEIO">BRK - MACEIO</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Pesquisa Social</label>
+              <input type="date" class="input input--dark input--full" formControlName="pesquisaSocial">
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Envio do Documento</label>
+              <input type="date" class="input input--dark input--full" formControlName="envioDocumento">
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Reenvio do Documento</label>
+              <input type="date" class="input input--dark input--full" formControlName="reenvioDocumento">
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">ASO</label>
+              <select class="select" formControlName="aso">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="CONCLUIDO">CONCLUIDO</option>
+                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Ficha de epi</label>
+              <select class="select" formControlName="epi">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="CONCLUIDO">CONCLUIDO</option>
+                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Treinamento</label>
+              <select class="select" formControlName="treinamento">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="CONCLUIDO">CONCLUIDO</option>
+                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Ordem de Serviço</label>
+              <select class="select" formControlName="os">
+                <option value="" disabled>Selecione uma opção</option>
+                <option value="CONCLUIDO">CONCLUIDO</option>
+                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
+              </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Link</label>
+              <input type="text" placeholder="Insira o link" class="input input--dark input--full"
+                formControlName="link">
+            </div>
+
+            <div class="group group--column group--full">
+              <label class="title title--medium title--light">Observação</label>
+              <textarea formControlName="observacao" class="textarea"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="returnModal()">
+            Voltar
+          </button>
+          <button type="submit" class="btn btn__action">
+            @if (isLoading) {
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
             } @else {
             Atualizar
             }
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
 
-    <!-- LOADING -->
-    <div class="loading" *ngIf="isLoading">
+    <div class="centralized" *ngIf="isSearching">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
 
-    <!-- SEM RESULTADO -->
-    <div class="empty" *ngIf="isEmpty">
-      <h2 class="empty__title">Nenhum resultado foi encontrado</h2>
+    <div class="centralized centralized--column" *ngIf="isEmpty">
+      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
+      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
     </div>
   </div>
 </div>

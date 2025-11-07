@@ -502,6 +502,33 @@ $bp-desktop-max: 1919px;
   &__body {
     width: 100%;
     height: 100%;
+
+    &--scrollable {
+      gap: $gp-md;
+      display: flex;
+      flex-direction: column;
+      max-height: 50vh;
+      overflow-y: auto;
+      padding-right: $pd-sm;
+
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        border-radius: $bd-sm;
+        background: var(--orange-color);
+      }
+
+      @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
+        max-height: 40vh;
+      }
+
+      @media (min-width: $bp-desktop) {
+        max-height: 60vh;
+      }
+    }
   }
 
   &__footer {

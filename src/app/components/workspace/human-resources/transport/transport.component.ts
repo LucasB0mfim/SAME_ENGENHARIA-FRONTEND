@@ -117,14 +117,14 @@ export class TransportComponent implements OnInit {
         .replace(/[\u0300-\u036f]/g, '');
 
       data = data.filter(item => {
-        if (!item.colaborador) return false;
+        if (!item.nome) return false;
 
-        const colaborador = item.colaborador
+        const nome = item.nome
           .toUpperCase()
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '');
 
-        return colaborador.includes(inputValue);
+        return nome.includes(inputValue);
       });
     }
 
