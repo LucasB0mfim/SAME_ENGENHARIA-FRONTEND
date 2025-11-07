@@ -177,6 +177,20 @@
           </div>
         </div>
 
+        @if(item.observacao) {
+        <div class="group group--body group--full">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              notes
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">OBSERVAÇÃO</h3>
+            <h3 class="title title--dark">{{ item.observacao }}</h3>
+          </div>
+        </div>
+        }
+
       </div>
     </div>
 
