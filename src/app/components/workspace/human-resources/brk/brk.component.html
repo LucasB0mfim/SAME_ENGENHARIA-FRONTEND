@@ -85,7 +85,7 @@
           </div>
           <div>
             <h3 class="title title--light">LINK</h3>
-            <h3 class="title title--dark">{{ item.link ? 'Clique aqui para acessar o link' : 'N/A' }}</h3>
+            <h3 class="title title--dark">{{ item.link ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
           </div>
         </div>
         <div class="group group--body">
@@ -285,16 +285,7 @@
           </button>
         </div>
         <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action">
-              @if (isLoading) {
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-              } @else {
-              Gerar PDF
-              }
-            </button>
+          <div class="grid grid--single">
             <button type="button" class="btn btn__action" (click)="openUpdateModal()">
               Atualizar Registro
             </button>

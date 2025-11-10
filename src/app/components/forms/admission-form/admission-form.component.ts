@@ -161,7 +161,7 @@ export class AdmissionFormComponent implements OnInit {
       formData.append(key, file, file.name);
     });
 
-    this._admissionService.sendForm(formData).subscribe({
+    this._admissionService.create(formData).subscribe({
       next: () => {
         this.isLoading = false;
         this._router.navigate(['/success-form']);

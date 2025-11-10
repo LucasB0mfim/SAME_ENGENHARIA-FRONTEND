@@ -17,35 +17,28 @@ export class AdmissionService {
   generateLink() {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/generate-link', null, { headers });
-  }
+  };
 
-  sendForm(formData: FormData): Observable<any> {
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/create', formData);
-  }
+  create(formData: FormData): Observable<any> {
+    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission', formData);
+  };
 
-  getAdmission(request: any): Observable<any> {
+  findByStatus(status: string): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/find', request, { headers });
-  }
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/admission/${status}`, { headers });
+  };
 
-  updateAdmission(request: any): Observable<any> {
+  update(request: any): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.put<any>('https://sameengenharia.com.br/api/admission/update', request, { headers });
-  }
+    return this._httpClient.put<any>('https://sameengenharia.com.br/api/admission', request, { headers });
+  };
 
-  deleteById(id: any): Observable<any> {
+  download(id: number) {
     const headers = this._createHeaders();
-    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/admission/delete/${id}`, { headers });
-  }
-
-  generatePdf(id: number) {
-    const headers = this._createHeaders();
-    return this._httpClient.get(`https://sameengenharia.com.br/api/admission/generate-pdf/${id}`, {
+    return this._httpClient.get(`https://sameengenharia.com.br/api/admission/download/${id}`, {
       headers,
       responseType: 'blob',
       observe: 'response'
     });
   }
-
-
 }
