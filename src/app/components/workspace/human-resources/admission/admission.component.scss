@@ -121,22 +121,19 @@ $bp-desktop-max: 1919px;
   }
 
   &--icon {
+    cursor: pointer;
     padding: $pd-sm;
     border-radius: $bd-lg;
+    border: 1px solid transparent;
     background-color: rgb(255, 111, 0, 0.1);
-  }
-
-  &--hover {
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-    }
   }
 
   &--full {
     grid-column: 1 / -1;
+  }
+
+  &--double {
+    grid-column: span 2;
   }
 }
 
@@ -222,7 +219,7 @@ $bp-desktop-max: 1919px;
 
   &__body {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: $gp-lg;
     padding: $pd-md;
     border-top: $bd-sm solid var(--primary-color);

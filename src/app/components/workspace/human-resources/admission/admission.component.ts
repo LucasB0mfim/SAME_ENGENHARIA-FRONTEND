@@ -33,9 +33,7 @@ export class AdmissionComponent implements OnInit {
 
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
-    criador: new FormControl(''),
     status: new FormControl('', Validators.required),
-    advertencia: new FormControl('', Validators.required),
     observacao: new FormControl('', Validators.required),
   });
 
@@ -88,7 +86,6 @@ export class AdmissionComponent implements OnInit {
     const request = {
       id: this.currentItem.id,
       status: this.updateForm.value.status,
-      advertencia: this.updateForm.value.advertencia,
       observacao: this.updateForm.value.observacao
     }
 
@@ -117,9 +114,9 @@ export class AdmissionComponent implements OnInit {
         .replace(/[\u0300-\u036f]/g, '');
 
       data = data.filter(item => {
-        if (!item.empData.nome) return false;
+        if (!item.nome) return false;
 
-        const nome = item.empData.nome
+        const nome = item.nome
           .toUpperCase()
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '');
@@ -144,6 +141,12 @@ export class AdmissionComponent implements OnInit {
   openUpdateModal(): void {
     this.menuModalOpen = false;
     this.updateModalOpen = true;
+
+    this.updateForm.patchValue({
+      id: this.currentItem.id,
+      status: this.currentItem.status,
+      observacao: this.currentItem.observacao
+    });
   }
 
   returnModal(): void {
@@ -162,7 +165,7 @@ export class AdmissionComponent implements OnInit {
   };
 
   openClipboard(url: string): void {
-    window.open(`https://sameengenharia.com.br/api/task/file/${url}`, "_blank", "noopener,noreferrer");
+    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
   };
 
   download() {

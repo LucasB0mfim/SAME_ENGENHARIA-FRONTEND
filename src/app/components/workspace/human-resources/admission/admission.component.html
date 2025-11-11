@@ -44,8 +44,8 @@
         </div>
       </div>
       <div class="card__body">
-        <div class="group group--body group--hover" (click)="openClipboard(item.foto_3x4)">
-          <div class="group group--icon">
+        <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_3x4)">
             <mat-icon class="icon icon--small icon--orange">
               add_a_photo
             </mat-icon>
@@ -56,8 +56,8 @@
           </div>
         </div>
 
-        <div class="group group--body group--hover" (click)="openClipboard(item.foto_cpf)">
-          <div class="group group--icon">
+        <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_cpf)">
             <mat-icon class="icon icon--small icon--orange">
               badge
             </mat-icon>
@@ -68,8 +68,8 @@
           </div>
         </div>
 
-        <div class="group group--body group--hover" (click)="openClipboard(item.foto_rg_frente)">
-          <div class="group group--icon">
+        <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_rg_frente)">
             <mat-icon class="icon icon--small icon--orange">
               perm_identity
             </mat-icon>
@@ -140,8 +140,8 @@
           </div>
         </div>
 
-        <div class="group group--body group--hover" (click)="openClipboard(item.numero_vem)">
-          <div class="group group--icon">
+        <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_vem)">
             <mat-icon class="icon icon--small icon--orange">
               credit_card
             </mat-icon>
@@ -227,6 +227,18 @@
         <div class="group group--body">
           <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
+              diversity_1
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">PARENTESCO</h3>
+            <h3 class="title title--dark">{{ item.grau_parentesco_emergencia }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
               phone_in_talk
             </mat-icon>
           </div>
@@ -237,20 +249,19 @@
         </div>
 
         <div class="group group--body">
-          <div class="group group--icon">
+          <div class="group group--icon" (click)="openClipboard(item.foto_certidao)">
             <mat-icon class="icon icon--small icon--orange">
-              diversity_1
+              file_present
             </mat-icon>
           </div>
           <div class="">
-            <h3 class="title title--light">GRAU DE PARENTESCO</h3>
-            <h3 class="title title--dark">{{ item.grau_parentesco_emergencia }}</h3>
+            <h3 class="title title--light">CERTIDÃO</h3>
+            <h3 class="title title--dark">{{ item.foto_certidao ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
           </div>
         </div>
 
-        <div class="group group--full group--body group--hover"
-          (click)="openClipboard(item.foto_comprovante_residencia)">
-          <div class="group group--icon">
+        <div class="group group--body group--double">
+          <div class="group group--icon" (click)="openClipboard(item.foto_comprovante_residencia)">
             <mat-icon class="icon icon--small icon--orange">
               add_location
             </mat-icon>
@@ -262,7 +273,7 @@
         </div>
 
         @if (item.observacao) {
-        <div class="group group--body">
+        <div class="group group--body group--full">
           <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               notes
