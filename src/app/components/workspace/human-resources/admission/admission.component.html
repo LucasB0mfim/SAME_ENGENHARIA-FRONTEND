@@ -27,6 +27,18 @@
     </button>
 
     <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
+
+    <button class="btn btn__action btn__action--dark" (click)="getLink()">
+      @if (isLoading) {
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      } @else {
+        <mat-icon class="icon icon">
+          link
+        </mat-icon>
+      }
+    </button>
   </div>
 
   <div class="main">

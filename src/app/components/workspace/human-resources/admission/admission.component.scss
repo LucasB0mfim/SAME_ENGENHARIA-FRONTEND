@@ -51,7 +51,7 @@ $bp-desktop-max: 1919px;
   justify-content: start;
   flex-wrap: nowrap;
 
-  :last-child {
+  :nth-child(5) {
     margin-left: auto;
   }
 
@@ -358,6 +358,11 @@ $bp-desktop-max: 1919px;
     padding: $pd-sm $pd-md;
     border: $bd-sm solid transparent;
     background-color: var(--primary-color);
+
+    &--dark {
+      padding: 0 $pd-md;
+      background-color: var(--secondary-color);
+    }
 
     &:hover {
       color: var(--orange-color);

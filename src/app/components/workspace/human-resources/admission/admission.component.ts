@@ -41,6 +41,8 @@ export class AdmissionComponent implements OnInit {
   currentItem: any = {};
   filteredItems: any[] = [];
 
+  link: string = '';
+
   employee: string = '';
   activeStatus: string = '';
 
@@ -178,6 +180,22 @@ export class AdmissionComponent implements OnInit {
         saveAs(response.body!, fileName);
       });
   };
+
+  getLink(): void {
+    this.isLoading = true;
+    this._admissionService.generateLink()
+    .pipe(finalize(() => this.isLoading = false))
+    .subscribe({
+      next: (res) => {
+        this.link = res.link;
+        this.setMessage(res.message, 'success');
+        navigator.clipboard.writeText(this.link);
+      },
+      error: (err) => {
+        this.setMessage(err.error.message, 'error');
+      }
+    });
+  }
 
   setMessage(message: string, type: 'success' | 'error' = 'success'): void {
     this.message = message;
