@@ -1,0 +1,187 @@
+<div class="admission">
+  <div class="admission__wrapper">
+
+    <!-- Header -->
+    <header class="admission-header">
+      <h1 class="admission-header__title">Cadastro de Colaborador</h1>
+      <p class="admission-header__subtitle">Preencha todas as informações necessárias</p>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="admission-progress">
+      <div class="admission-progress__steps">
+        <div *ngFor="let section of sections; let idx = index" class="admission-progress__step"
+          [class.admission-progress__step--active]="idx === currentSection"
+          [class.admission-progress__step--completed]="isSectionCompleted(idx)" (click)="goToSection(idx)">
+          <div class="admission-progress__step-icon">
+            <mat-icon class="admission-progress__step-mat-icon">{{ section.icon }}</mat-icon>
+          </div>
+          <span class="admission-progress__step-label">{{ section.title }}</span>
+        </div>
+      </div>
+      <div class="admission-progress__bar">
+        <div class="admission-progress__bar-fill" [style.width.%]="getProgressPercentage()"></div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <form [formGroup]="admissionForm" class="admission-card">
+      <h2 class="admission-card__title">
+        <mat-icon class="admission-card__title-icon">{{ sections[currentSection].icon }}</mat-icon>
+        {{ sections[currentSection].title }}
+      </h2>
+
+      <div [formGroupName]="sections[currentSection].formGroupName" class="admission-fields">
+        <div *ngFor="let field of sections[currentSection].fields" class="field"
+          [class.field--wide]="isFieldWide(field)" [class.field--error]="isFieldInvalid(field.name)">
+
+          <label class="field__label" [for]="field.name">
+            {{ field.label }}
+            <span *ngIf="field.required" class="field__required">*</span>
+          </label>
+
+          <!-- Text Input -->
+          <input *ngIf="field.type === 'text' && !field.mask" [id]="field.name" type="text"
+            [formControlName]="field.name" class="field__input" [placeholder]="field.placeholder || ''"
+            [attr.aria-label]="field.label" [attr.aria-required]="field.required">
+
+          <!-- Text Input with Mask -->
+          <input *ngIf="field.type === 'text' && field.mask" [id]="field.name" type="text"
+            [formControlName]="field.name" [mask]="field.mask" class="field__input"
+            [placeholder]="field.placeholder || ''" [attr.aria-label]="field.label"
+            [attr.aria-required]="field.required">
+
+          <!-- Email Input -->
+          <input *ngIf="field.type === 'email'" [id]="field.name" type="email" [formControlName]="field.name"
+            class="field__input" [placeholder]="field.placeholder || ''" [attr.aria-label]="field.label"
+            [attr.aria-required]="field.required">
+
+          <!-- Tel Input -->
+          <input *ngIf="field.type === 'tel'" [id]="field.name" type="tel" [formControlName]="field.name"
+            [mask]="field.mask || ''" class="field__input" [placeholder]="field.placeholder || ''"
+            [attr.aria-label]="field.label" [attr.aria-required]="field.required">
+
+          <!-- Date Input -->
+          <input *ngIf="field.type === 'date'" [id]="field.name" type="date" [formControlName]="field.name"
+            class="field__input" [attr.aria-label]="field.label" [attr.aria-required]="field.required">
+
+          <!-- Number Input -->
+          <input *ngIf="field.type === 'number'" [id]="field.name" type="number" [formControlName]="field.name"
+            [min]="field.min ?? 0" class="field__input" [placeholder]="field.placeholder || ''"
+            [attr.aria-label]="field.label" [attr.aria-required]="field.required">
+
+          <!-- Select -->
+          <select *ngIf="field.type === 'select'" [id]="field.name" [formControlName]="field.name"
+            class="field__input field__input--select" [attr.aria-label]="field.label"
+            [attr.aria-required]="field.required">
+            <option value="">Selecione...</option>
+            <option *ngFor="let option of field.options" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+
+          <!-- Textarea -->
+          <textarea *ngIf="field.type === 'textarea'" [id]="field.name" [formControlName]="field.name" rows="3"
+            class="field__input field__input--textarea" [placeholder]="field.placeholder || ''"
+            [attr.aria-label]="field.label" [attr.aria-required]="field.required">
+          </textarea>
+
+          <!-- File Input -->
+          <div *ngIf="field.type === 'file'" class="field__file">
+            <input [id]="field.name" type="file" [name]="field.name" [accept]="field.accept"
+              (change)="handleFileChange($event, field.name)" class="field__file-input" [attr.aria-label]="field.label"
+              [attr.aria-required]="field.required">
+
+            <label [for]="field.name" class="field__file-label">
+              <mat-icon class="field__file-icon">cloud_upload</mat-icon>
+              <span class="field__file-text">
+                {{ uploadedFiles[field.name] || 'Clique para selecionar arquivo' }}
+              </span>
+            </label>
+
+            <button *ngIf="uploadedFiles[field.name]" type="button" (click)="removeFile(field.name)"
+              class="field__file-remove" aria-label="Remover arquivo">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <span *ngIf="isFieldInvalid(field.name)" class="field__error">
+            <mat-icon class="field__error-icon">error</mat-icon>
+            {{ getFieldError(field.name) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="admission-actions">
+        <button type="button" (click)="prevSection()" [disabled]="currentSection === 0" class="btn btn--secondary"
+          aria-label="Voltar para seção anterior">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Anterior</span>
+        </button>
+
+        <button *ngIf="currentSection === sections.length - 1" type="button" (click)="handleSubmit()"
+          [disabled]="submissionState === SubmissionState.LOADING" class="btn btn--success"
+          aria-label="Finalizar cadastro">
+          <mat-icon *ngIf="submissionState !== SubmissionState.LOADING">check_circle</mat-icon>
+          <span>Finalizar Cadastro</span>
+        </button>
+
+        <button *ngIf="currentSection < sections.length - 1" type="button" (click)="nextSection()"
+          class="btn btn--primary" aria-label="Avançar para próxima seção">
+          <span>Próximo</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <footer class="admission-footer">
+      <mat-icon class="admission-footer__icon">info</mat-icon>
+      <p class="admission-footer__text">Todos os campos marcados com * são obrigatórios</p>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div *ngIf="submissionState === SubmissionState.LOADING" class="overlay">
+      <div class="overlay__content">
+        <mat-spinner class="overlay__spinner" diameter="60"></mat-spinner>
+        <p class="overlay__text">Enviando seus dados...</p>
+        <p class="overlay__subtext">Por favor, aguarde</p>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div *ngIf="submissionState === SubmissionState.SUCCESS" class="modal modal--success">
+      <div class="modal__content">
+        <div class="modal__icon-wrapper">
+          <mat-icon class="modal__icon">check_circle</mat-icon>
+        </div>
+        <h3 class="modal__title">Cadastro Realizado!</h3>
+        <p class="modal__text">Seus dados foram enviados com sucesso.</p>
+        <p class="modal__subtext">Em breve entraremos em contato.</p>
+        <button type="button" (click)="resetForm()" class="btn btn--primary btn--block">
+          Fazer Novo Cadastro
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div *ngIf="submissionState === SubmissionState.ERROR" class="modal modal--error">
+      <div class="modal__content">
+        <button type="button" (click)="closeMessage()" class="modal__close" aria-label="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+        <div class="modal__icon-wrapper">
+          <mat-icon class="modal__icon">error</mat-icon>
+        </div>
+        <h3 class="modal__title">Ops! Algo deu errado</h3>
+        <p class="modal__text">{{ errorMessage }}</p>
+        <button type="button" (click)="closeMessage()" class="btn btn--primary btn--block">
+          Tentar Novamente
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
