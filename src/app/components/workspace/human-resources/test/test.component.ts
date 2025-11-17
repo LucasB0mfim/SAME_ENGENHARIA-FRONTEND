@@ -14,6 +14,7 @@ interface FormField {
   options?: string[];
   accept?: string;
   min?: number;
+  max?: number;
   mask?: string;
   placeholder?: string;
   validators?: any[];
@@ -102,14 +103,12 @@ export class TestComponent implements OnInit {
           name: 'nomeMae',
           type: 'text',
           required: true,
-          placeholder: 'Digite o nome completo da mãe',
-          validators: [Validators.minLength(3)]
+          placeholder: 'Digite o nome completo da mãe'
         },
         {
           label: 'PIS',
           name: 'pis',
-          type: 'text',
-          mask: '000.00000.00-0',
+          type: 'number',
           placeholder: '000.00000.00-0'
         }
       ]
@@ -274,6 +273,29 @@ export class TestComponent implements OnInit {
           accept: 'image/*,application/pdf',
           required: true
         }
+      ]
+    },
+    {
+      title: 'Vale Transporte',
+      icon: 'directions_bus',
+      formGroupName: 'valeTransporte',
+      fields: [
+        {
+          label: 'Quantos VT você precisa por dia?',
+          name: 'vale_transporte',
+          type: 'number',
+          required: false,
+          max: 10,
+          placeholder: 'Ex: 2'
+        },
+        {
+          label: 'Número do cartão VEM (se tiver)',
+          name: 'cartao_vem',
+          type: 'text',
+          required: false,
+          mask: '00.00.00000000-0',
+          placeholder: '00.00.00000000-0'
+        },
       ]
     },
     {
