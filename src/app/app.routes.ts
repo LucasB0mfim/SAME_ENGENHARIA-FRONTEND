@@ -21,7 +21,6 @@ import { EmployeeComponent } from './components/workspace/human-resources/employ
 import { AdmissionComponent } from './components/workspace/human-resources/admission/admission.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { TimeSheetComponent } from './components/workspace/human-resources/time-sheet/time-sheet.component';
-import { CancellationFormComponent } from './components/forms/cancellation-form/cancellation-form.component';
 import { ResignationComponent } from './components/workspace/human-resources/resignation/resignation.component';
 import { UploadTimesheetComponent } from './components/workspace/human-resources/upload-timesheet/upload-timesheet.component';
 
@@ -58,10 +57,6 @@ export const routes: Routes = [
     path: 'admission',
     component: AdmissionFormComponent,
     canActivate: [tempTokenGuard]
-  },
-  {
-    path: 'benefit-cancellation-form',
-    component: CancellationFormComponent,
   },
   {
     path: 'unauthorized',

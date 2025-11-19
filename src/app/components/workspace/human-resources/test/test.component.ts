@@ -100,7 +100,7 @@ export class TestComponent implements OnInit {
         },
         {
           label: 'Nome da Mãe',
-          name: 'nomeMae',
+          name: 'nome_mae',
           type: 'text',
           required: true,
           placeholder: 'Digite o nome completo da mãe'
@@ -144,9 +144,9 @@ export class TestComponent implements OnInit {
       ]
     },
     {
-      title: 'Informações Profissionais',
+      title: 'Profissional',
       icon: 'work',
-      formGroupName: 'informacoesProfissionais',
+      formGroupName: 'profissional',
       fields: [
         {
           label: 'Função',
@@ -173,7 +173,7 @@ export class TestComponent implements OnInit {
       ]
     },
     {
-      title: 'Informações de Saúde',
+      title: 'Saúde',
       icon: 'favorite',
       formGroupName: 'informacoesSaude',
       fields: [
@@ -199,9 +199,9 @@ export class TestComponent implements OnInit {
       ]
     },
     {
-      title: 'Contato de Emergência',
+      title: 'Emergência',
       icon: 'emergency',
-      formGroupName: 'contatoEmergencia',
+      formGroupName: 'emergencia',
       fields: [
         {
           label: 'Nome do Contato de Emergência',
@@ -224,6 +224,58 @@ export class TestComponent implements OnInit {
           mask: '(00) 00000-0000',
           required: true,
           placeholder: '(00) 00000-0000'
+        }
+      ]
+    },
+    {
+      title: 'Vale Transporte',
+      icon: 'directions_bus',
+      formGroupName: 'valeTransporte',
+      fields: [
+        {
+          label: 'Precisa de vale transporte?',
+          name: 'vale_transporte',
+          type: 'select',
+          options: ['SIM', 'NAO'],
+          required: true
+        },
+        {
+          label: 'Número do cartão VEM (se tiver)',
+          name: 'cartao_vem',
+          type: 'text',
+          required: false,
+          mask: '00.00.00000000-0',
+          placeholder: '00.00.00000000-0'
+        },
+        {
+          label: 'Quantas passagens de ÔNIBUS você precisa por dia?',
+          name: 'qtd_onibus',
+          type: 'number',
+          required: false,
+          min: 0,
+          placeholder: '0'
+        },
+        {
+          label: 'Quantas passagens de METRÔ você precisa por dia?',
+          name: 'qtd_metro',
+          type: 'number',
+          required: false,
+          min: 0,
+          placeholder: '0'
+        }
+      ]
+    },
+    {
+      title: 'Outros',
+      icon: 'home',
+      formGroupName: 'outros',
+      fields: [
+        {
+          label: 'Quantidade de Filhos',
+          name: 'criancas_dependentes',
+          type: 'number',
+          min: 0,
+          placeholder: '0'
         }
       ]
     },
@@ -264,54 +316,24 @@ export class TestComponent implements OnInit {
           label: 'Certidão de Nascimento',
           name: 'foto_certidao',
           type: 'file',
-          accept: 'image/*,application/pdf'
+          accept: 'image/*'
         },
         {
           label: 'Comprovante de Residência',
           name: 'foto_comprovante_residencia',
           type: 'file',
-          accept: 'image/*,application/pdf',
+          accept: 'image/*',
           required: true
+        },
+        {
+          label: 'Cartão VEM (se tiver)',
+          name: 'foto_vem',
+          type: 'file',
+          accept: 'image/*',
+          required: false
         }
       ]
     },
-    {
-      title: 'Vale Transporte',
-      icon: 'directions_bus',
-      formGroupName: 'valeTransporte',
-      fields: [
-        {
-          label: 'Quantos VT você precisa por dia?',
-          name: 'vale_transporte',
-          type: 'number',
-          required: false,
-          max: 10,
-          placeholder: 'Ex: 2'
-        },
-        {
-          label: 'Número do cartão VEM (se tiver)',
-          name: 'cartao_vem',
-          type: 'text',
-          required: false,
-          mask: '00.00.00000000-0',
-          placeholder: '00.00.00000000-0'
-        },
-      ]
-    },
-    {
-      title: 'Outros',
-      icon: 'home',
-      formGroupName: 'outros',
-      fields: [
-        {
-          label: 'Quantidade de Filhos',
-          name: 'criancas_dependentes',
-          type: 'number',
-          min: 0,
-          placeholder: '0'
-        }
-      ]
-    }
   ];
 
   constructor(
@@ -507,14 +529,6 @@ export class TestComponent implements OnInit {
         Math.random() > 0.05 ? resolve() : reject(new Error('Erro simulado'));
       }, 2000);
     });
-  }
-
-  resetForm(): void {
-    this.admissionForm.reset();
-    this.currentSection = 0;
-    this.submissionState = SubmissionState.IDLE;
-    this.uploadedFiles = {};
-    this.scrollToTop();
   }
 
   closeMessage(): void {

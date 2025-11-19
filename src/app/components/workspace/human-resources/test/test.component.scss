@@ -154,59 +154,34 @@ $breakpoint-xl: 1280px;
 }
 
 // ============================================
-// HEADER
-// ============================================
-
-.admission-header {
-  text-align: center;
-  margin-bottom: $spacing-2xl;
-  animation: fadeInDown 0.5s ease;
-
-  @include respond-to($breakpoint-md) {
-    margin-bottom: $spacing-3xl;
-  }
-
-  &__title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: $color-gray-900;
-    margin-bottom: $spacing-sm;
-
-    @include respond-to($breakpoint-md) {
-      font-size: 2.5rem;
-    }
-  }
-
-  &__subtitle {
-    color: $color-gray-600;
-    font-size: 0.875rem;
-
-    @include respond-to($breakpoint-md) {
-      font-size: 1rem;
-    }
-  }
-}
-
-// ============================================
 // PROGRESS BAR
 // ============================================
 
 .admission-progress {
-  margin-bottom: $spacing-2xl;
-  animation: fadeIn 0.5s ease 0.1s both;
+  box-shadow: $shadow-xl;
+  background-color: $color-white;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+  animation: fadeIn 0.5s ease;
 
   @include respond-to($breakpoint-md) {
-    margin-bottom: $spacing-3xl;
+    padding: $spacing-3xl;
+    margin-bottom: $spacing-xl;
+    background-color: transparent;
+    box-shadow: none;
   }
 
   &__steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-    gap: $spacing-sm;
-    margin-bottom: $spacing-lg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
 
     @include respond-to($breakpoint-md) {
-      gap: $spacing-md;
+      gap: $spacing-2xl;
     }
   }
 
@@ -312,7 +287,7 @@ $breakpoint-xl: 1280px;
   border-radius: $radius-xl;
   box-shadow: $shadow-xl;
   padding: $spacing-xl;
-  animation: fadeInUp 0.5s ease 0.2s both;
+  animation: fadeInUp 0.5s ease 0.1s both;
 
   @include respond-to($breakpoint-md) {
     padding: $spacing-3xl;
@@ -406,7 +381,7 @@ $breakpoint-xl: 1280px;
     }
 
     &--textarea {
-      resize: vertical;
+      resize: none;
       min-height: 5rem;
       font-family: inherit;
     }
