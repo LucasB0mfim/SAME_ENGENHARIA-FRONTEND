@@ -95,7 +95,7 @@ export class TestComponent implements OnInit {
           label: 'Sexo',
           name: 'sexo',
           type: 'select',
-          options: ['Masculino', 'Feminino', 'Outro'],
+          options: ['MASCULINO', 'FEMININO'],
           required: true
         },
         {
@@ -213,9 +213,9 @@ export class TestComponent implements OnInit {
         {
           label: 'Parentesco',
           name: 'grau_parentesco_emergencia',
-          type: 'text',
-          required: true,
-          placeholder: 'Ex: Mãe, Pai, Irmão(ã)'
+          type: 'select',
+          options: ['PAI', 'MAE', 'FILHO', 'FILHA', 'IRMAO', 'IRMA', 'TIO', 'TIA', 'PRIMO', 'PRIMA', 'COMPANHEIRO', 'COMPANHEIRA', 'OUTRO'],
+          required: true
         },
         {
           label: 'Número de Emergência',
@@ -224,44 +224,6 @@ export class TestComponent implements OnInit {
           mask: '(00) 00000-0000',
           required: true,
           placeholder: '(00) 00000-0000'
-        }
-      ]
-    },
-    {
-      title: 'Vale Transporte',
-      icon: 'directions_bus',
-      formGroupName: 'valeTransporte',
-      fields: [
-        {
-          label: 'Precisa de vale transporte?',
-          name: 'vale_transporte',
-          type: 'select',
-          options: ['SIM', 'NAO'],
-          required: true
-        },
-        {
-          label: 'Número do cartão VEM (se tiver)',
-          name: 'cartao_vem',
-          type: 'text',
-          required: false,
-          mask: '00.00.00000000-0',
-          placeholder: '00.00.00000000-0'
-        },
-        {
-          label: 'Quantas passagens de ÔNIBUS você precisa por dia?',
-          name: 'qtd_onibus',
-          type: 'number',
-          required: false,
-          min: 0,
-          placeholder: '0'
-        },
-        {
-          label: 'Quantas passagens de METRÔ você precisa por dia?',
-          name: 'qtd_metro',
-          type: 'number',
-          required: false,
-          min: 0,
-          placeholder: '0'
         }
       ]
     },
@@ -276,6 +238,37 @@ export class TestComponent implements OnInit {
           type: 'number',
           min: 0,
           placeholder: '0'
+        }
+      ]
+    },
+    {
+      title: 'Vale Transporte',
+      icon: 'directions_bus',
+      formGroupName: 'valeTransporte',
+      fields: [
+        {
+          label: 'Quantas passagens de ÔNIBUS você precisa por dia? (Opcional)',
+          name: 'qtd_onibus',
+          type: 'number',
+          required: false,
+          min: 0,
+          placeholder: '0'
+        },
+        {
+          label: 'Quantas passagens de METRÔ você precisa por dia? (Opcional)',
+          name: 'qtd_metro',
+          type: 'number',
+          required: false,
+          min: 0,
+          placeholder: '0'
+        },
+        {
+          label: 'Número do cartão VEM (Opcional)',
+          name: 'vem',
+          type: 'text',
+          required: false,
+          mask: '00.00.00000000-0',
+          placeholder: '00.00.00000000-0'
         }
       ]
     },

@@ -30,13 +30,25 @@
 
     <button class="btn btn__action btn__action--dark" (click)="getLink()">
       @if (isLoading) {
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
       } @else {
-        <mat-icon class="icon icon">
-          link
-        </mat-icon>
+      <mat-icon class="icon icon">
+        link
+      </mat-icon>
+      }
+    </button>
+
+    <button class="btn btn__action btn__action--dark" (click)="excel()">
+      @if (isLoading) {
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      } @else {
+      <mat-icon class="icon icon">
+        cloud_download
+      </mat-icon>
       }
     </button>
   </div>
@@ -56,6 +68,43 @@
         </div>
       </div>
       <div class="card__body">
+
+        <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_3x4)">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_month
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DATA DE ADMISSÃO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_admissao) }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_month
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DATA DE NASCIMENTO</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_nascimento) }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_certidao)">
+            <mat-icon class="icon icon--small icon--orange">
+              file_present
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">CERTIDÃO</h3>
+            <h3 class="title title--dark">{{ item.foto_certidao ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
+          </div>
+        </div>
+
         <div class="group group--body">
           <div class="group group--icon" (click)="openClipboard(item.foto_3x4)">
             <mat-icon class="icon icon--small icon--orange">
@@ -81,7 +130,7 @@
         </div>
 
         <div class="group group--body">
-          <div class="group group--icon">
+          <div class="group group--icon" (click)="openRGModal(item)">
             <mat-icon class="icon icon--small icon--orange">
               perm_identity
             </mat-icon>
@@ -89,30 +138,6 @@
           <div class="">
             <h3 class="title title--light">RG</h3>
             <h3 class="title title--dark">{{ item.rg }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_rg_frente)">
-            <mat-icon class="icon icon--small icon--orange">
-              perm_identity
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">FRENTE DO RG</h3>
-            <h3 class="title title--dark">{{ item.foto_rg_frente ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_rg_verso)">
-            <mat-icon class="icon icon--small icon--orange">
-              perm_identity
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">VERSO DO RG</h3>
-            <h3 class="title title--dark">{{ item.foto_rg_verso ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
           </div>
         </div>
 
@@ -129,6 +154,18 @@
         </div>
 
         <div class="group group--body">
+          <div class="group group--icon" (click)="openClipboard(item.foto_vem)">
+            <mat-icon class="icon icon--small icon--orange">
+              credit_card
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">NÚMERO DO VEM</h3>
+            <h3 class="title title--dark">{{ item.numero_vem || 'N/A' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
           <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               phone_in_talk
@@ -137,6 +174,90 @@
           <div class="">
             <h3 class="title title--light">TELEFONE</h3>
             <h3 class="title title--dark">{{ formatePhone(item.numero_contato) }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              phone_in_talk
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">TELEFONE DE EMERGÊNCIA</h3>
+            <h3 class="title title--dark">{{ formatePhone(item.numero_contato_emergencia) }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              article
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">CONTATO DE EMERGÊNCIA</h3>
+            <h3 class="title title--dark">{{ item.contato_emergencia_nome }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              diversity_1
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">PARENTESCO</h3>
+            <h3 class="title title--dark">{{ item.grau_parentesco_emergencia }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              family_restroom
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">NÚMERO DE FILHOS</h3>
+            <h3 class="title title--dark">{{ item.criancas_dependentes }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              sick
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">ALERGIA</h3>
+            <h3 class="title title--dark">{{ item.alergia || 'N/A' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              medical_services
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DOENÇA CRONICA</h3>
+            <h3 class="title title--dark">{{ item.doenca_cronica || 'N/A' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              bloodtype
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">TIPO SANGUÍNEO</h3>
+            <h3 class="title title--dark">{{ item.tipo_sanguineo }}</h3>
           </div>
         </div>
 
@@ -171,128 +292,20 @@
             </mat-icon>
           </div>
           <div class="">
-            <h3 class="title title--light">VALE TRANSPORTE</h3>
-            <h3 class="title title--dark">{{ item.quantidade_vt || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_vem)">
-            <mat-icon class="icon icon--small icon--orange">
-              credit_card
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">NÚMERO DO VEM</h3>
-            <h3 class="title title--dark">{{ item.numero_vem || 'N/A' }}</h3>
+            <h3 class="title title--light">VT'S DE ONIBUS POR DIA</h3>
+            <h3 class="title title--dark">{{ item.qtd_onibus }}</h3>
           </div>
         </div>
 
         <div class="group group--body">
           <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
-              calendar_month
+              train
             </mat-icon>
           </div>
           <div class="">
-            <h3 class="title title--light">DATA DE NASCIMENTO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_nascimento) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              family_restroom
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">NÚMERO DE FILHOS</h3>
-            <h3 class="title title--dark">{{ item.criancas_dependentes }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              sick
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">ALERGIA</h3>
-            <h3 class="title title--dark">{{ item.alergia }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              medical_services
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DOENÇA CRONICA</h3>
-            <h3 class="title title--dark">{{ item.doenca_cronica }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              bloodtype
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TIPO SANGUÍNEO</h3>
-            <h3 class="title title--dark">{{ item.tipo_sanguineo }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              article
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">EMERGÊNCIA</h3>
-            <h3 class="title title--dark">{{ item.contato_emergencia_nome }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              diversity_1
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">PARENTESCO</h3>
-            <h3 class="title title--dark">{{ item.grau_parentesco_emergencia }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              phone_in_talk
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TEL. EMERGÊNCIA</h3>
-            <h3 class="title title--dark">{{ formatePhone(item.numero_contato_emergencia) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_certidao)">
-            <mat-icon class="icon icon--small icon--orange">
-              file_present
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">CERTIDÃO</h3>
-            <h3 class="title title--dark">{{ item.foto_certidao ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
+            <h3 class="title title--light">VT'S DE METRO POR DIA</h3>
+            <h3 class="title title--dark">{{ item.qtd_metro }}</h3>
           </div>
         </div>
 
@@ -367,7 +380,7 @@
         </div>
         <div class="modal__body">
           <div class="grid grid--double">
-            <div class="group group--column group--full">
+            <div class="group group--column">
               <label class="title title--medium title--light">Status</label>
               <select class="select" formControlName="status">
                 <option value="" disabled>Selecione uma opção</option>
@@ -375,6 +388,11 @@
                 <option value="CONCLUIDO">Concluído</option>
                 <option value="CANCELADO">Cancelado</option>
               </select>
+            </div>
+
+            <div class="group group--column">
+              <label class="title title--medium title--light">Data da admissão</label>
+              <input type="date" class="input input--dark input--full" formControlName="dataAdmissao">
             </div>
 
             <div class="group group--column group--full">
@@ -395,6 +413,32 @@
             } @else {
             Atualizar
             }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="blurred-background" *ngIf="rGModalOpen">
+      <form class="modal">
+        <div class="modal__header">
+          <h3 class="title title--large title--dark">RG</h3>
+          <button class="icon icon--close icon--dark" (click)="closeModals()">
+            &times;
+          </button>
+        </div>
+        <div class="modal__body">
+          <div class="grid grid--double">
+            <button type="button" class="btn btn__action" (click)="openRGFront()">
+              FRENTE DO RG
+            </button>
+            <button type="button" class="btn btn__action" (click)="openRGBack()">
+              VERSO DO RG
+            </button>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn btn__action" (click)="closeModals()">
+            Fechar
           </button>
         </div>
       </form>

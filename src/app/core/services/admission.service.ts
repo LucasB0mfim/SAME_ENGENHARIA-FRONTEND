@@ -35,7 +35,16 @@ export class AdmissionService {
 
   download(id: number) {
     const headers = this._createHeaders();
-    return this._httpClient.get(`https://sameengenharia.com.br/api/admission/download/${id}`, {
+    return this._httpClient.get(`https://sameengenharia.com.br/api/admission/download/pdf/${id}`, {
+      headers,
+      responseType: 'blob',
+      observe: 'response'
+    });
+  }
+
+  excel() {
+    const headers = this._createHeaders();
+    return this._httpClient.get(`https://sameengenharia.com.br/api/admission/download/excel`, {
       headers,
       responseType: 'blob',
       observe: 'response'

@@ -397,6 +397,14 @@ $bp-desktop-max: 1919px;
     border-color: var(--orange-color);
   }
 
+  &--dark {
+    background-color: var(--primary-color);
+  }
+
+  &--full {
+    width: 100%;
+  }
+
   @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
     min-width: 150px;
   }

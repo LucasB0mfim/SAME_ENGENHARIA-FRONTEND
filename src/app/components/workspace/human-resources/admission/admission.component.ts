@@ -34,6 +34,7 @@ export class AdmissionComponent implements OnInit {
   updateForm: FormGroup = new FormGroup({
     id: new FormControl(''),
     status: new FormControl('', Validators.required),
+    dataAdmissao: new FormControl('', Validators.required),
     observacao: new FormControl('', Validators.required),
   });
 
@@ -48,6 +49,7 @@ export class AdmissionComponent implements OnInit {
 
   menuModalOpen: boolean = false;
   updateModalOpen: boolean = false;
+  rGModalOpen: boolean = false;
 
   isEmpty: boolean = false;
   isLoading: boolean = false;
@@ -88,6 +90,7 @@ export class AdmissionComponent implements OnInit {
     const request = {
       id: this.currentItem.id,
       status: this.updateForm.value.status,
+      data_admissao: this.updateForm.value.dataAdmissao,
       observacao: this.updateForm.value.observacao
     }
 
@@ -135,9 +138,15 @@ export class AdmissionComponent implements OnInit {
     this.currentItem = item;
   };
 
+  openRGModal(item: any): void {
+    this.rGModalOpen = true;
+    this.currentItem = item;
+  };
+
   closeModals(): void {
     this.menuModalOpen = false;
     this.updateModalOpen = false;
+    this.rGModalOpen = false;
   };
 
   openUpdateModal(): void {
@@ -157,6 +166,7 @@ export class AdmissionComponent implements OnInit {
   }
 
   formateDate(date: string) {
+    if (!date) return 'N/A';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   };
@@ -170,6 +180,16 @@ export class AdmissionComponent implements OnInit {
     window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
   };
 
+  openRGFront(): void {
+    const url = this.currentItem.foto_rg_frente;
+    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
+  };
+
+  openRGBack(): void {
+    const url = this.currentItem.foto_rg_verso;
+    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
+  };
+
   download() {
     this.isLoading = true;
     this._admissionService.download(this.currentItem.id)
@@ -177,6 +197,17 @@ export class AdmissionComponent implements OnInit {
       .subscribe((response: HttpResponse<Blob>) => {
         const cd = response.headers.get('content-disposition');
         const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'RELATORIO_DE_ADMISSAO.pdf';
+        saveAs(response.body!, fileName);
+      });
+  };
+
+  excel() {
+    this.isLoading = true;
+    this._admissionService.excel()
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe((response: HttpResponse<Blob>) => {
+        const cd = response.headers.get('content-disposition');
+        const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'BSCASH.xlsx';
         saveAs(response.body!, fileName);
       });
   };

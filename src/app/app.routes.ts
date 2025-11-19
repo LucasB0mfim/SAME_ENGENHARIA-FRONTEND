@@ -55,16 +55,12 @@ export const routes: Routes = [
   },
   {
     path: 'admission',
-    component: AdmissionFormComponent,
+    component: TestComponent,
     canActivate: [tempTokenGuard]
   },
   {
     path: 'unauthorized',
     component: UnauthorizedComponent
-  },
-  {
-    path: 'test',
-    component: TestComponent
   },
   {
     path: 'success-form',
