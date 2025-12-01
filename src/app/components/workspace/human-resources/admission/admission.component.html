@@ -154,18 +154,6 @@
         </div>
 
         <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_vem)">
-            <mat-icon class="icon icon--small icon--orange">
-              credit_card
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">NÚMERO DO VEM</h3>
-            <h3 class="title title--dark">{{ item.numero_vem || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
           <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">
               phone_in_talk
@@ -178,110 +166,14 @@
         </div>
 
         <div class="group group--body">
-          <div class="group group--icon">
+          <div class="group group--icon" (click)="openClipboard(item.foto_vem)">
             <mat-icon class="icon icon--small icon--orange">
-              phone_in_talk
+              credit_card
             </mat-icon>
           </div>
           <div class="">
-            <h3 class="title title--light">TELEFONE DE EMERGÊNCIA</h3>
-            <h3 class="title title--dark">{{ formatePhone(item.numero_contato_emergencia) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              article
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">CONTATO DE EMERGÊNCIA</h3>
-            <h3 class="title title--dark">{{ item.contato_emergencia_nome }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              diversity_1
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">PARENTESCO</h3>
-            <h3 class="title title--dark">{{ item.grau_parentesco_emergencia }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              family_restroom
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">NÚMERO DE FILHOS</h3>
-            <h3 class="title title--dark">{{ item.criancas_dependentes }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              sick
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">ALERGIA</h3>
-            <h3 class="title title--dark">{{ item.alergia || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              medical_services
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DOENÇA CRONICA</h3>
-            <h3 class="title title--dark">{{ item.doenca_cronica || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              bloodtype
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TIPO SANGUÍNEO</h3>
-            <h3 class="title title--dark">{{ item.tipo_sanguineo }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              directions_walk
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TAMANHO DA BOTA</h3>
-            <h3 class="title title--dark">{{ item.numero_calcado }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              checkroom
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TAMANHO DA FARDA</h3>
-            <h3 class="title title--dark">{{ item.tamanho_farda }}</h3>
+            <h3 class="title title--light">NÚMERO DO VEM</h3>
+            <h3 class="title title--dark">{{ item.numero_vem || 'N/A' }}</h3>
           </div>
         </div>
 
@@ -309,7 +201,43 @@
           </div>
         </div>
 
-        <div class="group group--body group--full">
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              family_restroom
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">NÚMERO DE FILHOS</h3>
+            <h3 class="title title--dark">{{ item.criancas_dependentes }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              directions_walk
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">TAMANHO DA BOTA</h3>
+            <h3 class="title title--dark">{{ item.numero_calcado }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              checkroom
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">TAMANHO DA FARDA</h3>
+            <h3 class="title title--dark">{{ item.tamanho_farda }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body group--double">
           <div class="group group--icon" (click)="openClipboard(item.foto_comprovante_residencia)">
             <mat-icon class="icon icon--small icon--orange">
               add_location

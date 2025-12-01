@@ -309,7 +309,8 @@ export class TestComponent implements OnInit {
           label: 'Certidão de Nascimento',
           name: 'foto_certidao',
           type: 'file',
-          accept: 'image/*'
+          accept: 'image/*',
+          required: true
         },
         {
           label: 'Comprovante de Residência',
