@@ -29,6 +29,11 @@ export class DisciplinaryMeasureService {
     return this._httpClient.put<any>(`https://sameengenharia.com.br/api/disciplinary-measure`, request, { headers });
   };
 
+  delete(id: number): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/disciplinary-measure/${id}`, { headers });
+  };
+
   download(id: number) {
     const headers = this._createHeaders();
     return this._httpClient.get(`https://sameengenharia.com.br/api/disciplinary-measure/download/${id}`, {

@@ -107,6 +107,22 @@ export class DisciplinaryMeasureComponent implements OnInit {
       });
   };
 
+  delete(): void {
+    this._disciplinaryMeasureService.delete(this.currentItem.id)
+      .pipe(finalize(() => !this.isLoading))
+      .subscribe({
+        next: (res) => {
+          this.menuModalOpen = false;
+          this.findByStatus(this.activeStatus);
+          this.setMessage(res.message, 'success');
+        },
+        error: (error) => {
+          console.log(error.error.message);
+          this.setMessage(error.message, 'error');
+        }
+      });
+  }
+
   applyFilters() {
     let data = [...this.filteredItems];
 

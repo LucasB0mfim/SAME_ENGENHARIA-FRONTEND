@@ -17,21 +17,26 @@ export class AdmissionService {
   generateLink() {
     const headers = this._createHeaders();
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission/generate-link', null, { headers });
-  };
+  }
 
   create(formData: FormData): Observable<any> {
     return this._httpClient.post<any>('https://sameengenharia.com.br/api/admission', formData);
-  };
+  }
 
   findByStatus(status: string): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.get<any>(`https://sameengenharia.com.br/api/admission/${status}`, { headers });
-  };
+  }
 
   update(request: any): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.put<any>('https://sameengenharia.com.br/api/admission', request, { headers });
-  };
+  }
+
+  delete(id: number): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.delete<any>(`https://sameengenharia.com.br/api/admission/${id}`, { headers });
+  }
 
   download(id: number) {
     const headers = this._createHeaders();

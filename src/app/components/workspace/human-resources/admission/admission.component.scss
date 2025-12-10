@@ -371,6 +371,10 @@ $bp-desktop-max: 1919px;
     }
   }
 
+  &__full {
+    grid-column: 1/-1;
+  }
+
   &.active {
     color: var(--white-color);
     transform: translateY(-4px);

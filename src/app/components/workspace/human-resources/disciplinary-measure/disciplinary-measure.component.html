@@ -34,14 +34,14 @@
       <div class="card__header" (click)="openMenu(item)">
         <div class="display display--column">
           <div class="group">
-            <h3 class="title title--dark">{{ item.empData.nome }}</h3>
+            <h3 class="title title--dark">{{ item.nome }}</h3>
           </div>
           <div class="group">
             <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.empData.funcao }}</h3>
+              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
             </div>
             <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.empData.centro_custo }}</h3>
+              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
           </div>
           <div class="">
             <h3 class="title title--light">SOLICITANTE</h3>
-            <h3 class="title title--dark">{{ item.criador }}</h3>
+            <h3 class="title title--dark">{{ item.criado_por }}</h3>
           </div>
         </div>
         <div class="group group--body">
@@ -127,7 +127,10 @@
               }
             </button>
             <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-              Atualizar Registro
+              Atualizar
+            </button>
+            <button type="button" class="btn btn__action btn__full" (click)="delete()">
+              Deletar
             </button>
           </div>
         </div>

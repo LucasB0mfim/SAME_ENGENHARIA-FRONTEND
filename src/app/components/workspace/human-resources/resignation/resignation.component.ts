@@ -92,14 +92,14 @@ export class ResignationComponent implements OnInit {
 
   findActiveEmployees(): void {
     this._employeesService.findActiveNames()
-    .subscribe({
-      next: (res) => {
-        this.activeEmployees = res.result;
-      },
-      error: (err) => {
-        this.setMessage(err.error.message, 'error')
-      }
-    });
+      .subscribe({
+        next: (res) => {
+          this.activeEmployees = res.result;
+        },
+        error: (err) => {
+          this.setMessage(err.error.message, 'error')
+        }
+      });
   }
 
   create(): void {
@@ -155,6 +155,22 @@ export class ResignationComponent implements OnInit {
         }
       });
   };
+
+  delete(): void {
+    this._resignationService.delete(this.currentItem.id)
+      .pipe(finalize(() => !this.isLoading))
+      .subscribe({
+        next: (res) => {
+          this.menuModalOpen = false;
+          this.findByStatus(this.activeStatus);
+          this.setMessage(res.message, 'success');
+        },
+        error: (error) => {
+          console.log(error.error.message);
+          this.setMessage(error.message, 'error');
+        }
+      });
+  }
 
   applyFilters() {
     let data = [...this.filteredItems];
