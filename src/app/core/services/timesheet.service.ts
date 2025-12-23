@@ -25,6 +25,11 @@ export class TimesheetService {
     return this._httpClient.post('https://sameengenharia.com.br/api/reports/timesheet/filters', request, {headers})
   }
 
+  findSheetByName(employee: string): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get(`https://sameengenharia.com.br/api/timesheet/employee/${employee}`, {headers})
+  }
+
   upload(formData: FormData): Observable<any> {
     const headers = this._createHeaders();
     return this._httpClient.post('https://sameengenharia.com.br/api/reports/csv', formData, {headers})

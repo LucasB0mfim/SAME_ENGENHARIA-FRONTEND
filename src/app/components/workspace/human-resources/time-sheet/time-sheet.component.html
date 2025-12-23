@@ -1,210 +1,101 @@
 <div class="container">
-  <!-- FILTRO DE BUSCA -->
-  <form [formGroup]="filterForm" class="filter__container">
 
-    <!-- COLABORADOR -->
-    <div class="filter">
-      <label for="employee" class="filter__label">COLABORADOR</label>
-      <input type="text" id="employee" placeholder="BUSCAR" formControlName="employee" (input)="applyFilters()"
-        class="btn btn--tertiary">
-    </div>
+  <!-- MENSAGEM -->
+  @if (showMessage) {
+  <div class="message" [ngClass]="messageType">{{ message }}</div>
+  }
 
-    <!-- CENTRO DE CUSTO -->
-    <div class="filter">
-      <label for="costCenter" class="filter__label">CENTRO CUSTO</label>
-      <select id="costCenter" formControlName="costCenter" class="btn btn--tertiary">
-        <option value="Geral">Geral</option>
-        <option *ngFor="let centro of costCenter" [value]="centro">{{ centro }}</option>
-      </select>
-    </div>
+  <div class="aside">
+    <select class="input" [(ngModel)]="selectedEmployee">
+      <option value="" disabled>Selecione um colaborador</option>
+      <option *ngFor="let employee of employees" [value]="employee">{{ employee }}</option>
+    </select>
 
-    <!-- STATUS -->
-    <div class="filter">
-      <label for="status" class="filter__label">STATUS</label>
-      <select id="status" formControlName="status" class="btn btn--tertiary">
-        <option value="Geral">Geral</option>
-        <option value="Férias">Férias</option>
-        <option value="Dia extra">Dia Extra</option>
-        <option value="Gestor decibiu abonar">Abono</option>
-        <option value="Atestado Médico">Atestado Médico</option>
-        <option value="Justificado">Falta Justificada</option>
-        <option value="Injustificado">Falta Injustificada</option>
-      </select>
-    </div>
-
-    <!-- DATA INICIAL -->
-    <div class="filter">
-      <label for="startDate" class="filter__label">DATA INICIAL</label>
-      <input type="date" formControlName="startDate" class="btn btn--tertiary">
-    </div>
-
-    <!-- DATA FINAL -->
-    <div class="filter">
-      <label for="endDate" class="filter__label">DATA FINAL</label>
-      <input type="date" id="endDate" formControlName="endDate" class="btn btn--tertiary">
-    </div>
-
-    <!-- BUSCAR DADOS -->
-    <div class="filter">
-      <button (click)="onSearch()" class="btn btn--primary">BUSCAR</button>
-    </div>
-
-    <!-- BUSCAR TUDO -->
-    <div class="filter">
-      <button (click)="onClear()" class="btn btn--primary">LIMPAR</button>
-    </div>
-
-    <!-- ABRIR CONFIGURAÇÃO -->
-    <div class="filter">
-      <button (click)="downloadSection = true" class="btn btn--icon">
-        <mat-icon>download</mat-icon>
-      </button>
-    </div>
-  </form>
-
-  <!-- LISTA DE CARDS -->
-  <div class="card__container">
-
-    <!-- CARD INDIVIDUAL -->
-    <div class="card" *ngFor="let data of employeeHistory | keyvalue; let i = index">
-
-      <!-- CABEÇA DO CARD -->
-      <div class="card__header" (click)="openCard(i)">
-
-        <!-- LADO ESQUEDO DO CARD -->
-        <div class="card__primary">
-          <div class="card__top">
-            <div class="card__subtitle">CHAPA: </div>
-            <div class="card__subtitle">{{ data.value.chapa || 'N/A' }}</div>
-          </div>
-
-          <!-- Parte inferiro do cabeçalho -->
-          <div class="card__bottom">
-            <div class="card__title">{{ data.value.nome }}</div>
-          </div>
-        </div>
-
-        <!-- LADO DIREITO DO CARD -->
-        <div class="card__secondary">
-          <div class="card__text">
-            <div class="card__subtitle">FALTAS: </div>
-            <div class="card__title">{{ faultCounter(data.key) }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">ATESTADOS: </div>
-            <div class="card__title">{{ certificateCounter(data.key) }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">ABONOS: </div>
-            <div class="card__title">{{ abonoCounter(data.key) }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-
-          <div class="card__text">
-            <div class="card__subtitle">DIAS EXTRAS: </div>
-            <div class="card__title">{{ extraDayCounter(data.key) }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CORPO DO CARD -->
-      <div class="card__body" [class.show]="index === i">
-
-        <!-- DETALHES DO CARD -->
-        <div class="card__details">
-
-          <!-- DATA DA BATIDA -->
-          <div class="card__info">
-            <div class="card__title">DATA DO REGISTRO</div>
-            <div class="card__subtitle card__subtitle--info" *ngFor="let item of data.value.records">
-              {{ formateDate(item.periodo) }}
-            </div>
-          </div>
-
-          <!-- MOTIVO DA AUSÊNCIA -->
-          <div class="card__info">
-            <div class="card__title">MOTIVO DA AUSÊNCIA</div>
-            <div class="card__subtitle card__subtitle--info" *ngFor="let item of data.value.records">
-              {{ item.evento_abono }}
-            </div>
-          </div>
-
-          <!-- MOTIVO DA AUSÊNCIA -->
-          <div class="card__info">
-            <div class="card__title">JORNADA REALIZADA</div>
-            <div class="card__subtitle card__subtitle--info" *ngFor="let item of data.value.records">
-              {{ item.jornada_realizada }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- LISTA VAZIA -->
-    <div class="empty" *ngIf="isVoid">
-      <span>Nenhum registro encontrado</span>
-      <mat-icon>search</mat-icon>
-    </div>
-
-    <!-- CARREGANDO LISTA -->
-    <div class="loading" *ngIf="isLoading">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findSheet()">
+      Buscar
+    </button>
   </div>
 
-  <section class="record__container" *ngIf="downloadSection">
-    <form [formGroup]="createLayoutTOTVSForm" (ngSubmit)="downloadLayoutTOTVS()" class="modal__backdrop" role="dialog">
-      <div class="form__container">
-        <div class="form__header">
-          <h2>Gerar layout TOTVS</h2>
-          <button type="button" class="btn btn--close" (click)="downloadSection = false"
-            aria-label="Fechar modal">&times;</button>
-        </div>
-        <div class="form__content">
-          <div class="form__group form__group--full">
-            <label for="date">Mês e Ano</label>
-            <input id="date" type="month" formControlName="date" class="form__input">
-          </div>
-          <div class="form__group">
-            <label for="holidays">Feriados do mês</label>
-            <div class="holidays-container">
-              <div class="holiday-input-group" *ngFor="let holiday of holidays; let i = index">
-                <input type="date" [value]="holiday" (change)="updateHoliday(i, $event)"
-                  class="form__input holiday-input">
-                <button type="button" class="btn btn--danger" (click)="removeHoliday(i)">
-                  ×
-                </button>
-              </div>
-              <button type="button" class="btn btn--primary" (click)="addHoliday()" [disabled]="holidays.length >= 5">
-                + Adicionar Feriado
-              </button>
-            </div>
-          </div>
-          <div class="form__group">
-            <label for="workingDays">Dias Úteis</label>
-            <input id="workingDays" type="number" placeholder="0" min="0" formControlName="workingDays"
-              class="form__input">
-          </div>
-        </div>
-        <div class="form__footer">
-          <button type="button" class="btn btn--quaternary" (click)="downloadSection = false">Sair</button>
-          <button type="submit" class="btn btn--primary">
-            @if (isCreating) {
-            <div class="loading-dots">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-            } @else {
-            Gerar
-            }
-          </button>
+  <div class="main">
+    <div class="card" *ngFor="let item of items">
+      <div class="card__header">
+        <div class="display display--column">
+          <h3 class="title title--dark">{{ item.nome }}</h3>
         </div>
       </div>
-    </form>
-  </section>
+      <div class="card__body">
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              badge
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">CHAPA</h3>
+            <h3 class="title title--dark">{{ item.chapa || 'N/A' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              confirmation_number
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">EVENTO</h3>
+            <h3 class="title title--dark">{{ item.evento_abono || 'N/A' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              timer
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">JORNADA REALIZADA</h3>
+            <h3 class="title title--dark">{{ item.jornada_realizada }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">DATA</h3>
+            <h3 class="title title--dark">{{ formateDate(item.periodo) }}</h3>
+          </div>
+        </div>
+
+        @if (item.observacao) {
+        <div class="group group--body group--full">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              notes
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">OBSERVAÇÃO</h3>
+            <h3 class="title title--dark">{{ item.observacao }}</h3>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="centralized" *ngIf="isSearching">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div class="centralized centralized--column" *ngIf="isEmpty">
+      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
+      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
+    </div>
+  </div>
 </div>

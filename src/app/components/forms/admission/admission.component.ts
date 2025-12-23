@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { AdmissionService } from '../../../../core/services/admission.service';
+import { AdmissionService } from '../../../core/services/admission.service';
 
 interface FormField {
   label: string;
@@ -45,10 +45,10 @@ enum SubmissionState {
     NgxMaskDirective
   ],
   providers: [provideNgxMask()],
-  templateUrl: './test.component.html',
-  styleUrl: './test.component.scss'
+  templateUrl: './admission.component.html',
+  styleUrl: './admission.component.scss'
 })
-export class TestComponent implements OnInit {
+export class AdmissionFormComponent implements OnInit {
 
   admissionForm!: FormGroup;
   currentSection = 0;

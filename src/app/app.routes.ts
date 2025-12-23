@@ -8,14 +8,13 @@ import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BrkComponent } from './components/workspace/human-resources/brk/brk.component';
-import { ErrorFormComponent } from './components/forms/error-form/error-form.component';
+import { ErrorComponent } from './components/error/error.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { RentalComponent } from './components/workspace/reports/rental/rental.component';
 import { TaskComponent } from './components/workspace/human-resources/task/task.component';
-import { SuccessFormComponent } from './components/forms/success-form/success-form.component';
+import { SuccessComponent } from './components/success/success.component';
 import { TrackingComponent } from './components/workspace/reports/tracking/tracking.component';
 import { BenefitComponent } from './components/workspace/human-resources/benefit/benefit.component';
-import { AdmissionFormComponent } from './components/forms/admission-form/admission-form.component';
 import { ExperienceComponent } from './components/workspace/reports/experience/experience.component';
 import { EmployeeComponent } from './components/workspace/human-resources/employee/employee.component';
 import { AdmissionComponent } from './components/workspace/human-resources/admission/admission.component';
@@ -29,7 +28,7 @@ import { tempTokenGuard } from './core/guard/temp-token.guard';
 import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TransportComponent } from './components/workspace/human-resources/transport/transport.component';
 import { DisciplinaryMeasureComponent } from './components/workspace/human-resources/disciplinary-measure/disciplinary-measure.component';
-import { TestComponent } from './components/workspace/human-resources/test/test.component';
+import { AdmissionFormComponent } from './components/forms/admission/admission.component';
 
 export const routes: Routes = [
   {
@@ -55,7 +54,7 @@ export const routes: Routes = [
   },
   {
     path: 'admission',
-    component: TestComponent,
+    component: AdmissionFormComponent,
     canActivate: [tempTokenGuard]
   },
   {
@@ -64,11 +63,11 @@ export const routes: Routes = [
   },
   {
     path: 'success-form',
-    component: SuccessFormComponent
+    component: SuccessComponent
   },
   {
     path: 'error-form',
-    component: ErrorFormComponent
+    component: ErrorComponent
   },
   {
     path: 'dashboard',
