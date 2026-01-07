@@ -19,7 +19,6 @@ import { ExperienceComponent } from './components/workspace/reports/experience/e
 import { EmployeeComponent } from './components/workspace/human-resources/employee/employee.component';
 import { AdmissionComponent } from './components/workspace/human-resources/admission/admission.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
-import { TimeSheetComponent } from './components/workspace/human-resources/time-sheet/time-sheet.component';
 import { ResignationComponent } from './components/workspace/human-resources/resignation/resignation.component';
 import { UploadTimesheetComponent } from './components/workspace/human-resources/upload-timesheet/upload-timesheet.component';
 
@@ -83,11 +82,6 @@ export const routes: Routes = [
       {
         path: 'human-resources',
         component: HumanResourcesComponent
-      },
-      {
-        path: 'human-resources/time-sheet',
-        component: TimeSheetComponent,
-        canActivate: [humanResourcesGuard]
       },
       {
         path: 'human-resources/upload-timesheet',
