@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { SafeHtml } from '@angular/platform-browser';
 import { DomSanitizer } from '@angular/platform-browser';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
@@ -37,7 +38,10 @@ interface Value {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterModule
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
