@@ -20,4 +20,15 @@ export class TwoComponent {
     { url: 'assets/logo/lead__moura.png', alt: 'Baterias Moura' },
     { url: 'assets/logo/lead__guerdal.png', alt: 'Guerdal' },
   ]
+
+  services = [
+    { title: 'Pavimentação' },
+    { title: 'Piso de concreto' },
+    { title: 'Asfalto' },
+    { title: 'ETE' },
+    { title: 'ETA' },
+    { title: 'Estação elevatória' },
+    { title: 'Esgoto' },
+    { title: 'Linha de água' },
+  ]
 }

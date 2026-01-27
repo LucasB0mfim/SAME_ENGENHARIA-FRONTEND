@@ -15,48 +15,46 @@
 
 <section class="section section__hero">
   <div class="hero__container">
-    <div class="hero__text">
-      <h2 class="hero__title">Engenharia civil e industrial.</h2>
-      <p class="hero__subtitle">Solicite agora um orçamento e descubra soluções técnicas sob medida para sua obra ou indústria.</p>
-      <button class="hero__button">Fazer Consulta</button>
-    </div>
-    <lottie-player
-      class="hero__image"
-      src="assets/json/hero__banner.json"
-      background="transparent"
-      speed="1"
-      loop
+    <lottie-player class="hero__image" src="assets/json/hero__banner.json" background="transparent" speed="1" loop
       autoplay>
     </lottie-player>
+    <div class="hero__text">
+      <h2 class="hero__title">Engenharia civil e industrial.</h2>
+      <p class="hero__subtitle">Solicite agora um orçamento e descubra soluções técnicas sob medida para sua obra ou
+        indústria.</p>
+      <button class="hero__button">Fazer Orçamento</button>
+    </div>
   </div>
 </section>
 
-<section class="section section__team">
-  <div class="team__container">
-    <lottie-player
-      class="team__image"
-      src="assets/json/team__banner.json"
-      background="transparent"
-      speed="1"
-      loop
+<section class="section section__service">
+  <div class="service__container">
+    <div class="service__text">
+      <h2 class="service__title">Soluções completas para sua empresa</h2>
+      <p class="service__subtitle">Soluções completas, precisas e personalizadas para projetos que exigem alto
+        desempenho, qualidade superior e confiabilidade técnica.</p>
+      <div class="service__cards">
+        <div class="service__card" *ngFor="let service of services">
+          <div class="service__subtitle">{{ service.title }}</div>
+        </div>
+      </div>
+    </div>
+    <lottie-player class="service__image" src="assets/json/service__banner.json" background="transparent" speed="1" loop
       autoplay>
     </lottie-player>
-    <div class="hero__text">
-      <!-- <h2 class="hero__title">Sua satisfação é a nossa prioridade</h2> -->
-      <h2 class="hero__title">Uma equipe focada no seu sucesso!</h2>
-      <p class="hero__subtitle">Nossa equipe atua de forma integrada, desde o escritório até o time de campo, com um único objetivo: <strong>entender sua necessidade e entregar a melhor solução para o seu projeto.</strong></p>
-      <p class="hero__subtitle">Cada etapa é conduzida por profissionais qualificados, comprometidos em resolver problemas com agilidade, responsabilidade e atenção aos detalhes, sempre mantendo uma comunicação clara com o cliente.</p>
-      <p class="hero__subtitle"><strong>Todos os serviços são executados em total conformidade com as normas técnicas e regulatórias vigentes</strong>, garantindo segurança, qualidade e confiabilidade em cada entrega.</p>
-    </div>
   </div>
 </section>
 
 <section class="section section__lead">
   <div class="lead__container">
+    <lottie-player class="lead__image" src="assets/json/lead__banner.json" background="transparent" speed="1" loop
+      autoplay>
+    </lottie-player>
     <div class="lead__text">
-      <h2 class="lead__title">Soluções que geram resultados reais para grandes clientes.</h2>
-      <p class="lead__subtitle">Projetos executados para grandes clientes, entregues com excelência técnica, cumprimento de prazos e total conformidade com as normas. Resultados que reforçam a confiança construída em cada parceria.</p>
-
+      <h2 class="lead__title">Soluções que geram resultados reais.</h2>
+      <p class="lead__subtitle">Projetos executados para grandes clientes, entregues com excelência técnica, cumprimento
+        de prazos e total conformidade com as normas. Resultados que reforçam a confiança construída em cada parceria.
+      </p>
       <div class="lead__carousel-wrapper">
         <div class="lead__carousel">
           <div class="lead__card" *ngFor="let lead of leads">
@@ -68,13 +66,23 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <lottie-player
-      class="lead__image"
-      src="assets/json/lead__banner.json"
-      background="transparent"
-      speed="1"
-      loop
+<section class="section section__team">
+  <div class="team__container">
+    <div class="hero__text">
+      <h2 class="hero__title">Sua satisfação é a nossa prioridade!</h2>
+      <!-- <h2 class="hero__title">Uma equipe focada no seu sucesso!</h2> -->
+      <p class="hero__subtitle">Nossa equipe atua de forma integrada, desde o escritório até o time de campo, com um
+        único objetivo: <strong>entender sua necessidade e entregar a melhor solução para o seu projeto.</strong></p>
+      <p class="hero__subtitle">Cada etapa é conduzida por profissionais qualificados, comprometidos em resolver
+        problemas com agilidade, responsabilidade e atenção aos detalhes, sempre mantendo uma comunicação clara com o
+        cliente.</p>
+      <!-- <p class="hero__subtitle"><strong>Todos os serviços são executados em total conformidade com as normas técnicas e
+          regulatórias vigentes</strong>, garantindo segurança, qualidade e confiabilidade em cada entrega.</p> -->
+    </div>
+    <lottie-player class="team__image" src="assets/json/team__banner.json" background="transparent" speed="1" loop
       autoplay>
     </lottie-player>
   </div>
@@ -82,13 +90,56 @@
 
 <section class="section section__localization">
   <div class="localization__container">
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1971648975395!2d-46.65844268501896!3d-23.561414984691654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0x0!2sRua%20Arthur%20Lopes%2C%20218!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
-      allowfullscreen=""
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      title="Localização Same Engenharia"
-      class="localization__iframe">
-    </iframe>
+    <lottie-player class="team__image" src="assets/json/localization__banner.json" background="transparent" speed="1"
+      loop autoplay>
+    </lottie-player>
+    <div class="hero__text">
+      <h2 class="hero__title">Nossa localização</h2>
+      <p class="hero__subtitle">Estamos prontos para atender você presencialmente ou à distância. Nossa estrutura reúne
+        equipe técnica e operacional para oferecer suporte completo, esclarecer dúvidas e iniciar seu projeto com
+        segurança e eficiência.</p>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1971648975395!2d-46.65844268501896!3d-23.561414984691654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0x0!2sRua%20Arthur%20Lopes%2C%20218!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        title="Localização Same Engenharia" class="localization__iframe">
+      </iframe>
+    </div>
   </div>
 </section>
+
+<section class="section section__hiring">
+</section>
+
+<footer class="section section__footer">
+  <div class="footer__container">
+    <div class="footer__column">
+      <img src="assets/images/logo-white.png" alt="logo" class="footer__image">
+      <p class="footer__subtitle">&#169; Same Engenharia</p>
+    </div>
+    <div class="footer__column">
+      <h2 class="footer__title">Navegação</h2>
+      <ul class="footer__list">
+        <li class="footer__item"><a href="#" class="footer__link">Sobre</a></li>
+        <li class="footer__item"><a href="#" class="footer__link">Serviços</a></li>
+        <li class="footer__item"><a href="#" class="footer__link">Parceiros</a></li>
+        <li class="footer__item"><a href="#" class="footer__link">Localização</a></li>
+      </ul>
+    </div>
+    <div class="footer__column">
+      <h2 class="footer__title">Contatos</h2>
+      <ul class="footer__list">
+        <li class="footer__item"><a href="#" class="footer__link">Comercial</a></li>
+        <li class="footer__item"><a href="#" class="footer__link">Financeiro</a></li>
+        <li class="footer__item"><a href="#" class="footer__link">Ouvidoria</a></li>
+      </ul>
+    </div>
+    <div class="footer__column">
+      <h2 class="footer__title">Escritório</h2>
+      <p class="footer__link">Rua Arthur Lopes, 218 <br /> Imbiribeira - Recife <br /> CEP 00000-000</p>
+    </div>
+    <div class="footer__column">
+      <h2 class="footer__title">Carreiras</h2>
+      <a href="#" class="footer__link">Acessar InHire</a>
+    </div>
+  </div>
+</footer>
