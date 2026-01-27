@@ -11,7 +11,7 @@ export const humanResourcesGuard: CanActivateFn = (route, state) => {
 
   return _dashboardService.findAll().pipe(
     map(response => {
-      if (response.result.setor === 'RECURSOS HUMANOS' || response.result.setor === 'TI') {
+      if (response.result.funcao === 'RECURSOS HUMANOS' || response.result.funcao === 'TI') {
         return true
       }  else {
         _router.navigate(['/dashboard']);

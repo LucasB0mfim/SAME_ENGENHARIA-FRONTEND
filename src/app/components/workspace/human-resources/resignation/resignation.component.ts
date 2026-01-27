@@ -42,7 +42,8 @@ export class ResignationComponent implements OnInit {
     dataInicioAvisoTrabalhado: new FormControl(null, Validators.required),
     modalidadeAvisoTrabalhado: new FormControl('', Validators.required),
     colaboradorComunicado: new FormControl('', Validators.required),
-    dataRescisao: new FormControl(null, Validators.required)
+    dataRescisao: new FormControl(null, Validators.required),
+    observacao: new FormControl(null, Validators.required),
   });
 
   items: any[] = [];
@@ -138,7 +139,8 @@ export class ResignationComponent implements OnInit {
       modalidade_aviso_trabalhado: this.updateForm.value.modalidadeAvisoTrabalhado,
       colaborador_comunicado: this.updateForm.value.colaboradorComunicado,
       data_comunicacao: this.currentItem.data_comunicacao,
-      data_rescisao: this.updateForm.value.dataRescisao
+      data_rescisao: this.updateForm.value.dataRescisao,
+      observacao: this.updateForm.value.observacao,
     }
 
     this._resignationService.update(request)

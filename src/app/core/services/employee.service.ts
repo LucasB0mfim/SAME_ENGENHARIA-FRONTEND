@@ -27,7 +27,7 @@ export class EmployeeService {
 
   findActiveNames(): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/active-names', { headers });
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/names', { headers });
   };
 
   findFunctions(): Observable<any> {
