@@ -125,11 +125,7 @@ $gradient-end: #0077FF;
   }
 
   &__hiring {
-    height: 70vh;
-    background-image: url('/assets/images/hiring__banner_2.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    cursor: pointer;
+    height: auto;
   }
 
   &__footer {
@@ -145,7 +141,7 @@ $gradient-end: #0077FF;
     height: 100%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 40% 60%;
     align-items: center;
   }
 
@@ -158,7 +154,7 @@ $gradient-end: #0077FF;
 
   &__title {
     color: $dark-white;
-    font-size: 2.5rem;
+    font-size: 56px;
     font-weight: 500;
     line-height: 1.1;
   }
@@ -201,7 +197,7 @@ $gradient-end: #0077FF;
     height: 100%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 60% 40%;
     align-items: center;
     gap: $gp-lg;
   }
@@ -234,8 +230,8 @@ $gradient-end: #0077FF;
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: $gp-lg;
   }
@@ -361,16 +357,39 @@ $gradient-end: #0077FF;
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-    gap: $gp-lg;
+
+    display: flex;
+    flex-direction: column;
+    gap: $gp-md;
+  }
+
+  &__title {
+    color: $dark-white;
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.1;
+    text-align: end;
   }
 
   &__iframe {
     width: 100%;
+    height: 50vh;
     border-radius: 10px;
     grid-column: 1/-1;
+  }
+}
+
+.hiring {
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }
 

@@ -31,4 +31,9 @@ export class TwoComponent {
     { title: 'Esgoto' },
     { title: 'Linha de água' },
   ]
+
+  works = [
+    { url: 'assets/test/silo.png', alt: 'Obra 2' },
+    { url: 'assets/test/work.png', alt: 'Obra 2' },
+  ]
 }
