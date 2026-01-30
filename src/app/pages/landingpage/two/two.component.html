@@ -1,25 +1,25 @@
-<header class="header">
+<header class="header" [class.scrolled]="isScrolled">
   <div class="header__container">
     <img src="assets/images/logo-white.png" alt="logo" class="header__image">
     <nav class="header__nav">
       <ul class="header__list">
-        <li class="header__item"><a href="#" class="header__link">Sobre</a></li>
-        <li class="header__item"><a href="#" class="header__link">Serviços</a></li>
+        <li class="header__item"><a href="#" class="header__link">Quem Somos</a></li>
+        <li class="header__item"><a href="#" class="header__link">O Que Fazemos</a></li>
         <li class="header__item"><a href="#" class="header__link">Parceiros</a></li>
-        <li class="header__item"><a href="#" class="header__link">Trabalhe Conosco</a></li>
+        <li class="header__item"><a href="#" class="header__link">Vagas</a></li>
       </ul>
     </nav>
-    <button class="header__button">Log in</button>
+    <button class="header__button">Entrar</button>
   </div>
 </header>
 
 <section class="section section__hero">
   <div class="hero__container">
     <div class="hero__text">
-      <h2 class="hero__title">Engenharia civil e industrial.</h2>
-      <p class="hero__subtitle">Solicite agora um orçamento e descubra soluções técnicas sob medida para sua obra ou
-        indústria.</p>
-      <button class="hero__button">Fazer Orçamento</button>
+      <h2 class="hero__title">Construímos estruturas que transformam realidades.</h2>
+      <p class="hero__subtitle">Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça seu
+        orçamento e veja como podemos ir além.</p>
+      <button class="hero__button">Quero Meu Orçamento</button>
     </div>
     <lottie-player class="hero__image" src="assets/json/hero__banner.json" background="transparent" speed="1" loop
       autoplay>
@@ -33,37 +33,67 @@
       autoplay>
     </lottie-player>
     <div class="team__text">
-      <h2 class="team__title">Sua satisfação é a nossa prioridade!</h2>
-      <p class="team__subtitle">Nossa equipe atua de forma integrada, desde o escritório até o time de campo, com um
-        único objetivo: <strong>entender sua necessidade e entregar a melhor solução para o seu projeto.</strong></p>
-      <p class="team__subtitle">Cada etapa é conduzida por profissionais qualificados, comprometidos em resolver
-        problemas com agilidade, responsabilidade e atenção aos detalhes, sempre mantendo uma comunicação clara com o
-        cliente.</p>
+      <h2 class="team__title">Você no centro de tudo que fazemos.</h2>
+      <p class="team__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong>
+      </p>
+      <p class="team__subtitle">Cada etapa é acompanhada por profissionais experientes, que resolvem desafios com
+        rapidez, cuidado e transparência. Porque o seu projeto merece atenção total.</p>
     </div>
   </div>
 </section>
 
-<section class="section section__service">
-  <div class="service__container">
-    <div class="service__text">
-      <h2 class="service__title">Soluções completas para sua empresa</h2>
-      <p class="service__subtitle">Soluções completas, precisas e personalizadas para projetos que exigem alto
-        desempenho, qualidade superior e confiabilidade técnica.</p>
-      <div class="service__cards">
-        <div class="service__card" *ngFor="let service of services">
-          <div class="service__subtitle">{{ service.title }}</div>
+<section class="section section__sanitation">
+  <div class="sanitation__container">
+    <div class="sanitation__text">
+      <h2 class="sanitation__title">Saneamento que funciona de verdade!</h2>
+      <p class="sanitation__subtitle">Infraestrutura essencial para o seu projeto. Desenvolvemos sistemas de saneamento
+        completos — água, esgoto, drenagem — com tecnologia, segurança e compromisso com o meio ambiente. Soluções que
+        impactam vidas e duram gerações.</p>
+      <div class="sanitation__cards">
+        <div class="sanitation__card" *ngFor="let sanitation of sanitations">
+          <div class="sanitation__subtitle">{{ sanitation.title }}</div>
         </div>
       </div>
     </div>
-    <lottie-player class="service__image" src="assets/json/service__banner.json" background="transparent" speed="1" loop
-      autoplay>
+    <lottie-player class="service__image" src="assets/json/test.json" background="transparent" speed="1" loop autoplay>
     </lottie-player>
+  </div>
+</section>
+
+<section class="section section__paving">
+  <div class="paving__container">
+    <!-- <lottie-player class="paving__image" src="assets/json/truck__banner.json" background="transparent" speed="1" loop autoplay>
+    </lottie-player> -->
+    <lottie-player class="paving__image" src="assets/json/employee.json" background="transparent" speed="1" loop autoplay>
+    </lottie-player>
+    <div class="paving__text">
+      <h2 class="paving__title">Pavimentação que resiste ao tempo...</h2>
+      <p class="paving__subtitle">Da via urbana ao acesso industrial, criamos pavimentos robustos e duráveis.
+        Asfaltamento, terraplanagem, drenagem e sinalização: tudo planejado para suportar o tráfego intenso e as
+        condições mais exigentes. Seu caminho em boas mãos.</p>
+      <div class="paving__cards">
+        <div class="paving__card" *ngFor="let sanitation of sanitations">
+          <div class="paving__subtitle">{{ sanitation.title }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section__timer">
+  <div class="timer__container">
+    <div class="timer__text">
+      <h2 class="timer__title">O que você está esperando?</h2>
+      <p class="timer__subtitle">Garanta agora seu orçamento e saia na frente!</p>
+      <button class="timer__button">Solicitar Orçamento Agora</button>
+    </div>
   </div>
 </section>
 
 <section class="section section__localization">
   <div class="localization__container">
-    <h2 class="localization__title">Nossa localização</h2>
+    <h2 class="localization__title">Onde nos encontrar</h2>
     <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1971648975395!2d-46.65844268501896!3d-23.561414984691654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0x0!2sRua%20Arthur%20Lopes%2C%20218!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
       allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localização Same Engenharia"
@@ -75,10 +105,9 @@
 <section class="section section__lead">
   <div class="lead__container">
     <div class="lead__text">
-      <h2 class="lead__title">Cases de sucesso</h2>
-      <p class="lead__subtitle">Projetos executados para grandes clientes, entregues com excelência técnica, cumprimento
-        de prazos e total conformidade com as normas. Resultados que reforçam a confiança construída em cada parceria.
-      </p>
+      <h2 class="lead__title">Projetos que falam por si</h2>
+      <p class="lead__subtitle">Trabalhamos ao lado de grandes clientes, entregando obras no prazo, dentro das normas e
+        com excelência técnica. Cada projeto reforça a confiança que construímos juntos.</p>
       <div class="lead__carousel-wrapper">
         <div class="lead__carousel">
           <div class="lead__card" *ngFor="let lead of leads">
@@ -95,40 +124,80 @@
 
 <section class="section section__hiring">
   <div class="hiring__container">
-    <img src="/assets/images/hiring__banner_2.png" alt="Hiring Banner" class="hiring__image">
+    <img src="/assets/images/hiring__banner.png" alt="Hiring Banner" class="hiring__image">
   </div>
 </section>
 
 <footer class="section section__footer">
   <div class="footer__container">
-    <div class="footer__column">
-      <img src="assets/images/logo-white.png" alt="logo" class="footer__image">
-      <p class="footer__subtitle">&#169; Same Engenharia</p>
+    <div class="footer__grid">
+      <nav class="footer__column" aria-labelledby="footer-company">
+        <h2 class="footer__title" id="footer-company">Empresa</h2>
+        <ul class="footer__list footer__list--text">
+          <li class="footer__item">
+            <a href="#" class="footer__link">sobre nós</a>
+          </li>
+          <li class="footer__item">
+            <a href="#" class="footer__link">nossos serviços</a>
+          </li>
+          <li class="footer__item">
+            <a href="#" class="footer__link">parceiros</a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="footer__column" aria-labelledby="footer-help">
+        <h2 class="footer__title" id="footer-help">Precisa de ajuda?</h2>
+        <ul class="footer__list footer__list--text">
+          <li class="footer__item">
+            <a href="#" class="footer__link">ouvidoria</a>
+          </li>
+          <li class="footer__item">
+            <a href="#" class="footer__link">comercial</a>
+          </li>
+          <li class="footer__item">
+            <a href="#" class="footer__link">financeiro</a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="footer__column" aria-labelledby="footer-shop">
+        <h2 class="footer__title" id="footer-shop">Carreiras</h2>
+        <ul class="footer__list footer__list--text">
+          <li class="footer__item">
+            <a href="#" class="footer__link">Acessar InHire</a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="footer__column" aria-labelledby="footer-social">
+        <h2 class="footer__title" id="footer-social">Nos acompanhe</h2>
+        <ul class="footer__list footer__list--social">
+          <li class="footer__item">
+            <a href="#" aria-label="LinkedIn" class="footer__link">
+              <span class="fab fa-linkedin-in" aria-hidden="true"></span>
+            </a>
+          </li>
+          <li class="footer__item">
+            <a href="#" aria-label="Instagram" class="footer__link">
+              <span class="fab fa-instagram" aria-hidden="true"></span>
+            </a>
+          </li>
+          <li class="footer__item">
+            <a href="#" aria-label="WhatsApp" class="footer__link">
+              <span class="fab fa-whatsapp" aria-hidden="true"></span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <div class="footer__column">
-      <h2 class="footer__title">Navegação</h2>
-      <ul class="footer__list">
-        <li class="footer__item"><a href="#" class="footer__link">Sobre</a></li>
-        <li class="footer__item"><a href="#" class="footer__link">Serviços</a></li>
-        <li class="footer__item"><a href="#" class="footer__link">Parceiros</a></li>
-        <li class="footer__item"><a href="#" class="footer__link">Localização</a></li>
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h2 class="footer__title">Contatos</h2>
-      <ul class="footer__list">
-        <li class="footer__item"><a href="#" class="footer__link">Comercial</a></li>
-        <li class="footer__item"><a href="#" class="footer__link">Financeiro</a></li>
-        <li class="footer__item"><a href="#" class="footer__link">Ouvidoria</a></li>
-      </ul>
-    </div>
-    <div class="footer__column">
-      <h2 class="footer__title">Escritório</h2>
-      <p class="footer__link">Rua Arthur Lopes, 218 <br /> Imbiribeira - Recife <br /> CEP 00000-000</p>
-    </div>
-    <div class="footer__column">
-      <h2 class="footer__title">Carreiras</h2>
-      <a href="#" class="footer__link">Acessar InHire</a>
+    <div class="footer__bottom">
+      <div class="footer__brand">
+        <img src="assets/images/logo-white.png" alt="Same Engenharia" class="footer__logo">
+      </div>
+      <small class="footer__copyright">
+        © 2026 Same Engenharia. Todos os direitos reservados.
+      </small>
     </div>
   </div>
 </footer>

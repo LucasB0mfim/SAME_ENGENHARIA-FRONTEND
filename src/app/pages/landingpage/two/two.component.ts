@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { Component, HostListener , CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,6 +11,15 @@ import { CommonModule } from '@angular/common';
   styleUrl: './two.component.scss'
 })
 export class TwoComponent {
+
+  isScrolled: boolean = false;
+
+  @HostListener('window:scroll', [])
+
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+  }
+
   leads = [
     { url: 'assets/logo/lead__aena.png', alt: 'Aena Aeroportos' },
     { url: 'assets/logo/lead__bimbo.png', alt: 'Bimbo' },
@@ -21,7 +30,7 @@ export class TwoComponent {
     { url: 'assets/logo/lead__guerdal.png', alt: 'Guerdal' },
   ]
 
-  services = [
+  sanitations = [
     { title: 'Pavimentação' },
     { title: 'Piso de concreto' },
     { title: 'Asfalto' },
