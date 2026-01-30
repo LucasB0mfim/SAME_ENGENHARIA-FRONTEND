@@ -1,4 +1,4 @@
-import { Component, HostListener , CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { Component , CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,14 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './two.component.scss'
 })
 export class TwoComponent {
-
-  isScrolled: boolean = false;
-
-  @HostListener('window:scroll', [])
-
-  onWindowScroll() {
-    this.isScrolled = window.scrollY > 50;
-  }
 
   leads = [
     { url: 'assets/logo/lead__aena.png', alt: 'Aena Aeroportos' },
@@ -44,5 +36,20 @@ export class TwoComponent {
   works = [
     { url: 'assets/test/silo.png', alt: 'Obra 2' },
     { url: 'assets/test/work.png', alt: 'Obra 2' },
+  ]
+
+  processes = [
+    {
+      title: 'Planejamento Técnico',
+      subtitle: 'Estudos preliminares, viabilidade e soluções sob medida para cada cenário.'
+    },
+    {
+      title: 'Execução com Controle',
+      subtitle: 'Acompanhamento em campo, cumprimento de normas e controle rigoroso de qualidade.'
+    },
+    {
+      title: 'Entrega Responsável',
+      subtitle: 'Obras entregues no prazo, com documentação técnica e responsabilidade legal.'
+    }
   ]
 }

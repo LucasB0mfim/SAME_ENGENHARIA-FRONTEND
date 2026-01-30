@@ -1,4 +1,4 @@
-<header class="header" [class.scrolled]="isScrolled">
+<header class="header">
   <div class="header__container">
     <img src="assets/images/logo-white.png" alt="logo" class="header__image">
     <nav class="header__nav">
@@ -9,7 +9,7 @@
         <li class="header__item"><a href="#" class="header__link">Vagas</a></li>
       </ul>
     </nav>
-    <button class="header__button">Entrar</button>
+    <button class="header__button">Sing in</button>
   </div>
 </header>
 
@@ -33,7 +33,7 @@
       autoplay>
     </lottie-player>
     <div class="team__text">
-      <h2 class="team__title">Você no centro de tudo que fazemos.</h2>
+      <h2 class="team__title"><span class="team__span">Você no centro</span> de tudo que fazemos.</h2>
       <p class="team__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
         <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong>
       </p>
@@ -56,16 +56,16 @@
         </div>
       </div>
     </div>
-    <lottie-player class="service__image" src="assets/json/test.json" background="transparent" speed="1" loop autoplay>
+    <lottie-player class="service__image" src="assets/json/warn__banner.json" background="transparent" speed="1" loop
+      autoplay>
     </lottie-player>
   </div>
 </section>
 
 <section class="section section__paving">
   <div class="paving__container">
-    <!-- <lottie-player class="paving__image" src="assets/json/truck__banner.json" background="transparent" speed="1" loop autoplay>
-    </lottie-player> -->
-    <lottie-player class="paving__image" src="assets/json/employee.json" background="transparent" speed="1" loop autoplay>
+    <lottie-player class="paving__image" src="assets/json/work__banner.json" background="transparent" speed="1" loop
+      autoplay>
     </lottie-player>
     <div class="paving__text">
       <h2 class="paving__title">Pavimentação que resiste ao tempo...</h2>
@@ -81,13 +81,17 @@
   </div>
 </section>
 
-<section class="section section__timer">
-  <div class="timer__container">
-    <div class="timer__text">
-      <h2 class="timer__title">O que você está esperando?</h2>
-      <p class="timer__subtitle">Garanta agora seu orçamento e saia na frente!</p>
-      <button class="timer__button">Solicitar Orçamento Agora</button>
+<section class="section section__map">
+  <div class="map__container">
+    <div class="map__text">
+      <h2 class="map__title">Atuamos em todo o <span class="map__span">Nordeste!</span></h2>
+      <p class="map__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong>
+      </p>
     </div>
+    <lottie-player class="map__image" src="assets/json/map__banner.json" background="transparent" speed="1" loop
+      autoplay>
+    </lottie-player>
   </div>
 </section>
 
