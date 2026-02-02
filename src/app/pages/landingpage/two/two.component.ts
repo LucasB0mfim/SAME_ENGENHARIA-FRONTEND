@@ -1,16 +1,30 @@
-import { Component , CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ScrollAnimationDirective } from './scroll-animation.directive';
+import { scrollAnimations } from './scroll-animations';
 
 @Component({
   selector: 'app-two',
   imports: [
-    CommonModule
+    CommonModule,
+    ScrollAnimationDirective
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './two.component.html',
-  styleUrl: './two.component.scss'
+  styleUrl: './two.component.scss',
+  animations: scrollAnimations
 })
 export class TwoComponent {
+
+  // Estados de visibilidade para cada seção
+  heroVisible = false;
+  teamVisible = false;
+  sanitationVisible = false;
+  pavingVisible = false;
+  mapVisible = false;
+  localizationVisible = false;
+  leadVisible = false;
+  hiringVisible = false;
 
   leads = [
     { url: 'assets/logo/lead__aena.png', alt: 'Aena Aeroportos' },
@@ -52,4 +66,40 @@ export class TwoComponent {
       subtitle: 'Obras entregues no prazo, com documentação técnica e responsabilidade legal.'
     }
   ]
+
+  /**
+   * Métodos para atualizar visibilidade de cada seção
+   * Chamados pela diretiva quando o elemento entra/sai do viewport
+   */
+  onHeroVisibilityChange(isVisible: boolean): void {
+    this.heroVisible = isVisible;
+  }
+
+  onTeamVisibilityChange(isVisible: boolean): void {
+    this.teamVisible = isVisible;
+  }
+
+  onSanitationVisibilityChange(isVisible: boolean): void {
+    this.sanitationVisible = isVisible;
+  }
+
+  onPavingVisibilityChange(isVisible: boolean): void {
+    this.pavingVisible = isVisible;
+  }
+
+  onMapVisibilityChange(isVisible: boolean): void {
+    this.mapVisible = isVisible;
+  }
+
+  onLocalizationVisibilityChange(isVisible: boolean): void {
+    this.localizationVisible = isVisible;
+  }
+
+  onLeadVisibilityChange(isVisible: boolean): void {
+    this.leadVisible = isVisible;
+  }
+
+  onHiringVisibilityChange(isVisible: boolean): void {
+    this.hiringVisible = isVisible;
+  }
 }
