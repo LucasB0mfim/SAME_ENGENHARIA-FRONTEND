@@ -13,70 +13,103 @@
   </div>
 </header>
 
-<section class="section">
-  <div class="section__container section__container--right" appScrollAnimation (visibilityChange)="onHeroVisibilityChange($event)" [@fadeSlideUp]="heroVisible ? 'visible' : 'hidden'">
+<section class="section__banner">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onHeroVisibilityChange($event)"
+    [@fadeSlideUp]="heroVisible ? 'visible' : 'hidden'">
     <div class="section__text">
       <h2 class="section__title section__title--hero">Construímos estruturas que transformam realidades.</h2>
-      <p class="section__subtitle">Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça seu orçamento e veja como podemos ir além.</p>
+      <p class="section__subtitle">Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça
+        seu orçamento e veja como podemos ir além.</p>
       <button class="section__button">Quero Meu Orçamento</button>
     </div>
-    <lottie-player src="assets/json/hero__banner.json" background="transparent" speed="1" loop
+  </div>
+</section>
+
+<section class="section__about">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onTeamVisibilityChange($event)"
+    [@slideFromRight]="teamVisible ? 'visible' : 'hidden'">
+
+    <div class="section__banner"></div>
+
+    <div class="section__text">
+      <h2 class="section__title">
+        Você no centro de tudo que fazemos.
+      </h2>
+
+      <p class="section__subtitle">
+        Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        entender o que você precisa e entregar a solução certa, no momento certo.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section__sanitation">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onSanitationVisibilityChange($event)"
+    [@slideFromLeft]="sanitationVisible ? 'visible' : 'hidden'">
+
+    <div class="section__text">
+      <h2 class="section__title">Saneamento que funciona de verdade!</h2>
+      <p class="section__subtitle">
+        Infraestrutura essencial para o seu projeto. Desenvolvemos sistemas de saneamento
+        completos — água, esgoto, drenagem — com tecnologia, segurança e compromisso com o meio ambiente. Soluções que
+        impactam vidas e duram gerações.
+      </p>
+      <div class="section__cards">
+        <div class="section__card" *ngFor="let sanitation of sanitations">
+          <div class="section__subtitle">{{ sanitation.title }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section__banner"></div>
+  </div>
+</section>
+
+<section class="section__paving">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onPavingVisibilityChange($event)"
+    [@slideFromRight]="pavingVisible ? 'visible' : 'hidden'">
+
+    <div class="section__banner"></div>
+
+    <div class="section__text">
+      <h2 class="section__title">
+        Pavimentação que resiste ao tempo...
+      </h2>
+
+      <p class="section__subtitle">
+        Da via urbana ao acesso industrial, criamos pavimentos robustos e duráveis.
+        Asfaltamento, terraplanagem, drenagem e sinalização: tudo planejado para suportar o tráfego intenso e as
+        condições mais exigentes. Seu caminho em boas mãos.
+      </p>
+
+      <div class="section__cards">
+        <div class="section__card" *ngFor="let sanitation of sanitations">
+          <div class="section__subtitle">{{ sanitation.title }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__map">
+  <div class="section__container" appScrollAnimation
+    (visibilityChange)="onMapVisibilityChange($event)" [@slideFromLeft]="mapVisible ? 'visible' : 'hidden'">
+    <div class="section__text">
+      <h2 class="section__title">Atuamos em todo o <span class="section__span">Nordeste!</span></h2>
+      <p class="section__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong>
+      </p>
+    </div>
+    <lottie-player src="assets/json/map__banner.json" background="transparent" speed="1" loop
       autoplay>
     </lottie-player>
   </div>
 </section>
 
-<section class="section">
-  <div class="section__container section__container--right" appScrollAnimation (visibilityChange)="onTeamVisibilityChange($event)" [@slideFromRight]="teamVisible ? 'visible' : 'hidden'">
-    <div class="section__text">
-      <h2 class="section__title"><span class="section__span">Você no centro</span> de tudo que fazemos.</h2>
-      <p class="section__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão: <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong> </p>
-      <p class="section__subtitle">Cada etapa é acompanhada por profissionais experientes, que resolvem desafios com rapidez, cuidado e transparência. Porque o seu projeto merece atenção total.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="section__container section__container--left" appScrollAnimation (visibilityChange)="onSanitationVisibilityChange($event)" [@slideFromLeft]="sanitationVisible ? 'visible' : 'hidden'">
-    <div class="section__text">
-      <h2 class="section__title">Saneamento que funciona de verdade!</h2>
-      <p class="section__subtitle">Infraestrutura essencial para o seu projeto. Desenvolvemos sistemas de saneamento completos — água, esgoto, drenagem — com tecnologia, segurança e compromisso com o meio ambiente. Soluções que impactam vidas e duram gerações.</p>
-
-      <div class="section__services">
-        <div class="section__service" *ngFor="let sanitation of sanitations">
-          <div class="section__subtitle">{{ sanitation.title }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="section__container section__container--right" appScrollAnimation (visibilityChange)="onPavingVisibilityChange($event)" [@slideFromRight]="pavingVisible ? 'visible' : 'hidden'">
-    <div class="section__text">
-      <h2 class="section__title">Pavimentação que resiste ao tempo...</h2>
-      <p class="section__subtitle"> Da via urbana ao acesso industrial, criamos pavimentos robustos e duráveis. Asfaltamento, terraplanagem, drenagem e sinalização: tudo planejado para suportar o tráfego intenso e as condições mais exigentes. Seu caminho em boas mãos.</p>
-
-      <div class="section__services">
-        <div class="section__service" *ngFor="let sanitation of sanitations">
-          <div class="section__subtitle">{{ sanitation.title }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="section__container section__container--left" appScrollAnimation (visibilityChange)="onMapVisibilityChange($event)" [@slideFromLeft]="mapVisible ? 'visible' : 'hidden'">
-    <div class="section__text">
-      <h2 class="section__title">Atuamos em todo o <span class="section__span">Nordeste!</span></h2>
-      <p class="section__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão: <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong></p>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onLocalizationVisibilityChange($event)" [@slideFromBottom]="localizationVisible ? 'visible' : 'hidden'">
+<section class="section__localization">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onLocalizationVisibilityChange($event)"
+    [@scaleUp]="localizationVisible ? 'visible' : 'hidden'">
     <h2 class="section__title">Onde nos encontrar</h2>
     <iframe
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1971648975395!2d-46.65844268501896!3d-23.561414984691654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0x0!2sRua%20Arthur%20Lopes%2C%20218!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
@@ -86,19 +119,21 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onLeadVisibilityChange($event)" [@scaleUp]="leadVisible ? 'visible' : 'hidden'">
+<section class="section__lead">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onLeadVisibilityChange($event)"
+    [@scaleUp]="leadVisible ? 'visible' : 'hidden'">
     <div class="section__text">
       <h2 class="section__title">Projetos que falam por si</h2>
-      <p class="section__subtitle">Trabalhamos ao lado de grandes clientes, entregando obras no prazo, dentro das normas e com excelência técnica. Cada projeto reforça a confiança que construímos juntos.</p>
+      <p class="section__subtitle">Trabalhamos ao lado de grandes clientes, entregando obras no prazo, dentro das normas
+        e com excelência técnica. Cada projeto reforça a confiança que construímos juntos.</p>
 
       <div class="section__carousel-wrapper">
         <div class="section__carousel">
           <div class="section__card" *ngFor="let lead of leads">
-            <img [src]="lead.url" [alt]="lead.alt" class="section__image--lead">
+            <img [src]="lead.url" [alt]="lead.alt" class="section__image">
           </div>
           <div class="section__card" *ngFor="let lead of leads">
-            <img [src]="lead.url" [alt]="lead.alt" class="section__image--lead">
+            <img [src]="lead.url" [alt]="lead.alt" class="section__image">
           </div>
         </div>
       </div>
@@ -106,16 +141,13 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="section__container"
-    appScrollAnimation
-    (visibilityChange)="onHiringVisibilityChange($event)"
-    [@fadeIn]="hiringVisible ? 'visible' : 'hidden'">
-    <img src="/assets/images/hiring__banner.png" alt="Hiring Banner" class="section__image--hiring">
+<section class="section__hiring">
+  <div class="section__container">
+    <img src="/assets/images/hiring__banner.png" alt="Hiring Banner" class="section__image">
   </div>
 </section>
 
-<footer class="section section__footer">
+<footer class="footer">
   <div class="footer__container">
     <div class="footer__grid">
       <nav class="footer__column" aria-labelledby="footer-company">
