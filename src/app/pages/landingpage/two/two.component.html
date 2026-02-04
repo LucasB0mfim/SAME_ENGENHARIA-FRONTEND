@@ -1,32 +1,37 @@
-<header class="header">
+<header class="header" [class.scrolled]="isScrolled">
   <div class="header__container">
-    <img src="assets/images/logo-white.png" alt="logo" class="header__image">
+    <img src="assets/images/logo-orange.png" alt="logo" class="header__image">
     <nav class="header__nav">
       <ul class="header__list">
         <li class="header__item"><a href="#" class="header__link">Quem Somos</a></li>
         <li class="header__item"><a href="#" class="header__link">O Que Fazemos</a></li>
         <li class="header__item"><a href="#" class="header__link">Parceiros</a></li>
-        <li class="header__item"><a href="#" class="header__link">Vagas</a></li>
+        <li class="header__item"><a href="https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia" target="_blank" class="header__link">Vagas</a></li>
       </ul>
     </nav>
-    <button class="header__button">Sing in</button>
+    <button class="header__button" routerLink="/login">Sing in</button>
   </div>
 </header>
 
 <section class="section__banner">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onHeroVisibilityChange($event)"
-    [@fadeSlideUp]="heroVisible ? 'visible' : 'hidden'">
+  <div class="section__container">
     <div class="section__text">
-      <h2 class="section__title section__title--hero">Construímos estruturas que transformam realidades.</h2>
-      <p class="section__subtitle">Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça
-        seu orçamento e veja como podemos ir além.</p>
-      <button class="section__button">Quero Meu Orçamento</button>
+      <h2 class="section__title section__title--hero">
+        Pavimentando caminhos que constroem o seu futuro.
+      </h2>
+      <p class="section__subtitle">
+        Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça
+        seu orçamento e veja como podemos ir além.
+      </p>
+      <button class="section__button">Pedir Orçamento</button>
     </div>
   </div>
 </section>
 
 <section class="section__about">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onTeamVisibilityChange($event)"
+  <div class="section__container"
+    appScrollAnimation
+    (visibilityChange)="onTeamVisibilityChange($event)"
     [@slideFromRight]="teamVisible ? 'visible' : 'hidden'">
 
     <div class="section__banner"></div>
@@ -40,12 +45,26 @@
         Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
         entender o que você precisa e entregar a solução certa, no momento certo.
       </p>
+
+      <p class="section__subtitle">
+        A SAME Engenharia é uma empresa especializada em infraestrutura urbana, com forte atuação nas áreas de
+        pavimentação e saneamento, entregando soluções eficientes, seguras e alinhadas às necessidades de cada projeto.
+        Desde 2015, a empresa constrói sua trajetória com foco em qualidade, inovação e responsabilidade técnica.
+      </p>
+
+      <p class="section__subtitle">
+        A empresa conta com uma equipe altamente qualificada, formada por engenheiros e profissionais experientes,
+        preparados para atuar em todas as etapas da obra — do planejamento à execução. Cada serviço é realizado com
+        atenção aos detalhes, controle de qualidade e compromisso com a durabilidade das soluções entregues.
+      </p>
     </div>
   </div>
 </section>
 
 <section class="section__sanitation">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onSanitationVisibilityChange($event)"
+  <div class="section__container"
+    appScrollAnimation
+    (visibilityChange)="onSanitationVisibilityChange($event)"
     [@slideFromLeft]="sanitationVisible ? 'visible' : 'hidden'">
 
     <div class="section__text">
@@ -57,6 +76,7 @@
       </p>
       <div class="section__cards">
         <div class="section__card" *ngFor="let sanitation of sanitations">
+          <mat-icon class="section__icon">{{ sanitation.icon }}</mat-icon>
           <div class="section__subtitle">{{ sanitation.title }}</div>
         </div>
       </div>
@@ -67,7 +87,9 @@
 </section>
 
 <section class="section__paving">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onPavingVisibilityChange($event)"
+  <div class="section__container"
+    appScrollAnimation
+    (visibilityChange)="onPavingVisibilityChange($event)"
     [@slideFromRight]="pavingVisible ? 'visible' : 'hidden'">
 
     <div class="section__banner"></div>
@@ -84,8 +106,9 @@
       </p>
 
       <div class="section__cards">
-        <div class="section__card" *ngFor="let sanitation of sanitations">
-          <div class="section__subtitle">{{ sanitation.title }}</div>
+        <div class="section__card" *ngFor="let paving of pavings">
+          <mat-icon class="section__icon">{{ paving.icon }}</mat-icon>
+          <div class="section__subtitle">{{ paving.title }}</div>
         </div>
       </div>
     </div>
@@ -93,29 +116,40 @@
 </section>
 
 <section class="section__map">
-  <div class="section__container" appScrollAnimation
-    (visibilityChange)="onMapVisibilityChange($event)" [@slideFromLeft]="mapVisible ? 'visible' : 'hidden'">
+  <div class="section__container"
+    appScrollAnimation
+    (visibilityChange)="onMapVisibilityChange($event)"
+    [@slideFromLeft]="mapVisible ? 'visible' : 'hidden'">
     <div class="section__text">
-      <h2 class="section__title">Atuamos em todo o <span class="section__span">Nordeste!</span></h2>
-      <p class="section__subtitle">Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
-        <strong>entender o que você precisa e entregar a solução certa, no momento certo.</strong>
+      <h2 class="section__title">Atuamos em todo o Nordeste!</h2>
+      <p class="section__subtitle">
+        Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        entender o que você precisa e entregar a solução certa, no momento certo.
       </p>
     </div>
-    <lottie-player src="assets/json/map__banner.json" background="transparent" speed="1" loop
-      autoplay>
+    <lottie-player src="assets/json/map__banner.json" background="transparent" speed="1" loop autoplay>
     </lottie-player>
   </div>
 </section>
 
 <section class="section__localization">
-  <div class="section__container" appScrollAnimation (visibilityChange)="onLocalizationVisibilityChange($event)"
+  <div class="section__container"
+    appScrollAnimation
+    (visibilityChange)="onLocalizationVisibilityChange($event)"
     [@scaleUp]="localizationVisible ? 'visible' : 'hidden'">
     <h2 class="section__title">Onde nos encontrar</h2>
+    <p class="section__subtitle">
+      Estamos prontos para atender você presencialmente ou à distância. Nossa cultura reúne equipe técnica e operacional para oferecer suporte completo, esclarecer dúvidas e iniciar seu projeto com segurança e eficiência.
+    </p>
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1971648975395!2d-46.65844268501896!3d-23.561414984691654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0x0!2sRua%20Arthur%20Lopes%2C%20218!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr"
-      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localização Same Engenharia"
+      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15804.6!2d-34.9152!3d-8.1086!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2sRua%20Arthur%20Lopes%2C%20218%20-%20Imbiribeira%2C%20Recife%20-%20PE!5e0!3m2!1spt-BR!2sbr"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Localização Same Engenharia"
       class="section__iframe">
-    </iframe>
+</iframe>
+
   </div>
 </section>
 
@@ -123,9 +157,11 @@
   <div class="section__container" appScrollAnimation (visibilityChange)="onLeadVisibilityChange($event)"
     [@scaleUp]="leadVisible ? 'visible' : 'hidden'">
     <div class="section__text">
-      <h2 class="section__title">Projetos que falam por si</h2>
-      <p class="section__subtitle">Trabalhamos ao lado de grandes clientes, entregando obras no prazo, dentro das normas
-        e com excelência técnica. Cada projeto reforça a confiança que construímos juntos.</p>
+      <h2 class="section__title">Clientes que falam por si</h2>
+      <p class="section__subtitle">
+        Trabalhamos ao lado de grandes clientes, entregando obras no prazo, dentro das normas
+        e com excelência técnica. Cada projeto reforça a confiança que construímos juntos.
+      </p>
 
       <div class="section__carousel-wrapper">
         <div class="section__carousel">
@@ -142,7 +178,7 @@
 </section>
 
 <section class="section__hiring">
-  <div class="section__container">
+  <div class="section__container" (click)="onClick()">
     <img src="/assets/images/hiring__banner.png" alt="Hiring Banner" class="section__image">
   </div>
 </section>
@@ -184,7 +220,9 @@
         <h2 class="footer__title" id="footer-shop">Carreiras</h2>
         <ul class="footer__list footer__list--text">
           <li class="footer__item">
-            <a href="#" class="footer__link">Acessar InHire</a>
+            <a href="https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia" target="_blank" class="footer__link">
+              Acessar InHire
+            </a>
           </li>
         </ul>
       </nav>
@@ -212,7 +250,7 @@
     </div>
     <div class="footer__bottom">
       <div class="footer__brand">
-        <img src="assets/images/logo-white.png" alt="Same Engenharia" class="footer__logo">
+        <img src="assets/images/logo-orange.png" alt="Same Engenharia" class="footer__logo">
       </div>
       <small class="footer__copyright">
         © 2026 Same Engenharia. Todos os direitos reservados.

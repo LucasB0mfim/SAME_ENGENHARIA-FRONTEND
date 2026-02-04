@@ -41,13 +41,18 @@ $gradient-end: #0077FF;
   width: 100%;
   height: auto;
   padding: $pd-md;
-  background-color: #040714;
-  transition: background-color 0.3s ease;
+  background-color: transparent;
 
   position: fixed;
   left: 0;
   top: 0;
   z-index: 2;
+
+  &.scrolled {
+    background: rgba(4, 7, 20, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
 
   &__container {
     max-width: 1200px;
@@ -127,9 +132,17 @@ $gradient-end: #0077FF;
 
 .section__banner {
   height: 100dvh;
-  background-image: url('/assets/images/pavimentacao__banner.png');
+  background: linear-gradient(90deg,
+      rgba(4, 7, 20, 0.85) 0%,
+      rgba(4, 7, 20, 0.6) 35%,
+      rgba(4, 7, 20, 0.15) 60%,
+      rgba(4, 7, 20, 0) 100%),
+    linear-gradient(to bottom,
+      rgba(4, 7, 20, 0) 0%,
+      #040714 100%), url('/assets/images/pavimentacao__banner.png');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
 
   .section__container {
     max-width: 1200px;
@@ -178,21 +191,19 @@ $gradient-end: #0077FF;
     margin: 0 auto;
 
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    align-items: start;
+    grid-template-columns: 1fr 1fr;
     gap: $gp-lg;
   }
 
   .section__banner {
     width: 100%;
-    height: 70vh;
+    height: 100%;
+    border-radius: 5px;
 
-    background-image: linear-gradient(135deg, rgba(4, 7, 20, 0.85) 20%, rgba(4, 7, 20, 0.6) 55%, rgba(255, 111, 0, 0.25) 100%), url('/assets/images/employees__banner.png');
-    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    // box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 -80px 120px rgba(4, 7, 20, 0.85);
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-repeat: no-repeat;
+    background-image: url('/assets/images/employees__banner.png');
   }
 
   .section__text {
@@ -200,6 +211,7 @@ $gradient-end: #0077FF;
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 1.5rem;
   }
 }
@@ -220,13 +232,13 @@ $gradient-end: #0077FF;
 
   .section__banner {
     width: 100%;
-    height: 70vh;
+    height: 100%;
+    border-radius: 5px;
 
-    background-image: linear-gradient(135deg, rgba(4, 7, 20, 0.85) 20%, rgba(4, 7, 20, 0.6) 55%, rgba(255, 111, 0, 0.25) 100%), url('/assets/images/saneamento__banner.png');
-    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 -80px 120px rgba(4, 7, 20, 0.85);
+    background-repeat: no-repeat;
+    background-image: url('/assets/images/saneamento__baner.png');
   }
 
   .section__text {
@@ -234,39 +246,42 @@ $gradient-end: #0077FF;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: space-between;
     gap: 1.5rem;
   }
 
   .section__cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $gp-md;
   }
 
   .section__card {
     cursor: pointer;
-    width: 100%;
-    height: 80px;
+    padding: $pd-md;
+    border-radius: 4px;
+    border: 1px solid $orange;
+    background-color: rgb(255, 111, 0, 0.2);
+    transition: all 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    gap: $gp-md;
+
+    &:hover {
+      background-color: rgb(255, 111, 0, 0.3);
+    }
+  }
+
+  .section__icon {
+    color: $orange;
+    padding: $pd-md;
+    border-radius: 4px;
+    background-color: rgb(255, 111, 0, 0.5);
 
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border-radius: 5px;
-    background: #E67E22;
-    background: linear-gradient(135deg, rgba(230, 126, 34, 1) 0%, rgba(255, 111, 0, 1) 100%);
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-      background-color: #E67E22;
-      background: linear-gradient(135deg, rgba(255, 111, 0, 1) 0%, rgba(230, 126, 34, 1) 100%);
-    }
-
-    .section__subtitle {
-      font-weight: 400;
-    }
   }
 }
 
@@ -286,13 +301,13 @@ $gradient-end: #0077FF;
 
   .section__banner {
     width: 100%;
-    height: 70vh;
+    height: 100%;
+    border-radius: 5px;
 
-    background-image: linear-gradient(135deg, rgba(4, 7, 20, 0.85) 20%, rgba(4, 7, 20, 0.6) 55%, rgba(255, 111, 0, 0.25) 100%), url('/assets/images/pavimentacao.png');
-    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 -80px 120px rgba(4, 7, 20, 0.85);
+    background-repeat: no-repeat;
+    background-image: url('/assets/images/pavimentacao.png');
   }
 
   .section__text {
@@ -300,39 +315,42 @@ $gradient-end: #0077FF;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: space-between;
     gap: 1.5rem;
   }
 
   .section__cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $gp-md;
   }
 
   .section__card {
     cursor: pointer;
-    width: 100%;
-    height: 80px;
+    padding: $pd-md;
+    border-radius: 4px;
+    border: 1px solid $orange;
+    background-color: rgb(255, 111, 0, 0.2);
+    transition: all 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    gap: $gp-md;
+
+    &:hover {
+      background-color: rgb(255, 111, 0, 0.3);
+    }
+  }
+
+  .section__icon {
+    color: $orange;
+    padding: $pd-md;
+    border-radius: 4px;
+    background-color: rgb(255, 111, 0, 0.5);
 
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border-radius: 5px;
-    background: #E67E22;
-    background: linear-gradient(135deg, rgba(230, 126, 34, 1) 0%, rgba(255, 111, 0, 1) 100%);
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-      background-color: #E67E22;
-      background: linear-gradient(135deg, rgba(255, 111, 0, 1) 0%, rgba(230, 126, 34, 1) 100%);
-    }
-
-    .section__subtitle {
-      font-weight: 400;
-    }
   }
 }
 
@@ -348,7 +366,17 @@ $gradient-end: #0077FF;
     display: grid;
     grid-template-columns: 1fr 2fr;
     align-items: center;
+    justify-content: space-between;
     gap: $gp-lg;
+  }
+
+  .section__text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: $gp-md;
   }
 }
 
@@ -405,13 +433,13 @@ $gradient-end: #0077FF;
   .section__carousel {
     display: flex;
     gap: $gp-md;
-    animation: scroll 25s linear infinite;
+    animation: scroll 10s linear infinite;
     will-change: transform;
   }
 
   .section__card {
-    height: 125px;
-    width: 225px;
+    width: 200px;
+    height: 120px;
     flex-shrink: 0;
   }
 
@@ -437,6 +465,7 @@ $gradient-end: #0077FF;
   .section__image {
     width: 100%;
     height: auto;
+    cursor: pointer;
   }
 }
 

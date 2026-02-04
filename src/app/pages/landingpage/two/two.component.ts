@@ -1,13 +1,17 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollAnimationDirective } from './scroll-animation.directive';
 import { scrollAnimations } from './scroll-animations';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-two',
   imports: [
     CommonModule,
-    ScrollAnimationDirective
+    ScrollAnimationDirective,
+    MatIconModule,
+    RouterModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './two.component.html',
@@ -16,7 +20,6 @@ import { scrollAnimations } from './scroll-animations';
 })
 export class TwoComponent {
 
-  // Estados de visibilidade para cada seção
   heroVisible = false;
   teamVisible = false;
   sanitationVisible = false;
@@ -25,47 +28,46 @@ export class TwoComponent {
   localizationVisible = false;
   leadVisible = false;
   hiringVisible = false;
+  isScrolled = false;
+
+  @HostListener('window:scroll', [])
+
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+  }
 
   leads = [
-    { url: 'assets/logo/lead__aena.png', alt: 'Aena Aeroportos' },
-    { url: 'assets/logo/lead__bimbo.png', alt: 'Bimbo' },
-    { url: 'assets/logo/lead__coca.png', alt: 'Coca Coca Solar' },
-    { url: 'assets/logo/lead__votorantim.png', alt: 'Votorantim' },
-    { url: 'assets/logo/lead__heineken.png', alt: 'Heineken' },
-    { url: 'assets/logo/lead__moura.png', alt: 'Baterias Moura' },
-    { url: 'assets/logo/lead__guerdal.png', alt: 'Guerdal' },
+    { url: '/assets/logo/lead__aena.png', alt: 'Aena Aeroportos' },
+    { url: '/assets/logo/lead__bimbo.png', alt: 'Bimbo' },
+    { url: '/assets/logo/lead__coca.png', alt: 'Coca Coca Solar' },
+    { url: '/assets/logo/lead__votorantim.png', alt: 'Votorantim' },
+    { url: '/assets/logo/lead__heineken.png', alt: 'Heineken' },
+    { url: '/assets/logo/lead__moura.png', alt: 'Baterias Moura' },
+    { url: '/assets/logo/lead__guerdal.png', alt: 'Guerdal' },
+    { url: '/assets/logo/lead__brk.png', alt: 'BRK' },
   ]
 
   sanitations = [
-    { title: 'Pavimentação' },
-    { title: 'Piso de concreto' },
-    { title: 'Asfalto' },
-    { title: 'ETE' },
-    { title: 'ETA' },
-    { title: 'Estação elevatória' },
-    { title: 'Esgoto' },
-    { title: 'Linha de água' },
+    { icon: 'route', title: 'Rede Coletora' },
+    { icon: 'swap_vert', title: 'Linha de Recalque' },
+    { icon: 'timeline', title: 'Adutora' },
+    { icon: 'water', title: 'Estação de Tratamento de Água' },
+    { icon: 'water_damage', title: 'Estação de Tratamento de Esgoto' },
+    { icon: 'vertical_align_top', title: 'Estação Elevatória' },
   ]
 
-  works = [
-    { url: 'assets/test/silo.png', alt: 'Obra 2' },
-    { url: 'assets/test/work.png', alt: 'Obra 2' },
+  pavings = [
+    { icon: 'add_road', title: 'Pavimentação Asfáltica' },
+    { icon: 'grid_on', title: 'Pavimentação Intertravado' },
+    { icon: 'view_quilt', title: 'Pisos de Concreto' },
+    { icon: 'construction', title: 'Terraplanagem' },
+    { icon: 'water_damage', title: 'Drenagem' },
+    { icon: 'traffic', title: 'Sinalização' },
   ]
 
-  processes = [
-    {
-      title: 'Planejamento Técnico',
-      subtitle: 'Estudos preliminares, viabilidade e soluções sob medida para cada cenário.'
-    },
-    {
-      title: 'Execução com Controle',
-      subtitle: 'Acompanhamento em campo, cumprimento de normas e controle rigoroso de qualidade.'
-    },
-    {
-      title: 'Entrega Responsável',
-      subtitle: 'Obras entregues no prazo, com documentação técnica e responsabilidade legal.'
-    }
-  ]
+  onClick(): void {
+    window.location.href = 'https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia';
+  }
 
   /**
    * Métodos para atualizar visibilidade de cada seção
