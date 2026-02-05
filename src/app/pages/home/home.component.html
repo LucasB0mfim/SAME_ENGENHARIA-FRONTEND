@@ -1,302 +1,262 @@
-<!-- Header -->
 <header class="header" [class.scrolled]="isScrolled">
-  <div class="header-content">
-    <a href="#" class="logo">
-      <img [src]="isScrolled ? '/assets/images/logo-orange.png' : '/assets/images/logo-white.png'"
-           alt="Same Engenharia"
-           class="logo-img">
-    </a>
-
-    <nav class="nav-desktop">
-      <a class="nav-link" (click)="scrollToSection('sobre')">Sobre</a>
-      <a class="nav-link" (click)="scrollToSection('servicos')">Serviços</a>
-      <a class="nav-link" (click)="scrollToSection('obras')">Obras</a>
-      <a class="nav-link" (click)="scrollToSection('contato')">Contato</a>
-      <button class="btn-login" routerLink="/login">Log in</button>
+  <div class="header__container">
+    <img src="assets/images/logo-orange.png" alt="logo" class="header__image">
+    <nav class="header__nav">
+      <ul class="header__list">
+        <li class="header__item"><a href="#about" class="header__link">Quem somos</a></li>
+        <li class="header__item"><a href="#sanitation" class="header__link">Nossos serviços</a></li>
+        <li class="header__item"><a href="#localization" class="header__link">Localização</a></li>
+        <li class="header__item"><a href="/login" class="header__link">Sou colaborador</a>
+      </ul>
     </nav>
-
-    <button class="menu-toggle" (click)="toggleMenu()">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
-    </button>
+    <a href="mailto:ronei@sameengenharia.com.br" class="header__button">Orçamento</a>
   </div>
 </header>
 
-<!-- Mobile Menu -->
-<div class="mobile-menu" [class.open]="isMenuOpen">
-  <div class="mobile-menu-header">
-    <img src="/assets/images/logo-white.png" alt="Same Engenharia" class="logo-mobile">
-    <button class="mobile-menu-close" (click)="toggleMenu()">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
+<section class="section__banner">
+  <div class="section__container">
+    <div class="section__text">
+      <h2 class="section__title section__title--hero">
+        Pavimentando caminhos que constroem o seu futuro.
+      </h2>
+      <p class="section__subtitle">
+        Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça
+        seu orçamento e veja como podemos ir além.
+      </p>
+      <a href="mailto:ronei@sameengenharia.com.br" class="section__button">Solicitar Orçamento</a>
+    </div>
   </div>
-  <nav class="mobile-nav">
-    <a class="nav-link" (click)="scrollToSection('sobre')">Sobre</a>
-    <a class="nav-link" (click)="scrollToSection('servicos')">Serviços</a>
-    <a class="nav-link" (click)="scrollToSection('obras')">Obras</a>
-    <a class="nav-link" (click)="scrollToSection('contato')">Contato</a>
-    <button class="btn-login" routerLink="/login">Log in</button>
-  </nav>
-</div>
+</section>
 
-<!-- Hero Section -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1 class="hero-title" [@fadeInUp]>
-      Construindo o Futuro com <span class="hero-title-highlight">Excelência</span>
-    </h1>
-    <p class="hero-subtitle" [@fadeInUp]>
-      Projetos industriais, públicos e corporativos executados com precisão técnica e compromisso com resultados
+<section class="section__about" id="about">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onTeamVisibilityChange($event)"
+    [@slideFromRight]="teamVisible ? 'visible' : 'hidden'">
+
+    <div class="section__banner"></div>
+
+    <div class="section__text">
+      <h2 class="section__title">
+        Você no centro de tudo que fazemos.
+      </h2>
+
+      <p class="section__subtitle">
+        Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        entender o que você precisa e entregar a solução certa, no momento certo.
+      </p>
+
+      <p class="section__subtitle">
+        A SAME Engenharia é uma empresa especializada em infraestrutura urbana, com forte atuação nas áreas de
+        pavimentação e saneamento, entregando soluções eficientes, seguras e alinhadas às necessidades de cada projeto.
+        Desde 2015, a empresa constrói sua trajetória com foco em qualidade, inovação e responsabilidade técnica.
+      </p>
+
+      <p class="section__subtitle">
+        A empresa conta com uma equipe altamente qualificada, formada por engenheiros e profissionais experientes,
+        preparados para atuar em todas as etapas da obra — do planejamento à execução. Cada serviço é realizado com
+        atenção aos detalhes, controle de qualidade e compromisso com a durabilidade das soluções entregues.
+      </p>
+
+      <div class="section__cards">
+        <div class="section__card" *ngFor="let list of lists">
+          <mat-icon class="section__icon">{{ list.icon }}</mat-icon>
+          <div class="section__subtitle">{{ list.title }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__sanitation" id="sanitation">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onSanitationVisibilityChange($event)"
+    [@slideFromLeft]="sanitationVisible ? 'visible' : 'hidden'">
+
+    <div class="section__text">
+      <h2 class="section__title">Saneamento que funciona de verdade!</h2>
+      <p class="section__subtitle">
+        Infraestrutura essencial para o seu projeto. Desenvolvemos sistemas de saneamento
+        completos — água, esgoto, drenagem — com tecnologia, segurança e compromisso com o meio ambiente. Soluções que
+        impactam vidas e duram gerações.
+      </p>
+      <div class="section__cards">
+        <div class="section__card" *ngFor="let sanitation of sanitations">
+          <mat-icon class="section__icon">{{ sanitation.icon }}</mat-icon>
+          <div class="section__subtitle">{{ sanitation.title }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section__banner"></div>
+  </div>
+</section>
+
+<section class="section__paving">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onPavingVisibilityChange($event)"
+    [@slideFromRight]="pavingVisible ? 'visible' : 'hidden'">
+
+    <div class="section__banner"></div>
+
+    <div class="section__text">
+      <h2 class="section__title">
+        Pavimentação que resiste ao tempo...
+      </h2>
+
+      <p class="section__subtitle">
+        Da via urbana ao acesso industrial, criamos pavimentos robustos e duráveis.
+        Asfaltamento, terraplanagem, drenagem e sinalização: tudo planejado para suportar o tráfego intenso e as
+        condições mais exigentes. Seu caminho em boas mãos.
+      </p>
+
+      <div class="section__cards">
+        <div class="section__card" *ngFor="let paving of pavings">
+          <mat-icon class="section__icon">{{ paving.icon }}</mat-icon>
+          <div class="section__subtitle">{{ paving.title }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__map">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onMapVisibilityChange($event)"
+    [@slideFromLeft]="mapVisible ? 'visible' : 'hidden'">
+    <div class="section__text">
+      <h2 class="section__title">Atuamos em todo o Nordeste!</h2>
+      <p class="section__subtitle">
+        Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
+        entender o que você precisa e entregar a solução certa, no momento certo.
+      </p>
+    </div>
+    <lottie-player src="assets/json/map__banner.json" background="transparent" speed="1" loop autoplay>
+    </lottie-player>
+  </div>
+</section>
+
+<section class="section__localization" id="localization">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onLocalizationVisibilityChange($event)"
+    [@scaleUp]="localizationVisible ? 'visible' : 'hidden'">
+    <h2 class="section__title">Onde nos encontrar</h2>
+    <p class="section__subtitle">
+      Estamos prontos para atender você presencialmente ou à distância. Nossa cultura reúne equipe técnica e operacional
+      para oferecer suporte completo, esclarecer dúvidas e iniciar seu projeto com segurança e eficiência.
     </p>
-    <button class="hero-cta" (click)="scrollToSection('contato')" [@fadeInUp]>
-      Solicitar Orçamento
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-      </svg>
-    </button>
-  </div>
-  <div class="scroll-indicator">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6F00" stroke-width="2">
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15804.6!2d-34.9152!3d-8.1086!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2sRua%20Arthur%20Lopes%2C%20218%20-%20Imbiribeira%2C%20Recife%20-%20PE!5e0!3m2!1spt-BR!2sbr"
+      allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localização Same Engenharia"
+      class="section__iframe">
+    </iframe>
+
   </div>
 </section>
 
-<!-- About Section -->
-<section id="sobre" class="section section-about">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Por que escolher a Same Engenharia?</h2>
-      <p class="section-subtitle">
-        Mais de duas décadas transformando projetos em realidade
+<section class="section__lead" id="lead">
+  <div class="section__container" appScrollAnimation (visibilityChange)="onLeadVisibilityChange($event)"
+    [@scaleUp]="leadVisible ? 'visible' : 'hidden'">
+    <div class="section__text">
+      <h2 class="section__title">Clientes que falam por si</h2>
+      <p class="section__subtitle">
+        Trabalhamos ao lado de grandes clientes, entregando obras no prazo, dentro das normas
+        e com excelência técnica. Cada projeto reforça a confiança que construímos juntos.
       </p>
-    </div>
 
-    <!-- Interactive Stats Counter -->
-    <div class="about-stats-interactive">
-      <div class="stat-card"
-           *ngFor="let stat of stats; let i = index"
-           [@slideInUp]
-           (@slideInUp.done)="onStatAnimationDone(i)"
-           [class.animated]="stat.animated">
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24" [innerHTML]="stat.icon"></svg>
-        </div>
-        <div class="stat-number" [@countUp]="stat.animated ? stat.value : 0">
-          {{ stat.currentValue }}{{ stat.suffix }}
-        </div>
-        <div class="stat-label">{{ stat.label }}</div>
-        <div class="stat-description">{{ stat.description }}</div>
-      </div>
-    </div>
-
-    <!-- Interactive Timeline -->
-    <div class="about-timeline">
-      <h3 class="timeline-title">Nossa Jornada de Excelência</h3>
-      <div class="timeline">
-        <div class="timeline-item"
-             *ngFor="let item of timeline; let i = index"
-             [@slideInLeft]
-             (mouseenter)="onTimelineHover(i)"
-             (mouseleave)="onTimelineLeave(i)"
-             [class.active]="item.isHovered">
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
+      <div class="section__carousel-wrapper">
+        <div class="section__carousel">
+          <div class="section__card" *ngFor="let lead of leads">
+            <img [src]="lead.url" [alt]="lead.alt" class="section__image">
           </div>
-          <div class="timeline-content">
-            <div class="timeline-year">{{ item.year }}</div>
-            <h4 class="timeline-heading">{{ item.title }}</h4>
-            <p class="timeline-text">{{ item.description }}</p>
+          <div class="section__card" *ngFor="let lead of leads">
+            <img [src]="lead.url" [alt]="lead.alt" class="section__image">
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Interactive Values Grid -->
-    <div class="about-values">
-      <h3 class="values-title">Nossos Valores</h3>
-      <div class="values-grid">
-        <div class="value-card"
-             *ngFor="let value of values"
-             [@scaleIn]
-             (mouseenter)="value.isHovered = true"
-             (mouseleave)="value.isHovered = false"
-             [class.hovered]="value.isHovered">
-          <div class="value-icon" [class.rotate]="value.isHovered">
-            <svg viewBox="0 0 24 24" [innerHTML]="value.icon"></svg>
-          </div>
-          <h4 class="value-title">{{ value.title }}</h4>
-          <p class="value-description">{{ value.description }}</p>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- Services Section -->
-<section id="servicos" class="section section-services">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Tipos de Obras</h2>
-      <p class="section-subtitle">
-        Soluções completas para diferentes segmentos do mercado
-      </p>
-    </div>
-    <div class="services-grid">
-      <!-- Obras Industriais -->
-      <div class="service-card" [@slideInUp]>
-        <div class="service-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path>
-          </svg>
-        </div>
-        <h3 class="service-title">Obras Industriais</h3>
-        <p class="service-description">
-          Projetos robustos para indústrias que exigem infraestrutura especializada e alta performance operacional.
-        </p>
-        <ul class="service-features">
-          <li>Galpões industriais</li>
-          <li>Plantas de produção</li>
-          <li>Estruturas metálicas</li>
-          <li>Instalações especiais</li>
-        </ul>
-        <button class="service-cta">Saiba Mais</button>
-      </div>
-
-      <!-- Obras Públicas -->
-      <div class="service-card" [@slideInUp]>
-        <div class="service-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 21h18"></path>
-            <path d="M5 21V7l8-4v18"></path>
-            <path d="M19 21V11l-6-4"></path>
-            <path d="M9 9v.01"></path>
-            <path d="M9 12v.01"></path>
-            <path d="M9 15v.01"></path>
-            <path d="M9 18v.01"></path>
-          </svg>
-        </div>
-        <h3 class="service-title">Obras Públicas</h3>
-        <p class="service-description">
-          Execução de projetos para prefeituras e órgãos governamentais com total conformidade legal e transparência.
-        </p>
-        <ul class="service-features">
-          <li>Escolas e creches</li>
-          <li>Postos de saúde</li>
-          <li>Infraestrutura urbana</li>
-          <li>Prédios públicos</li>
-        </ul>
-        <button class="service-cta">Saiba Mais</button>
-      </div>
-
-      <!-- Obras Corporativas -->
-      <div class="service-card" [@slideInUp]>
-        <div class="service-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-            <path d="M9 22v-4h6v4"></path>
-            <path d="M8 6h.01"></path>
-            <path d="M16 6h.01"></path>
-            <path d="M12 6h.01"></path>
-            <path d="M12 10h.01"></path>
-            <path d="M12 14h.01"></path>
-            <path d="M16 10h.01"></path>
-            <path d="M16 14h.01"></path>
-            <path d="M8 10h.01"></path>
-            <path d="M8 14h.01"></path>
-          </svg>
-        </div>
-        <h3 class="service-title">Obras Corporativas</h3>
-        <p class="service-description">
-          Soluções sofisticadas para empresas que buscam ambientes modernos, funcionais e sustentáveis.
-        </p>
-        <ul class="service-features">
-          <li>Edifícios comerciais</li>
-          <li>Centros corporativos</li>
-          <li>Reformas e retrofit</li>
-          <li>Interiores corporativos</li>
-        </ul>
-        <button class="service-cta">Saiba Mais</button>
-      </div>
-    </div>
+<section class="section__hiring">
+  <div class="section__container" (click)="onClick()">
+    <img src="/assets/images/hiring__banner.png" alt="Hiring Banner" class="section__image">
   </div>
 </section>
 
-<!-- Portfolio Section -->
-<section id="obras" class="section section-portfolio">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Obras Realizadas</h2>
-      <p class="section-subtitle">
-        Portfólio de projetos entregues com excelência
-      </p>
-    </div>
-    <div class="portfolio-grid">
-      <div class="portfolio-item"
-           *ngFor="let project of projects"
-           [@fadeIn]>
-        <div class="portfolio-overlay">
-          <span class="portfolio-tag">{{ project.category }}</span>
-          <h3 class="portfolio-title">{{ project.title }}</h3>
-          <p class="portfolio-description">{{ project.description }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<footer class="footer">
+  <div class="footer__container">
+    <div class="footer__grid">
+      <nav class="footer__column" aria-labelledby="footer-company">
+        <h2 class="footer__title" id="footer-company">Empresa</h2>
+        <ul class="footer__list footer__list--text">
+          <li class="footer__item">
+            <a href="#lead" class="footer__link">Parceiros</a>
+          </li>
+          <li class="footer__item">
+            <a href="#about" class="footer__link">Sobre nós</a>
+          </li>
+          <li class="footer__item">
+            <a href="#sanitation" class="footer__link">Nossos serviços</a>
+          </li>
+          <li class="footer__item">
+            <a href="#localization" class="footer__link">Nossa localização</a>
+          </li>
+        </ul>
+      </nav>
 
-<!-- Footer -->
-<footer id="contato" class="footer">
-  <div class="footer-content">
-    <div class="footer-section">
-      <img src="/assets/images/logo-white.png" alt="Same Engenharia" class="footer-logo">
-      <p>Construindo o futuro com excelência técnica e compromisso com resultados desde 2003.</p>
-    </div>
+      <nav class="footer__column" aria-labelledby="footer-help">
+        <h2 class="footer__title" id="footer-help">Precisa de ajuda?</h2>
+        <ul class="footer__list footer__list--text">
+          <li class="footer__item">
+            <a href="https://w.app/5ddh72" class="footer__link">ouvidoria</a>
+          </li>
+          <li class="footer__item">
+            <a href="mailto:ronei@sameengenharia.com.br" class="footer__link">comercial</a>
+          </li>
+          <li class="footer__item">
+            <a href="mailto:financeiro@sameengenharia.com.br" class="footer__link">financeiro</a>
+          </li>
+          <li class="footer__item">
+            <a [href]="compliance" class="footer__link">Canal de denúncia</a>
+          </li>
+        </ul>
+      </nav>
 
-    <div class="footer-section">
-      <h4>Links Úteis</h4>
-      <ul class="footer-links">
-        <li><a (click)="scrollToSection('sobre')">Sobre Nós</a></li>
-        <li><a (click)="scrollToSection('servicos')">Serviços</a></li>
-        <li><a (click)="scrollToSection('obras')">Obras</a></li>
-        <li><a href="#">Carreira</a></li>
-      </ul>
-    </div>
+      <nav class="footer__column" aria-labelledby="footer-shop">
+        <h2 class="footer__title" id="footer-shop">Carreiras</h2>
+        <ul class="footer__list footer__list--text">
+          <li class="footer__item">
+            <a [href]="urlInHire" target="_blank" class="footer__link">
+              Acessar InHire
+            </a>
+          </li>
+        </ul>
+      </nav>
 
-    <div class="footer-section">
-      <h4>Contato</h4>
-      <div class="contact-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-        </svg>
-        <span>(11) 3456-7890</span>
-      </div>
-      <div class="contact-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-        <span>orcamento.sameengenharia.gmail.com</span>
-      </div>
-      <div class="contact-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        <span>São Paulo, SP</span>
-      </div>
+      <nav class="footer__column" aria-labelledby="footer-social">
+        <h2 class="footer__title" id="footer-social">Nos acompanhe</h2>
+        <ul class="footer__list footer__list--social">
+          <li class="footer__item">
+            <a href="https://www.linkedin.com/company/same-engenharia/posts/?feedView=all" aria-label="LinkedIn"
+              class="footer__link">
+              <span class="fab fa-linkedin-in" aria-hidden="true"></span>
+            </a>
+          </li>
+          <li class="footer__item">
+            <a href="#" aria-label="Instagram" class="footer__link">
+              <span class="fab fa-instagram" aria-hidden="true"></span>
+            </a>
+          </li>
+          <li class="footer__item">
+            <a href="https://w.app/5ddh72" aria-label="WhatsApp" class="footer__link">
+              <span class="fab fa-whatsapp" aria-hidden="true"></span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
-  </div>
-
-  <div class="footer-bottom">
-    <p>&copy; 2026 Same Engenharia. Todos os direitos reservados.</p>
+    <div class="footer__bottom">
+      <div class="footer__brand">
+        <img src="assets/images/logo-orange.png" alt="Same Engenharia" class="footer__logo">
+      </div>
+      <small class="footer__copyright">
+        © 2026 Same Engenharia. Todos os direitos reservados.
+      </small>
+    </div>
   </div>
 </footer>

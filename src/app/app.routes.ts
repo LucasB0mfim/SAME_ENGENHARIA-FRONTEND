@@ -28,7 +28,6 @@ import { humanResourcesGuard } from './core/guard/human-resources.guard';
 import { TransportComponent } from './components/workspace/human-resources/transport/transport.component';
 import { DisciplinaryMeasureComponent } from './components/workspace/human-resources/disciplinary-measure/disciplinary-measure.component';
 import { AdmissionFormComponent } from './components/forms/admission/admission.component';
-import { TwoComponent } from './pages/landingpage/two/two.component';
 
 export const routes: Routes = [
   {
@@ -38,10 +37,6 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent
-  },
-  {
-    path: 'landing-page-two',
-    component: TwoComponent
   },
   {
     path: 'login',
