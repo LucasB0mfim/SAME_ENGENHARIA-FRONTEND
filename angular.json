@@ -37,7 +37,9 @@
               "node_modules/material-icons/iconfont/material-icons.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/app/pages/home/vanilla-tilt.js"
+            ]
           },
           "configurations": {
             "production": {

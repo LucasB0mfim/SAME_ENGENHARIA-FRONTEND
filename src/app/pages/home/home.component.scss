@@ -120,6 +120,7 @@ $gradient-end: #0077FF;
   height: 100%;
   border-radius: 5px;
   background: url($image-url) center / cover no-repeat;
+  cursor: pointer;
 }
 
 @mixin section-grid-layout($columns) {
@@ -395,7 +396,6 @@ html {
 
 .section__hiring {
   background-color: #040714;
-  padding: $section-spacing-md 0;
 
   .section__container {
     @include container;
@@ -411,9 +411,8 @@ html {
 }
 
 .footer {
+  padding-top: $section-spacing-md;
   background-color: $dark-black;
-  padding-top: $section-spacing-xl;
-  padding-bottom: $section-spacing-md;
 
   &__container {
     @include container;

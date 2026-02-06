@@ -1,9 +1,11 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollAnimationDirective } from '../home/scroll-animation.directive';
 import { scrollAnimations } from '../home/scroll-animations';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+
+declare const VanillaTilt: any;
 
 @Component({
   selector: 'app-home',
@@ -19,7 +21,7 @@ import { RouterModule } from '@angular/router';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   animations: scrollAnimations
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   heroVisible = false;
   teamVisible = false;
   sanitationVisible = false;
@@ -44,6 +46,15 @@ export class HomeComponent {
     window.location.href = this.urlInHire;
   }
 
+  ngAfterViewInit(): void {
+    VanillaTilt.init(
+      document.querySelectorAll('[data-tilt]'),
+      {
+        glare: true,
+        'max-glare': 0.3
+      }
+    );
+  }
 
   lists = [
     { icon: 'verified_user', title: 'Conformidade total com as Normas Regulamentadoras (NRs)' },
