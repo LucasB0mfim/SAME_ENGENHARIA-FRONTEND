@@ -32,7 +32,7 @@ export class HomeComponent implements AfterViewInit {
   hiringVisible = false;
   isScrolled = false;
 
-  urlInHire: string = 'https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia';
+  urlInHire: string = 'https://same-engenharia.inhire.app/vagas';
   compliance: string = 'https://docs.google.com/forms/u/0/d/1h_UFcDfnbMmu710rZQ4pqF8_B-RnQUFs_7FsP_AREPc/viewform?edit_requested=true';
   currentYear: string = String(new Date().getFullYear());
 
@@ -70,7 +70,7 @@ export class HomeComponent implements AfterViewInit {
     { icon: 'swap_vert', title: 'Linha de Recalque' },
     { icon: 'timeline', title: 'Adutora' },
     { icon: 'water', title: 'Estação de Tratamento de Água' },
-    { icon: 'water_damage', title: 'Estação de Tratamento de Esgoto' },
+    { icon: 'water_drop', title: 'Estação de Tratamento de Esgoto' },
     { icon: 'vertical_align_top', title: 'Estação Elevatória' },
   ]
 
@@ -79,8 +79,8 @@ export class HomeComponent implements AfterViewInit {
     { icon: 'grid_on', title: 'Pavimentação Intertravado' },
     { icon: 'view_quilt', title: 'Pisos de Concreto' },
     { icon: 'construction', title: 'Terraplanagem' },
-    { icon: 'water_damage', title: 'Drenagem' },
-    { icon: 'traffic', title: 'Sinalização' },
+    { icon: 'water_drop', title: 'Drenagem' },
+    { icon: 'directions', title: 'Sinalização' },
   ]
 
   leads = [
