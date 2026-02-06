@@ -32,6 +32,7 @@ export class HomeComponent {
 
   urlInHire: string = 'https://same-engenharia.inhire.app/vagas/c88453e5-110d-435d-ba33-e4a911a16fa4/banco-de-talentos-same-engenharia';
   compliance: string = 'https://docs.google.com/forms/u/0/d/1h_UFcDfnbMmu710rZQ4pqF8_B-RnQUFs_7FsP_AREPc/viewform?edit_requested=true';
+  currentYear: string = String(new Date().getFullYear());
 
   @HostListener('window:scroll', [])
 
@@ -42,6 +43,7 @@ export class HomeComponent {
   onClick(): void {
     window.location.href = this.urlInHire;
   }
+
 
   lists = [
     { icon: 'verified_user', title: 'Conformidade total com as Normas Regulamentadoras (NRs)' },

@@ -17,7 +17,7 @@
   <div class="section__container">
     <div class="section__text">
       <h2 class="section__title section__title--hero">
-        Pavimentando caminhos que constroem o seu futuro.
+        Pavimentando caminhos que constroem o seu futuro
       </h2>
       <p class="section__subtitle">
         Do projeto à execução, encontramos a solução ideal para sua obra ou indústria. Peça
@@ -36,13 +36,8 @@
 
     <div class="section__text">
       <h2 class="section__title">
-        Você no centro de tudo que fazemos.
+        Referência em infraestrutura urbana
       </h2>
-
-      <p class="section__subtitle">
-        Trabalhamos integrados — do escritório ao canteiro de obras — com uma missão:
-        entender o que você precisa e entregar a solução certa, no momento certo.
-      </p>
 
       <p class="section__subtitle">
         A SAME Engenharia é uma empresa especializada em infraestrutura urbana, com forte atuação nas áreas de
@@ -71,12 +66,21 @@
     [@slideFromLeft]="sanitationVisible ? 'visible' : 'hidden'">
 
     <div class="section__text">
-      <h2 class="section__title">Saneamento que funciona de verdade!</h2>
+      <h2 class="section__title">
+        Saneamento pensado para atender pessoas e cidades
+      </h2>
+
       <p class="section__subtitle">
-        Infraestrutura essencial para o seu projeto. Desenvolvemos sistemas de saneamento
-        completos — água, esgoto, drenagem — com tecnologia, segurança e compromisso com o meio ambiente. Soluções que
-        impactam vidas e duram gerações.
+        Saneamento não pode falhar. Por isso, entregamos soluções completas em água, esgoto e drenagem, desenvolvidas
+        para funcionar de verdade desde o primeiro dia.
       </p>
+
+      <p class="section__subtitle">
+        Unimos engenharia especializada, tecnologia confiável e compromisso ambiental para criar sistemas eficientes,
+        duráveis e alinhados às necessidades de cada projeto — infraestrutura que gera impacto positivo hoje e continua
+        entregando resultados no futuro.
+      </p>
+
       <div class="section__cards">
         <div class="section__card" *ngFor="let sanitation of sanitations">
           <mat-icon class="section__icon">{{ sanitation.icon }}</mat-icon>
@@ -97,13 +101,17 @@
 
     <div class="section__text">
       <h2 class="section__title">
-        Pavimentação que resiste ao tempo...
+        Pavimentação para durar nas condições mais severas
       </h2>
 
       <p class="section__subtitle">
-        Da via urbana ao acesso industrial, criamos pavimentos robustos e duráveis.
-        Asfaltamento, terraplanagem, drenagem e sinalização: tudo planejado para suportar o tráfego intenso e as
-        condições mais exigentes. Seu caminho em boas mãos.
+        Da via urbana ao acesso industrial, entregamos soluções completas em pavimentação projetadas para suportar
+        tráfego intenso, variações climáticas e uso contínuo.
+      </p>
+
+      <p class="section__subtitle">
+        Trabalhamos com asfaltamento, intertravado, pisos de concreto, terraplanagem, drenagem e sinalização, sempre com
+        foco em resistência, segurança e longa vida útil. Infraestrutura confiável para quem não pode parar.
       </p>
 
       <div class="section__cards">
@@ -203,14 +211,23 @@
         <h2 class="footer__title" id="footer-help">Precisa de ajuda?</h2>
         <ul class="footer__list footer__list--text">
           <li class="footer__item">
-            <a href="https://w.app/5ddh72" class="footer__link">ouvidoria</a>
+            <a href="mailto:anthony.gabriel@sameengenharia.com.br" class="footer__link">Compras</a>
           </li>
           <li class="footer__item">
-            <a href="mailto:ronei@sameengenharia.com.br" class="footer__link">comercial</a>
+            <a href="https://w.app/5ddh72" class="footer__link">Ouvidoria</a>
           </li>
           <li class="footer__item">
-            <a href="mailto:financeiro@sameengenharia.com.br" class="footer__link">financeiro</a>
+            <a href="mailto:financeiro@sameengenharia.com.br" class="footer__link">Financeiro</a>
           </li>
+          <li class="footer__item">
+            <a href="mailto:ronei@sameengenharia.com.br" class="footer__link">Comercial</a>
+          </li>
+        </ul>
+      </nav>
+
+      <nav class="footer__column" aria-labelledby="footer-help">
+        <h2 class="footer__title" id="footer-help">Complice</h2>
+        <ul class="footer__list footer__list--text">
           <li class="footer__item">
             <a [href]="compliance" class="footer__link">Canal de denúncia</a>
           </li>
@@ -238,13 +255,8 @@
             </a>
           </li>
           <li class="footer__item">
-            <a href="#" aria-label="Instagram" class="footer__link">
+            <a href="https://www.instagram.com/sameengenharia/" aria-label="Instagram" class="footer__link">
               <span class="fab fa-instagram" aria-hidden="true"></span>
-            </a>
-          </li>
-          <li class="footer__item">
-            <a href="https://w.app/5ddh72" aria-label="WhatsApp" class="footer__link">
-              <span class="fab fa-whatsapp" aria-hidden="true"></span>
             </a>
           </li>
         </ul>
@@ -255,7 +267,7 @@
         <img src="assets/images/logo-orange.png" alt="Same Engenharia" class="footer__logo">
       </div>
       <small class="footer__copyright">
-        © 2026 Same Engenharia. Todos os direitos reservados.
+        © {{ currentYear }} Same Engenharia. Todos os direitos reservados.
       </small>
     </div>
   </div>
