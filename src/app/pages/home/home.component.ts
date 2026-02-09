@@ -31,19 +31,35 @@ export class HomeComponent implements AfterViewInit {
   leadVisible = false;
   hiringVisible = false;
   isScrolled = false;
+  menuOpen = false;
 
   urlInHire: string = 'https://same-engenharia.inhire.app/vagas';
   compliance: string = 'https://docs.google.com/forms/u/0/d/1h_UFcDfnbMmu710rZQ4pqF8_B-RnQUFs_7FsP_AREPc/viewform?edit_requested=true';
   currentYear: string = String(new Date().getFullYear());
 
   @HostListener('window:scroll', [])
-
   onWindowScroll() {
     this.isScrolled = window.scrollY > 50;
   }
 
   onClick(): void {
     window.location.href = this.urlInHire;
+  }
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+
+    // Previne scroll quando o menu está aberto
+    if (this.menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
+    document.body.style.overflow = '';
   }
 
   ngAfterViewInit(): void {
@@ -78,8 +94,8 @@ export class HomeComponent implements AfterViewInit {
     { icon: 'add_road', title: 'Pavimentação Asfáltica' },
     { icon: 'grid_on', title: 'Pavimentação Intertravado' },
     { icon: 'view_quilt', title: 'Pisos de Concreto' },
-    { icon: 'construction', title: 'Terraplanagem' },
-    { icon: 'water_drop', title: 'Drenagem' },
+    { icon: 'front_loader', title: 'Terraplanagem' },
+    { icon: 'oil_barrel', title: 'Drenagem' },
     { icon: 'directions', title: 'Sinalização' },
   ]
 

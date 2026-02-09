@@ -2,7 +2,7 @@ import { trigger, state, style, transition, animate, AnimationTriggerMetadata } 
 
 /**
  * Animações de scroll para landing page
- * Cada animação pode ser facilmente trocada modificando o parâmetro no HTML
+ * Valores reduzidos para evitar overflow horizontal em mobile
  */
 
 export const fadeIn: AnimationTriggerMetadata = trigger('fadeIn', [
@@ -23,7 +23,7 @@ export const fadeIn: AnimationTriggerMetadata = trigger('fadeIn', [
 export const slideFromLeft: AnimationTriggerMetadata = trigger('slideFromLeft', [
   state('hidden', style({
     opacity: 0,
-    transform: 'translateX(-100px)'
+    transform: 'translateX(-30px)' // Reduzido de -100px para -30px
   })),
   state('visible', style({
     opacity: 1,
@@ -40,7 +40,7 @@ export const slideFromLeft: AnimationTriggerMetadata = trigger('slideFromLeft', 
 export const slideFromRight: AnimationTriggerMetadata = trigger('slideFromRight', [
   state('hidden', style({
     opacity: 0,
-    transform: 'translateX(100px)'
+    transform: 'translateX(30px)' // Reduzido de 100px para 30px
   })),
   state('visible', style({
     opacity: 1,
@@ -57,7 +57,7 @@ export const slideFromRight: AnimationTriggerMetadata = trigger('slideFromRight'
 export const slideFromTop: AnimationTriggerMetadata = trigger('slideFromTop', [
   state('hidden', style({
     opacity: 0,
-    transform: 'translateY(-80px)'
+    transform: 'translateY(-40px)' // Reduzido de -80px para -40px
   })),
   state('visible', style({
     opacity: 1,
@@ -74,7 +74,7 @@ export const slideFromTop: AnimationTriggerMetadata = trigger('slideFromTop', [
 export const slideFromBottom: AnimationTriggerMetadata = trigger('slideFromBottom', [
   state('hidden', style({
     opacity: 0,
-    transform: 'translateY(80px)'
+    transform: 'translateY(40px)' // Reduzido de 80px para 40px
   })),
   state('visible', style({
     opacity: 1,
@@ -91,7 +91,7 @@ export const slideFromBottom: AnimationTriggerMetadata = trigger('slideFromBotto
 export const scaleUp: AnimationTriggerMetadata = trigger('scaleUp', [
   state('hidden', style({
     opacity: 0,
-    transform: 'scale(0.85)'
+    transform: 'scale(0.9)' // Reduzido de 0.85 para 0.9
   })),
   state('visible', style({
     opacity: 1,
@@ -109,7 +109,7 @@ export const scaleUp: AnimationTriggerMetadata = trigger('scaleUp', [
 export const fadeSlideUp: AnimationTriggerMetadata = trigger('fadeSlideUp', [
   state('hidden', style({
     opacity: 0,
-    transform: 'translateY(60px)'
+    transform: 'translateY(30px)' // Reduzido de 60px para 30px
   })),
   state('visible', style({
     opacity: 1,
