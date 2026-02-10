@@ -34,4 +34,9 @@ export class EmployeeService {
     const headers = this._createHeaders();
     return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/functions', { headers });
   };
+
+  dashboard(): Observable<any> {
+    const headers = this._createHeaders();
+    return this._httpClient.get<any>('https://sameengenharia.com.br/api/employee/dashboard', { headers });
+  };
 }

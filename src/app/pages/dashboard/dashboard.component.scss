@@ -1,8 +1,10 @@
 .dashboard {
   width: 100%;
   height: 100vh;
+
   display: flex;
   justify-content: space-between;
+
   background: var(--primary-color);
 
   app-sidebar {
@@ -11,12 +13,13 @@
 
   .workspace {
     width: 96%;
-    padding: 0 4rem;
-    background: var(--primary-color);
+    height: 100%;
+    padding: 1rem;
 
-    &__content {
-      width: 100%;
-      height: 80vh;
-    }
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+
+    background: var(--primary-color);
   }
 }

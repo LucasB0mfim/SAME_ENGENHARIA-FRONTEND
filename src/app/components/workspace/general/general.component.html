@@ -1,110 +1,123 @@
 <div class="container">
-  <div class="left__section">
-    <div class="birthday-card">
-      <div class="birthday-card__header">
-        <mat-icon>celebration</mat-icon>
-        <span class="birthday-card__title">Aniversariantes</span>
-      </div>
-      <div class="birthday-card__list">
-        <div class="birthday-card__item" *ngFor="let birthday of birthdays">
-          <img src="{{ birthday.avatar || avatar }}" class="birthday-card__avatar" />
-          <div class="birthday-card__info">
-            <span class="birthday-card__name">{{ birthday.username || 'N/A' }}</span>
-            <span class="birthday-card__date">{{ birthday.birthday | date:'dd/MM' }}</span>
-          </div>
-        </div>
-        <div class="birthday__loading" *ngIf="loadingbirthdays">
-          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  <main class="dashboard__main">
+    <section class="dashboard__column">
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Colaboradores Ativos</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores_ativos ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>group</mat-icon>
+          <span>Increased from last month</span>
         </div>
       </div>
-    </div>
 
-    <div class="access-card">
-      <div class="access-card__header">
-        <mat-icon>bolt</mat-icon>
-        <span class="access-card__title">Acesso rápido</span>
-      </div>
-      <div class="access-card__list">
-        <div class="access-card__item" routerLink="/dashboard/experience">
-          <mat-icon>date_range</mat-icon>
-          <div>Experiência</div>
-        </div>
-        <div class="access-card__item" routerLink="/dashboard/tracking">
-          <mat-icon>edit_document</mat-icon>
-          <div>Ratrear pedido</div>
-        </div>
-        <div class="access-card__item" routerLink="/dashboard/human-resources/upload-timesheet">
-          <mat-icon>download</mat-icon>
-          <div>Importar ponto</div>
-        </div>
-        <div class="access-card__item" routerLink="/dashboard/human-resources/time-sheet">
-          <mat-icon>work_history</mat-icon>
-          <div>Monitorar ponto</div>
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Colaboradores de Férias</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores_ferias ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>beach_access</mat-icon>
+          <span>Increased from last month</span>
         </div>
       </div>
-    </div>
 
-    <div class="access-card">
-      <div class="access-card__header">
-        <mat-icon>campaign</mat-icon>
-        <span class="access-card__title">Fala aí!</span>
-      </div>
-      <div class="access-card__list">
-        <a [href]="falaAi" target="_blank" class="access-card__item">
-          <mat-icon class="access-card__icon">chat</mat-icon>
-          <div>Enviar feedback</div>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="main__section">
-    <div class="welcome" [ngStyle]="{ 'background-image': 'url(' + ilustration + ')' }">
-      <span class="welcome__title">{{ getHours() }}, {{ username }}!</span>
-      <span class="welcome__subtitle">Espero que você tenha um ótimo dia.</span>
-    </div>
-
-    <form [formGroup]="commentForm" (ngSubmit)="sendComment()" class="create-comment">
-      <textarea class="create-comment__textarea" placeholder="No que você está pensando?"
-        formControlName="comment"></textarea>
-      <button class="create-comment__button" type="submit">
-        @if (isSendComment) {
-        <div class="loading-dots">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-        } @else {
-        Enviar
-        }
-      </button>
-    </form>
-
-    <div class="comment-card" *ngFor="let comment of comments">
-      <div class="comment-card__header">
-        <img src="{{ comment.avatar }}" class="comment-card__avatar" />
-        <div class="comment-card__info">
-          <div class="comment-card__username">{{ comment.usuario }}</div>
-          <div class="comment-card__date">{{ comment.data_criacao | date:'dd/MM/yyyy HH:mm' }}</div>
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Colaboradores Demitidos</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores_demitidos ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>block</mat-icon>
+          <span>Increased from last month</span>
         </div>
       </div>
-      <div class="comment-card__comment">{{ comment.comentario }}</div>
-    </div>
-  </div>
+    </section>
 
-  <div class="right__section">
-    <div class="notice">
-      <div class="notice__card" *ngFor="let notice of notices">
-        <h3 class="notice__title">{{ notice.titulo }}</h3>
-        <p class="notice__description">{{ notice.descricao }}</p>
-        <div class="notice__meta">
-          <span>{{ notice.criador }}</span>
-          <span class="date">{{ notice.data_criacao | date:'dd/MM/yyyy' }}</span>
+    <section class="dashboard__column">
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Total Projects</h3>
+        <div class="dashboard__number">24</div>
+        <div class="dashboard__trend">
+          <mat-icon>folder</mat-icon>
+          <span>Increased from last month</span>
         </div>
       </div>
-      <div class="notice__loading" *ngIf="loadingNotice">
-        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Active Tasks</h3>
+        <div class="dashboard__number">156</div>
+        <div class="dashboard__trend">
+          <mat-icon>task</mat-icon>
+          <span>Updated today</span>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <section class="dashboard__column">
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Completed This Month</h3>
+        <div class="dashboard__number">89</div>
+        <div class="dashboard__trend">
+          <mat-icon>check_circle</mat-icon>
+          <span>On track</span>
+        </div>
+      </div>
+
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Team Members</h3>
+        <div class="dashboard__number">42</div>
+        <div class="dashboard__trend">
+          <mat-icon>groups</mat-icon>
+          <span>Stable</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="dashboard__aside">
+    <section class="dashboard__column">
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Total de Colaboradores</h3>
+        <div class="dashboard__number">{{ dashboardData?.total_colaboradores ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>groups</mat-icon>
+          <span>Increased from last month</span>
+        </div>
+      </div>
+
+      <div class="dashboard__card dashboard__card--feeling">
+        <h3 class="dashboard__title">Como você se sente?</h3>
+
+        <div class="dashboard__feeling-options">
+          <button
+            class="dashboard__feeling"
+            type="button"
+            (click)="setFeeling('happy')"
+            [class.active]="selectedFeeling === 'happy'">
+            <mat-icon>sentiment_satisfied_alt</mat-icon>
+            <span>Feliz</span>
+          </button>
+
+          <button
+            class="dashboard__feeling"
+            type="button"
+            (click)="setFeeling('neutral')"
+            [class.active]="selectedFeeling === 'neutral'">
+            <mat-icon>sentiment_neutral</mat-icon>
+            <span>Neutro</span>
+          </button>
+
+          <button
+            class="dashboard__feeling"
+            type="button"
+            (click)="setFeeling('sad')"
+            [class.active]="selectedFeeling === 'sad'">
+            <mat-icon>sentiment_dissatisfied</mat-icon>
+            <span>Triste</span>
+          </button>
+        </div>
+
+        <div class="dashboard__feedback-message" *ngIf="showFeedbackMessage" @fadeIn>
+          <mat-icon>check_circle</mat-icon>
+          <span>Obrigado pelo feedback!</span>
+        </div>
+      </div>
+    </section>
+  </aside>
 </div>

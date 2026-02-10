@@ -1,14 +1,20 @@
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 import { TitleService } from '../../../core/services/title.service';
-import { GeneralService } from '../../../core/services/general.service';
-import { DashboardService } from '../../../core/services/dashboard.service';
-import { FindEmployeesService } from '../../../core/services/find-employees.service';
+import { EmployeeService } from '../../../core/services/employee.service';
+
+interface DashboardData {
+  colaboradores_ativos?: number;
+  colaboradores_ferias?: number;
+  colaboradores_demitidos?: number;
+  total_colaboradores?: number;
+}
 
 @Component({
   selector: 'app-general',
@@ -22,141 +28,58 @@ import { FindEmployeesService } from '../../../core/services/find-employees.serv
     FormsModule
   ],
   templateUrl: './general.component.html',
-  styleUrl: './general.component.scss'
+  styleUrl: './general.component.scss',
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
-export class GeneralComponent implements OnInit {
+export class GeneralComponent implements OnInit, OnDestroy {
 
-  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
   private readonly _titleService = inject(TitleService);
-  private readonly _generalService = inject(GeneralService);
-  private readonly _dashboardService = inject(DashboardService);
-  private readonly _employeeService = inject(FindEmployeesService);
+  private readonly _employeeService = inject(EmployeeService);
 
-  // ========== FORMULÁRIOS ========== //
-  commentForm: FormGroup = new FormGroup({
-    comment: new FormControl('')
-  })
+  dashboardData: DashboardData = {};
+  selectedFeeling: string | null = null;
+  showFeedbackMessage: boolean = false;
+  private feedbackTimeout?: number;
 
-  // ========== ESTADOS ========== //
-  notices: any[] = [];
-  comments: any[] = [];
-  birthdays: any[] = [];
-  employee: any = {}
-
-  loadingNotice: boolean = false;
-  loadingbirthdays: boolean = false;
-
-  isSendComment: boolean = false;
-
-  username = 'Carregando...';
-  ilustration = 'assets/images/ilustration-night.gif';
-  avatar: string = 'assets/images/avatarIconDark.png';
-
-  falaAi: string = 'https://docs.google.com/forms/d/1h_UFcDfnbMmu710rZQ4pqF8_B-RnQUFs_7FsP_AREPc/edit';
-
-
-  // ========== HOOK ========== //
   ngOnInit(): void {
-    this.getEmployee();
     this._titleService.setTitle('Dashboard');
+    this.loadDashboard();
   }
 
-  // ========== API ========== //
-  getEmployee(): void {
-    this._dashboardService.findAll().subscribe({
-      next: (data) => {
-        this.username = data.employee.username;
-        this.employee = data.employee;
-        this.getNotice();
-        this.getComment();
-        this.getBirthdays();
+  loadDashboard(): void {
+    this._employeeService.dashboard().subscribe({
+      next: (res) => {
+        this.dashboardData = res.result;
       },
       error: (error) => {
-        console.error('Erro ao carregar dados do colaborador:', error);
-        this.username = 'Colaborador';
+        console.error('Error loading dashboard data:', error);
       }
     });
   }
 
-  getNotice(): void {
-    this.loadingNotice = true;
+  setFeeling(feeling: string): void {
+    this.selectedFeeling = feeling;
+    this.showFeedbackMessage = true;
 
-    this._generalService.findNotice().subscribe({
-      next: (data) => {
-        this.notices = data.records;
-        this.loadingNotice = false;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar as notícias.', error);
-        this.loadingNotice = false;
-      }
-    })
-  }
-
-  getComment(): void {
-    this._generalService.findComment().subscribe({
-      next: (data) => {
-        this.comments = data.records;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar as notícias.', error);
-      }
-    })
-  }
-
-  getBirthdays(): void {
-    this.loadingbirthdays = true;
-
-    this._employeeService.findEmployees().subscribe({
-      next: (data) => {
-        const currentMonth = new Date().getMonth();
-
-        this.birthdays = data.employees.filter((employee: any) => {
-          const birthday = new Date(employee.birthday);
-          return birthday.getMonth() === currentMonth;
-        });
-
-        this.loadingbirthdays = false;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar aniversariantes.', error);
-        this.loadingbirthdays = false;
-      }
-    });
-  }
-
-  sendComment(): void {
-    this.isSendComment = true;
-
-    const request = {
-      comment: this.commentForm.value.comment,
-      username: this.employee.username,
-      avatar: this.employee.avatar,
+    if (this.feedbackTimeout) {
+      clearTimeout(this.feedbackTimeout);
     }
 
-    this._generalService.sendComment(request).subscribe({
-      next: () => {
-        this.getComment();
-        this.isSendComment = false;
-        this.commentForm.reset();
-      },
-      error: (error) => {
-        console.log('Erro ao enviar comentário.', error);
-        this.isSendComment = false;
-      }
-    })
+    this.feedbackTimeout = window.setTimeout(() => {
+      this.showFeedbackMessage = false;
+    }, 1000);
   }
 
-  // ========== UTILITÁRIOS ========== //
-  getHours(): string {
-    const hour = new Date().getHours();
-
-    if (hour < 12) {
-      return 'Bom dia';
-    } else if (hour < 18) {
-      return 'Boa tarde';
-    } else {
-      return 'Boa noite';
+  ngOnDestroy(): void {
+    if (this.feedbackTimeout) {
+      clearTimeout(this.feedbackTimeout);
     }
   }
 }

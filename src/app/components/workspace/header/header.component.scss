@@ -1,8 +1,11 @@
 .workspace__header {
-  height: 20vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  padding: 2rem;
+  border-radius: 15px;
+  background-color: var(--secondary-color);
 }
 
 .workspace__section {

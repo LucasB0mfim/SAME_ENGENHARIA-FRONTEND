@@ -2,9 +2,7 @@ import { Routes } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-import { UpdateComponent } from './pages/update/update.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { FirstLoginComponent } from './pages/first-login/first-login.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BrkComponent } from './components/workspace/human-resources/brk/brk.component';
@@ -14,7 +12,6 @@ import { RentalComponent } from './components/workspace/reports/rental/rental.co
 import { TaskComponent } from './components/workspace/human-resources/task/task.component';
 import { SuccessComponent } from './components/success/success.component';
 import { TrackingComponent } from './components/workspace/reports/tracking/tracking.component';
-import { BenefitComponent } from './components/workspace/human-resources/benefit/benefit.component';
 import { ExperienceComponent } from './components/workspace/reports/experience/experience.component';
 import { EmployeeComponent } from './components/workspace/human-resources/employee/employee.component';
 import { AdmissionComponent } from './components/workspace/human-resources/admission/admission.component';
@@ -41,15 +38,6 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
-  },
-  {
-    path: 'first-login',
-    component: FirstLoginComponent
-  },
-  {
-    path: 'update',
-    component: UpdateComponent,
-    canActivate: [authGuard]
   },
   {
     path: 'admission',
@@ -86,11 +74,6 @@ export const routes: Routes = [
       {
         path: 'human-resources/upload-timesheet',
         component: UploadTimesheetComponent,
-        canActivate: [humanResourcesGuard]
-      },
-      {
-        path: 'human-resources/benefit',
-        component: BenefitComponent,
         canActivate: [humanResourcesGuard]
       },
       {
