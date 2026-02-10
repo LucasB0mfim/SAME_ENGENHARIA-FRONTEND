@@ -32,10 +32,19 @@ export class HomeComponent implements AfterViewInit {
   hiringVisible = false;
   isScrolled = false;
   menuOpen = false;
+  isMobile = false;
 
   urlInHire: string = 'https://same-engenharia.inhire.app/vagas';
   compliance: string = 'https://docs.google.com/forms/u/0/d/1h_UFcDfnbMmu710rZQ4pqF8_B-RnQUFs_7FsP_AREPc/viewform?edit_requested=true';
   currentYear: string = String(new Date().getFullYear());
+
+  constructor() {
+    this.checkIfMobile();
+  }
+
+  private checkIfMobile(): void {
+    this.isMobile = window.innerWidth <= 768;
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -113,36 +122,37 @@ export class HomeComponent implements AfterViewInit {
   /**
    * Métodos para atualizar visibilidade de cada seção
    * Chamados pela diretiva quando o elemento entra/sai do viewport
+   * Se for mobile, as animações são desabilitadas mantendo o estado sempre como 'visible'
    */
   onHeroVisibilityChange(isVisible: boolean): void {
-    this.heroVisible = isVisible;
+    this.heroVisible = this.isMobile ? true : isVisible;
   }
 
   onTeamVisibilityChange(isVisible: boolean): void {
-    this.teamVisible = isVisible;
+    this.teamVisible = this.isMobile ? true : isVisible;
   }
 
   onSanitationVisibilityChange(isVisible: boolean): void {
-    this.sanitationVisible = isVisible;
+    this.sanitationVisible = this.isMobile ? true : isVisible;
   }
 
   onPavingVisibilityChange(isVisible: boolean): void {
-    this.pavingVisible = isVisible;
+    this.pavingVisible = this.isMobile ? true : isVisible;
   }
 
   onMapVisibilityChange(isVisible: boolean): void {
-    this.mapVisible = isVisible;
+    this.mapVisible = this.isMobile ? true : isVisible;
   }
 
   onLocalizationVisibilityChange(isVisible: boolean): void {
-    this.localizationVisible = isVisible;
+    this.localizationVisible = this.isMobile ? true : isVisible;
   }
 
   onLeadVisibilityChange(isVisible: boolean): void {
-    this.leadVisible = isVisible;
+    this.leadVisible = this.isMobile ? true : isVisible;
   }
 
   onHiringVisibilityChange(isVisible: boolean): void {
-    this.hiringVisible = isVisible;
+    this.hiringVisible = this.isMobile ? true : isVisible;
   }
 }

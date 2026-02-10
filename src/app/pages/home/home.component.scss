@@ -311,6 +311,16 @@ body {
 
   @media (max-width: 768px) {
     padding: 2rem 1rem;
+    background: linear-gradient(90deg,
+        rgba(4, 7, 20, 0.85) 0%,
+        rgba(4, 7, 20, 0.6) 35%,
+        rgba(4, 7, 20, 0.15) 60%,
+        rgba(4, 7, 20, 0) 100%),
+      linear-gradient(to bottom,
+        rgba(4, 7, 20, 0) 0%,
+        #040714 100%), url('/assets/images/hero__banner-mobile.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 
     .section__container {
       max-width: 100%;
@@ -459,7 +469,8 @@ body {
     }
 
     .section__banner {
-      display: none;
+      display: inline-block;
+      height: 30vh;
     }
 
     .section__title {
@@ -596,11 +607,12 @@ body {
       max-width: 100%;
       padding: 0;
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
     }
 
     .section__banner {
-      display: none;
+      display: inline-block;
+      height: 30vh;
     }
 
     .section__title {
@@ -741,7 +753,8 @@ body {
     }
 
     .section__banner {
-      display: none;
+      display: inline-block;
+      height: 30vh;
     }
 
     .section__title {
@@ -949,10 +962,11 @@ body {
 
   .section__carousel {
     display: flex;
+    width: max-content;
     gap: $gp-md;
-    animation: scroll 10s linear infinite;
-    will-change: transform;
+    animation: scroll 12s linear infinite;
   }
+
 
   .section__card {
     width: 200px;
@@ -989,9 +1003,13 @@ body {
       font-weight: 300;
     }
 
+    .section__carousel {
+      animation: scroll 25s linear infinite;
+    }
+
     .section__card {
-      width: 100px;
-      height: 50px;
+      width: 150px;
+      height: 100px;
     }
   }
 }
