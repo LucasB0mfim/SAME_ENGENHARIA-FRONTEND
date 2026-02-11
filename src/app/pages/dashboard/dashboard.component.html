@@ -1,13 +1,66 @@
-<div class="dashboard">
+<div class="container">
 
-  <app-sidebar (logout)="logout()"></app-sidebar>
+  <aside class="menu" role="navigation" aria-label="Menu principal">
+    <nav class="menu__nav">
+      <div class="menu__section">
+        <h2 class="menu__section-title">MENU</h2>
+        <ul class="menu__list" role="list">
+          <li class="menu__item">
+            <a routerLink="/dashboard" routerLinkActive="menu__link--active" class="menu__link" aria-label="Ir para Dashboard" [routerLinkActiveOptions]="{exact: true}">
+              <mat-icon class="menu__icon" aria-hidden="true">dashboard</mat-icon>
+              <span class="menu__title">Dashboard</span>
+            </a>
+          </li>
 
-  <main class="workspace">
-    <app-header [username]="username" [avatar]="avatar" [isDarkTheme]="isDarkTheme"
-      (toggleMenu)="toggleMenu()" (toggleTheme)="toggleTheme()">
-    </app-header>
+          <li class="menu__item">
+            <a routerLink="/dashboard/reports" routerLinkActive="menu__link--active" class="menu__link"
+              aria-label="Ir para Relatórios">
+              <mat-icon class="menu__icon" aria-hidden="true">description</mat-icon>
+              <span class="menu__title">Relatórios</span>
+            </a>
+          </li>
 
-    <section class="workspace__content">
+          <li class="menu__item">
+            <a routerLink="/dashboard/human-resources" routerLinkActive="menu__link--active" class="menu__link"
+              aria-label="Ir para Recursos Humanos">
+              <mat-icon class="menu__icon" aria-hidden="true">groups</mat-icon>
+              <span class="menu__title">Recursos Humanos</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="menu__section">
+        <h2 class="menu__section-title">GENERAL</h2>
+        <ul class="menu__list" role="list">
+          <li class="menu__item">
+            <button type="button" class="menu__link" aria-label="Sair do sistema">
+              <mat-icon class="menu__icon" aria-hidden="true">logout</mat-icon>
+              <span class="menu__title">Sair</span>
+            </button>
+          </li>
+
+          <li class="menu__item">
+            <button type="button" class="menu__link" (click)="onToggleTheme()" aria-label="Alternar tema">
+              <mat-icon class="menu__icon" aria-hidden="true">{{ isDarkTheme ? 'wb_sunny' : 'dark_mode' }}</mat-icon>
+              <span class="menu__title">{{ isDarkTheme ? 'Tema Claro' : 'Tema Escuro' }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="workspace" role="main">
+    <header class="header">
+      <h1 class="header__title">{{ pageTitle }}</h1>
+
+      <div class="header__avatar">
+        <img src="https://placehold.co/40x40" alt="Foto de perfil de {{ userName }}" width="40" height="40">
+      </div>
+    </header>
+
+    <section class="content">
       <router-outlet></router-outlet>
     </section>
   </main>

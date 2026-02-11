@@ -8,49 +8,24 @@
   font-weight: 400;
   font-style: normal;
   font-family: "Poppins", sans-serif;
+
+  // Transição suave para mudança de tema
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-// Tema claro (padrão)
 :root[data-theme="light"] {
-  // --primary-color: #F2F1EF;
-  // --secondary-color: #FFFFFF;
-
-  // --primary-color: #FFFFFF;
-  // --secondary-color: #F5F5F5;
-
   --primary-color: #FFFFFF;
   --secondary-color: #f3f3f3;
-  --third-color: #c0c0c0;
-  --fourth-color: #878787;
-  --text-color: #525252;
-  --hover-active: #DDD;
-  --sidebar-color: #1E1E2A;
-  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.12);
-  --green-color: #38B000;
-  --red-color: #D72638;
-  --light-gray: rgba(0, 0, 0, 0.04);
+  --text-color: #1E1E1E;
 }
 
-// Tema escuro
 :root[data-theme="dark"] {
-  // --primary-color: #12121E;
-  // --secondary-color: #1E1E2A;
-  --primary-color: #121212;
-  --secondary-color: #1E1E1E;
-  --third-color: #3c3c4b;
-  --fourth-color: #FF6F00;
-  --text-color: #FFFFFF;
-  --hover-active: #1E1E1E;
-  --sidebar-color: #FFFFFF;
-  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.1);
-  --green-color: #A8FF60;
-  --red-color: #FF6B6B;
-  --light-gray: rgba(255, 255, 255, 0.02);
+  --primary-color: #1E1E1E;
+  --secondary-color: #121212;
+  --text-color: #F3F3F3;
 }
 
-// Definições padrão (fallback)
 :root {
-  --gray-color: #878787;
   --white-color: #FFFFFF;
   --orange-color: #FF6F00;
 }

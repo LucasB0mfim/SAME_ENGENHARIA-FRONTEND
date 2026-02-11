@@ -1,15 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { LoginService } from '../../core/services/login.service';
-import { DashboardService } from '../../core/services/dashboard.service';
-import { ThemeService } from '../../core/services/theme.service';
 import { MatIconModule } from '@angular/material/icon';
-import { SidebarComponent } from '../../components/workspace/sidebar/menu.component';
-import { HeaderComponent } from '../../components/workspace/header/header.component';
-import { IEmployeeResponse } from '../../core/interfaces/employee-response.interface';
-import { TitleService } from '../../core/services/title.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,93 +11,42 @@ import { TitleService } from '../../core/services/title.service';
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule,
-    MatIconModule,
-    SidebarComponent,
-    HeaderComponent
+    MatIconModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit {
-  isMenuOpen: boolean = false;
+export class DashboardComponent implements OnInit, OnDestroy {
+  pageTitle: string = 'Dashboard';
+  userName: string = 'Lucas';
   isDarkTheme: boolean = false;
-  hasCustomAvatar: boolean = false;
 
-  avatarIcon: string = '';
-  avatarIconDark: string = 'assets/images/avatarIconDark.png';
-  avatarIconLight: string = 'assets/images/avatarIconLight.png';
+  private destroy$ = new Subject<void>();
 
-  name: string = '...';
-  username: string = '...';
-  avatar: string = '...';
+  constructor(private themeService: ThemeService) {}
 
-  private readonly _dashboardService = inject(DashboardService);
-  private readonly _loginService = inject(LoginService);
-  private readonly _themeService = inject(ThemeService);
-  private _titleService = inject(TitleService);
-
-  constructor() {
-    // Obter o tema inicial do localStorage
-    this.isDarkTheme = localStorage.getItem('theme') === 'dark';
-    this.toggleIconTheme();
-    this.applyTheme();
-    this._titleService.setTitle('Dashboard')
+  ngOnInit(): void {
+    // Se inscrever nas mudanças de tema
+    this.themeService.getThemeState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isDark => {
+        this.isDarkTheme = isDark;
+        this.applyTheme(isDark);
+      });
   }
 
-  ngOnInit() {
-    this.loadEmployeeData();
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  loadEmployeeData(): void {
-    this._dashboardService.findAll().subscribe({
-      next: (response) => {
-        const employee = response.result;
-        this.name = employee.name;
-        this.username = employee.username || employee.name;
-        this.hasCustomAvatar = !!employee.avatar;
-        this.avatar = employee.avatar || this.avatarIcon;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar informações do colaborador:', error);
-        this.name = 'error';
-        this.username = 'error';
-        this.hasCustomAvatar = false;
-        this.avatar = this.avatarIcon;
-      }
-    });
+  onToggleTheme(): void {
+    const newTheme = !this.isDarkTheme;
+    this.themeService.setThemeState(newTheme);
   }
 
-  toggleTheme(): void {
-    this.isDarkTheme = !this.isDarkTheme;
-
-    // Atualizar o tema via serviço (isso também atualiza o localStorage)
-    this._themeService.setThemeState(this.isDarkTheme);
-
-    this.applyTheme();
-    this.toggleIconTheme();
-    this.isMenuOpen = false;
-
-    if (!this.hasCustomAvatar) {
-      this.avatar = this.avatarIcon;
-    }
-  }
-
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  private toggleIconTheme(): void {
-    this.avatarIcon = this.isDarkTheme ? this.avatarIconLight : this.avatarIconDark;
-  }
-
-  private applyTheme(): void {
-    document.documentElement.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
-  }
-
-  logout(): void {
-    this.isMenuOpen = false;
-    this._loginService.logout();
+  private applyTheme(isDark: boolean): void {
+    const theme = isDark ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
   }
 }
