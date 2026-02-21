@@ -35,6 +35,7 @@ $bp-desktop-max: 1919px;
 .container {
   width: 100%;
   height: 100%;
+  padding: 1rem;
   gap: $gp-md;
   display: grid;
   justify-items: center;
@@ -117,7 +118,7 @@ $bp-desktop-max: 1919px;
   &--body {
     padding: $pd-sm;
     border-radius: $bd-lg;
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
   }
 
   &--icon {
@@ -196,7 +197,7 @@ $bp-desktop-max: 1919px;
   width: 100%;
   height: auto;
   border-radius: $bd-df;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
 
   &__header {
     display: flex;
@@ -216,7 +217,7 @@ $bp-desktop-max: 1919px;
     grid-template-columns: repeat(4, 1fr);
     gap: $gp-lg;
     padding: $pd-md;
-    border-top: $bd-sm solid var(--primary-color);
+    border-top: $bd-sm solid var(--secondary-color);
 
     @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
       grid-template-columns: 1fr;
@@ -244,7 +245,7 @@ $bp-desktop-max: 1919px;
 
   &--light {
     font-weight: 500;
-    color: var(--gray-color);
+    color: var(--text-color);
   }
 
   &--dark {
@@ -290,7 +291,7 @@ $bp-desktop-max: 1919px;
   }
 
   &--light {
-    color: var(--gray-color);
+    color: var(--text-color);
   }
 
   &--dark {
@@ -304,7 +305,7 @@ $bp-desktop-max: 1919px;
   &--close {
     cursor: pointer;
     font-size: $icon-sm;
-    color: var(--gray-color);
+    color: var(--text-color);
 
     &:hover {
       color: var(--text-color);
@@ -326,14 +327,14 @@ $bp-desktop-max: 1919px;
   align-items: center;
   justify-content: center;
   border: none;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   transition: all 0.2s ease;
   white-space: nowrap;
 
   &__launch {
     border-radius: $bd-lg;
     padding: $pd-sm $pd-md;
-    border: $bd-sm solid transparent;
+    border: $bd-sm dashed transparent;
 
     &:hover {
       color: var(--orange-color);
@@ -350,12 +351,12 @@ $bp-desktop-max: 1919px;
   &__action {
     border-radius: $bd-lg;
     padding: $pd-sm $pd-md;
-    border: $bd-sm solid transparent;
-    background-color: var(--primary-color);
+    border: $bd-sm dashed transparent;
+    background-color: var(--secondary-color);
 
     &--dark {
       padding: 0 $pd-md;
-      background-color: var(--secondary-color);
+      background-color: var(--primary-color);
     }
 
     &:hover {
@@ -382,8 +383,8 @@ $bp-desktop-max: 1919px;
   padding: $pd-sm;
   color: var(--text-color);
   border-radius: $bd-lg;
-  border: $bd-sm solid transparent;
-  background-color: var(--secondary-color);
+  border: $bd-sm dashed transparent;
+  background-color: var(--primary-color);
   transition: all 0.2s ease;
 
   &:focus {
@@ -392,7 +393,7 @@ $bp-desktop-max: 1919px;
   }
 
   &--dark {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
   }
 
   &--full {
@@ -412,8 +413,8 @@ $bp-desktop-max: 1919px;
   padding: $pd-sm;
   color: var(--text-color);
   border-radius: $bd-lg;
-  border: $bd-sm solid transparent;
-  background-color: var(--primary-color);
+  border: $bd-sm dashed transparent;
+  background-color: var(--secondary-color);
   transition: all 0.2s ease;
 
   &:focus {
@@ -431,8 +432,8 @@ $bp-desktop-max: 1919px;
   resize: none;
   outline: none;
   border-radius: $bd-lg;
-  border: $bd-sm solid transparent;
-  background-color: var(--primary-color);
+  border: $bd-sm dashed transparent;
+  background-color: var(--secondary-color);
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -441,7 +442,7 @@ $bp-desktop-max: 1919px;
   &::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: $bd-sm;
-    background: var(--secondary-color);
+    background: var(--primary-color);
   }
 
   &:focus {
@@ -478,7 +479,7 @@ $bp-desktop-max: 1919px;
   gap: $gp-md;
   padding: $pd-md;
   border-radius: $bd-lg;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   max-height: 90vh;
   overflow-y: auto;
 

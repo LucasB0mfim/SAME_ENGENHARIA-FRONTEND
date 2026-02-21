@@ -2,6 +2,35 @@
   <main class="dashboard__main">
     <section class="dashboard__column">
       <div class="dashboard__card">
+        <h3 class="dashboard__title">Quadro de Colaboradores</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>group</mat-icon>
+          <span>Increased from last month</span>
+        </div>
+      </div>
+
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Colaboradores Demitidos</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores_demitidos ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>beach_access</mat-icon>
+          <span>Increased from last month</span>
+        </div>
+      </div>
+
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Total de Colaboradores</h3>
+        <div class="dashboard__number">{{ dashboardData?.total_colaboradores ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>groups</mat-icon>
+          <span>Increased from last month</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard__column">
+      <div class="dashboard__card">
         <h3 class="dashboard__title">Colaboradores Ativos</h3>
         <div class="dashboard__number">{{ dashboardData?.colaboradores_ativos ?? '...' }}</div>
         <div class="dashboard__trend">
@@ -18,53 +47,24 @@
           <span>Increased from last month</span>
         </div>
       </div>
+    </section>
+
+    <section class="dashboard__column">
+      <div class="dashboard__card">
+        <h3 class="dashboard__title">Colaboradores no INSS</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores_inss ?? '...' }}</div>
+        <div class="dashboard__trend">
+          <mat-icon>sick</mat-icon>
+          <span>Increased from last month</span>
+        </div>
+      </div>
 
       <div class="dashboard__card">
-        <h3 class="dashboard__title">Colaboradores Demitidos</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores_demitidos ?? '...' }}</div>
+        <h3 class="dashboard__title">Colaboradores em Aviso Prévio</h3>
+        <div class="dashboard__number">{{ dashboardData?.colaboradores_aviso_previo ?? '...' }}</div>
         <div class="dashboard__trend">
           <mat-icon>block</mat-icon>
           <span>Increased from last month</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="dashboard__column">
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Total Projects</h3>
-        <div class="dashboard__number">24</div>
-        <div class="dashboard__trend">
-          <mat-icon>folder</mat-icon>
-          <span>Increased from last month</span>
-        </div>
-      </div>
-
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Active Tasks</h3>
-        <div class="dashboard__number">156</div>
-        <div class="dashboard__trend">
-          <mat-icon>task</mat-icon>
-          <span>Updated today</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="dashboard__column">
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Completed This Month</h3>
-        <div class="dashboard__number">89</div>
-        <div class="dashboard__trend">
-          <mat-icon>check_circle</mat-icon>
-          <span>On track</span>
-        </div>
-      </div>
-
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Team Members</h3>
-        <div class="dashboard__number">42</div>
-        <div class="dashboard__trend">
-          <mat-icon>groups</mat-icon>
-          <span>Stable</span>
         </div>
       </div>
     </section>
@@ -73,10 +73,10 @@
   <aside class="dashboard__aside">
     <section class="dashboard__column">
       <div class="dashboard__card">
-        <h3 class="dashboard__title">Total de Colaboradores</h3>
-        <div class="dashboard__number">{{ dashboardData?.total_colaboradores ?? '...' }}</div>
+        <h3 class="dashboard__title">Centros de Custo Ativos</h3>
+        <div class="dashboard__number">{{ dashboardData?.centros_custo_ativos ?? '...' }}</div>
         <div class="dashboard__trend">
-          <mat-icon>groups</mat-icon>
+          <mat-icon>front_loader</mat-icon>
           <span>Increased from last month</span>
         </div>
       </div>

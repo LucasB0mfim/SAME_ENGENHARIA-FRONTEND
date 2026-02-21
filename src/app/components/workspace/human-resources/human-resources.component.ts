@@ -15,6 +15,6 @@ export class HumanResourcesComponent implements OnInit {
   private _titleService = inject(TitleService);
 
   ngOnInit() {
-    this._titleService.setTitle('Recursos Humanos')
+    this._titleService.setTitle('Recursos Humanos');
   }
 }

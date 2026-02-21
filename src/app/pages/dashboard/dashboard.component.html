@@ -34,16 +34,15 @@
         <h2 class="menu__section-title">GENERAL</h2>
         <ul class="menu__list" role="list">
           <li class="menu__item">
-            <button type="button" class="menu__link" aria-label="Sair do sistema">
-              <mat-icon class="menu__icon" aria-hidden="true">logout</mat-icon>
-              <span class="menu__title">Sair</span>
-            </button>
-          </li>
-
-          <li class="menu__item">
             <button type="button" class="menu__link" (click)="onToggleTheme()" aria-label="Alternar tema">
               <mat-icon class="menu__icon" aria-hidden="true">{{ isDarkTheme ? 'wb_sunny' : 'dark_mode' }}</mat-icon>
               <span class="menu__title">{{ isDarkTheme ? 'Tema Claro' : 'Tema Escuro' }}</span>
+            </button>
+          </li>
+          <li class="menu__item">
+            <button type="button" class="menu__link" aria-label="Sair do sistema">
+              <mat-icon class="menu__icon" aria-hidden="true">logout</mat-icon>
+              <span class="menu__title">Sair</span>
             </button>
           </li>
         </ul>
@@ -53,10 +52,10 @@
 
   <main class="workspace" role="main">
     <header class="header">
-      <h1 class="header__title">{{ pageTitle }}</h1>
+      <h1 class="header__title">{{ title }}</h1>
 
       <div class="header__avatar">
-        <img src="https://placehold.co/40x40" alt="Foto de perfil de {{ userName }}" width="40" height="40">
+        <img [src]="avatar" alt="Foto de perfil" width="40" height="40">
       </div>
     </header>
 

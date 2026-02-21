@@ -14,6 +14,10 @@ interface DashboardData {
   colaboradores_ferias?: number;
   colaboradores_demitidos?: number;
   total_colaboradores?: number;
+  colaboradores_aviso_previo?: number;
+  colaboradores_inss?: number;
+  colaboradores?: number;
+  centros_custo_ativos?: number;
 }
 
 @Component({

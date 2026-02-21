@@ -1,6 +1,7 @@
 .container {
   gap: 20px;
   height: 100%;
+  padding: 1rem;
   display: grid;
   grid-template-rows: auto 1fr;
 
@@ -33,12 +34,12 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    color: var(--fourth-color);
+    color: var(--text-color);
     border-radius: 8px;
     border: 2px dashed var(--fourth-color);
 
     &:hover {
-      background-color: var(--secondary-color);
+      background-color: var(--primary-color);
     }
 
     mat-icon {
@@ -72,10 +73,10 @@
 
   &--primary {
     border-radius: 4px;
-    color: var(--gray-color);
+    color: var(--text-color);
     font-weight: 500;
     font-size: clamp(0.6rem, 0.8vw, 0.9rem);
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     transition: all ease 0.3s;
 
     &.active {
@@ -97,7 +98,7 @@
 
     &:hover:not(:disabled) {
       transform: translateY(-2px);
-      background-color: var(--secondary-color);
+      background-color: var(--primary-color);
     }
 
     &:disabled {

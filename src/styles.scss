@@ -13,10 +13,20 @@
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+html,
+body {
+  height: 100vh;
+}
+
+app-root {
+  display: block;
+  height: 100%;
+}
+
 :root[data-theme="light"] {
-  --primary-color: #FFFFFF;
-  --secondary-color: #f3f3f3;
-  --text-color: #1E1E1E;
+  --primary-color: #F5F6F8;
+  --secondary-color: #FFFFFF;
+  --text-color: #9CA3AF;
 }
 
 :root[data-theme="dark"] {

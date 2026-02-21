@@ -67,7 +67,7 @@
 
 .subtitle {
   font-weight: 500;
-  color: var(--gray-color);
+  color: var(--text-color);
 
   &--bg {
     font-size: clamp(1rem, 1rem + 0vw, 1rem);
@@ -184,7 +184,7 @@
     border: none;
     box-shadow: none;
     font-size: 24px;
-    color: var(--gray-color);
+    color: var(--text-color);
     cursor: pointer;
     padding: 0;
     width: 30px;
@@ -209,7 +209,7 @@
 
 .icon {
   &--bg {
-    color: var(--gray-color);
+    color: var(--text-color);
     font-size: clamp(4.875rem, 4.8143rem + 0.2589vw, 5.125rem);
   }
 }

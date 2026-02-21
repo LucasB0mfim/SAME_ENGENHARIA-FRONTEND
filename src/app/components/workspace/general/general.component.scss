@@ -2,6 +2,7 @@
   width: 100%;
   max-height: 100vh;
   height: 100%;
+  padding: 1rem;
 
   display: flex;
   gap: 1.25rem;
@@ -154,7 +155,7 @@
   }
 
   &__main &__column:nth-child(1) &__card:nth-child(1) {
-    background: radial-gradient(circle at top left, #FFB74D, #FF6F00);
+    background: linear-gradient(135deg, #FF6F00, #BF360C);
   }
 
   &__main &__column:nth-child(1) &__card:nth-child(1) &__title,
