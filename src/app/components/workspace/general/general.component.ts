@@ -9,17 +9,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { TitleService } from '../../../core/services/title.service';
 import { EmployeeService } from '../../../core/services/employee.service';
 
-interface DashboardData {
-  colaboradores_ativos?: number;
-  colaboradores_ferias?: number;
-  colaboradores_demitidos?: number;
-  total_colaboradores?: number;
-  colaboradores_aviso_previo?: number;
-  colaboradores_inss?: number;
-  colaboradores?: number;
-  centros_custo_ativos?: number;
-}
-
 @Component({
   selector: 'app-general',
   standalone: true,
@@ -47,7 +36,7 @@ export class GeneralComponent implements OnInit, OnDestroy {
   private readonly _titleService = inject(TitleService);
   private readonly _employeeService = inject(EmployeeService);
 
-  dashboardData: DashboardData = {};
+  dashboardData: any = {};
   selectedFeeling: string | null = null;
   showFeedbackMessage: boolean = false;
   private feedbackTimeout?: number;

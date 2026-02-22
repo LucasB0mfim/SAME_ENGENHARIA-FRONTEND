@@ -1,16 +1,12 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BrkComponent } from './components/workspace/human-resources/brk/brk.component';
-import { ErrorComponent } from './components/error/error.component';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { RentalComponent } from './components/workspace/reports/rental/rental.component';
 import { TaskComponent } from './components/workspace/human-resources/task/task.component';
-import { SuccessComponent } from './components/success/success.component';
 import { TrackingComponent } from './components/workspace/reports/tracking/tracking.component';
 import { ExperienceComponent } from './components/workspace/reports/experience/experience.component';
 import { EmployeeComponent } from './components/workspace/human-resources/employee/employee.component';
@@ -29,11 +25,7 @@ import { AdmissionFormComponent } from './components/forms/admission/admission.c
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
-  },
-  {
-    path: 'home',
-    component: HomeComponent
+    component: LoginComponent
   },
   {
     path: 'login',
@@ -43,18 +35,6 @@ export const routes: Routes = [
     path: 'admission',
     component: AdmissionFormComponent,
     canActivate: [tempTokenGuard]
-  },
-  {
-    path: 'unauthorized',
-    component: UnauthorizedComponent
-  },
-  {
-    path: 'success-form',
-    component: SuccessComponent
-  },
-  {
-    path: 'error-form',
-    component: ErrorComponent
   },
   {
     path: 'dashboard',

@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ThemeService } from '../../core/services/theme.service';
 import { TitleService } from '../../core/services/title.service';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { LoginService } from '../../core/services/login.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +30,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private _themeService: ThemeService,
     private readonly _titleService: TitleService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _userService: DashboardService
+    private readonly _userService: DashboardService,
+    private readonly _loginService: LoginService
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +64,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onToggleTheme(): void {
     const newTheme = !this.isDarkTheme;
     this._themeService.setThemeState(newTheme);
+  }
+
+  onLogout(): void {
+    this._loginService.logout();
   }
 
   private applyTheme(isDark: boolean): void {
