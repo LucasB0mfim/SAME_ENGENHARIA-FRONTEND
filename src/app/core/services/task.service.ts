@@ -14,14 +14,9 @@ export class TaskService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  getTask() {
-    const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/task', { headers });
-  }
-
   findByStatus(status: any) {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/task/${status}`, { headers });
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/task/status/${status}`, { headers });
   }
 
   update(request: any) {
