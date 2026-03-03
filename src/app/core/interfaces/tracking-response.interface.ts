@@ -19,6 +19,7 @@ export interface ITrackingInfo {
 }
 
 export interface ITrackingResponse {
+  result: ITrackingInfo[];
   success: boolean;
   message: string;
   tracking: ITrackingInfo[]

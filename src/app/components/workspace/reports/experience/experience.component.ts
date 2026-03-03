@@ -43,7 +43,7 @@ export class ExperienceComponent implements OnInit {
 
     this._service.find().subscribe({
       next: (data) => {
-        this.items = data.records;
+        this.items = data.result;
         this.filteredItem = [...this.items];
         this.isLoading = false;
         if (this.filteredItem.length === 0) this.isEmpty = true;

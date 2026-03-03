@@ -41,7 +41,7 @@ export class TrackingComponent implements OnInit {
   getID() {
     this.__trackingService.findAll().subscribe({
       next: (data) => {
-        this.originalOrder = data.tracking;
+        this.originalOrder = data.result;
         this.order = [...this.originalOrder];
 
         this.removeDuplicate();
