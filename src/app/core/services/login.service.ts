@@ -10,7 +10,7 @@ export class LoginService {
 
   private readonly _httpClient = inject(HttpClient);
   private readonly _router = inject(Router);
-  private readonly _apiUrl = 'https://sameengenharia.com.br/api/user/login';
+  private readonly _apiUrl = 'https://sameengenharia.com.br/api/user/login/username';
 
   login(request: any) {
     return this._httpClient.post<any>(this._apiUrl, request).pipe(
