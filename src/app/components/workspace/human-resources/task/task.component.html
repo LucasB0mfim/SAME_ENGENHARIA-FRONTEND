@@ -115,14 +115,11 @@
         </div>
         <div class="modal__body">
           <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="openClipboard()">
-              Visualizar Prancheta
+            <button type="button" class="btn btn__action" (click)="openEmployeesModal()">
+              Ver Colaboradores
             </button>
             <button type="button" class="btn btn__action" (click)="openUpdateModal()">
               Atualizar Registro
-            </button>
-            <button type="button" class="btn btn--full btn__action" (click)="openEmployeesModal()">
-              Ver Colaboradores
             </button>
           </div>
         </div>
@@ -185,7 +182,7 @@
           </button>
         </div>
         <div class="modal__body modal__body--scrollable">
-          <div class="group group--body" *ngFor="let emp of currentItem.participantes">
+          <div class="group group--body" *ngFor="let emp of currentItem.tarefa_participantes">
             <div class="group group--icon">
               <mat-icon class="icon icon--small icon--orange">
                 person
@@ -195,17 +192,14 @@
               <h3 class="title title--dark">{{ emp.nome || 'N/A' }}</h3>
               <div class="group">
                 <div class="bubble">
-                  <h3 class="title title--dark-orange">{{ emp.funcao }}</h3>
+                  <h3 class="title title--dark-orange">{{ emp.funcao ||'N/A'}}</h3>
                 </div>
                 <div class="bubble">
                   <h3 class="title title--dark-orange">{{ emp.valor | currency:'BRL':'symbol':'1.2-2' }}</h3>
                 </div>
                 <div class="bubble">
-                  <h3 class="title title--dark-orange">{{ emp.autorizacao}}</h3>
+                  <h3 class="title title--dark-orange">{{ emp.autorizacao || 'N/A' }}</h3>
                 </div>
-                <!-- <div class="bubble">
-                  <h3 class="title title--dark-orange">{{ formatCPF(emp.cpf) }}</h3>
-                </div> -->
               </div>
             </div>
           </div>
@@ -216,7 +210,7 @@
               group
             </mat-icon>
             <h3 class="title title--dark">Total de colaboradores:</h3>
-            <h3 class="title title--dark-orange">{{ currentItem.participantes?.length || 0 }}</h3>
+            <h3 class="title title--dark-orange">{{ currentItem.tarefa_participantes?.length || 0 }}</h3>
           </div>
           <div class="group group--icon">
             <mat-icon class="icon icon--small icon--orange">

@@ -175,7 +175,7 @@ export class TaskComponent implements OnInit {
   };
 
   totalValue(): number {
-    return this.currentItem.participantes.reduce((acc: number, item: any) => {
+    return this.currentItem.tarefa_participantes.reduce((acc: number, item: any) => {
       return acc + item.valor
     }, 0);
   };
