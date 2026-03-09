@@ -1,383 +1,121 @@
-<div class="container">
+<app-dynamic-list [config]="listConfig" [items]="items" [isSearching]="isSearching">
 
-  <!-- MENSAGEM -->
-  @if (showMessage) {
-  <div class="message" [ngClass]="messageType">{{ message }}</div>
-  }
+  <ng-template #cardBody let-item>
+    <div class="body">
 
-  <div class="aside">
-    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
-      [class.active]="activeStatus === 'NOVO'">
-      Novos
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
-      [class.active]="activeStatus === 'ANDAMENTO'">
-      Em andamento
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('AVISO TRABALHADO')"
-      [class.active]="activeStatus === 'AVISO TRABALHADO'">
-      Aviso Trabalhado
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('DEMITIDO')"
-      [class.active]="activeStatus === 'DEMITIDO'">
-      Demitido
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('DESLIGADO')"
-      [class.active]="activeStatus === 'DESLIGADO'">
-      Desligado
-    </button>
-
-    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
-
-    <button class="btn btn__action btn__action--dark" (click)="openCreator()">
-      <mat-icon class="icon icon">add</mat-icon>
-    </button>
-  </div>
-
-  <div class="main">
-    <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openMenu(item)">
-        <div class="display display--column">
-          <div class="group">
-            <h3 class="title title--dark">{{ item.nome }}</h3>
-          </div>
-          <div class="group">
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
-            </div>
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
-            </div>
-          </div>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">category</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">MODALIDADE</h3>
+          <h3 class="title title--dark">{{ item.modalidade }}</h3>
         </div>
       </div>
-      <div class="card__body">
 
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              category
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">MODALIDADE</h3>
-            <h3 class="title title--dark">{{ item.modalidade }}</h3>
-          </div>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">category</mat-icon>
         </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              category
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">MODALIDADE DO A.T</h3>
-            <h3 class="title title--dark">{{ item.modalidade_aviso_trabalhado || 'N/A' }}</h3>
-          </div>
+        <div>
+          <h3 class="title title--light">MODALIDADE DO A.T</h3>
+          <h3 class="title title--dark">{{ item.modalidade_aviso_trabalhado || 'N/A' }}</h3>
         </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              campaign
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">COMUNICADO?</h3>
-            <h3 class="title title--dark">{{ item.colaborador_comunicado || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DA SOLICITAÇÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_solicitacao) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DA COMUNICAÇÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_comunicacao) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DO A.T</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_inicio_aviso_trabalhado) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">ÚLTIMO DIA TRABALHADO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_ultimo_dia_trabalhado) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DA DEMISSÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_demissao) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DA RESCISÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.rescisao) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DO PAGAMENTO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_pagamento_rescisao) }}</h3>
-          </div>
-        </div>
-
-        @if(item.observacao) {
-        <div class="group group--body group--full">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              notes
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">OBSERVAÇÃO</h3>
-            <h3 class="title title--dark">{{ item.observacao }}</h3>
-          </div>
-        </div>
-        }
-
       </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">campaign</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">COMUNICADO?</h3>
+          <h3 class="title title--dark">{{ item.colaborador_comunicado || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DA SOLICITAÇÃO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_solicitacao) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DA COMUNICAÇÃO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_comunicacao) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DO A.T</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_inicio_aviso_trabalhado) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">ÚLTIMO DIA TRABALHADO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_ultimo_dia_trabalhado) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DA DEMISSÃO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_demissao) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DA RESCISÃO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.rescisao) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DO PAGAMENTO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_pagamento_rescisao) }}</h3>
+        </div>
+      </div>
+
+      @if (item.observacao) {
+      <div class="group group--body group--full">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">notes</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">OBSERVAÇÃO</h3>
+          <h3 class="title title--dark">{{ item.observacao }}</h3>
+        </div>
+      </div>
+      }
+
     </div>
+  </ng-template>
 
-    <div class="blurred-background" *ngIf="createModalOpen">
-      <form class="modal" [formGroup]="createForm" (ngSubmit)="create()">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Criar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Colaborador *</label>
-              <select class="select" formControlName="nome">
-                <option value="" disabled>Selecione uma opção</option>
-                <option *ngFor="let emp of activeEmployees" [value]="emp">{{ emp }}</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Modalidade *</label>
-              <select class="select" formControlName="modalidade">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="AVISO INDENIZADO">Aviso Indenizado</option>
-                <option value="AVISO TRABALHADO">Aviso Trabalhado</option>
-                <option value="PEDIDO DE DEMISSAO">Pedido de Demissão</option>
-                <option value="ENCERRAMENTO DE CONTRATO">Encerramento de Contrato</option>
-                <option value="TERMINO DO CONTRATO DE EXPERIENCIA">Término do Contrato de Experiência</option>
-                <option value="AVISO TRABALHADO JORNADA REDUZIDA">Aviso Trabalhado Jornada Reduzida</option>
-                <option value="ANTECIPACAO DO CONTRATO DE EXPERIENCIA">Antecipação do Contrato de Experiência</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Data da comunicação</label>
-              <input type="date" class="input input--dark input--full" formControlName="comunicarColaborador">
-            </div>
-
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea class="textarea" placeholder="Digite algo..." formControlName="observacao"></textarea>
-            </div>
-
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-          <button type="submit" class="btn btn__action">
-            @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Criar
-            }
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="blurred-background" *ngIf="menuModalOpen">
-      <form class="modal">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Menu</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-              Atualizar
-            </button>
-            <button type="button" class="btn btn__action" (click)="delete()">
-              Deletar
-            </button>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="blurred-background" *ngIf="updateModalOpen">
-      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Atualizar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Status *</label>
-              <select class="select" formControlName="status">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="ANDAMENTO">Em Andamento</option>
-                <option value="AVISO TRABALHADO">Aviso Trabalhado</option>
-                <option value="DEMITIDO">Demitido</option>
-                <option value="DESLIGADO">Desligado</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Modalidade *</label>
-              <select class="select" formControlName="modalidade">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="AVISO INDENIZADO">Aviso Indenizado</option>
-                <option value="AVISO TRABALHADO">Aviso Trabalhado</option>
-                <option value="PEDIDO DE DEMISSAO">Pedido de Demissão</option>
-                <option value="ENCERRAMENTO DE CONTRATO">Encerramento de Contrato</option>
-                <option value="TERMINO DO CONTRATO DE EXPERIENCIA">Término do Contrato de Experiência</option>
-                <option value="AVISO TRABALHADO JORNADA REDUZIDA">Aviso Trabalhado Jornada Reduzida</option>
-                <option value="ANTECIPACAO DO CONTRATO DE EXPERIENCIA">Antecipação do Contrato de Experiência</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Início do Aviso Trabalhado</label>
-              <input type="date" class="input input--dark input--full" formControlName="dataInicioAvisoTrabalhado">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Modalidade do Aviso Trabalhado</label>
-              <select class="select" formControlName="modalidadeAvisoTrabalhado">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="NAO SE APLICA">Não se Aplica</option>
-                <option value="REDUCAO DE DIAS">Redução de Dias</option>
-                <option value="REDUCAO DE CARGA HORARIA">Redução de Carga Horária</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Colaborador Comunicado?</label>
-              <select class="select" formControlName="colaboradorComunicado">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="SIM">Sim</option>
-                <option value="NAO">Não</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Rescisão</label>
-              <input type="date" class="input input--dark input--full" formControlName="dataRescisao">
-            </div>
-
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea class="textarea" formControlName="observacao"></textarea>
-            </div>
-
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="returnModal()">
-            Voltar
-          </button>
-          <button type="submit" class="btn btn__action">
-            @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Atualizar
-            }
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="centralized" *ngIf="isSearching">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-
-    <div class="centralized centralized--column" *ngIf="isEmpty">
-      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
-      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
-    </div>
-  </div>
-</div>
+</app-dynamic-list>

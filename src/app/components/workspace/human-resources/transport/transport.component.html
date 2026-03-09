@@ -1,215 +1,81 @@
-<div class="container">
+<app-dynamic-list [config]="listConfig" [items]="items" [isSearching]="isSearching">
 
-  <!-- MENSAGEM -->
-  @if (showMessage) {
-  <div class="message" [ngClass]="messageType">{{ message }}</div>
-  }
+  <ng-template #cardBody let-item>
+    <div class="body">
 
-  <div class="aside">
-    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
-      [class.active]="activeStatus === 'NOVO'">
-      Novos
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
-      [class.active]="activeStatus === 'ANDAMENTO'">
-      Em andamento
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
-      [class.active]="activeStatus === 'CONCLUIDO'">
-      Concluídos
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
-      [class.active]="activeStatus === 'CANCELADO'">
-      Cancelados
-    </button>
-
-    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
-  </div>
-
-  <div class="main">
-    <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openMenu(item)">
-        <div class="display display--column">
-          <div class="group">
-            <h3 class="title title--dark">{{ item.nome }}</h3>
-          </div>
-          <div class="group">
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
-            </div>
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
-            </div>
-          </div>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">category</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">TIPO</h3>
+          <h3 class="title title--dark">{{ item.tipo }}</h3>
         </div>
       </div>
-      <div class="card__body">
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              category
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TIPO</h3>
-            <h3 class="title title--dark">{{ item.tipo }}</h3>
-          </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
         </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DA SOLICITAÇÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_criacao) || 'N/A' }}</h3>
-          </div>
+        <div>
+          <h3 class="title title--light">DATA DA SOLICITAÇÃO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_criacao) }}</h3>
         </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              article
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">MOTIVO</h3>
-            <h3 class="title title--dark">{{ item.motivo || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              add_location
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">ENDEREÇO</h3>
-            <h3 class="title title--dark">{{ item.endereco }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              commute
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">ONIBUS/DIA</h3>
-            <h3 class="title title--dark">{{ item.qtd_onibus }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              credit_card
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">METRO/DIA</h3>
-            <h3 class="title title--dark">{{ item.qtd_metro }}</h3>
-          </div>
-        </div>
-        @if (item.observacao) {
-        <div class="group group--full group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              notes
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">OBSERVAÇÃO</h3>
-            <h3 class="title title--dark">{{ item.observacao || 'N/A' }}</h3>
-          </div>
-        </div>
-        }
       </div>
-    </div>
 
-    <div class="blurred-background" *ngIf="menuModalOpen">
-      <form class="modal">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Menu</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">commute</mat-icon>
         </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="download()">
-              @if (isLoading) {
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-              } @else {
-              Gerar PDF
-              }
-            </button>
-            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-              Atualizar Registro
-            </button>
-          </div>
+        <div>
+          <h3 class="title title--light">ONIBUS/DIA</h3>
+          <h3 class="title title--dark">{{ item.qtd_onibus }}</h3>
         </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-        </div>
-      </form>
-    </div>
+      </div>
 
-    <div class="blurred-background" *ngIf="updateModalOpen">
-      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Atualizar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">credit_card</mat-icon>
         </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Status</label>
-              <select class="select" formControlName="status">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="ANDAMENTO">Em andamento</option>
-                <option value="CONCLUIDO">Concluído</option>
-                <option value="CANCELADO">Cancelado</option>
-              </select>
-            </div>
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea formControlName="observacao" class="textarea"></textarea>
-            </div>
-          </div>
+        <div>
+          <h3 class="title title--light">METRO/DIA</h3>
+          <h3 class="title title--dark">{{ item.qtd_metro }}</h3>
         </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="returnModal()">
-            Voltar
-          </button>
-          <button type="submit" class="btn btn__action">
-            @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Atualizar
-            }
-          </button>
-        </div>
-      </form>
-    </div>
+      </div>
 
-    <div class="centralized" *ngIf="isSearching">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">article</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">MOTIVO</h3>
+          <h3 class="title title--dark">{{ item.motivo || 'N/A' }}</h3>
+        </div>
+      </div>
 
-    <div class="centralized centralized--column" *ngIf="isEmpty">
-      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
-      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">add_location</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">ENDEREÇO</h3>
+          <h3 class="title title--dark">{{ item.endereco }}</h3>
+        </div>
+      </div>
+
+      @if (item.observacao) {
+      <div class="group group--body group--full">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">notes</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">OBSERVAÇÃO</h3>
+          <h3 class="title title--dark">{{ item.observacao }}</h3>
+        </div>
+      </div>
+      }
+
     </div>
-  </div>
-</div>
+  </ng-template>
+
+</app-dynamic-list>

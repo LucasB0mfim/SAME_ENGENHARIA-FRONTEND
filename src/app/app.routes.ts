@@ -5,15 +5,12 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReportsComponent } from './components/workspace/reports/reports.component';
 import { GeneralComponent } from './components/workspace/general/general.component';
 import { BrkComponent } from './components/workspace/human-resources/brk/brk.component';
-import { RentalComponent } from './components/workspace/reports/rental/rental.component';
 import { TaskComponent } from './components/workspace/human-resources/task/task.component';
 import { TrackingComponent } from './components/workspace/reports/tracking/tracking.component';
 import { ExperienceComponent } from './components/workspace/reports/experience/experience.component';
-import { EmployeeComponent } from './components/workspace/human-resources/employee/employee.component';
 import { AdmissionComponent } from './components/workspace/human-resources/admission/admission.component';
 import { HumanResourcesComponent } from './components/workspace/human-resources/human-resources.component';
 import { ResignationComponent } from './components/workspace/human-resources/resignation/resignation.component';
-import { UploadTimesheetComponent } from './components/workspace/human-resources/upload-timesheet/upload-timesheet.component';
 
 import { authGuard } from './core/guard/auth.guard';
 import { tempTokenGuard } from './core/guard/temp-token.guard';
@@ -43,19 +40,12 @@ export const routes: Routes = [
     children: [
       { path: '', component: GeneralComponent },
       { path: 'welcome', component: GeneralComponent },
+
       { path: 'reports', component: ReportsComponent },
-      { path: 'experience', component: ExperienceComponent },
-      { path: 'tracking', component: TrackingComponent },
-      { path: 'rental', component: RentalComponent },
-      {
-        path: 'human-resources',
-        component: HumanResourcesComponent
-      },
-      {
-        path: 'human-resources/upload-timesheet',
-        component: UploadTimesheetComponent,
-        canActivate: [humanResourcesGuard]
-      },
+      { path: 'reports/experience', component: ExperienceComponent },
+      { path: 'reports/tracking', component: TrackingComponent },
+
+      { path: 'human-resources', component: HumanResourcesComponent },
       {
         path: 'human-resources/admission',
         component: AdmissionComponent,
@@ -64,11 +54,6 @@ export const routes: Routes = [
       {
         path: 'human-resources/resignation',
         component: ResignationComponent,
-        canActivate: [humanResourcesGuard]
-      },
-      {
-        path: 'human-resources/employees',
-        component: EmployeeComponent,
         canActivate: [humanResourcesGuard]
       },
       {

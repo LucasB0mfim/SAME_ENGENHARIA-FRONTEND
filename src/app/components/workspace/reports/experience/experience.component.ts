@@ -1,109 +1,66 @@
-import { saveAs } from 'file-saver';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { differenceInCalendarDays } from 'date-fns';
+import { finalize } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TitleService } from '../../../../core/services/title.service';
 import { ExperienceService } from '../../../../core/services/experience.service';
+import { DynamicListComponent } from '../../../dynamic-list/dynamic-list.component';
+import { DynamicListConfig } from '../../../dynamic-list/dynamic-list.models';
 
 @Component({
   selector: 'app-experience',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [
+    MatIconModule,
+    DynamicListComponent
+  ],
   templateUrl: './experience.component.html',
   styleUrl: './experience.component.scss'
 })
 export class ExperienceComponent implements OnInit {
+  private readonly _titleService = inject(TitleService);
+  private readonly _experienceService = inject(ExperienceService);
 
-  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
-  private _titleService = inject(TitleService);
-  private readonly _service = inject(ExperienceService);
-
-  // ========== ESTADOS ========== //
   items: any[] = [];
-  filteredItem: any[] = [];
-  employeeFilter: string = '';
+  activeStatus = '';
+  isSearching = false;
 
-  isEmpty: boolean = false;
-  isLoading: boolean = false;
-  isGenerating: boolean = false;
+  listConfig: DynamicListConfig = {
+    statusButtons: [
+      { label: 'Novos', value: 'NOVO' },
+      { label: 'Em andamento', value: 'ANDAMENTO' },
+      { label: 'Concluídos', value: 'CONCLUIDO' }
+    ],
 
-  // ========== HOOK ========== //
+    onStatusChange: (status) => this.findByStatus(status),
+
+    cardHeader: {
+      title: item => item.nome,
+      subtitles: [item => item.chapa, item => item.funcao],
+    },
+  };
+
   ngOnInit(): void {
-    this.getData();
     this._titleService.setTitle('Experiência');
+    this.findByStatus('NOVO');
   }
 
-  // ========== API ========== //
-  getData(): void {
-    this.isLoading = true;
+  findByStatus(status: string): void {
+    this.items = [];
+    this.isSearching = true;
+    this.activeStatus = status;
 
-    this._service.find().subscribe({
-      next: (data) => {
-        this.items = data.result;
-        this.filteredItem = [...this.items];
-        this.isLoading = false;
-        if (this.filteredItem.length === 0) this.isEmpty = true;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar dados.', error);
-        this.isLoading = false;
-        this.isEmpty = true;
-      }
-    })
+    this._experienceService.findByStatus(status)
+      .pipe(finalize(() => this.isSearching = false))
+      .subscribe({
+        next: res => { this.items = res.result; },
+        error: err => console.error(err.error.message, err),
+      });
   }
 
-  downloadExcel(): void {
-    this.isGenerating = true;
-
-    this._service.getExcel().subscribe((blob: Blob) => {
-      saveAs(blob, 'experiência.xlsx');
-      this.isGenerating = false;
-    });
-  }
-
-  // ========== BUSCAR COLABORADOR ========== //
-  applyFilters() {
-    let data = [...this.filteredItem];
-
-    if (this.employeeFilter) {
-      const inputValue = this.employeeFilter.toLowerCase();
-      data = data.filter(data =>
-        data.funcionario.toLowerCase().includes(inputValue)
-      );
-    }
-
-    this.items = data;
-  }
-
-
-  // ========== UTILITÁRIOS ========== //
-  borderExperience(firstExperience: string, secondExperience: string) {
-    const firstDate = this.experienceTime(firstExperience);
-    const secondDate = this.experienceTime(secondExperience);
-
-    if (firstDate > 0 || secondDate > 0) {
-      if ((firstDate > 0 && firstDate <= 10) || (secondDate > 0 && secondDate <= 10)) {
-        return 'red';
-      } else {
-        return 'green';
-      }
-    } else {
-      return 'orange';
-    }
-  }
-
-  experienceTime(experienceDate: string): number {
-    const today = new Date();
-    const period = this.parseBrazilianDate(experienceDate);
-    return differenceInCalendarDays(period, today) + 1;
-  }
-
-  parseBrazilianDate(dateString: string): Date {
-    const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day);
+  formateDate(date: string): string {
+    if (!date) return 'N/A';
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
   }
 }

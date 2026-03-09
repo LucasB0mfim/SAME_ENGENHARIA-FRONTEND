@@ -1,387 +1,171 @@
-<div class="container">
+<app-dynamic-list [config]="listConfig" [items]="items" [isSearching]="isSearching">
 
-  <!-- MENSAGEM -->
-  @if (showMessage) {
-  <div class="message" [ngClass]="messageType">{{ message }}</div>
-  }
+  <ng-template #cardBody let-item>
+    <div class="body">
 
-  <div class="aside">
-    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
-      [class.active]="activeStatus === 'NOVO'">
-      Novos
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
-      [class.active]="activeStatus === 'ANDAMENTO'">
-      Em andamento
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
-      [class.active]="activeStatus === 'CONCLUIDO'">
-      Concluídos
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
-      [class.active]="activeStatus === 'CANCELADO'">
-      Cancelados
-    </button>
-
-    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
-
-    <button class="btn btn__action btn__action--dark" (click)="getLink()">
-      @if (isLoading) {
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      } @else {
-      <mat-icon class="icon icon">
-        link
-      </mat-icon>
-      }
-    </button>
-
-    <button class="btn btn__action btn__action--dark" (click)="excel()">
-      @if (isLoading) {
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      } @else {
-      <mat-icon class="icon icon">
-        cloud_download
-      </mat-icon>
-      }
-    </button>
-  </div>
-
-  <div class="main">
-    <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openMenu(item)">
-        <div class="display display--column">
-          <div class="group">
-            <h3 class="title title--dark">{{ item.nome }}</h3>
-          </div>
-          <div class="group">
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
-            </div>
-          </div>
+      <div class="group group--body" (click)="openClipboard(item.foto_3x4)">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_month</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">DATA DE ADMISSÃO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_admissao) }}</h3>
         </div>
       </div>
-      <div class="card__body">
 
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_3x4)">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_month
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DE ADMISSÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_admissao) }}</h3>
-          </div>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_month</mat-icon>
         </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_month
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">DATA DE NASCIMENTO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_nascimento) }}</h3>
-          </div>
+        <div>
+          <h3 class="title title--light">DATA DE NASCIMENTO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.data_nascimento) }}</h3>
         </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_certidao)">
-            <mat-icon class="icon icon--small icon--orange">
-              file_present
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">CERTIDÃO</h3>
-            <h3 class="title title--dark">{{ item.foto_certidao ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_3x4)">
-            <mat-icon class="icon icon--small icon--orange">
-              add_a_photo
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">FOTO 3X4</h3>
-            <h3 class="title title--dark">{{ item.foto_3x4 ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_cpf)">
-            <mat-icon class="icon icon--small icon--orange">
-              badge
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">CPF</h3>
-            <h3 class="title title--dark">{{ item.cpf }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openRGModal(item)">
-            <mat-icon class="icon icon--small icon--orange">
-              perm_identity
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">RG</h3>
-            <h3 class="title title--dark">{{ item.rg }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              confirmation_number
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">PIS</h3>
-            <h3 class="title title--dark">{{ item.pis || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              phone_in_talk
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TELEFONE</h3>
-            <h3 class="title title--dark">{{ formatePhone(item.numero_contato) }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon" (click)="openClipboard(item.foto_vem)">
-            <mat-icon class="icon icon--small icon--orange">
-              credit_card
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">NÚMERO DO VEM</h3>
-            <h3 class="title title--dark">{{ item.numero_vem || 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              directions_bus
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">VT'S DE ONIBUS POR DIA</h3>
-            <h3 class="title title--dark">{{ item.qtd_onibus }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              train
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">VT'S DE METRO POR DIA</h3>
-            <h3 class="title title--dark">{{ item.qtd_metro }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              family_restroom
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">NÚMERO DE FILHOS</h3>
-            <h3 class="title title--dark">{{ item.criancas_dependentes }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              directions_walk
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TAMANHO DA BOTA</h3>
-            <h3 class="title title--dark">{{ item.numero_calcado }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              checkroom
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">TAMANHO DA FARDA</h3>
-            <h3 class="title title--dark">{{ item.tamanho_farda }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body group--double">
-          <div class="group group--icon" (click)="openClipboard(item.foto_comprovante_residencia)">
-            <mat-icon class="icon icon--small icon--orange">
-              add_location
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">ENDEREÇO</h3>
-            <h3 class="title title--dark">{{ item.endereco }}</h3>
-          </div>
-        </div>
-
-        @if (item.observacao) {
-        <div class="group group--body group--full">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              notes
-            </mat-icon>
-          </div>
-          <div class="">
-            <h3 class="title title--light">OBSERVAÇÃO</h3>
-            <h3 class="title title--dark">{{ item.observacao }}</h3>
-          </div>
-        </div>
-        }
-
       </div>
+
+      <div class="group group--body" (click)="openClipboard(item.foto_certidao)">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">file_present</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">CERTIDÃO</h3>
+          <h3 class="title title--dark">{{ item.foto_certidao ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body" (click)="openClipboard(item.foto_3x4)">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">add_a_photo</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">FOTO 3X4</h3>
+          <h3 class="title title--dark">{{ item.foto_3x4 ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body" (click)="openClipboard(item.foto_cpf)">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">badge</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">CPF</h3>
+          <h3 class="title title--dark">{{ item.cpf }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">perm_identity</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">RG</h3>
+          <h3 class="title title--dark">{{ item.rg }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">confirmation_number</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">PIS</h3>
+          <h3 class="title title--dark">{{ item.pis || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">phone_in_talk</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">TELEFONE</h3>
+          <h3 class="title title--dark">{{ formatePhone(item.numero_contato) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body" (click)="openClipboard(item.foto_vem)">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">credit_card</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">NÚMERO DO VEM</h3>
+          <h3 class="title title--dark">{{ item.numero_vem || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">directions_bus</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">VT'S DE ONIBUS/DIA</h3>
+          <h3 class="title title--dark">{{ item.qtd_onibus }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">train</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">VT'S DE METRO/DIA</h3>
+          <h3 class="title title--dark">{{ item.qtd_metro }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">family_restroom</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">NÚMERO DE FILHOS</h3>
+          <h3 class="title title--dark">{{ item.criancas_dependentes }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">directions_walk</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">TAMANHO DA BOTA</h3>
+          <h3 class="title title--dark">{{ item.numero_calcado }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">checkroom</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">TAMANHO DA FARDA</h3>
+          <h3 class="title title--dark">{{ item.tamanho_farda }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body group--double" (click)="openClipboard(item.foto_comprovante_residencia)">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">add_location</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">ENDEREÇO</h3>
+          <h3 class="title title--dark">{{ item.endereco }}</h3>
+        </div>
+      </div>
+
+      @if (item.observacao) {
+      <div class="group group--body group--full">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">notes</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">OBSERVAÇÃO</h3>
+          <h3 class="title title--dark">{{ item.observacao }}</h3>
+        </div>
+      </div>
+      }
+
     </div>
+  </ng-template>
 
-    <div class="blurred-background" *ngIf="menuModalOpen">
-      <form class="modal">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Menu</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="download()">
-              @if (isLoading) {
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-              } @else {
-              Gerar PDF
-              }
-            </button>
-            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-              Atualizar
-            </button>
-            <button type="button" class="btn btn__action btn__full" (click)="delete()">
-              Deletar
-            </button>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="blurred-background" *ngIf="updateModalOpen">
-      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Atualizar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <div class="group group--column">
-              <label class="title title--medium title--light">Status</label>
-              <select class="select" formControlName="status">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="ANDAMENTO">Em andamento</option>
-                <option value="CONCLUIDO">Concluído</option>
-                <option value="CANCELADO">Cancelado</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Data da admissão</label>
-              <input type="date" class="input input--dark input--full" formControlName="dataAdmissao">
-            </div>
-
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea formControlName="observacao" class="textarea"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="returnModal()">
-            Voltar
-          </button>
-          <button type="submit" class="btn btn__action">
-            @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Atualizar
-            }
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="blurred-background" *ngIf="rGModalOpen">
-      <form class="modal">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">RG</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="openRGFront()">
-              FRENTE DO RG
-            </button>
-            <button type="button" class="btn btn__action" (click)="openRGBack()">
-              VERSO DO RG
-            </button>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="centralized" *ngIf="isSearching">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-
-    <div class="centralized centralized--column" *ngIf="isEmpty">
-      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
-      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
-    </div>
-  </div>
-</div>
+</app-dynamic-list>

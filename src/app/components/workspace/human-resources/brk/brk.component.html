@@ -1,440 +1,141 @@
-<div class="container">
+<app-dynamic-list [config]="listConfig" [items]="items" [isSearching]="isSearching">
 
-  <!-- MENSAGEM -->
-  @if (showMessage) {
-  <div class="message" [ngClass]="messageType">{{ message }}</div>
-  }
+  <ng-template #cardBody let-item>
+    <div class="body">
 
-  <div class="aside">
-    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
-      [class.active]="activeStatus === 'NOVO'">
-      Novos
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('PESQUISA SOCIAL')"
-      [class.active]="activeStatus === 'PESQUISA SOCIAL'">
-      Pesquisa Social
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('DOCUMENTACAO')"
-      [class.active]="activeStatus === 'DOCUMENTACAO'">
-      Documentação
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('INTEGRACAO')"
-      [class.active]="activeStatus === 'INTEGRACAO'">
-      Integração
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('LIBERADO')"
-      [class.active]="activeStatus === 'LIBERADO'">
-      Liberados
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('PAUSADO')"
-      [class.active]="activeStatus === 'PAUSADO'">
-      Pausados
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
-      [class.active]="activeStatus === 'CANCELADO'">
-      Cancelados
-    </button>
-
-    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
-
-    <button class="btn btn__action btn__action--dark" (click)="openCreator()">
-      <mat-icon class="icon icon">add</mat-icon>
-    </button>
-  </div>
-
-  <div class="main">
-    <div class="card" *ngFor="let item of items">
-      <div class="card__header" (click)="openMenu(item)">
-        <div class="display display--column">
-          <div class="group">
-            <h3 class="title title--dark">{{ item.nome }}</h3>
-          </div>
-          <div class="group">
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
-            </div>
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
-            </div>
-          </div>
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">article</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">NÚMERO DO CONTRATO</h3>
+          <h3 class="title title--dark">{{ item.contrato || 'N/A' }}</h3>
         </div>
       </div>
-      <div class="card__body">
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              article
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">NÚMERO DO CONTRATO</h3>
-            <h3 class="title title--dark">{{ item.contrato || 'N/A' }}</h3>
-          </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">link</mat-icon>
         </div>
-        <div class="group group--body" (click)="managerLink(item.link)">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              link
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">LINK</h3>
-            <h3 class="title title--dark">{{ item.link ? 'ABRIR IMAGEM' : 'N/A' }}</h3>
-          </div>
+        <div>
+          <h3 class="title title--light">LINK</h3>
+          <h3 class="title title--dark">{{ item.link ? 'ABRIR LINK' : 'N/A' }}</h3>
         </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">PESQUISA SOCIAL</h3>
-            <h3 class="title title--dark">{{ formateDate(item.dt_envio_pesq_social) || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">PREVISÃO DE APROVAÇÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_pesq_social) || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">ENVIO DO DOCUMENTO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.dt_envio_doc) || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">PREVISÃO DE APROVAÇÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_doc) || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">REENVIO DO DOCUMENTO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.dt_reenvio_doc) || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">PREVISÃO DE APROVAÇÃO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_reenvio_doc) || 'N/A' }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              settings
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">ASO</h3>
-            <h3 class="title title--dark">{{ item.aso }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              settings
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">FILHA DE EPI</h3>
-            <h3 class="title title--dark">{{ item.epi }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              settings
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">TREINAMENTO</h3>
-            <h3 class="title title--dark">{{ item.treinamento }}</h3>
-          </div>
-        </div>
-        <div class="group group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              settings
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">ORDEM DE SERVIÇO</h3>
-            <h3 class="title title--dark">{{ item.os }}</h3>
-          </div>
-        </div>
-        @if (item.observacao) {
-        <div class="group group--body group--full">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              notes
-            </mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">OBSERVAÇÃO</h3>
-            <h3 class="title title--dark">{{ item.observacao }}</h3>
-          </div>
-        </div>
-        }
       </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">PESQUISA SOCIAL</h3>
+          <h3 class="title title--dark">{{ formateDate(item.dt_envio_pesq_social) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">PREV. APROVAÇÃO P.S</h3>
+          <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_pesq_social) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">ENVIO DO DOCUMENTO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.dt_envio_doc) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">PREV. APROVAÇÃO DOC</h3>
+          <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_doc) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">REENVIO DO DOCUMENTO</h3>
+          <h3 class="title title--dark">{{ formateDate(item.dt_reenvio_doc) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">PREV. APROVAÇÃO REENV</h3>
+          <h3 class="title title--dark">{{ formateDate(item.dt_prev_aprov_reenvio_doc) }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">settings</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">ASO</h3>
+          <h3 class="title title--dark">{{ item.aso || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">settings</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">FICHA DE EPI</h3>
+          <h3 class="title title--dark">{{ item.epi || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">settings</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">TREINAMENTO</h3>
+          <h3 class="title title--dark">{{ item.treinamento || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">settings</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">ORDEM DE SERVIÇO</h3>
+          <h3 class="title title--dark">{{ item.os || 'N/A' }}</h3>
+        </div>
+      </div>
+
+      @if (item.observacao) {
+      <div class="group group--body group--full">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">notes</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">OBSERVAÇÃO</h3>
+          <h3 class="title title--dark">{{ item.observacao }}</h3>
+        </div>
+      </div>
+      }
+
     </div>
+  </ng-template>
 
-    <div class="blurred-background" *ngIf="createModalOpen">
-      <form class="modal" [formGroup]="createForm" (ngSubmit)="create()">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Criar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <div class="group group--column">
-              <label class="title title--medium title--light">Nome Completo *</label>
-              <input type="text" class="input input--dark input--full" placeholder="Insira o nome"
-                formControlName="nome">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Função *</label>
-              <select class="select" formControlName="funcao">
-                <option value="" disabled>Selecione uma opção</option>
-                <option *ngFor="let function of listOfFunctions" [value]="function">{{ function }}</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Contrato *</label>
-              <input type="text" class="input input--dark input--full" placeholder="Insira o contrato"
-                formControlName="contrato">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Centro de Custo *</label>
-              <select class="select" formControlName="centroCusto">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="BRK - RECIFE">BRK - RECIFE</option>
-                <option value="BRK - MACEIO">BRK - MACEIO</option>
-              </select>
-            </div>
-
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea class="textarea" placeholder="Comente sobre algo..." formControlName="observacao"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-          <button type="submit" class="btn btn__action">
-            @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Criar
-            }
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="blurred-background" *ngIf="menuModalOpen">
-      <form class="modal">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Menu</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-              Atualizar
-            </button>
-            <button type="button" class="btn btn__action" (click)="delete()">
-              deletar
-            </button>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="blurred-background" *ngIf="updateModalOpen">
-      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
-        <div class="modal__header">
-          <h3 class="title title--large title--dark">Atualizar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
-          </button>
-        </div>
-        <div class="modal__body">
-          <div class="grid grid--quad">
-            <div class="group group--column">
-              <label class="title title--medium title--light">Função *</label>
-              <select class="select" formControlName="funcao">
-                <option value="" disabled>Selecione uma opção</option>
-                <option *ngFor="let function of listOfFunctions" [value]="function">{{ function }}</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Contrato *</label>
-              <input type="text" class="input input--dark input--full" formControlName="contrato">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Status *</label>
-              <select class="select" formControlName="status">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="NOVO">NOVO</option>
-                <option value="PESQUISA SOCIAL">PESQUISA SOCIAL</option>
-                <option value="DOCUMENTACAO">DOCUMENTACAO</option>
-                <option value="INTEGRACAO">INTEGRACAO</option>
-                <option value="LIBERADO">LIBERADO</option>
-                <option value="PAUSADO">PAUSADO</option>
-                <option value="CANCELADO">CANCELADO</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Centro de Custo *</label>
-              <select class="select" formControlName="centroCusto">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="BRK - RECIFE">BRK - RECIFE</option>
-                <option value="BRK - MACEIO">BRK - MACEIO</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Pesquisa Social</label>
-              <input type="date" class="input input--dark input--full" formControlName="pesquisaSocial">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Envio do Documento</label>
-              <input type="date" class="input input--dark input--full" formControlName="envioDocumento">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Reenvio do Documento</label>
-              <input type="date" class="input input--dark input--full" formControlName="reenvioDocumento">
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">ASO</label>
-              <select class="select" formControlName="aso">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="CONCLUIDO">CONCLUIDO</option>
-                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Ficha de epi</label>
-              <select class="select" formControlName="epi">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="CONCLUIDO">CONCLUIDO</option>
-                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Treinamento</label>
-              <select class="select" formControlName="treinamento">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="CONCLUIDO">CONCLUIDO</option>
-                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Ordem de Serviço</label>
-              <select class="select" formControlName="os">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="CONCLUIDO">CONCLUIDO</option>
-                <option value="NÃO CONCLUIDO">NÃO CONCLUIDO</option>
-              </select>
-            </div>
-
-            <div class="group group--column">
-              <label class="title title--medium title--light">Link</label>
-              <input type="text" placeholder="Insira o link" class="input input--dark input--full"
-                formControlName="link">
-            </div>
-
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea formControlName="observacao" class="textarea"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="returnModal()">
-            Voltar
-          </button>
-          <button type="submit" class="btn btn__action">
-            @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            } @else {
-            Atualizar
-            }
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="centralized" *ngIf="isSearching">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-
-    <div class="centralized centralized--column" *ngIf="isEmpty">
-      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
-      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
-    </div>
-  </div>
-</div>
+</app-dynamic-list>

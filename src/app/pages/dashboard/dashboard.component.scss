@@ -7,18 +7,18 @@ $border-radius: 8px;
   height: 100vh;
   padding: $padding;
 
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   background-color: var(--primary-color);
   gap: $gap;
 }
 
 .menu {
-  width: 100%;
+  width: auto;
   height: 100%;
   padding: $padding;
   border-radius: $border-radius;
   background-color: var(--secondary-color);
+  flex: 0 0 auto;
 
   &__nav {
     display: flex;
@@ -102,7 +102,7 @@ $border-radius: 8px;
 }
 
 .workspace {
-  width: 100%;
+  flex: 1;
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;

@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="aside">
+    @for (btn of config.statusButtons; track btn.value) {
+    <button type="button" class="btn btn__launch" (click)="onStatusClick(btn.value)"
+      [class.active]="activeStatus === btn.value">
+      {{ btn.label }}
+    </button>
+    }
+  </div>
+
+  <div class="main">
+
+    @for (item of items; track $index) {
+    <div class="card">
+
+      <div class="card__header">
+        <div class="display display--column">
+          <div class="group">
+            <h3 class="title title--dark">{{ config.cardHeader.title(item) }}</h3>
+          </div>
+          @if (config.cardHeader.subtitles?.length) {
+          <div class="group">
+            @for (sub of config.cardHeader.subtitles!; track $index) {
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ sub(item) }}</h3>
+            </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="card__body">
+        <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: item }">
+        </ng-container>
+      </div>
+
+    </div>
+    }
+
+    @if (isSearching) {
+    <div class="centralized">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+    }
+
+    @if (isEmpty) {
+    <div class="centralized centralized--column">
+      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
+      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
+    </div>
+    }
+
+  </div>
+</div>

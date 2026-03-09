@@ -14,21 +14,8 @@ export class ExperienceService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  find(): Observable<any> {
+  findByStatus(status: string): Observable<any> {
     const headers = this._createHeaders();
-    return this._httpClient.get<any>('https://sameengenharia.com.br/api/experience/reports', { headers });
-  }
-
-  updateModality(request: any): Observable<any> {
-    const headers = this._createHeaders();
-    return this._httpClient.put<any>('https://sameengenharia.com.br/api/experience/update', request, { headers });
-  }
-
-  getExcel(): Observable<Blob> {
-    const headers = this._createHeaders();
-    return this._httpClient.get('https://sameengenharia.com.br/api/experience/download', {
-      headers,
-      responseType: 'blob' as 'blob'
-    });
+    return this._httpClient.get<any>(`https://sameengenharia.com.br/api/experience/${status}`, { headers });
   }
 }

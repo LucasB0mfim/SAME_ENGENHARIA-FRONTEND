@@ -1,71 +1,38 @@
-<div class="container">
-  <div class="filter__container">
-    <div class="filter">
-      <label class="filter__label">COLABORADOR</label>
-      <input type="text" placeholder="BUSCAR" [(ngModel)]="employeeFilter" (input)="applyFilters()" class="filter__input">
-    </div>
+<app-dynamic-list [config]="listConfig" [items]="items" [isSearching]="isSearching">
 
-    <div class="filter">
-      <label class="filter__label">GERAR EXCEL</label>
-      <button type="button" (click)="downloadExcel()" class="filter__button">
-        @if (isGenerating) {
-        <div class="loading-dots">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+  <ng-template #cardBody let-item>
+    <div class="body">
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
         </div>
-        } @else {
-        <mat-icon>download</mat-icon>
-        }
-      </button>
-    </div>
-  </div>
-  <div class="card__container">
-    <!-- CARD -->
-    <div class="card" *ngFor="let item of items">
-      <div class="card__header" [ngClass]="borderExperience(item.primeiro_periodo, item.segundo_periodo)">
-        <div class="card__primary">
-          <div class="card__top">
-            <div class="card__subtitle">CHAPA: {{ item.chapa || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.estado || 'N/A' }}</div>
-          </div>
-          <div class="card__bottom">
-            <div class="card__title">{{ item.funcionario || 'N/A' }}</div>
-          </div>
+        <div>
+          <h3 class="title title--light">ADMISSÃO</h3>
+          <h3 class="title title--dark">{{ item.admissao }}</h3>
         </div>
-        <div class="card__secondary">
-          <div class="card__text">
-            <div class="card__title">ADMISSÃO:</div>
-            <div class="card__subtitle">{{ item.admissao || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-          <div class="card__text">
-            <div class="card__title">1º PERIODO:</div>
-            <div class="card__subtitle">{{ item.primeiro_periodo || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-          </div>
-          <div class="card__text">
-            <div class="card__title">2º PERIODO:</div>
-            <div class="card__subtitle">{{ item.segundo_periodo || 'N/A' }}</div>
-          </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">1º PERÍODO</h3>
+          <h3 class="title title--dark">{{ item.primeiro_periodo }}</h3>
+        </div>
+      </div>
+
+      <div class="group group--body">
+        <div class="group group--icon">
+          <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
+        </div>
+        <div>
+          <h3 class="title title--light">2º PERÍODO</h3>
+          <h3 class="title title--dark">{{ item.segundo_periodo }}</h3>
         </div>
       </div>
     </div>
+  </ng-template>
 
-    <!-- LISTA VAZIA -->
-    <div class="empty" *ngIf="isEmpty">
-      <span>Nenhum registro encontrado</span>
-      <mat-icon>search</mat-icon>
-    </div>
-
-    <!-- CARREGANDO LISTA -->
-    <div class="loading" *ngIf="isLoading">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-  </div>
-</div>
+</app-dynamic-list>
