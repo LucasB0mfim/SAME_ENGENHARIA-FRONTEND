@@ -45,7 +45,7 @@ export class LoginComponent {
       .subscribe({
         next: (res) => {
           this.setMessage(res.message, 'success');
-          this._router.navigate(['dashboard']);
+          this._router.navigate(['workspace/dashboard']);
         },
         error: (err) => {
           console.error('Erro ao solicitar acesso: ', err);

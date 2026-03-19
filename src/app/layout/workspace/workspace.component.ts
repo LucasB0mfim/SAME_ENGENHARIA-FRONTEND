@@ -1,0 +1,75 @@
+import { Subject, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { ThemeService } from '../../core/services/theme.service';
+import { TitleService } from '../../core/services/title.service';
+import { UserService } from '../../core/services/user.service';
+import { LoginService } from '../../core/services/login.service';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+
+@Component({
+  selector: 'app-workspace',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatIconModule
+  ],
+  templateUrl: './workspace.component.html',
+  styleUrl: './workspace.component.scss'
+})
+export class WorkspaceComponent implements OnInit, OnDestroy {
+  title: string = 'Dashboard';
+  avatar: string = 'assets/images/avatar.png';
+  isDarkTheme: boolean = false;
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private _themeService: ThemeService,
+    private readonly _titleService: TitleService,
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _userService: UserService,
+    private readonly _loginService: LoginService
+  ) { }
+
+  ngOnInit(): void {
+    this._themeService.getThemeState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isDark => {
+        this.isDarkTheme = isDark;
+        this.applyTheme(isDark);
+      });
+
+    this._titleService.title$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(title => {
+        this.title = title;
+        this._cdr.detectChanges();
+      });
+
+    this._userService.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
+      if (user) this.avatar = user.avatar;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  onToggleTheme(): void {
+    const newTheme = !this.isDarkTheme;
+    this._themeService.setThemeState(newTheme);
+  }
+
+  onLogout(): void {
+    this._loginService.logout();
+  }
+
+  private applyTheme(isDark: boolean): void {
+    const theme = isDark ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+}

@@ -1,0 +1,109 @@
+import { saveAs } from 'file-saver';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { differenceInCalendarDays } from 'date-fns';
+import { MatIconModule } from '@angular/material/icon';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { TitleService } from '../../../../core/services/title.service';
+import { ExperienceService } from '../../services/experience.service';
+
+@Component({
+  selector: 'app-experience',
+  standalone: true,
+  imports: [CommonModule, FormsModule, MatIconModule, MatProgressSpinnerModule],
+  templateUrl: './experience.component.html',
+  styleUrl: './experience.component.scss'
+})
+export class ExperienceComponent implements OnInit {
+
+  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
+  private _titleService = inject(TitleService);
+  private readonly _service = inject(ExperienceService);
+
+  // ========== ESTADOS ========== //
+  items: any[] = [];
+  filteredItem: any[] = [];
+  employeeFilter: string = '';
+
+  isEmpty: boolean = false;
+  isLoading: boolean = false;
+  isGenerating: boolean = false;
+
+  // ========== HOOK ========== //
+  ngOnInit(): void {
+    this.getData();
+    this._titleService.setTitle('Experiência');
+  }
+
+  // ========== API ========== //
+  getData(): void {
+    this.isLoading = true;
+
+    this._service.find().subscribe({
+      next: (data) => {
+        this.items = data.result;
+        this.filteredItem = [...this.items];
+        this.isLoading = false;
+        if (this.filteredItem.length === 0) this.isEmpty = true;
+      },
+      error: (error) => {
+        console.error('Erro ao buscar dados.', error);
+        this.isLoading = false;
+        this.isEmpty = true;
+      }
+    })
+  }
+
+  downloadExcel(): void {
+    this.isGenerating = true;
+
+    this._service.getExcel().subscribe((blob: Blob) => {
+      saveAs(blob, 'experiência.xlsx');
+      this.isGenerating = false;
+    });
+  }
+
+  // ========== BUSCAR COLABORADOR ========== //
+  applyFilters() {
+    let data = [...this.filteredItem];
+
+    if (this.employeeFilter) {
+      const inputValue = this.employeeFilter.toLowerCase();
+      data = data.filter(data =>
+        data.funcionario.toLowerCase().includes(inputValue)
+      );
+    }
+
+    this.items = data;
+  }
+
+
+  // ========== UTILITÁRIOS ========== //
+  borderExperience(firstExperience: string, secondExperience: string) {
+    const firstDate = this.experienceTime(firstExperience);
+    const secondDate = this.experienceTime(secondExperience);
+
+    if (firstDate > 0 || secondDate > 0) {
+      if ((firstDate > 0 && firstDate <= 10) || (secondDate > 0 && secondDate <= 10)) {
+        return 'red';
+      } else {
+        return 'green';
+      }
+    } else {
+      return 'orange';
+    }
+  }
+
+  experienceTime(experienceDate: string): number {
+    const today = new Date();
+    const period = this.parseBrazilianDate(experienceDate);
+    return differenceInCalendarDays(period, today) + 1;
+  }
+
+  parseBrazilianDate(dateString: string): Date {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day);
+  }
+}
