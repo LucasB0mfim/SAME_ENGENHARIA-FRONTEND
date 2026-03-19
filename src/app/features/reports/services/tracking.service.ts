@@ -11,6 +11,6 @@ export class TrackingService {
   private readonly _httpClient = inject(HttpClient);
 
   findAll() {
-    return this._httpClient.get<any>(`${this._url}/reports/tracking`);
+    return this._httpClient.get<any>(`${this._url}/tracking`);
   }
 }

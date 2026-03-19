@@ -1,71 +1,84 @@
 <div class="container">
-  <div class="filter__container">
-    <div class="filter">
-      <label class="filter__label">COLABORADOR</label>
-      <input type="text" placeholder="BUSCAR" [(ngModel)]="employeeFilter" (input)="applyFilters()" class="filter__input">
-    </div>
+  <div class="aside">
+    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
+      [class.active]="activeStatus === 'NOVO'">
+      Novos
+    </button>
 
-    <div class="filter">
-      <label class="filter__label">GERAR EXCEL</label>
-      <button type="button" (click)="downloadExcel()" class="filter__button">
-        @if (isGenerating) {
-        <div class="loading-dots">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-        } @else {
-        <mat-icon>download</mat-icon>
-        }
-      </button>
-    </div>
+    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
+      [class.active]="activeStatus === 'ANDAMENTO'">
+      Em andamento
+    </button>
+
+    <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
+      [class.active]="activeStatus === 'CONCLUIDO'">
+      Concluídos
+    </button>
+
+    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
   </div>
-  <div class="card__container">
-    <!-- CARD -->
+
+  <div class="main">
     <div class="card" *ngFor="let item of items">
-      <div class="card__header" [ngClass]="borderExperience(item.primeiro_periodo, item.segundo_periodo)">
-        <div class="card__primary">
-          <div class="card__top">
-            <div class="card__subtitle">CHAPA: {{ item.chapa || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.centro_custo || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.funcao || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
-            <div class="card__subtitle">{{ item.estado || 'N/A' }}</div>
+      <div class="card__header">
+        <div class="display display--column">
+          <div class="group">
+            <h3 class="title title--dark">{{ item.nome }}</h3>
           </div>
-          <div class="card__bottom">
-            <div class="card__title">{{ item.funcionario || 'N/A' }}</div>
+          <div class="group">
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.chapa || 'N/A' }}</h3>
+            </div>
+            <div class="bubble">
+              <h3 class="title title--dark-orange">{{ item.funcao || 'N/A' }}</h3>
+            </div>
           </div>
         </div>
-        <div class="card__secondary">
-          <div class="card__text">
-            <div class="card__title">ADMISSÃO:</div>
-            <div class="card__subtitle">{{ item.admissao || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
+      </div>
+      <div class="card__body">
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
           </div>
-          <div class="card__text">
-            <div class="card__title">1º PERIODO:</div>
-            <div class="card__subtitle">{{ item.primeiro_periodo || 'N/A' }}</div>
-            <div class="card__subtitle">|</div>
+          <div class="">
+            <h3 class="title title--light">DATA DE ADMISSÃO</h3>
+            <h3 class="title title--dark">{{ item.admissao }}</h3>
           </div>
-          <div class="card__text">
-            <div class="card__title">2º PERIODO:</div>
-            <div class="card__subtitle">{{ item.segundo_periodo || 'N/A' }}</div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">1º PERIODO</h3>
+            <h3 class="title title--dark">{{ item.primeiro_periodo || 'N/A' }}</h3>
+          </div>
+        </div>
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">
+              calendar_today
+            </mat-icon>
+          </div>
+          <div class="">
+            <h3 class="title title--light">2º PERIODO</h3>
+            <h3 class="title title--dark">{{ item.segundo_periodo || 'N/A' }}</h3>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- LISTA VAZIA -->
-    <div class="empty" *ngIf="isEmpty">
-      <span>Nenhum registro encontrado</span>
-      <mat-icon>search</mat-icon>
+    <div class="centralized" *ngIf="isSearching">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>
 
-    <!-- CARREGANDO LISTA -->
-    <div class="loading" *ngIf="isLoading">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <div class="centralized centralized--column" *ngIf="isEmpty">
+      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
+      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
     </div>
   </div>
 </div>

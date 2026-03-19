@@ -1,13 +1,15 @@
-import { saveAs } from 'file-saver';
-import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs';
+
 import { CommonModule } from '@angular/common';
-import { differenceInCalendarDays } from 'date-fns';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormControl, FormsModule, FormGroup, Validators } from '@angular/forms';
 
 import { TitleService } from '../../../../core/services/title.service';
 import { ExperienceService } from '../../services/experience.service';
+
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-experience',
@@ -17,93 +19,65 @@ import { ExperienceService } from '../../services/experience.service';
   styleUrl: './experience.component.scss'
 })
 export class ExperienceComponent implements OnInit {
+  private readonly _titleService = inject(TitleService);
+  private readonly _experienceService = inject(ExperienceService);
 
-  // ========== INJEÇÃO DE DEPENDÊNCIAS ========== //
-  private _titleService = inject(TitleService);
-  private readonly _service = inject(ExperienceService);
-
-  // ========== ESTADOS ========== //
   items: any[] = [];
-  filteredItem: any[] = [];
-  employeeFilter: string = '';
+  currentItem: any = {};
+  filteredItems: any[] = [];
+
+  employee: string = '';
+  activeStatus: string = '';
 
   isEmpty: boolean = false;
-  isLoading: boolean = false;
-  isGenerating: boolean = false;
+  isSearching: boolean = false;
 
-  // ========== HOOK ========== //
   ngOnInit(): void {
-    this.getData();
-    this._titleService.setTitle('Experiência');
+    this.findByStatus('NOVO');
+    this._titleService.setTitle('Período de Experiência');
   }
 
-  // ========== API ========== //
-  getData(): void {
-    this.isLoading = true;
+  findByStatus(status: string): void {
+    this.items = [];
+    this.isEmpty = false;
+    this.isSearching = true;
 
-    this._service.find().subscribe({
-      next: (data) => {
-        this.items = data.result;
-        this.filteredItem = [...this.items];
-        this.isLoading = false;
-        if (this.filteredItem.length === 0) this.isEmpty = true;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar dados.', error);
-        this.isLoading = false;
-        this.isEmpty = true;
-      }
-    })
-  }
+    this._experienceService.findByStatus(status)
+      .pipe(finalize(() => this.isSearching = false))
+      .subscribe({
+        next: (res) => {
+          this.items = res.result;
+          this.filteredItems = [...this.items];
+          this.isEmpty = this.items.length === 0;
+          this.activeStatus = status;
+        },
+        error: (err) => {
+          console.error(err.error.message, err);
+        }
+      });
+  };
 
-  downloadExcel(): void {
-    this.isGenerating = true;
-
-    this._service.getExcel().subscribe((blob: Blob) => {
-      saveAs(blob, 'experiência.xlsx');
-      this.isGenerating = false;
-    });
-  }
-
-  // ========== BUSCAR COLABORADOR ========== //
   applyFilters() {
-    let data = [...this.filteredItem];
+    let data = [...this.filteredItems];
 
-    if (this.employeeFilter) {
-      const inputValue = this.employeeFilter.toLowerCase();
-      data = data.filter(data =>
-        data.funcionario.toLowerCase().includes(inputValue)
-      );
+    if (this.employee) {
+      const inputValue = this.employee
+        .toUpperCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      data = data.filter(item => {
+        if (!item.nome) return false;
+
+        const nome = item.nome
+          .toUpperCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+
+        return nome.includes(inputValue);
+      });
     }
 
     this.items = data;
-  }
-
-
-  // ========== UTILITÁRIOS ========== //
-  borderExperience(firstExperience: string, secondExperience: string) {
-    const firstDate = this.experienceTime(firstExperience);
-    const secondDate = this.experienceTime(secondExperience);
-
-    if (firstDate > 0 || secondDate > 0) {
-      if ((firstDate > 0 && firstDate <= 10) || (secondDate > 0 && secondDate <= 10)) {
-        return 'red';
-      } else {
-        return 'green';
-      }
-    } else {
-      return 'orange';
-    }
-  }
-
-  experienceTime(experienceDate: string): number {
-    const today = new Date();
-    const period = this.parseBrazilianDate(experienceDate);
-    return differenceInCalendarDays(period, today) + 1;
-  }
-
-  parseBrazilianDate(dateString: string): Date {
-    const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day);
-  }
+  };
 }
