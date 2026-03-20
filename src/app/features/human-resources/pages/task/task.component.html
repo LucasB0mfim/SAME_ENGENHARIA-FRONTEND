@@ -34,14 +34,14 @@
       <div class="card__header" (click)="openMenu(item)">
         <div class="display display--column">
           <div class="group">
-            <h3 class="title title--dark">{{ item.empData.nome }}</h3>
+            <h3 class="title title--dark">{{ item.criador.nome }}</h3>
           </div>
           <div class="group">
             <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.empData.funcao }}</h3>
+              <h3 class="title title--dark-orange">{{ item.criador.funcao }}</h3>
             </div>
             <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.empData.funcao }}</h3>
+              <h3 class="title title--dark-orange">{{ item.criador.centro_custo }}</h3>
             </div>
           </div>
         </div>
@@ -182,7 +182,7 @@
           </button>
         </div>
         <div class="modal__body modal__body--scrollable">
-          <div class="group group--body" *ngFor="let emp of currentItem.tarefa_participantes">
+          <div class="group group--body" *ngFor="let emp of currentItem.colaboradores">
             <div class="group group--icon">
               <mat-icon class="icon icon--small icon--orange">
                 person
@@ -196,6 +196,9 @@
                 </div>
                 <div class="bubble">
                   <h3 class="title title--dark-orange">{{ emp.valor | currency:'BRL':'symbol':'1.2-2' }}</h3>
+                </div>
+                <div class="bubble">
+                  <h3 class="title title--dark-orange">{{ emp.coligada == 1 ? 'SAME' : 'ARAUJO' }}</h3>
                 </div>
                 <div class="bubble">
                   <h3 class="title title--dark-orange">{{ emp.autorizacao || 'N/A' }}</h3>
