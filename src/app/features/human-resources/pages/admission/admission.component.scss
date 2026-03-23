@@ -35,7 +35,6 @@ $bp-desktop-max: 1919px;
 .container {
   width: 100%;
   height: 100%;
-  padding: 1rem;
   gap: $gp-md;
   display: grid;
   justify-items: center;
@@ -48,7 +47,6 @@ $bp-desktop-max: 1919px;
   gap: $gp-md;
   display: flex;
   align-items: start;
-  padding-right: $pd-sm;
   justify-content: start;
   flex-wrap: nowrap;
 
@@ -63,7 +61,6 @@ $bp-desktop-max: 1919px;
 
 .main {
   display: flex;
-  padding-right: $pd-sm;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -71,13 +68,7 @@ $bp-desktop-max: 1919px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    cursor: pointer;
-    border-radius: $bd-sm;
-    background: var(--orange-color);
+    width: 0;
   }
 
   @media (min-width: $bp-desktop) {
@@ -118,7 +109,7 @@ $bp-desktop-max: 1919px;
   &--body {
     padding: $pd-sm;
     border-radius: $bd-lg;
-    background-color: var(--secondary-color);
+    background-color: var(--background-color);
   }
 
   &--icon {
@@ -203,7 +194,7 @@ $bp-desktop-max: 1919px;
   width: 100%;
   height: auto;
   border-radius: $bd-df;
-  background-color: var(--primary-color);
+  background-color: var(--card-color);
 
   &__header {
     display: flex;
@@ -223,7 +214,7 @@ $bp-desktop-max: 1919px;
     grid-template-columns: repeat(4, 1fr);
     gap: $gp-lg;
     padding: $pd-md;
-    border-top: $bd-sm solid var(--secondary-color);
+    border-top: $bd-sm solid var(--background-color);
 
     @media (min-width: $bp-tablet) and (max-width: $bp-tablet-max) {
       grid-template-columns: 1fr;
@@ -251,12 +242,12 @@ $bp-desktop-max: 1919px;
 
   &--light {
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-primary-color);
   }
 
   &--dark {
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-secondary-color);
   }
 
   &--dark-orange {
@@ -297,11 +288,11 @@ $bp-desktop-max: 1919px;
   }
 
   &--light {
-    color: var(--text-color);
+    color: var(--text-primary-color);
   }
 
   &--dark {
-    color: var(--text-color);
+    color: var(--text-primary-color);
   }
 
   &--orange {
@@ -311,10 +302,10 @@ $bp-desktop-max: 1919px;
   &--close {
     cursor: pointer;
     font-size: $icon-sm;
-    color: var(--text-color);
+    color: var(--text-primary-color);
 
     &:hover {
-      color: var(--text-color);
+      color: var(--text-primary-color);
     }
   }
 }
@@ -328,12 +319,12 @@ $bp-desktop-max: 1919px;
   cursor: pointer;
   font-weight: 600;
   font-size: $fs-md;
-  color: var(--text-color);
+  color: var(--text-primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  background-color: var(--primary-color);
+  background-color: var(--card-color);
   transition: all 0.2s ease;
   white-space: nowrap;
 
@@ -358,11 +349,11 @@ $bp-desktop-max: 1919px;
     border-radius: $bd-lg;
     padding: $pd-sm $pd-md;
     border: $bd-sm dashed transparent;
-    background-color: var(--secondary-color);
+    background-color: var(--sidebar-color);
 
     &--dark {
       padding: 0 $pd-md;
-      background-color: var(--primary-color);
+      background-color: var(--card-color);
     }
 
     &:hover {
@@ -391,10 +382,10 @@ $bp-desktop-max: 1919px;
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm;
-  color: var(--text-color);
+  color: var(--text-primary-color);
   border-radius: $bd-lg;
   border: $bd-sm dashed transparent;
-  background-color: var(--primary-color);
+  background-color: var(--card-color);
   transition: all 0.2s ease;
 
   &:focus {
@@ -403,7 +394,7 @@ $bp-desktop-max: 1919px;
   }
 
   &--dark {
-    background-color: var(--secondary-color);
+    background-color: var(--background-color);
   }
 
   &--full {
@@ -421,10 +412,10 @@ $bp-desktop-max: 1919px;
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm;
-  color: var(--text-color);
+  color: var(--text-primary-color);
   border-radius: $bd-lg;
   border: $bd-sm dashed transparent;
-  background-color: var(--secondary-color);
+  background-color: var(--background-color);
   transition: all 0.2s ease;
 
   &:focus {
@@ -438,12 +429,12 @@ $bp-desktop-max: 1919px;
   font-size: $fs-md;
   font-weight: 500;
   padding: $pd-sm;
-  color: var(--text-color);
+  color: var(--text-primary-color);
   resize: none;
   outline: none;
   border-radius: $bd-lg;
   border: $bd-sm dashed transparent;
-  background-color: var(--secondary-color);
+  background-color: var(--background-color);
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -452,7 +443,7 @@ $bp-desktop-max: 1919px;
   &::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: $bd-sm;
-    background: var(--secondary-color);
+    background: var(--card-color);
   }
 
   &:focus {
@@ -489,7 +480,7 @@ $bp-desktop-max: 1919px;
   gap: $gp-md;
   padding: $pd-md;
   border-radius: $bd-lg;
-  background-color: var(--primary-color);
+  background-color: var(--card-color);
   max-height: 90vh;
   overflow-y: auto;
 

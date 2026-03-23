@@ -34,7 +34,7 @@ export class ExperienceComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
-    this._titleService.setTitle('Período de Experiência');
+    this._titleService.setTitle('Experiência');
   }
 
   findByStatus(status: string): void {

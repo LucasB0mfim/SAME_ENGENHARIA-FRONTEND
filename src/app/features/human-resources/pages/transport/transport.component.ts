@@ -42,6 +42,8 @@ export class TransportComponent implements OnInit {
   currentItem: any = {};
   filteredItems: any[] = [];
 
+  countStatus: { novo: number, andamento: number, concluido: number, cancelado: number } = { novo: 0, andamento: 0, concluido: 0, cancelado: 0 };
+
   employee: string = '';
   activeStatus: string = '';
 
@@ -58,6 +60,7 @@ export class TransportComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
+    this.countByStatus();
     this._titleService.setTitle('Vale Transporte');
   }
 
@@ -80,6 +83,17 @@ export class TransportComponent implements OnInit {
         }
       });
   };
+
+  countByStatus(): void {
+    this._transportService.countByStatus().subscribe({
+      next: (res) => {
+        this.countStatus = res.result;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 
   update(): void {
     this.isLoading = true;

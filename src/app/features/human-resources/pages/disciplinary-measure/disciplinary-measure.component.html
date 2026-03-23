@@ -8,22 +8,22 @@
   <div class="aside">
     <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
       [class.active]="activeStatus === 'NOVO'">
-      Novos
+      Novos ({{ countStatus.novo }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
       [class.active]="activeStatus === 'ANDAMENTO'">
-      Em andamento
+      Em andamento ({{ countStatus.andamento }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
       [class.active]="activeStatus === 'CONCLUIDO'">
-      Concluídos
+      Concluídos ({{ countStatus.concluido }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
       [class.active]="activeStatus === 'CANCELADO'">
-      Cancelados
+      Cancelados ({{ countStatus.cancelado }})
     </button>
 
     <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />

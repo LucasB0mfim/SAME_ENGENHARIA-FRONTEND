@@ -1,6 +1,6 @@
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeService } from '../../core/services/theme.service';
 import { TitleService } from '../../core/services/title.service';
@@ -8,30 +8,53 @@ import { UserService } from '../../core/services/user.service';
 import { LoginService } from '../../core/services/login.service';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
+type GroupKey = 'reports' | 'hr';
+
+const GROUP_ROUTES: Record<GroupKey, string[]> = {
+  reports: [
+    '/workspace/reports/experience',
+    '/workspace/reports/tracking',
+  ],
+  hr: [
+    '/workspace/human-resources/admission',
+    '/workspace/human-resources/resignation',
+    '/workspace/human-resources/disciplinary-measure',
+    '/workspace/human-resources/brk',
+    '/workspace/human-resources/task',
+    '/workspace/human-resources/transport',
+  ],
+};
+
 @Component({
   selector: 'app-workspace',
   standalone: true,
   imports: [
     CommonModule,
     RouterModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './workspace.component.html',
-  styleUrl: './workspace.component.scss'
+  styleUrl: './workspace.component.scss',
 })
 export class WorkspaceComponent implements OnInit, OnDestroy {
   title: string = 'Dashboard';
   avatar: string = 'assets/images/avatar.png';
   isDarkTheme: boolean = false;
 
+  openGroups: Record<GroupKey, boolean> = {
+    reports: false,
+    hr: false,
+  };
+
   private destroy$ = new Subject<void>();
 
   constructor(
-    private _themeService: ThemeService,
+    private readonly _router: Router,
+    private readonly _themeService: ThemeService,
     private readonly _titleService: TitleService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _userService: UserService,
-    private readonly _loginService: LoginService
+    private readonly _loginService: LoginService,
   ) { }
 
   ngOnInit(): void {
@@ -49,9 +72,11 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
         this._cdr.detectChanges();
       });
 
-    this._userService.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
-      if (user) this.avatar = user.avatar;
-    });
+    this._userService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        if (user) this.avatar = user.avatar;
+      });
   }
 
   ngOnDestroy(): void {
@@ -59,9 +84,17 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  toggleGroup(group: GroupKey): void {
+    this.openGroups[group] = !this.openGroups[group];
+  }
+
+  isGroupActive(group: GroupKey): boolean {
+    const currentUrl = this._router.url;
+    return GROUP_ROUTES[group].some(route => currentUrl.startsWith(route));
+  }
+
   onToggleTheme(): void {
-    const newTheme = !this.isDarkTheme;
-    this._themeService.setThemeState(newTheme);
+    this._themeService.setThemeState(!this.isDarkTheme);
   }
 
   onLogout(): void {
@@ -69,7 +102,6 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
   }
 
   private applyTheme(isDark: boolean): void {
-    const theme = isDark ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
   }
 }

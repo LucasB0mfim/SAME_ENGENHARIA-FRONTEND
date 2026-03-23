@@ -8,27 +8,27 @@
   <div class="aside">
     <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
       [class.active]="activeStatus === 'NOVO'">
-      Novos
+      Novos ({{ countStatus.novo }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
       [class.active]="activeStatus === 'ANDAMENTO'">
-      Em andamento
+      Em andamento ({{ countStatus.andamento }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('AVISO TRABALHADO')"
       [class.active]="activeStatus === 'AVISO TRABALHADO'">
-      Aviso Trabalhado
+      Aviso Trabalhado ({{ countStatus.aviso_trabalhado }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('DEMITIDO')"
       [class.active]="activeStatus === 'DEMITIDO'">
-      Demitido
+      Demitido ({{ countStatus.demitido }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('DESLIGADO')"
       [class.active]="activeStatus === 'DESLIGADO'">
-      Desligado
+      Desligado ({{ countStatus.desligado }})
     </button>
 
     <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />

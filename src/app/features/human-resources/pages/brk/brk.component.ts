@@ -58,6 +58,7 @@ export class BrkComponent implements OnInit {
   currentItem: any = {};
   filteredItems: any[] = [];
   listOfFunctions: any = {};
+  countStatus: { novo: number, pesquisa_social: number, documentacao: number, integracao: number, liberado: number, pausado: number, cancelado: number } = { novo: 0, pesquisa_social: 0, documentacao: 0, integracao: 0, liberado: 0, pausado: 0, cancelado: 0 }
 
   employee: string = '';
   activeStatus: string = '';
@@ -76,6 +77,7 @@ export class BrkComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
+    this.countByStatus();
     this._titleService.setTitle('BRK');
   };
 
@@ -98,6 +100,17 @@ export class BrkComponent implements OnInit {
         }
       });
   };
+
+  countByStatus(): void {
+    this._brkService.countByStatus().subscribe({
+      next: (res) => {
+        this.countStatus = res.result;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 
   findFunctions(): void {
     this._employeeService.findFunctions()

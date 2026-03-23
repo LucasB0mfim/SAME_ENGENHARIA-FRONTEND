@@ -1,31 +1,50 @@
-$gap: 1rem;
-$padding: 1rem;
-$border-radius: 8px;
+// ─────────────────────────────────────────────
+// Design tokens
+// ─────────────────────────────────────────────
+$gap:           1rem;
+$padding:       1rem;
+$radius:        8px;
+$radius-sm:     6px;
+$transition:    0.25s ease;
+$accent:        #FF6F00;
+$accent-hover:  #F57C00;
 
+// ─────────────────────────────────────────────
+// Layout container
+// ─────────────────────────────────────────────
 .container {
   width: 100%;
   height: 100vh;
   padding: $padding;
-
   display: grid;
   grid-template-columns: auto 1fr;
-  background-color: var(--primary-color);
   gap: $gap;
+  background-color: var(--background-color);
 }
 
+// ─────────────────────────────────────────────
+// Sidebar / Menu
+// ─────────────────────────────────────────────
 .menu {
   width: 100%;
   height: 100%;
   padding: $padding;
-  border-radius: $border-radius;
-  background-color: var(--secondary-color);
+  border-radius: $radius;
+  background-color: var(--sidebar-color);
+  overflow-y: auto;
 
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+  // ── Navigation wrapper ──
   &__nav {
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
 
+  // ── Section (MENU / GENERAL) ──
   &__section {
     display: flex;
     flex-direction: column;
@@ -33,14 +52,16 @@ $border-radius: 8px;
   }
 
   &__section-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: var(--text-color);
-    padding: 0 $padding;
     margin: 0;
+    padding: 0 $padding;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-primary-color);
+    text-transform: uppercase;
   }
 
+  // ── Flat list ──
   &__list {
     list-style: none;
     padding: 0;
@@ -52,55 +73,157 @@ $border-radius: 8px;
 
   &__item {
     width: 100%;
+
+    // Group item holds both the trigger and the collapsible body
+    &--group {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
-  &__title {
-    font-size: 1rem;
-    color: var(--text-color);
-  }
-
-  &__icon {
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
-    color: var(--text-color);
-  }
-
+  // ── Shared link / button style ──
   &__link {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    text-align: left;
     gap: 0.75rem;
     padding: $padding;
-    border-radius: $border-radius;
+    border-radius: $radius;
     text-decoration: none;
-    color: var(--text-secondary);
-    transition: all 0.3s ease;
-    border: none;
+    color: var(--text-primary-color);
     background: transparent;
+    border: none;
     width: 100%;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
+    transition:
+      background-color $transition,
+      color $transition;
 
     &:hover {
-      background-color: var(--primary-color);
+      background-color: var(--background-color);
     }
 
+    // Active route (applied by routerLinkActive)
     &--active {
-      background-color: #FF6F00;
+      background-color: $accent;
 
       .menu__icon,
       .menu__title {
-        color: white;
+        color: #fff;
       }
 
       &:hover {
-        background-color: #F57C00;
+        background-color: $accent-hover;
       }
+    }
+
+    // Group trigger button
+    &--group {
+      font-weight: 500;
+    }
+
+    // Group trigger when any child route is active
+    &--group-active {
+      .menu__icon,
+      .menu__title {
+        color: $accent;
+      }
+    }
+
+    // Child link inside a group
+    &--child {
+      padding-left: 0.5rem;
+      border-radius: $radius-sm;
+      font-size: 0.825rem;
+    }
+  }
+
+  // ── Icons ──
+  &__icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: var(--text-primary-color);
+  }
+
+  &__title {
+    flex: 1;
+    font-size: inherit;
+    color: var(--text-primary-color);
+  }
+
+  // ── Chevron (group toggle indicator) ──
+  &__chevron {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: var(--text-primary-color);
+    margin-left: auto;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .menu__link--group[aria-expanded="true"] & {
+      transform: rotate(180deg);
+    }
+  }
+
+  // ── Accordion body ──
+  &__group-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    visibility: hidden;
+
+    &--open {
+      grid-template-rows: 1fr;
+      visibility: visible;
+    }
+  }
+
+  &__sublist {
+    list-style: none;
+    padding: 0.25rem 0 0.25rem 0.5rem;
+    margin: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  &__subitem {
+    width: 100%;
+  }
+
+  // ── Tree connector dot ──
+  &__connector {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-primary-color);
+    opacity: 0.4;
+    transition: opacity $transition, background-color $transition;
+
+    .menu__link--active & {
+      background-color: #fff;
+      opacity: 1;
+    }
+
+    .menu__link:hover & {
+      opacity: 0.8;
     }
   }
 }
 
+// ─────────────────────────────────────────────
+// Main workspace
+// ─────────────────────────────────────────────
 .workspace {
   width: 100%;
   height: 100%;
@@ -110,46 +233,45 @@ $border-radius: 8px;
   min-height: 0;
 }
 
+// ─────────────────────────────────────────────
+// Header
+// ─────────────────────────────────────────────
 .header {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
-  padding: $padding;
-  border-radius: $border-radius;
-  background-color: var(--secondary-color);
   gap: $gap;
+  padding: $padding;
+  border-radius: $radius;
+  background-color: var(--sidebar-color);
 
   &__title {
+    flex: 1;
     margin: 0;
-    margin-right: auto;
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-primary-color);
   }
 
   &__avatar {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--border-color);
-      transition: border-color 0.2s ease;
-
-      &:hover {
-        border-color: var(--border-hover);
-      }
+      transition: border-color $transition;
     }
   }
 }
 
+// ─────────────────────────────────────────────
+// Content area
+// ─────────────────────────────────────────────
 .content {
   width: 100%;
   height: 100%;
-  border-radius: $border-radius;
-  background-color: var(--secondary-color);
   min-height: 0;
+  border-radius: $radius;
+  background-color: var(--background-color);
 }

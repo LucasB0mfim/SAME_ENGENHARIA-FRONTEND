@@ -13,8 +13,14 @@ export class ResignationService {
     return this._httpClient.get<any>(`${this._url}/resignation`);
   }
 
-  findByStatus(status: any) {
-    return this._httpClient.get<any>(`${this._url}/resignation/${status}`);
+  findByStatus(status: string) {
+    return this._httpClient.get<any>(`${this._url}/resignation/status`, {
+      params: { status }
+    });
+  }
+
+  countByStatus() {
+    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
   }
 
   create(request: any) {

@@ -11,7 +11,6 @@ import { TitleService } from '../../../../core/services/title.service';
 import { AdmissionService } from '../../services/admission.service';
 
 import { HttpResponse } from '@angular/common/http';
-import { set } from 'date-fns';
 
 @Component({
   selector: 'app-admission',
@@ -43,6 +42,8 @@ export class AdmissionComponent implements OnInit {
   currentItem: any = {};
   filteredItems: any[] = [];
 
+  countStatus: { novo: number, andamento: number, concluido: number, cancelado: number } = { novo: 0, andamento: 0, concluido: 0, cancelado: 0 };
+
   link: string = '';
 
   employee: string = '';
@@ -62,6 +63,7 @@ export class AdmissionComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
+    this.countByStatus();
     this._titleService.setTitle('Admissão');
   }
 
@@ -84,6 +86,17 @@ export class AdmissionComponent implements OnInit {
         }
       });
   };
+
+  countByStatus(): void {
+    this._admissionService.countByStatus().subscribe({
+      next: (res) => {
+        this.countStatus = res.result;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 
   update(): void {
     this.isLoading = true;
@@ -208,14 +221,7 @@ export class AdmissionComponent implements OnInit {
   };
 
   download() {
-    this.isLoading = true;
-    this._admissionService.download(this.currentItem.id)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe((response: HttpResponse<Blob>) => {
-        const cd = response.headers.get('content-disposition');
-        const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'RELATORIO_DE_ADMISSAO.pdf';
-        saveAs(response.body!, fileName);
-      });
+    alert("Em manutenção. Em caso de necessidade entre em contato.")
   };
 
   excel() {
@@ -235,7 +241,7 @@ export class AdmissionComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res) => {
-          this.link = res.link;
+          this.link = res.result;
           this.setMessage(res.message, 'success');
           navigator.clipboard.writeText(this.link);
         },

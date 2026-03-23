@@ -8,37 +8,37 @@
   <div class="aside">
     <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
       [class.active]="activeStatus === 'NOVO'">
-      Novos
+      Novos ({{ countStatus?.novo }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('PESQUISA SOCIAL')"
       [class.active]="activeStatus === 'PESQUISA SOCIAL'">
-      Pesquisa Social
+      Pesquisa Social ({{ countStatus?.pesquisa_social }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('DOCUMENTACAO')"
       [class.active]="activeStatus === 'DOCUMENTACAO'">
-      Documentação
+      Documentação ({{ countStatus?.documentacao }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('INTEGRACAO')"
       [class.active]="activeStatus === 'INTEGRACAO'">
-      Integração
+      Integração ({{ countStatus?.integracao }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('LIBERADO')"
       [class.active]="activeStatus === 'LIBERADO'">
-      Liberados
+      Liberados ({{ countStatus?.liberado }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('PAUSADO')"
       [class.active]="activeStatus === 'PAUSADO'">
-      Pausados
+      Pausados ({{ countStatus?.pausado }})
     </button>
 
     <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
       [class.active]="activeStatus === 'CANCELADO'">
-      Cancelados
+      Cancelados ({{ countStatus?.cancelado }})
     </button>
 
     <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />

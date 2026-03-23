@@ -41,6 +41,7 @@ export class DisciplinaryMeasureComponent implements OnInit {
   items: any[] = [];
   currentItem: any = {};
   filteredItems: any[] = [];
+  countStatus: { novo: number, andamento: number, concluido: number, cancelado: number } = { novo: 0, andamento: 0, concluido: 0, cancelado: 0 };
 
   employee: string = '';
   activeStatus: string = '';
@@ -58,6 +59,7 @@ export class DisciplinaryMeasureComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
+    this.countByStatus();
     this._titleService.setTitle('Medidas Disciplinares');
   }
 
@@ -80,6 +82,17 @@ export class DisciplinaryMeasureComponent implements OnInit {
         }
       });
   };
+
+  countByStatus(): void {
+    this._disciplinaryMeasureService.countByStatus().subscribe({
+      next: (res) => {
+        this.countStatus = res.result;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 
   update(): void {
     this.isLoading = true;

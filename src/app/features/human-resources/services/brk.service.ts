@@ -9,8 +9,14 @@ export class BrkService {
   private readonly _url = environment.apiUrl;
   private readonly _httpClient = inject(HttpClient);
 
-  findByStatus(status: any) {
-    return this._httpClient.get<any>(`${this._url}/brk/${status}`);
+  findByStatus(status: string) {
+    return this._httpClient.get<any>(`${this._url}/brk/status`, {
+      params: { status }
+    });
+  }
+
+  countByStatus() {
+    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
   }
 
   create(request: any) {

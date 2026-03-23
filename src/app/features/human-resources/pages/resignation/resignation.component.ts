@@ -50,6 +50,7 @@ export class ResignationComponent implements OnInit {
   currentItem: any = {};
   filteredItems: any[] = [];
   activeEmployees: any = {};
+  countStatus: { novo: number, andamento: number, aviso_trabalhado: number, demitido: number, desligado: number } = { novo: 0, andamento: 0, aviso_trabalhado: 0, demitido: 0, desligado: 0 };
 
   employee: string = '';
   activeStatus: string = '';
@@ -68,6 +69,7 @@ export class ResignationComponent implements OnInit {
 
   ngOnInit(): void {
     this.findByStatus('NOVO');
+    this.countByStatus();
     this._titleService.setTitle('Desligamento');
   }
 
@@ -90,6 +92,17 @@ export class ResignationComponent implements OnInit {
         }
       });
   };
+
+  countByStatus(): void {
+    this._resignationService.countByStatus().subscribe({
+      next: (res) => {
+        this.countStatus = res.result;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 
   findActiveEmployees(): void {
     this._employeesService.findActiveNames()

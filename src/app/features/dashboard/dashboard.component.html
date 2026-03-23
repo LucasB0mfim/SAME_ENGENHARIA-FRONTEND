@@ -1,123 +1,117 @@
-<div class="container">
-  <main class="dashboard__main">
-    <section class="dashboard__column">
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Quadro de Colaboradores</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores ?? '...' }}</div>
-        <div class="dashboard__trend">
+<div class="dash">
+  <div class="dash__grid">
+
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon">
           <mat-icon>group</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+        </span>
+        <span class="dash__label">Quadro de Colaboradores</span>
       </div>
-
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Colaboradores Demitidos</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores_demitidos ?? '...' }}</div>
-        <div class="dashboard__trend">
-          <mat-icon>beach_access</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+      <div class="dash__value">{{ dashboardData?.colaboradores ?? '—' }}</div>
+      <div class="dash__trend dash__trend--up">
+        <mat-icon>trending_up</mat-icon>
+        <span>Aumento em relação ao mês anterior</span>
       </div>
+    </div>
 
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Total de Colaboradores</h3>
-        <div class="dashboard__number">{{ dashboardData?.total_colaboradores ?? '...' }}</div>
-        <div class="dashboard__trend">
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon dash__icon--red">
+          <mat-icon>person_remove</mat-icon>
+        </span>
+        <span class="dash__label">Colaboradores Demitidos</span>
+      </div>
+      <div class="dash__value">{{ dashboardData?.colaboradores_demitidos ?? '—' }}</div>
+      <div class="dash__trend dash__trend--neutral">
+        <mat-icon>remove</mat-icon>
+        <span>Estável no período</span>
+      </div>
+    </div>
+
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon">
           <mat-icon>groups</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+        </span>
+        <span class="dash__label">Total de Colaboradores</span>
       </div>
-    </section>
-
-    <section class="dashboard__column">
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Colaboradores Ativos</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores_ativos ?? '...' }}</div>
-        <div class="dashboard__trend">
-          <mat-icon>group</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+      <div class="dash__value">{{ dashboardData?.total_colaboradores ?? '—' }}</div>
+      <div class="dash__trend dash__trend--up">
+        <mat-icon>trending_up</mat-icon>
+        <span>Aumento em relação ao mês anterior</span>
       </div>
+    </div>
 
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Colaboradores de Férias</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores_ferias ?? '...' }}</div>
-        <div class="dashboard__trend">
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon dash__icon--green">
+          <mat-icon>how_to_reg</mat-icon>
+        </span>
+        <span class="dash__label">Colaboradores Ativos</span>
+      </div>
+      <div class="dash__value">{{ dashboardData?.colaboradores_ativos ?? '—' }}</div>
+      <div class="dash__trend dash__trend--up">
+        <mat-icon>trending_up</mat-icon>
+        <span>Aumento em relação ao mês anterior</span>
+      </div>
+    </div>
+
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon dash__icon--blue">
           <mat-icon>beach_access</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+        </span>
+        <span class="dash__label">Colaboradores de Férias</span>
       </div>
-    </section>
+      <div class="dash__value">{{ dashboardData?.colaboradores_ferias ?? '—' }}</div>
+      <div class="dash__trend dash__trend--neutral">
+        <mat-icon>remove</mat-icon>
+        <span>Estável no período</span>
+      </div>
+    </div>
 
-    <section class="dashboard__column">
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Colaboradores no INSS</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores_inss ?? '...' }}</div>
-        <div class="dashboard__trend">
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon dash__icon--amber">
           <mat-icon>sick</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+        </span>
+        <span class="dash__label">Colaboradores no INSS</span>
       </div>
+      <div class="dash__value">{{ dashboardData?.colaboradores_inss ?? '—' }}</div>
+      <div class="dash__trend dash__trend--neutral">
+        <mat-icon>remove</mat-icon>
+        <span>Estável no período</span>
+      </div>
+    </div>
 
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Colaboradores em Aviso Prévio</h3>
-        <div class="dashboard__number">{{ dashboardData?.colaboradores_aviso_previo ?? '...' }}</div>
-        <div class="dashboard__trend">
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon dash__icon--red">
           <mat-icon>block</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+        </span>
+        <span class="dash__label">Em Aviso Prévio</span>
       </div>
-    </section>
-  </main>
-
-  <aside class="dashboard__aside">
-    <section class="dashboard__column">
-      <div class="dashboard__card">
-        <h3 class="dashboard__title">Centros de Custo Ativos</h3>
-        <div class="dashboard__number">{{ dashboardData?.centros_custo_ativos ?? '...' }}</div>
-        <div class="dashboard__trend">
-          <mat-icon>front_loader</mat-icon>
-          <span>Increased from last month</span>
-        </div>
+      <div class="dash__value">{{ dashboardData?.colaboradores_aviso_previo ?? '—' }}</div>
+      <div class="dash__trend dash__trend--down">
+        <mat-icon>trending_down</mat-icon>
+        <span>Queda em relação ao mês anterior</span>
       </div>
+    </div>
 
-      <div class="dashboard__card dashboard__card--feeling">
-        <h3 class="dashboard__title">Como você se sente?</h3>
-
-        <div class="dashboard__feeling-options">
-          <button
-            class="dashboard__feeling"
-            type="button"
-            (click)="setFeeling('happy')"
-            [class.active]="selectedFeeling === 'happy'">
-            <mat-icon>sentiment_satisfied_alt</mat-icon>
-            <span>Feliz</span>
-          </button>
-
-          <button
-            class="dashboard__feeling"
-            type="button"
-            (click)="setFeeling('neutral')"
-            [class.active]="selectedFeeling === 'neutral'">
-            <mat-icon>sentiment_neutral</mat-icon>
-            <span>Neutro</span>
-          </button>
-
-          <button
-            class="dashboard__feeling"
-            type="button"
-            (click)="setFeeling('sad')"
-            [class.active]="selectedFeeling === 'sad'">
-            <mat-icon>sentiment_dissatisfied</mat-icon>
-            <span>Triste</span>
-          </button>
-        </div>
-
-        <div class="dashboard__feedback-message" *ngIf="showFeedbackMessage" @fadeIn>
-          <mat-icon>check_circle</mat-icon>
-          <span>Obrigado pelo feedback!</span>
-        </div>
+    <div class="dash__card">
+      <div class="dash__top">
+        <span class="dash__icon dash__icon--orange">
+          <mat-icon>account_tree</mat-icon>
+        </span>
+        <span class="dash__label">Centros de Custo Ativos</span>
       </div>
-    </section>
-  </aside>
+      <div class="dash__value">{{ dashboardData?.centros_custo_ativos ?? '—' }}</div>
+      <div class="dash__trend dash__trend--up">
+        <mat-icon>trending_up</mat-icon>
+        <span>Aumento em relação ao mês anterior</span>
+      </div>
+    </div>
+
+  </div>
 </div>

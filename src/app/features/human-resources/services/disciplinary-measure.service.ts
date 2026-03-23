@@ -14,8 +14,14 @@ export class DisciplinaryMeasureService {
   };
 
   findByStatus(status: string) {
-    return this._httpClient.get<any>(`${this._url}/disciplinary-measure/${status}`);
-  };
+    return this._httpClient.get<any>(`${this._url}/disciplinary-measure/status`, {
+      params: { status }
+    });
+  }
+
+  countByStatus() {
+    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
+  }
 
   update(request: any) {
     return this._httpClient.put<any>(`${this._url}/disciplinary-measure`, request);

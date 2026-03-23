@@ -4,28 +4,127 @@
       <div class="menu__section">
         <h2 class="menu__section-title">MENU</h2>
         <ul class="menu__list" role="list">
+
           <li class="menu__item">
-            <a routerLink="/workspace/dashboard" routerLinkActive="menu__link--active" class="menu__link" aria-label="Ir para Dashboard" [routerLinkActiveOptions]="{exact: true}">
+            <a routerLink="/workspace/dashboard" routerLinkActive="menu__link--active" class="menu__link"
+              aria-label="Ir para Dashboard" [routerLinkActiveOptions]="{exact: true}">
               <mat-icon class="menu__icon" aria-hidden="true">dashboard</mat-icon>
               <span class="menu__title">Dashboard</span>
             </a>
           </li>
 
-          <li class="menu__item">
-            <a routerLink="/workspace/reports" routerLinkActive="menu__link--active" class="menu__link"
-              aria-label="Ir para Relatórios">
-              <mat-icon class="menu__icon" aria-hidden="true">description</mat-icon>
-              <span class="menu__title">Relatórios</span>
-            </a>
+          <!-- Grupo: Relatório -->
+          <li class="menu__item menu__item--group">
+            <button
+              type="button"
+              class="menu__link menu__link--group"
+              [class.menu__link--group-active]="isGroupActive('reports')"
+              (click)="toggleGroup('reports')"
+              [attr.aria-expanded]="openGroups['reports']"
+              aria-controls="group-reports">
+              <mat-icon class="menu__icon" aria-hidden="true">bar_chart</mat-icon>
+              <span class="menu__title">Relatório</span>
+              <mat-icon class="menu__chevron" aria-hidden="true">expand_more</mat-icon>
+            </button>
+
+            <div
+              id="group-reports"
+              class="menu__group-body"
+              [class.menu__group-body--open]="openGroups['reports']"
+              role="region">
+              <ul class="menu__sublist" role="list">
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/reports/experience" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Experiência">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">date_range</mat-icon>
+                    <span class="menu__title">Experiência</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/reports/tracking" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Rastreamento">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">edit_document</mat-icon>
+                    <span class="menu__title">Rastreamento</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </li>
 
-          <li class="menu__item">
-            <a routerLink="/workspace/human-resources" routerLinkActive="menu__link--active" class="menu__link"
-              aria-label="Ir para Recursos Humanos">
-              <mat-icon class="menu__icon" aria-hidden="true">groups</mat-icon>
+          <!-- Grupo: Recursos Humanos -->
+          <li class="menu__item menu__item--group">
+            <button
+              type="button"
+              class="menu__link menu__link--group"
+              [class.menu__link--group-active]="isGroupActive('hr')"
+              (click)="toggleGroup('hr')"
+              [attr.aria-expanded]="openGroups['hr']"
+              aria-controls="group-hr">
+              <mat-icon class="menu__icon" aria-hidden="true">group</mat-icon>
               <span class="menu__title">Recursos Humanos</span>
-            </a>
+              <mat-icon class="menu__chevron" aria-hidden="true">expand_more</mat-icon>
+            </button>
+
+            <div
+              id="group-hr"
+              class="menu__group-body"
+              [class.menu__group-body--open]="openGroups['hr']"
+              role="region">
+              <ul class="menu__sublist" role="list">
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/human-resources/admission" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Admissão">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">how_to_reg</mat-icon>
+                    <span class="menu__title">Admissão</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/human-resources/resignation" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Desligamento">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">person_off</mat-icon>
+                    <span class="menu__title">Desligamento</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/human-resources/disciplinary-measure" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Medidas Disciplinares">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">gavel</mat-icon>
+                    <span class="menu__title">Medidas Disciplinares</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/human-resources/brk" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para BRK">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">factory</mat-icon>
+                    <span class="menu__title">BRK</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/human-resources/task" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Tarefa">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">account_balance_wallet</mat-icon>
+                    <span class="menu__title">Tarefa</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/human-resources/transport" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Vale Transporte">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">directions_bus</mat-icon>
+                    <span class="menu__title">Vale Transporte</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </li>
+
         </ul>
       </div>
 
@@ -52,7 +151,6 @@
   <main class="workspace" role="main">
     <header class="header">
       <h1 class="header__title">{{ title }}</h1>
-
       <div class="header__avatar">
         <img [src]="avatar" alt="Foto de perfil" width="40" height="40">
       </div>

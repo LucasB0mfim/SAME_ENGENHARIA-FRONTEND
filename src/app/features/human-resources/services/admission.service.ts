@@ -10,7 +10,7 @@ export class AdmissionService {
   private readonly _httpClient = inject(HttpClient);
 
   generateLink() {
-    return this._httpClient.get<any>(`${this._url}/admission/generate-link`);
+    return this._httpClient.get<any>(`${this._url}/admission/link`);
   }
 
   create(formData: FormData) {
@@ -18,7 +18,13 @@ export class AdmissionService {
   }
 
   findByStatus(status: string) {
-    return this._httpClient.get<any>(`${this._url}/admission/${status}`);
+    return this._httpClient.get<any>(`${this._url}/admission/status`, {
+      params: { status }
+    });
+  }
+
+  countByStatus() {
+    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
   }
 
   update(request: any) {
@@ -29,15 +35,8 @@ export class AdmissionService {
     return this._httpClient.delete<any>(`${this._url}/admission/${id}`);
   }
 
-  download(id: number) {
-    return this._httpClient.get(`${this._url}/admission/download/pdf/${id}`, {
-      responseType: 'blob',
-      observe: 'response'
-    });
-  }
-
   excel() {
-    return this._httpClient.get(`${this._url}/admission/download/excel`, {
+    return this._httpClient.get(`${this._url}/admission/export/excel`, {
       responseType: 'blob',
       observe: 'response'
     });

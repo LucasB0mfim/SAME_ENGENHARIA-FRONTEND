@@ -24,18 +24,24 @@ app-root {
 }
 
 :root[data-theme="light"] {
-  --primary-color: #F5F6F8;
-  --secondary-color: #FFFFFF;
-  --text-color: #9CA3AF;
+  --background-color: #F0EDE8;
+  --sidebar-color: #E8E4DE;
+  --card-color: #FFFFFF;
+  --text-primary-color: #3D3730;
+  --text-secondary-color: #9A8F84;
+  --orange-color: #E85F04;
 }
 
 :root[data-theme="dark"] {
-  --primary-color: #1E1E1E;
-  --secondary-color: #121212;
-  --text-color: #F3F3F3;
+  --background-color: #111110;
+  --sidebar-color: #1C1B19;
+  --card-color: #242320;
+  --text-primary-color: #E6E3DF;
+  --text-secondary-color: #6B6A66;
+  --orange-color: #F07030;
 }
 
 :root {
+  --gray-color: #9CA3AF;
   --white-color: #FFFFFF;
-  --orange-color: #FF6F00;
 }

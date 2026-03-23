@@ -37,6 +37,8 @@ export class TaskComponent implements OnInit {
   currentItem: any = {};
   filteredItems: any[] = [];
 
+  countStatus: { novo: number, andamento: number, concluido: number, cancelado: number } = { novo: 0, andamento: 0, concluido: 0, cancelado: 0 };
+
   employee: string = '';
   activeStatus: string = '';
 
@@ -76,6 +78,17 @@ export class TaskComponent implements OnInit {
         }
       });
   };
+
+  countByStatus(): void {
+    this._taskService.countByStatus().subscribe({
+      next: (res) => {
+        this.countStatus = res.result;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 
   update(): void {
     this.isLoading = true;
