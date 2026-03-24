@@ -4,97 +4,91 @@ import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../../core/services/title.service';
 import { AdmissionService } from '../../services/admission.service';
 
-import { HttpResponse } from '@angular/common/http';
+import { AdmissionItem, AdmissionCountStatus, MessageType } from '../../interfaces/admission.interface';
 
 @Component({
   selector: 'app-admission',
   standalone: true,
   imports: [
-    FormsModule,
     CommonModule,
+    FormsModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    ɵInternalFormsSharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './admission.component.html',
-  styleUrl: './admission.component.scss'
+  styleUrl: './admission.component.scss',
 })
 export class AdmissionComponent implements OnInit {
 
-  private readonly _titleService = inject(TitleService);
+  private readonly _titleService    = inject(TitleService);
   private readonly _admissionService = inject(AdmissionService);
 
   updateForm: FormGroup = new FormGroup({
-    id: new FormControl(''),
-    status: new FormControl('', Validators.required),
+    id:          new FormControl(''),
+    status:      new FormControl('', Validators.required),
     dataAdmissao: new FormControl('', Validators.required),
-    observacao: new FormControl('', Validators.required),
+    observacao:  new FormControl('', Validators.required),
   });
 
-  items: any[] = [];
-  currentItem: any = {};
-  filteredItems: any[] = [];
+  items: AdmissionItem[]         = [];
+  filteredItems: AdmissionItem[] = [];
+  currentItem: AdmissionItem     = {} as AdmissionItem;
 
-  countStatus: { novo: number, andamento: number, concluido: number, cancelado: number } = { novo: 0, andamento: 0, concluido: 0, cancelado: 0 };
+  countStatus: AdmissionCountStatus = {
+    novo: 0, andamento: 0, concluido: 0, cancelado: 0,
+  };
 
-  link: string = '';
-
-  employee: string = '';
+  employee:     string = '';
   activeStatus: string = '';
 
-  menuModalOpen: boolean = false;
+  menuModalOpen:   boolean = false;
   updateModalOpen: boolean = false;
-  rGModalOpen: boolean = false;
+  rGModalOpen:     boolean = false;
 
-  isEmpty: boolean = false;
-  isLoading: boolean = false;
+  isEmpty:     boolean = false;
+  isLoading:   boolean = false;
   isSearching: boolean = false;
 
-  message: string = '';
-  showMessage: boolean = false;
-  messageType: 'success' | 'error' = 'success';
+  message:     string      = '';
+  showMessage: boolean     = false;
+  messageType: MessageType = 'success';
 
   ngOnInit(): void {
+    this._titleService.setTitle('Admissão');
     this.findByStatus('NOVO');
     this.countByStatus();
-    this._titleService.setTitle('Admissão');
   }
 
   findByStatus(status: string): void {
-    this.items = [];
-    this.isEmpty = false;
+    this.items       = [];
+    this.isEmpty     = false;
     this.isSearching = true;
 
     this._admissionService.findByStatus(status)
-      .pipe(finalize(() => this.isSearching = false))
+      .pipe(finalize(() => (this.isSearching = false)))
       .subscribe({
         next: (res) => {
-          this.items = res.result;
+          this.items         = res.result;
           this.filteredItems = [...this.items];
-          this.isEmpty = this.items.length === 0;
-          this.activeStatus = status;
+          this.isEmpty       = this.items.length === 0;
+          this.activeStatus  = status;
         },
-        error: (err) => {
-          console.error(err.error.message, err);
-        }
+        error: (err) => console.error(err.error.message, err),
       });
-  };
+  }
 
   countByStatus(): void {
     this._admissionService.countByStatus().subscribe({
-      next: (res) => {
-        this.countStatus = res.result;
-      },
-      error: (error) => {
-        console.error(error);
-      }
+      next:  (res) => (this.countStatus = res.result),
+      error: (err) => console.error(err),
     });
   }
 
@@ -102,26 +96,23 @@ export class AdmissionComponent implements OnInit {
     this.isLoading = true;
 
     const request = {
-      id: this.currentItem.id,
-      status: this.updateForm.value.status,
+      id:           this.currentItem.id,
+      status:       this.updateForm.value.status,
       data_admissao: this.updateForm.value.dataAdmissao,
-      observacao: this.updateForm.value.observacao
-    }
+      observacao:   this.updateForm.value.observacao,
+    };
 
     this._admissionService.update(request)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
           this.updateModalOpen = false;
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
-        error: (err) => {
-          console.log(err.error.message);
-          this.setMessage(err.error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
-  };
+  }
 
   delete(): void {
     this._admissionService.delete(this.currentItem.id)
@@ -132,133 +123,118 @@ export class AdmissionComponent implements OnInit {
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
-        error: (error) => {
-          console.log(error.error.message);
-          this.setMessage(error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
   }
 
-  applyFilters() {
-    let data = [...this.filteredItems];
-
-    if (this.employee) {
-      const inputValue = this.employee
-        .toUpperCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-
-      data = data.filter(item => {
-        if (!item.nome) return false;
-
-        const nome = item.nome
-          .toUpperCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-
-        return nome.includes(inputValue);
-      });
+  applyFilters(): void {
+    if (!this.employee) {
+      this.items = [...this.filteredItems];
+      return;
     }
 
-    this.items = data;
-  };
+    const query = this.employee
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
 
-  openMenu(item: any): void {
+    this.items = this.filteredItems.filter((item) => {
+      if (!item.nome) return false;
+      const nome = item.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return nome.includes(query);
+    });
+  }
+
+  openMenu(item: AdmissionItem): void {
     this.menuModalOpen = true;
-    this.currentItem = item;
-  };
+    this.currentItem   = item;
+  }
 
-  openRGModal(item: any): void {
+  openRGModal(item: AdmissionItem): void {
     this.rGModalOpen = true;
-    this.currentItem = item;
-  };
+    this.currentItem  = item;
+  }
 
   closeModals(): void {
-    this.menuModalOpen = false;
+    this.menuModalOpen   = false;
     this.updateModalOpen = false;
-    this.rGModalOpen = false;
-  };
+    this.rGModalOpen     = false;
+  }
 
   openUpdateModal(): void {
-    this.menuModalOpen = false;
+    this.menuModalOpen   = false;
     this.updateModalOpen = true;
-
     this.updateForm.patchValue({
-      id: this.currentItem.id,
-      status: this.currentItem.status,
-      observacao: this.currentItem.observacao
+      id:          this.currentItem.id,
+      status:      this.currentItem.status,
+      observacao:  this.currentItem.observacao,
     });
   }
 
   returnModal(): void {
-    this.menuModalOpen = true;
+    this.menuModalOpen   = true;
     this.updateModalOpen = false;
   }
 
-  formateDate(date: string) {
+  formateDate(date: string | null): string {
     if (!date) return 'N/A';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
-  };
+  }
 
-  formatePhone(phone: string): string {
+  formatePhone(phone: string | null): string {
     if (!phone) return 'N/A';
     return `(${phone.slice(0, 2)}) ${phone.slice(2, 7)}-${phone.slice(7)}`;
-  };
+  }
 
-  openClipboard(url: string): void {
-    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
-  };
+  openClipboard(url: string | null): void {
+    if (!url) return;
+    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, '_blank', 'noopener,noreferrer');
+  }
 
   openRGFront(): void {
-    const url = this.currentItem.foto_rg_frente;
-    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
-  };
+    this.openClipboard(this.currentItem.foto_rg_frente);
+  }
 
   openRGBack(): void {
-    const url = this.currentItem.foto_rg_verso;
-    window.open(`https://sameengenharia.com.br/api/admission/file/${url}`, "_blank", "noopener,noreferrer");
-  };
+    this.openClipboard(this.currentItem.foto_rg_verso);
+  }
 
-  download() {
-    alert("Em manutenção. Em caso de necessidade entre em contato.")
-  };
+  download(): void {
+    alert('Em manutenção. Em caso de necessidade entre em contato.');
+  }
 
-  excel() {
+  excel(): void {
     this.isLoading = true;
     this._admissionService.excel()
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe((response: HttpResponse<Blob>) => {
-        const cd = response.headers.get('content-disposition');
+        const cd       = response.headers.get('content-disposition');
         const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'BSCASH.xlsx';
         saveAs(response.body!, fileName);
       });
-  };
+  }
 
   getLink(): void {
     this.isLoading = true;
     this._admissionService.generateLink()
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
-          this.link = res.result;
+          navigator.clipboard.writeText(res.result);
           this.setMessage(res.message, 'success');
-          navigator.clipboard.writeText(this.link);
         },
-        error: (err) => {
-          this.setMessage(err.error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
   }
 
-  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
-    this.message = message;
+  setMessage(message: string, type: MessageType = 'success'): void {
+    this.message     = message;
     this.messageType = type;
     this.showMessage = true;
-
     setTimeout(() => {
       this.showMessage = false;
-      this.message = '';
+      this.message     = '';
     }, 3000);
-  };
+  }
 }
