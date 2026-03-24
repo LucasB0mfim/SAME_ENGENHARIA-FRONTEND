@@ -20,7 +20,7 @@ export class ResignationService {
   }
 
   countByStatus() {
-    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
+    return this._httpClient.get<any>(`${this._url}/resignation/status/count`);
   }
 
   create(request: any) {

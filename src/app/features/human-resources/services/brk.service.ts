@@ -16,7 +16,7 @@ export class BrkService {
   }
 
   countByStatus() {
-    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
+    return this._httpClient.get<any>(`${this._url}/brk/status/count`);
   }
 
   create(request: any) {

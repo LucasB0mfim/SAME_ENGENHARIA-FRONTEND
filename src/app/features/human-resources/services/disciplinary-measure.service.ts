@@ -20,7 +20,7 @@ export class DisciplinaryMeasureService {
   }
 
   countByStatus() {
-    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
+    return this._httpClient.get<any>(`${this._url}/disciplinary-measure/status/count`);
   }
 
   update(request: any) {

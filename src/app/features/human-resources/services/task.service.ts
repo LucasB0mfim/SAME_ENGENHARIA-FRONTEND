@@ -16,7 +16,7 @@ export class TaskService {
   }
 
   countByStatus() {
-    return this._httpClient.get<any>(`${this._url}/admission/status/count`);
+    return this._httpClient.get<any>(`${this._url}/task/status/count`);
   }
 
   update(request: any) {
