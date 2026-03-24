@@ -1,205 +1,206 @@
 <div class="container">
 
-  <!-- MENSAGEM -->
+  <!-- Toast message -->
   @if (showMessage) {
-  <div class="message" [ngClass]="messageType">{{ message }}</div>
+    <div class="toast" [class.toast--success]="messageType === 'success'" [class.toast--error]="messageType === 'error'">
+      <mat-icon>{{ messageType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+      <span>{{ message }}</span>
+    </div>
   }
 
-  <div class="aside">
-    <button type="button" class="btn btn__launch" (click)="findByStatus('NOVO')"
-      [class.active]="activeStatus === 'NOVO'">
-      Novos ({{ countStatus.novo }})
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button type="button" class="filter-btn" (click)="findByStatus('NOVO')" [class.filter-btn--active]="activeStatus === 'NOVO'">
+      Novos
+      <span class="filter-btn__badge">{{ countStatus.novo }}</span>
+    </button>
+    <button type="button" class="filter-btn" (click)="findByStatus('ANDAMENTO')" [class.filter-btn--active]="activeStatus === 'ANDAMENTO'">
+      Em Andamento
+      <span class="filter-btn__badge">{{ countStatus.andamento }}</span>
+    </button>
+    <button type="button" class="filter-btn" (click)="findByStatus('CONCLUIDO')" [class.filter-btn--active]="activeStatus === 'CONCLUIDO'">
+      Concluídos
+      <span class="filter-btn__badge">{{ countStatus.concluido }}</span>
+    </button>
+    <button type="button" class="filter-btn" (click)="findByStatus('CANCELADO')" [class.filter-btn--active]="activeStatus === 'CANCELADO'">
+      Cancelados
+      <span class="filter-btn__badge">{{ countStatus.cancelado }}</span>
     </button>
 
-    <button type="button" class="btn btn__launch" (click)="findByStatus('ANDAMENTO')"
-      [class.active]="activeStatus === 'ANDAMENTO'">
-      Em andamento ({{ countStatus.andamento }})
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CONCLUIDO')"
-      [class.active]="activeStatus === 'CONCLUIDO'">
-      Concluídos ({{ countStatus.concluido }})
-    </button>
-
-    <button type="button" class="btn btn__launch" (click)="findByStatus('CANCELADO')"
-      [class.active]="activeStatus === 'CANCELADO'">
-      Cancelados ({{ countStatus.cancelado }})
-    </button>
-
-    <input type="text" placeholder="Buscar" class="input" [(ngModel)]="employee" (input)="applyFilters()" />
+    <div class="search">
+      <mat-icon class="search__icon">search</mat-icon>
+      <input type="text" class="search__input" placeholder="Buscar colaborador..." [(ngModel)]="employee" (input)="applyFilters()" />
+    </div>
   </div>
 
-  <div class="main">
+  <!-- Card list -->
+  <div class="list">
+
+    @if (isSearching) {
+      <div class="state-view">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
+
+    @if (isEmpty && !isSearching) {
+      <div class="state-view state-view--column">
+        <mat-icon class="state-view__icon">manage_search</mat-icon>
+        <span class="state-view__label">Nenhuma solicitação encontrada</span>
+      </div>
+    }
+
     <div class="card" *ngFor="let item of items">
+
       <div class="card__header" (click)="openMenu(item)">
-        <div class="display display--column">
-          <div class="group">
-            <h3 class="title title--dark">{{ item.nome }}</h3>
-          </div>
-          <div class="group">
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.funcao }}</h3>
-            </div>
-            <div class="bubble">
-              <h3 class="title title--dark-orange">{{ item.centro_custo }}</h3>
-            </div>
+        <div class="card__identity">
+          <span class="card__name">{{ item.nome }}</span>
+          <div class="card__tags">
+            <span class="tag">{{ item.funcao }}</span>
+            <span class="tag">{{ item.centro_custo }}</span>
           </div>
         </div>
+        <mat-icon class="card__menu-icon">more_horiz</mat-icon>
       </div>
+
       <div class="card__body">
+
         <div class="group group--body">
           <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              person
-            </mat-icon>
+            <mat-icon class="icon icon--small icon--orange">person</mat-icon>
           </div>
-          <div class="">
+          <div>
             <h3 class="title title--light">SOLICITANTE</h3>
             <h3 class="title title--dark">{{ item.criado_por }}</h3>
           </div>
         </div>
+
         <div class="group group--body">
           <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              calendar_today
-            </mat-icon>
+            <mat-icon class="icon icon--small icon--orange">calendar_today</mat-icon>
           </div>
-          <div class="">
+          <div>
             <h3 class="title title--light">DATA DO OCORRIDO</h3>
-            <h3 class="title title--dark">{{ formateDate(item.data_ocorrido) || 'N/A' }}</h3>
+            <h3 class="title title--dark">{{ formateDate(item.data_ocorrido) }}</h3>
           </div>
         </div>
+
         <div class="group group--body">
           <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              category
-            </mat-icon>
+            <mat-icon class="icon icon--small icon--orange">category</mat-icon>
           </div>
-          <div class="">
+          <div>
             <h3 class="title title--light">TIPO DE ADVERTÊNCIA</h3>
             <h3 class="title title--dark">{{ item.advertencia || 'N/A' }}</h3>
           </div>
         </div>
+
         <div class="group group--body">
           <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              article
-            </mat-icon>
+            <mat-icon class="icon icon--small icon--orange">article</mat-icon>
           </div>
-          <div class="">
+          <div>
             <h3 class="title title--light">MOTIVO</h3>
             <h3 class="title title--dark">{{ item.motivo }}</h3>
           </div>
         </div>
+
         @if (item.observacao) {
-        <div class="group group--full group--body">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">
-              notes
-            </mat-icon>
+          <div class="group group--body group--full">
+            <div class="group group--icon">
+              <mat-icon class="icon icon--small icon--orange">notes</mat-icon>
+            </div>
+            <div>
+              <h3 class="title title--light">OBSERVAÇÃO</h3>
+              <h3 class="title title--dark">{{ item.observacao }}</h3>
+            </div>
           </div>
-          <div class="">
-            <h3 class="title title--light">OBSERVAÇÃO</h3>
-            <h3 class="title title--dark">{{ item.observacao || 'N/A' }}</h3>
-          </div>
-        </div>
         }
+
       </div>
     </div>
 
-    <div class="blurred-background" *ngIf="menuModalOpen">
-      <form class="modal">
+    <!-- Modal: menu -->
+    <div class="overlay" *ngIf="menuModalOpen" (click)="closeModals()">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
         <div class="modal__header">
-          <h3 class="title title--large title--dark">Menu</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
+          <h2 class="modal__title">{{ currentItem.nome }}</h2>
+          <button type="button" class="modal__close" (click)="closeModals()">
+            <mat-icon>close</mat-icon>
           </button>
         </div>
-        <div class="modal__body">
-          <div class="grid grid--double">
-            <button type="button" class="btn btn__action" (click)="download()">
-              @if (isLoading) {
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-              } @else {
-              Gerar PDF
-              }
-            </button>
-            <button type="button" class="btn btn__action" (click)="openUpdateModal()">
-              Atualizar
-            </button>
-            <button type="button" class="btn btn__action btn__full" (click)="delete()">
-              Deletar
-            </button>
-          </div>
+        <div class="modal__body modal__body--actions">
+          <button type="button" class="action-btn" (click)="download()">
+            @if (isLoading) {
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            } @else {
+              <mat-icon>picture_as_pdf</mat-icon>
+              <span>Gerar PDF</span>
+            }
+          </button>
+          <button type="button" class="action-btn" (click)="openUpdateModal()">
+            <mat-icon>edit</mat-icon>
+            <span>Atualizar</span>
+          </button>
+          <button type="button" class="action-btn action-btn--danger" (click)="delete()">
+            <mat-icon>delete</mat-icon>
+            <span>Deletar</span>
+          </button>
         </div>
         <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="closeModals()">
-            Fechar
-          </button>
+          <button type="button" class="modal__btn modal__btn--ghost" (click)="closeModals()">Fechar</button>
         </div>
-      </form>
+      </div>
     </div>
 
-    <div class="blurred-background" *ngIf="updateModalOpen">
-      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()">
+    <!-- Modal: atualizar -->
+    <div class="overlay" *ngIf="updateModalOpen" (click)="closeModals()">
+      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()" (click)="$event.stopPropagation()">
         <div class="modal__header">
-          <h3 class="title title--large title--dark">Atualizar</h3>
-          <button class="icon icon--close icon--dark" (click)="closeModals()">
-            &times;
+          <h2 class="modal__title">Atualizar Medida Disciplinar</h2>
+          <button type="button" class="modal__close" (click)="closeModals()">
+            <mat-icon>close</mat-icon>
           </button>
         </div>
         <div class="modal__body">
-          <div class="grid grid--double">
-            <div class="group group--column">
-              <label class="title title--medium title--light">Status</label>
-              <select class="select" formControlName="status">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="ANDAMENTO">Em andamento</option>
-                <option value="CONCLUIDO">Concluído</option>
-                <option value="CANCELADO">Cancelado</option>
-              </select>
-            </div>
-            <div class="group group--column">
-              <label class="title title--medium title--light">Tipo de advertência</label>
-              <select class="select" formControlName="advertencia">
-                <option value="" disabled>Selecione uma opção</option>
-                <option value="VERBAL">Verbal</option>
-                <option value="ESCRITA">Escrita</option>
-                <option value="SUSPENSAO">Suspensão</option>
-              </select>
-            </div>
-            <div class="group group--column group--full">
-              <label class="title title--medium title--light">Observação</label>
-              <textarea formControlName="observacao" class="textarea"></textarea>
-            </div>
+
+          <div class="form-field">
+            <label class="form-field__label">Status *</label>
+            <select class="form-field__select" formControlName="status">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="ANDAMENTO">Em Andamento</option>
+              <option value="CONCLUIDO">Concluído</option>
+              <option value="CANCELADO">Cancelado</option>
+            </select>
           </div>
+
+          <div class="form-field">
+            <label class="form-field__label">Tipo de Advertência *</label>
+            <select class="form-field__select" formControlName="advertencia">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="VERBAL">Verbal</option>
+              <option value="ESCRITA">Escrita</option>
+              <option value="SUSPENSAO">Suspensão</option>
+            </select>
+          </div>
+
+          <div class="form-field form-field--full">
+            <label class="form-field__label">Observação *</label>
+            <textarea class="form-field__textarea" formControlName="observacao"></textarea>
+          </div>
+
         </div>
         <div class="modal__footer">
-          <button type="button" class="btn btn__action" (click)="returnModal()">
-            Voltar
-          </button>
-          <button type="submit" class="btn btn__action">
+          <button type="button" class="modal__btn modal__btn--ghost" (click)="returnModal()">Voltar</button>
+          <button type="submit" class="modal__btn modal__btn--primary" [disabled]="isLoading">
             @if (isLoading) {
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
             } @else {
-            Atualizar
+              Atualizar
             }
           </button>
         </div>
       </form>
     </div>
 
-    <div class="centralized" *ngIf="isSearching">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </div>
-
-    <div class="centralized centralized--column" *ngIf="isEmpty">
-      <mat-icon class="icon icon--large icon--light">wrong_location</mat-icon>
-      <h3 class="title title--large title--light">Nenhuma solicitação encontrada</h3>
-    </div>
   </div>
 </div>
