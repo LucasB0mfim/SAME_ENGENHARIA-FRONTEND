@@ -10,6 +10,8 @@ import { TitleService } from '../../../../core/services/title.service';
 import { ResignationService } from '../../services/resignation.service';
 import { EmployeeService } from '../../services/employee.service';
 
+import { ResignationItem, ResignationCountStatus, MessageType } from '../../interfaces/resignation.interface';
+
 @Component({
   selector: 'app-resignation',
   imports: [
@@ -17,10 +19,10 @@ import { EmployeeService } from '../../services/employee.service';
     ReactiveFormsModule,
     FormsModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './resignation.component.html',
-  styleUrl: './resignation.component.scss'
+  styleUrl: './resignation.component.scss',
 })
 export class ResignationComponent implements OnInit {
 
@@ -32,7 +34,7 @@ export class ResignationComponent implements OnInit {
     nome: new FormControl('', Validators.required),
     modalidade: new FormControl('', Validators.required),
     comunicarColaborador: new FormControl('', Validators.required),
-    observacao: new FormControl('', Validators.required)
+    observacao: new FormControl('', Validators.required),
   });
 
   updateForm: FormGroup = new FormGroup({
@@ -46,11 +48,14 @@ export class ResignationComponent implements OnInit {
     observacao: new FormControl(null, Validators.required),
   });
 
-  items: any[] = [];
-  currentItem: any = {};
-  filteredItems: any[] = [];
-  activeEmployees: any = {};
-  countStatus: { novo: number, andamento: number, aviso_trabalhado: number, demitido: number, desligado: number } = { novo: 0, andamento: 0, aviso_trabalhado: 0, demitido: 0, desligado: 0 };
+  items: ResignationItem[] = [];
+  filteredItems: ResignationItem[] = [];
+  currentItem: ResignationItem = {} as ResignationItem;
+  activeEmployees: string[] = [];
+
+  countStatus: ResignationCountStatus = {
+    novo: 0, andamento: 0, aviso_trabalhado: 0, demitido: 0, desligado: 0,
+  };
 
   employee: string = '';
   activeStatus: string = '';
@@ -65,12 +70,12 @@ export class ResignationComponent implements OnInit {
 
   message: string = '';
   showMessage: boolean = false;
-  messageType: 'success' | 'error' = 'success';
+  messageType: MessageType = 'success';
 
   ngOnInit(): void {
+    this._titleService.setTitle('Desligamento');
     this.findByStatus('NOVO');
     this.countByStatus();
-    this._titleService.setTitle('Desligamento');
   }
 
   findByStatus(status: string): void {
@@ -79,7 +84,7 @@ export class ResignationComponent implements OnInit {
     this.isSearching = true;
 
     this._resignationService.findByStatus(status)
-      .pipe(finalize(() => this.isSearching = false))
+      .pipe(finalize(() => (this.isSearching = false)))
       .subscribe({
         next: (res) => {
           this.items = res.result;
@@ -87,33 +92,26 @@ export class ResignationComponent implements OnInit {
           this.isEmpty = this.items.length === 0;
           this.activeStatus = status;
         },
-        error: (err) => {
-          console.error(err.error.message, err);
-        }
+        error: (err) => console.error(err.error.message, err),
       });
-  };
+  }
 
   countByStatus(): void {
+    console.log("ANTES DE ALIMENTAR: ", this.countStatus)
     this._resignationService.countByStatus().subscribe({
       next: (res) => {
-        this.countStatus = res.result;
+        this.countStatus = res.result
+        console.log("DEPOIS DE ALIMENTAR: ", this.countStatus)
       },
-      error: (error) => {
-        console.error(error);
-      }
+      error: (err) => console.error(err)
     });
   }
 
   findActiveEmployees(): void {
-    this._employeesService.findActiveNames()
-      .subscribe({
-        next: (res) => {
-          this.activeEmployees = res.result;
-        },
-        error: (err) => {
-          this.setMessage(err.error.message, 'error')
-        }
-      });
+    this._employeesService.findActiveNames().subscribe({
+      next: (res) => (this.activeEmployees = res.result),
+      error: (err) => this.setMessage(err.error.message, 'error'),
+    });
   }
 
   create(): void {
@@ -124,22 +122,19 @@ export class ResignationComponent implements OnInit {
       modalidade: this.createForm.value.modalidade,
       data_comunicacao: this.createForm.value.comunicarColaborador,
       observacao: this.createForm.value.observacao,
-    }
+    };
 
     this._resignationService.create(request)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
           this.createModalOpen = false;
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
-        error: (err) => {
-          console.log(err.error.message);
-          this.setMessage(err.error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
-  };
+  }
 
   update(): void {
     this.isLoading = true;
@@ -154,22 +149,19 @@ export class ResignationComponent implements OnInit {
       data_comunicacao: this.currentItem.data_comunicacao,
       data_rescisao: this.updateForm.value.dataRescisao,
       observacao: this.updateForm.value.observacao,
-    }
+    };
 
     this._resignationService.update(request)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
           this.updateModalOpen = false;
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
-        error: (err) => {
-          console.log(err.error.message);
-          this.setMessage(err.error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
-  };
+  }
 
   delete(): void {
     this._resignationService.delete(this.currentItem.id)
@@ -180,52 +172,43 @@ export class ResignationComponent implements OnInit {
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
-        error: (error) => {
-          console.log(error.error.message);
-          this.setMessage(error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
   }
 
-  applyFilters() {
-    let data = [...this.filteredItems];
-
-    if (this.employee) {
-      const inputValue = this.employee
-        .toUpperCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-
-      data = data.filter(item => {
-        if (!item.nome) return false;
-
-        const nome = item.nome
-          .toUpperCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-
-        return nome.includes(inputValue);
-      });
+  applyFilters(): void {
+    if (!this.employee) {
+      this.items = [...this.filteredItems];
+      return;
     }
 
-    this.items = data;
-  };
+    const query = this.employee
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    this.items = this.filteredItems.filter((item) => {
+      if (!item.nome) return false;
+      const nome = item.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return nome.includes(query);
+    });
+  }
 
   openCreator(): void {
     this.createModalOpen = true;
     this.findActiveEmployees();
   }
 
-  openMenu(item: any): void {
+  openMenu(item: ResignationItem): void {
     this.menuModalOpen = true;
     this.currentItem = item;
-  };
+  }
 
   closeModals(): void {
     this.menuModalOpen = false;
     this.updateModalOpen = false;
     this.createModalOpen = false;
-  };
+  }
 
   openUpdateModal(): void {
     this.menuModalOpen = false;
@@ -234,10 +217,10 @@ export class ResignationComponent implements OnInit {
       id: this.currentItem.id,
       status: this.currentItem.status,
       modalidade: this.currentItem.modalidade,
-      inicioAvisoTrabalhado: this.currentItem.data_inicio_aviso_trabalhado,
+      dataInicioAvisoTrabalhado: this.currentItem.data_inicio_aviso_trabalhado,
       modalidadeAvisoTrabalhado: this.currentItem.modalidade_aviso_trabalhado,
       colaboradorComunicado: this.currentItem.colaborador_comunicado,
-      rescisao: this.currentItem.data_rescisao,
+      dataRescisao: this.currentItem.data_rescisao,
       observacao: this.currentItem.observacao,
     });
   }
@@ -247,20 +230,19 @@ export class ResignationComponent implements OnInit {
     this.updateModalOpen = false;
   }
 
-  formateDate(date: string) {
-    if (!date) return 'N/A'
+  formateDate(date: string | null): string {
+    if (!date) return 'N/A';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
-  };
+  }
 
-  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
+  setMessage(message: string, type: MessageType = 'success'): void {
     this.message = message;
     this.messageType = type;
     this.showMessage = true;
-
     setTimeout(() => {
       this.showMessage = false;
       this.message = '';
     }, 3000);
-  };
+  }
 }
