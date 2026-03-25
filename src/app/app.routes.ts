@@ -15,6 +15,11 @@ export const routes: Routes = [
     canActivate: [tempTokenGuard]
   },
   {
+    path: 'invoice',
+    loadComponent: () => import('./pages/invoice/invoice.component')
+      .then(c => c.InvoiceComponent),
+  },
+  {
     path: 'workspace',
     loadComponent: () => import('./layout/workspace/workspace.component')
       .then(c => c.WorkspaceComponent),

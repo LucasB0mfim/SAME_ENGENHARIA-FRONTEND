@@ -1,0 +1,210 @@
+// ── Design Tokens ──────────────────────────────────────
+$color-background: #f0ede8;
+$color-card: #ffffff;
+$color-text-primary: #3d3730;
+$color-text-secondary: #9a8f84;
+$color-primary: #e85f04;
+$color-border: #d6d1ca;
+$radius: 0.75rem;
+$radius-sm: 0.5rem;
+
+// ── Page ───────────────────────────────────────────────
+.invoice-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: $color-background;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+}
+
+// ── Card Block ─────────────────────────────────────────
+.invoice-card {
+  width: 100%;
+  max-width: 32rem;
+  background-color: $color-card;
+  border: 1px solid $color-border;
+  border-radius: $radius;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  padding: 1.5rem;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: $color-text-primary;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    color: $color-text-secondary;
+    margin: 0.25rem 0 0;
+  }
+}
+
+// ── Form Block ─────────────────────────────────────────
+.invoice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: $color-text-primary;
+  }
+
+  // ── Input ──
+  &__input {
+    height: 2.5rem;
+    width: 100%;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border;
+    background-color: $color-background;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: $color-text-primary;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $color-text-secondary;
+    }
+
+    &:focus {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+    }
+
+    &--currency {
+      padding-left: 1.75rem;
+    }
+
+    &--date {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      position: relative;
+
+      // Style the calendar icon
+      &::-webkit-calendar-picker-indicator {
+        opacity: 0.5;
+        cursor: pointer;
+        filter: none;
+      }
+
+      // Placeholder-like text when empty
+      &:invalid,
+      &[value=""] {
+        color: $color-text-secondary;
+      }
+    }
+  }
+
+  // ── Input Wrapper (for prefix) ──
+  &__input-wrapper {
+    position: relative;
+  }
+
+  &__input-prefix {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+    color: $color-text-secondary;
+    pointer-events: none;
+  }
+
+  // ── Upload ──
+  &__upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    border: 2px dashed $color-border;
+    border-radius: $radius;
+    padding: 1.5rem;
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+
+    &:hover {
+      border-color: rgba($color-primary, 0.5);
+      background-color: rgba($color-background, 0.5);
+    }
+  }
+
+  &__upload-icon {
+    color: $color-text-secondary;
+  }
+
+  &__upload-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $color-text-primary;
+  }
+
+  &__upload-hint {
+    font-size: 0.75rem;
+    color: $color-text-secondary;
+  }
+
+  // ── Submit ──
+  &__submit {
+    height: 2.5rem;
+    width: 100%;
+    border: none;
+    border-radius: $radius-sm;
+    background-color: $color-primary;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: darken($color-primary, 8%);
+    }
+
+    &--disabled,
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+}
