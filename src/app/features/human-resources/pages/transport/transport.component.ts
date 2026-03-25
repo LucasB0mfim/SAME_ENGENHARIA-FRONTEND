@@ -4,94 +4,88 @@ import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormControl, FormsModule, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { TitleService } from '../../../../core/services/title.service';
 import { TransportService } from '../../services/transport.service';
 
-import { HttpResponse } from '@angular/common/http';
+import { TransportItem, TransportCountStatus, MessageType } from '../../interfaces/transport.interface';
 
 @Component({
   selector: 'app-transport',
   imports: [
-    FormsModule,
     CommonModule,
+    FormsModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    ɵInternalFormsSharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './transport.component.html',
-  styleUrl: './transport.component.scss'
+  styleUrl: './transport.component.scss',
 })
 export class TransportComponent implements OnInit {
 
-  private readonly _titleService = inject(TitleService);
+  private readonly _titleService    = inject(TitleService);
   private readonly _transportService = inject(TransportService);
 
   updateForm: FormGroup = new FormGroup({
-    id: new FormControl(''),
-    criador: new FormControl(''),
-    status: new FormControl('', Validators.required),
-    advertencia: new FormControl('', Validators.required),
+    id:        new FormControl(''),
+    status:    new FormControl('', Validators.required),
     observacao: new FormControl('', Validators.required),
   });
 
-  items: any[] = [];
-  currentItem: any = {};
-  filteredItems: any[] = [];
+  items: TransportItem[]         = [];
+  filteredItems: TransportItem[] = [];
+  currentItem: TransportItem     = {} as TransportItem;
 
-  countStatus: { novo: number, andamento: number, concluido: number, cancelado: number } = { novo: 0, andamento: 0, concluido: 0, cancelado: 0 };
+  countStatus: TransportCountStatus = {
+    novo: 0, andamento: 0, concluido: 0, cancelado: 0,
+  };
 
-  employee: string = '';
+  employee:     string = '';
   activeStatus: string = '';
 
-  menuModalOpen: boolean = false;
+  menuModalOpen:   boolean = false;
   updateModalOpen: boolean = false;
 
-  isEmpty: boolean = false;
-  isLoading: boolean = false;
+  isEmpty:     boolean = false;
+  isLoading:   boolean = false;
   isSearching: boolean = false;
 
-  message: string = '';
-  showMessage: boolean = false;
-  messageType: 'success' | 'error' = 'success';
+  message:     string      = '';
+  showMessage: boolean     = false;
+  messageType: MessageType = 'success';
 
   ngOnInit(): void {
+    this._titleService.setTitle('Vale Transporte');
     this.findByStatus('NOVO');
     this.countByStatus();
-    this._titleService.setTitle('Vale Transporte');
   }
 
   findByStatus(status: string): void {
-    this.items = [];
-    this.isEmpty = false;
+    this.items       = [];
+    this.isEmpty     = false;
     this.isSearching = true;
 
     this._transportService.findByStatus(status)
-      .pipe(finalize(() => this.isSearching = false))
+      .pipe(finalize(() => (this.isSearching = false)))
       .subscribe({
         next: (res) => {
-          this.items = res.result;
+          this.items         = res.result;
           this.filteredItems = [...this.items];
-          this.isEmpty = this.items.length === 0;
-          this.activeStatus = status;
+          this.isEmpty       = this.items.length === 0;
+          this.activeStatus  = status;
         },
-        error: (err) => {
-          console.error(err.error.message, err);
-        }
+        error: (err) => console.error(err.error.message, err),
       });
-  };
+  }
 
   countByStatus(): void {
     this._transportService.countByStatus().subscribe({
-      next: (res) => {
-        this.countStatus = res.result;
-      },
-      error: (error) => {
-        console.error(error);
-      }
+      next:  (res) => (this.countStatus = res.result),
+      error: (err) => console.error(err),
     });
   }
 
@@ -99,14 +93,13 @@ export class TransportComponent implements OnInit {
     this.isLoading = true;
 
     const request = {
-      id: this.currentItem.id,
-      status: this.updateForm.value.status,
-      advertencia: this.updateForm.value.advertencia,
-      observacao: this.updateForm.value.observacao
-    }
+      id:        this.currentItem.id,
+      status:    this.updateForm.value.status,
+      observacao: this.updateForm.value.observacao,
+    };
 
     this._transportService.update(request)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
           this.resetUpdateForm();
@@ -114,97 +107,80 @@ export class TransportComponent implements OnInit {
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
-        error: (err) => {
-          console.log(err.error.message);
-          this.setMessage(err.error.message, 'error');
-        }
+        error: (err) => this.setMessage(err.error.message, 'error'),
       });
-  };
+  }
 
-  applyFilters() {
-    let data = [...this.filteredItems];
-
-    if (this.employee) {
-      const inputValue = this.employee
-        .toUpperCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-
-      data = data.filter(item => {
-        if (!item.nome) return false;
-
-        const nome = item.nome
-          .toUpperCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-
-        return nome.includes(inputValue);
-      });
+  applyFilters(): void {
+    if (!this.employee) {
+      this.items = [...this.filteredItems];
+      return;
     }
 
-    this.items = data;
-  };
+    const query = this.employee
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
 
-  openMenu(item: any): void {
+    this.items = this.filteredItems.filter((item) => {
+      if (!item.nome) return false;
+      return item.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(query);
+    });
+  }
+
+  openMenu(item: TransportItem): void {
     this.menuModalOpen = true;
-    this.currentItem = item;
-  };
+    this.currentItem   = item;
+  }
 
   closeModals(): void {
-    this.menuModalOpen = false;
+    this.menuModalOpen   = false;
     this.updateModalOpen = false;
-  };
+  }
 
   openUpdateModal(): void {
-    this.menuModalOpen = false;
+    this.menuModalOpen   = false;
     this.updateModalOpen = true;
     this.updateForm.patchValue({
-      id: this.currentItem.id,
-      criador: this.currentItem.criador,
-      status: this.currentItem.status,
-      advertencia: this.currentItem.advertencia,
+      id:        this.currentItem.id,
+      status:    this.currentItem.status,
       observacao: this.currentItem.observacao,
     });
   }
 
   returnModal(): void {
-    this.menuModalOpen = true;
+    this.menuModalOpen   = true;
     this.updateModalOpen = false;
   }
 
-  formateDate(date: string) {
+  formateDate(date: string | null): string {
+    if (!date) return 'N/A';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
-  };
+  }
 
-  setMessage(message: string, type: 'success' | 'error' = 'success'): void {
-    this.message = message;
-    this.messageType = type;
-    this.showMessage = true;
-
-    setTimeout(() => {
-      this.showMessage = false;
-      this.message = '';
-    }, 3000);
-  };
-
-  download() {
+  download(): void {
     this.isLoading = true;
     this._transportService.download(this.currentItem.id)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe((response: HttpResponse<Blob>) => {
-        const cd = response.headers.get('content-disposition');
+        const cd       = response.headers.get('content-disposition');
         const fileName = cd?.match(/filename="?([^"]+)"?/)?.[1] || 'VALE_TRANSPORTE.pdf';
         saveAs(response.body!, fileName);
       });
   }
 
   resetUpdateForm(): void {
-    this.updateForm.reset({
-      criador: '',
-      status: '',
-      advertencia: '',
-      observacao: ''
-    })
+    this.updateForm.reset({ status: '', observacao: '' });
+  }
+
+  setMessage(message: string, type: MessageType = 'success'): void {
+    this.message     = message;
+    this.messageType = type;
+    this.showMessage = true;
+    setTimeout(() => {
+      this.showMessage = false;
+      this.message     = '';
+    }, 3000);
   }
 }
