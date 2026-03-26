@@ -1,25 +1,82 @@
 <div class="invoice-page">
+
+  @if (toast) {
+    <app-toast
+      [type]="toast.type"
+      [message]="toast.message"
+      (close)="toast = null">
+    </app-toast>
+  }
+
   <div class="invoice-card">
     <div class="invoice-card__header">
       <h1 class="invoice-card__title">Cadastrar Nota Fiscal</h1>
       <p class="invoice-card__subtitle">Preencha os dados abaixo para cadastrar uma nova nota fiscal.</p>
     </div>
 
-    <form class="invoice-form" [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+    <form
+      class="invoice-form"
+      [formGroup]="invoiceForm"
+      (ngSubmit)="onSubmit()"
+      aria-label="Formulário de cadastro de nota fiscal"
+    >
+
       <div class="invoice-form__field">
-        <label class="invoice-form__label" for="numero_nota">Número da Nota</label>
-        <input class="invoice-form__input" id="numero_nota" formControlName="numero_nota" type="text" placeholder="e.g. INV-2026-001" />
+        <label class="invoice-form__label" for="nome_completo">Nome Completo</label>
+        <input
+          class="invoice-form__input"
+          type="text"
+          id="nome_completo"
+          name="nome_completo"
+          formControlName="nome_completo"
+          autocomplete="name"
+          aria-required="true"
+          minlength="2"
+          maxlength="80"
+          placeholder="Insira seu nome completo"
+        />
+      </div>
+
+      <div class="invoice-form__field">
+        <label class="invoice-form__label" for="cnpj">CNPJ</label>
+        <input
+          class="invoice-form__input"
+          type="text"
+          id="cnpj"
+          name="cnpj"
+          autocomplete="cnpj"
+          aria-required="true"
+          minlength="18"
+          maxlength="18"
+          formControlName="cnpj"
+          placeholder="00.000.000/0000-00"
+          mask="00.000.000/0000-00"
+        />
       </div>
 
       <div class="invoice-form__row">
         <div class="invoice-form__field">
-          <label class="invoice-form__label" for="data_emissao">Data de Emissão</label>
-          <input class="invoice-form__input invoice-form__input--date" id="data_emissao" formControlName="data_emissao" type="date" />
+          <label class="invoice-form__label" for="data_periodo">Data do Período</label>
+          <input
+            class="invoice-form__input invoice-form__input--date"
+            type="month"
+            id="data_periodo"
+            name="data_periodo"
+            aria-required="true"
+            formControlName="data_periodo"
+          />
         </div>
 
         <div class="invoice-form__field">
           <label class="invoice-form__label" for="data_vencimento">Data de Vencimento</label>
-          <input class="invoice-form__input invoice-form__input--date" id="data_vencimento" formControlName="data_vencimento" type="date" />
+          <input
+            class="invoice-form__input invoice-form__input--date"
+            type="date"
+            id="data_vencimento"
+            name="data_vencimento"
+            aria-required="true"
+            formControlName="data_vencimento"
+          />
         </div>
       </div>
 
@@ -27,32 +84,81 @@
         <label class="invoice-form__label" for="valor">Valor (R$)</label>
         <div class="invoice-form__input-wrapper">
           <span class="invoice-form__input-prefix">R$</span>
-          <input class="invoice-form__input invoice-form__input--currency" id="valor" formControlName="valor" type="text" placeholder="0,00" />
+          <input
+            class="invoice-form__input"
+            type="text"
+            id="valor"
+            name="valor"
+            formControlName="valor"
+            aria-required="true"
+            [currencyMask]="{
+              prefix: '',
+              thousands: '.',
+              decimal: ','
+            }"
+          />
+        </div>
+      </div>
+
+      <div class="invoice-form__row">
+        <div class="invoice-form__field">
+          <label class="invoice-form__label" for="linha_digitavel">Boleto</label>
+          <input
+            class="invoice-form__input"
+            type="text"
+            id="linha_digitavel"
+            name="linha_digitavel"
+            formControlName="linha_digitavel"
+            aria-required="true"
+            placeholder="Código do boleto"
+            mask="000000000000 000000000000 000000000000 000000000000"
+          />
+        </div>
+
+        <div class="invoice-form__field">
+          <label class="invoice-form__label" for="pix_payload">Pix</label>
+          <input
+            class="invoice-form__input"
+            type="text"
+            id="pix_payload"
+            name="pix_payload"
+            formControlName="pix_payload"
+            aria-required="true"
+            placeholder="Código copia e cola"
+          />
         </div>
       </div>
 
       <div class="invoice-form__field">
-        <label class="invoice-form__label">Anexo</label>
+        <label class="invoice-form__label" for="arquivo_url">Anexar Documento</label>
 
         <input
-        type="file"
-        #fileInput
-        (change)="onFileSelected($event)"
-        accept="application/pdf"
-        style="display: none;"
-        >
+          type="file"
+          id="arquivo_url"
+          #arquivo_url
+          name="arquivo_url"
+          accept="application/pdf"
+          style="display: none;"
+          (change)="onFileSelected($event)"
+        />
 
-        <button class="invoice-form__upload" type="button" (click)="triggerFileInput()">
+        <button
+          type="button"
+          class="invoice-form__upload"
+          (click)="triggerFileInput()"
+        >
           <mat-icon class="invoice-form__upload-icon">cloud_upload</mat-icon>
+
           <span class="invoice-form__upload-text">
             {{ selectedFile ? selectedFile.name : 'Clique para anexar' }}
           </span>
+
           <span class="invoice-form__upload-hint">Apenas arquivos .pdf</span>
         </button>
       </div>
 
       <button class="invoice-form__submit" type="submit">
-        Cadastrar Nota Fiscal
+        {{ isSending ? 'Processando...' : 'Cadastrar Nota Fiscal' }}
       </button>
     </form>
   </div>

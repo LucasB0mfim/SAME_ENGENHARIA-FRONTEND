@@ -14,12 +14,9 @@ $radius-sm: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
   padding: 1rem;
   background-color: $color-background;
-
-  @media (min-width: 640px) {
-    padding: 2rem;
-  }
 }
 
 // ── Card Block ─────────────────────────────────────────
@@ -30,11 +27,7 @@ $radius-sm: 0.5rem;
   border: 1px solid $color-border;
   border-radius: $radius;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  padding: 1.5rem;
-
-  @media (min-width: 640px) {
-    padding: 2rem;
-  }
+  padding: 2rem;
 
   &__header {
     margin-bottom: 2rem;
@@ -108,10 +101,6 @@ $radius-sm: 0.5rem;
       box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
     }
 
-    &--currency {
-      padding-left: 1.75rem;
-    }
-
     &--date {
       cursor: pointer;
       appearance: none;
@@ -153,7 +142,6 @@ $radius-sm: 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
     width: 100%;
     border: 2px dashed $color-border;
     border-radius: $radius;
@@ -169,6 +157,9 @@ $radius-sm: 0.5rem;
   }
 
   &__upload-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 42px;
     color: $color-text-secondary;
   }
 

@@ -1,0 +1,221 @@
+<div class="container">
+
+  <!-- Toast message -->
+  @if (showMessage) {
+  <div class="toast" [class.toast--success]="messageType === 'success'" [class.toast--error]="messageType === 'error'">
+    <mat-icon>{{ messageType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+    <span>{{ message }}</span>
+  </div>
+  }
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button type="button" class="filter-btn" (click)="findByStatus('PENDENTE')"
+      [class.filter-btn--active]="activeStatus === 'PENDENTE'">
+      Pendentes
+      <span class="filter-btn__badge">{{ countStatus.pendente }}</span>
+    </button>
+
+    <button type="button" class="filter-btn" (click)="findByStatus('PAGO')"
+      [class.filter-btn--active]="activeStatus === 'PAGO'">
+      Pagos
+      <span class="filter-btn__badge">{{ countStatus.pago }}</span>
+    </button>
+
+    <button type="button" class="filter-btn" (click)="findByStatus('VENCIDO')"
+      [class.filter-btn--active]="activeStatus === 'VENCIDO'">
+      Vencidos
+      <span class="filter-btn__badge">{{ countStatus.vencido }}</span>
+    </button>
+
+    <button type="button" class="filter-btn" (click)="findByStatus('CANCELADO')"
+      [class.filter-btn--active]="activeStatus === 'CANCELADO'">
+      Cancelados
+      <span class="filter-btn__badge">{{ countStatus.cancelado }}</span>
+    </button>
+
+    <div class="search">
+      <mat-icon class="search__icon">search</mat-icon>
+      <input type="text" class="search__input" placeholder="Buscar colaborador..." [(ngModel)]="employee"
+        (input)="applyFilters()" />
+    </div>
+  </div>
+
+  <!-- Card list -->
+  <div class="list">
+
+    @if (isSearching) {
+    <div class="state-view">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+    }
+
+    @if (isEmpty && !isSearching) {
+    <div class="state-view state-view--column">
+      <mat-icon class="state-view__icon">manage_search</mat-icon>
+      <span class="state-view__label">Nenhuma solicitação encontrada</span>
+    </div>
+    }
+
+    <div class="card" *ngFor="let item of items">
+
+      <div class="card__header" (click)="openMenu(item)">
+        <div class="card__identity">
+          <span class="card__name">{{ item.nome_completo }}</span>
+          <div class="card__tags">
+            <span class="tag">{{ item.id }}</span>
+            <span class="tag">{{ item.created_at }}</span>
+          </div>
+        </div>
+        <mat-icon class="card__menu-icon">more_horiz</mat-icon>
+      </div>
+
+      <div class="card__body">
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">badge</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">CNPJ</h3>
+            <h3 class="title title--dark">{{ item.cnpj }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">date_range</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">PERIODO</h3>
+            <h3 class="title title--dark">{{ item.data_periodo }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">date_range</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">VENCIMENTO</h3>
+            <h3 class="title title--dark">{{ item.data_vencimento }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">attach_money</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">VALOR</h3>
+            <h3 class="title title--dark">{{ (item.valor / 100) | currency:'BRL' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body" (click)="copyContent(item.linha_digitavel)">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">receipt_long</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">BOLETO</h3>
+            <h3 class="title title--dark">{{ item.linha_digitavel ? 'Clique aqui para copiar' : 'N/A' }}</h3>
+          </div>
+        </div>
+
+        <div class="group group--body" (click)="copyContent(item.pix_payload)">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">qr_code</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">PIX</h3>
+            <h3 class="title title--dark">{{ item.pix_payload ? 'Clique aqui para copiar' : 'N/A' }}</h3>
+          </div>
+        </div>
+
+        @if (item.observacao) {
+        <div class="group group--body group--full">
+          <div class="group group--icon">
+            <mat-icon class="icon icon--small icon--orange">notes</mat-icon>
+          </div>
+          <div>
+            <h3 class="title title--light">OBSERVAÇÃO</h3>
+            <h3 class="title title--dark">{{ item.observacao }}</h3>
+          </div>
+        </div>
+        }
+
+      </div>
+    </div>
+
+    <!-- Modal: menu -->
+    <div class="overlay" *ngIf="menuModalOpen" (click)="closeModals()">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__header">
+          <h2 class="modal__title">{{ currentItem.nome_completo }}</h2>
+          <button type="button" class="modal__close" (click)="closeModals()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal__body modal__body--actions">
+          <button type="button" class="action-btn" (click)="OpenLink()">
+            <mat-icon>picture_as_pdf</mat-icon>
+            <span>Abrir PDF</span>
+          </button>
+          <button type="button" class="action-btn" (click)="openUpdateModal()">
+            <mat-icon>edit</mat-icon>
+            <span>Atualizar</span>
+          </button>
+          <button type="button" class="action-btn action-btn--danger" (click)="delete()">
+            <mat-icon>delete</mat-icon>
+            <span>Deletar</span>
+          </button>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="modal__btn modal__btn--ghost" (click)="closeModals()">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: atualizar -->
+    <div class="overlay" *ngIf="updateModalOpen" (click)="closeModals()">
+      <form class="modal" [formGroup]="updateForm" (ngSubmit)="update()" (click)="$event.stopPropagation()">
+        <div class="modal__header">
+          <h2 class="modal__title">Atualizar Solicitação</h2>
+          <button type="button" class="modal__close" (click)="closeModals()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal__body">
+
+          <div class="form-field form-field--full">
+            <label class="form-field__label">Status *</label>
+            <select class="form-field__select" formControlName="status">
+              <option value="" disabled>Selecione uma opção</option>
+              <option value="ANDAMENTO">Em Andamento</option>
+              <option value="AVISO TRABALHADO">Aviso Trabalhado</option>
+              <option value="DEMITIDO">Demitido</option>
+              <option value="DESLIGADO">Desligado</option>
+            </select>
+          </div>
+
+          <div class="form-field form-field--full">
+            <label class="form-field__label">Observação</label>
+            <textarea class="form-field__textarea" formControlName="observacao"></textarea>
+          </div>
+
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="modal__btn modal__btn--ghost" (click)="returnModal()">Voltar</button>
+          <button type="submit" class="modal__btn modal__btn--primary" [disabled]="isLoading">
+            @if (isLoading) {
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            } @else {
+            Atualizar
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

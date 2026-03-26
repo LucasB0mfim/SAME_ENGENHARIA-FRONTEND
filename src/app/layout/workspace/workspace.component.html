@@ -125,6 +125,37 @@
             </div>
           </li>
 
+          <li class="menu__item menu__item--group">
+            <button
+              type="button"
+              class="menu__link menu__link--group"
+              [class.menu__link--group-active]="isGroupActive('financial')"
+              (click)="toggleGroup('financial')"
+              [attr.aria-expanded]="openGroups['financial']"
+              aria-controls="group-financial">
+              <mat-icon class="menu__icon" aria-hidden="true">account_balance</mat-icon>
+              <span class="menu__title">Financeiro</span>
+              <mat-icon class="menu__chevron" aria-hidden="true">expand_more</mat-icon>
+            </button>
+
+            <div
+              id="group-financial"
+              class="menu__group-body"
+              [class.menu__group-body--open]="openGroups['financial']"
+              role="region">
+              <ul class="menu__sublist" role="list">
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/financial/invoice" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Notas Fiscais">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">assignment</mat-icon>
+                    <span class="menu__title">Notas Fiscais</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
         </ul>
       </div>
 

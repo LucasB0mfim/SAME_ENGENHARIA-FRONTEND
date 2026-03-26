@@ -8,7 +8,7 @@ import { UserService } from '../../core/services/user.service';
 import { LoginService } from '../../core/services/login.service';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
-type GroupKey = 'reports' | 'hr';
+type GroupKey = 'reports' | 'hr' | 'financial';
 
 const GROUP_ROUTES: Record<GroupKey, string[]> = {
   reports: [
@@ -22,6 +22,9 @@ const GROUP_ROUTES: Record<GroupKey, string[]> = {
     '/workspace/human-resources/brk',
     '/workspace/human-resources/task',
     '/workspace/human-resources/transport',
+  ],
+  financial: [
+    '/workspace/financial/invoice',
   ],
 };
 
@@ -44,6 +47,7 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
   openGroups: Record<GroupKey, boolean> = {
     reports: false,
     hr: false,
+    financial: false
   };
 
   private destroy$ = new Subject<void>();

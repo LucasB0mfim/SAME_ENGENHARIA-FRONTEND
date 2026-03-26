@@ -1,0 +1,12 @@
+<div
+  class="modal"
+  [class.modal--success]="type === 'success'"
+  [class.modal--error]="type === 'error'"
+  (click)="$event.stopPropagation()"
+>
+  <span class="modal__title">{{ message }}</span>
+
+  <div class="modal__icon" (click)="dimiss()">
+    <mat-icon>close</mat-icon>
+  </div>
+</div>

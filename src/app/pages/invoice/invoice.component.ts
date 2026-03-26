@@ -1,8 +1,12 @@
+import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { NgxCurrencyDirective } from 'ngx-currency';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+import { ToastComponent } from "../../shared/toast/toast.component";
 import { InvoiceService } from '../../core/services/invoice.service';
 
 @Component({
@@ -11,25 +15,35 @@ import { InvoiceService } from '../../core/services/invoice.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    NgxCurrencyDirective,
+    NgxMaskDirective,
+    ToastComponent
   ],
+  providers: [provideNgxMask()],
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.scss',
 })
 export class InvoiceComponent {
-  @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild('arquivo_url') fileInput!: ElementRef;
+
   invoiceForm: FormGroup;
   selectedFile: File | null = null;
+  isSending: boolean = false;
+  toast: { type: string, message: string } | null = null;
 
   constructor(
     private fb: FormBuilder,
     private invoiceService: InvoiceService
   ) {
     this.invoiceForm = this.fb.group({
-      numero_nota: [''],
-      data_emissao: [''],
+      nome_completo: [''],
+      cnpj: [''],
+      data_periodo: [''],
       data_vencimento: [''],
       valor: [''],
+      linha_digitavel: [''],
+      pix_payload: [''],
     });
   }
 
@@ -47,24 +61,39 @@ export class InvoiceComponent {
   }
 
   onSubmit(): void {
-    const formData = new FormData();
-
-    formData.append('numero_nota', this.invoiceForm.get('numero_nota')?.value);
-    formData.append('data_emissao', this.invoiceForm.get('data_emissao')?.value);
-    formData.append('data_vencimento', this.invoiceForm.get('data_vencimento')?.value);
-    formData.append('valor', this.invoiceForm.get('valor')?.value);
-
-    if (this.selectedFile) {
-      formData.append('arquivo_nota', this.selectedFile, this.selectedFile.name);
+    if (!this.selectedFile) {
+      this.showFeedback('error', 'Por favor, selecione um arquivo PDF.');
+      return;
     }
 
-    this.invoiceService.create(formData).subscribe({
-      next: (res) => {
-        console.log('Nota criada com sucesso!', res)
-      },
-      error: (err) => {
-        console.error('Erro ao enviar', err)
-      }
-    });
+    this.isSending = true;
+
+    const formData = new FormData();
+    formData.append('nome_completo', this.invoiceForm.get('nome_completo')?.value);
+    formData.append('cnpj', this.invoiceForm.get('cnpj')?.value);
+    formData.append('data_periodo', this.invoiceForm.get('data_periodo')?.value);
+    formData.append('data_vencimento', this.invoiceForm.get('data_vencimento')?.value);
+    formData.append('valor', this.invoiceForm.get('valor')?.value);
+    formData.append('linha_digitavel', this.invoiceForm.get('linha_digitavel')?.value);
+    formData.append('pix_payload', this.invoiceForm.get('pix_payload')?.value);
+    formData.append('arquivo_url', this.selectedFile, this.selectedFile.name);
+
+    this.invoiceService.create(formData)
+      .pipe(finalize(() => this.isSending = false))
+      .subscribe({
+        next: (res) => {
+          // this.invoiceForm.reset();
+          // this.selectedFile = null;
+          this.showFeedback('success', 'Nota Fiscal cadastrada com sucesso!');
+        },
+        error: (err) => {
+          console.error(err.error.message, err);
+          this.showFeedback('error', 'Erro ao enviar a nota. Tente novamente.');
+        }
+      });
+  }
+
+  showFeedback(type: string, message: string) {
+    this.toast = { type, message };
   }
 }

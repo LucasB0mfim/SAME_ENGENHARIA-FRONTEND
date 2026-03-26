@@ -1,0 +1,57 @@
+.modal {
+  // Posicionamento Centralizado
+  position: fixed;
+  top: 16px;
+  /* Distância do topo */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  // Layout Base
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 280px;
+  max-width: 90vw;
+  /* Garante que não quebre em telas pequenas */
+  padding: 10px 16px;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  // Tipografia
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+
+  &--success {
+    background-color: #2e7d32;
+  }
+
+  &--error {
+    background-color: #d32f2f;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    cursor: pointer;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
