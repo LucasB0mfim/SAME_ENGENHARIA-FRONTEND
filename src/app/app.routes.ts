@@ -18,6 +18,7 @@ export const routes: Routes = [
     path: 'invoice',
     loadComponent: () => import('./pages/invoice/invoice.component')
       .then(c => c.InvoiceComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'workspace',
@@ -39,12 +40,7 @@ export const routes: Routes = [
         path: 'human-resources',
         loadChildren: () => import('./features/human-resources/human-resources.routes')
           .then(r => r.HUMAN_RESOURCES_ROUTES)
-      },
-      {
-        path: 'financial',
-        loadChildren: () => import('./features/financial/financial.routes')
-          .then(r => r.FINANCIAL_ROUTES)
-      },
+      }
     ]
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' }

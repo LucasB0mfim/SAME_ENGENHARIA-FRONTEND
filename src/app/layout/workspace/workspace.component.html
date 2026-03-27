@@ -5,8 +5,8 @@
         <h2 class="menu__section-title">MENU</h2>
         <ul class="menu__list" role="list">
 
-          <li class="menu__item">
-            <a routerLink="/workspace/dashboard" routerLinkActive="menu__link--active" class="menu__link"
+          <li class="menu__item menu__item--group">
+            <a routerLink="/workspace/dashboard" routerLinkActive="menu__link--active" class="menu__link menu__link--group"
               aria-label="Ir para Dashboard" [routerLinkActiveOptions]="{exact: true}">
               <mat-icon class="menu__icon" aria-hidden="true">dashboard</mat-icon>
               <span class="menu__title">Dashboard</span>
@@ -47,6 +47,14 @@
                     <span class="menu__connector" aria-hidden="true"></span>
                     <mat-icon class="menu__icon" aria-hidden="true">edit_document</mat-icon>
                     <span class="menu__title">Rastreamento</span>
+                  </a>
+                </li>
+                <li class="menu__subitem">
+                  <a routerLink="/workspace/reports/invoice" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
+                    aria-label="Ir para Rastreamento">
+                    <span class="menu__connector" aria-hidden="true"></span>
+                    <mat-icon class="menu__icon" aria-hidden="true">receipt_long</mat-icon>
+                    <span class="menu__title">Notas Fiscais</span>
                   </a>
                 </li>
               </ul>
@@ -124,38 +132,6 @@
               </ul>
             </div>
           </li>
-
-          <li class="menu__item menu__item--group">
-            <button
-              type="button"
-              class="menu__link menu__link--group"
-              [class.menu__link--group-active]="isGroupActive('financial')"
-              (click)="toggleGroup('financial')"
-              [attr.aria-expanded]="openGroups['financial']"
-              aria-controls="group-financial">
-              <mat-icon class="menu__icon" aria-hidden="true">account_balance</mat-icon>
-              <span class="menu__title">Financeiro</span>
-              <mat-icon class="menu__chevron" aria-hidden="true">expand_more</mat-icon>
-            </button>
-
-            <div
-              id="group-financial"
-              class="menu__group-body"
-              [class.menu__group-body--open]="openGroups['financial']"
-              role="region">
-              <ul class="menu__sublist" role="list">
-                <li class="menu__subitem">
-                  <a routerLink="/workspace/financial/invoice" routerLinkActive="menu__link--active" class="menu__link menu__link--child"
-                    aria-label="Ir para Notas Fiscais">
-                    <span class="menu__connector" aria-hidden="true"></span>
-                    <mat-icon class="menu__icon" aria-hidden="true">assignment</mat-icon>
-                    <span class="menu__title">Notas Fiscais</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </li>
-
         </ul>
       </div>
 

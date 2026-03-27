@@ -9,18 +9,21 @@ import { FormControl, FormsModule, FormGroup, Validators, ReactiveFormsModule } 
 import { TitleService } from '../../../../core/services/title.service';
 import { InvoiceService } from '../../services/invoice.service';
 
-import { InvoiceItem, InvoiceCountStatus, MessageType } from '../../interfaces/financial.interface';
+import { InvoiceRawResponse, InvoiceCountStatus, MessageType } from '../../interfaces/invoice.interface';
+import { RouterLink } from "@angular/router";
 
 
 @Component({
   selector: 'app-invoice',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    RouterLink
+],
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.scss'
 })
@@ -34,9 +37,9 @@ export class InvoiceComponent implements OnInit {
     observacao: new FormControl(null, Validators.required),
   });
 
-  items: InvoiceItem[] = [];
-  filteredItems: InvoiceItem[] = [];
-  currentItem: InvoiceItem = {} as InvoiceItem;
+  items: InvoiceRawResponse[] | null = null;
+  filteredItems: InvoiceRawResponse[] = [];
+  currentItem: InvoiceRawResponse = {} as InvoiceRawResponse;
   activeEmployees: string[] = [];
 
   countStatus: InvoiceCountStatus = {
@@ -47,7 +50,6 @@ export class InvoiceComponent implements OnInit {
   activeStatus: string = '';
 
   menuModalOpen: boolean = false;
-  createModalOpen: boolean = false;
   updateModalOpen: boolean = false;
 
   isEmpty: boolean = false;
@@ -74,8 +76,8 @@ export class InvoiceComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.items = res.result;
-          this.filteredItems = [...this.items];
-          this.isEmpty = this.items.length === 0;
+          this.filteredItems = this.items ? [...this.items] : [];
+          this.isEmpty = this.items?.length === 0;
           this.activeStatus = status;
         },
         error: (err) => console.error(err.error.message, err),
@@ -105,19 +107,7 @@ export class InvoiceComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.updateModalOpen = false;
-          this.findByStatus(this.activeStatus);
-          this.setMessage(res.message, 'success');
-        },
-        error: (err) => this.setMessage(err.error.message, 'error'),
-      });
-  }
-
-  delete(): void {
-    this._invoiceService.delete(this.currentItem.id)
-      .pipe(finalize(() => !this.isLoading))
-      .subscribe({
-        next: (res) => {
-          this.menuModalOpen = false;
+          this.countByStatus();
           this.findByStatus(this.activeStatus);
           this.setMessage(res.message, 'success');
         },
@@ -137,13 +127,13 @@ export class InvoiceComponent implements OnInit {
       .replace(/[\u0300-\u036f]/g, '');
 
     this.items = this.filteredItems.filter((item) => {
-      if (!item.nome_completo) return false;
-      const nome = item.nome_completo.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!item.usuarios.nome) return false;
+      const nome = item.usuarios.nome.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       return nome.includes(query);
     });
   }
 
-  openMenu(item: InvoiceItem): void {
+  openMenu(item: InvoiceRawResponse): void {
     this.menuModalOpen = true;
     this.currentItem = item;
   }
@@ -151,7 +141,6 @@ export class InvoiceComponent implements OnInit {
   closeModals(): void {
     this.menuModalOpen = false;
     this.updateModalOpen = false;
-    this.createModalOpen = false;
   }
 
   openUpdateModal(): void {
@@ -183,12 +172,6 @@ export class InvoiceComponent implements OnInit {
       this.showMessage = false;
       this.message = '';
     }, 3000);
-  }
-
-  copyContent(value: string): void {
-    if (!value) return;
-    navigator.clipboard.writeText(value);
-    alert("Copiado!");
   }
 
   OpenLink(): void {

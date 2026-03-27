@@ -39,6 +39,11 @@
       <input type="text" class="search__input" placeholder="Buscar colaborador..." [(ngModel)]="employee"
         (input)="applyFilters()" />
     </div>
+
+    <button type="button" class="add-btn" routerLink="/invoice">
+      <mat-icon>add</mat-icon>
+      <span>Novo</span>
+    </button>
   </div>
 
   <!-- Card list -->
@@ -61,10 +66,10 @@
 
       <div class="card__header" (click)="openMenu(item)">
         <div class="card__identity">
-          <span class="card__name">{{ item.nome_completo }}</span>
+          <span class="card__name">{{ item.usuarios.nome }}</span>
           <div class="card__tags">
-            <span class="tag">{{ item.id }}</span>
-            <span class="tag">{{ item.created_at }}</span>
+            <span class="tag">{{ item.usuarios.funcao || 'N/A' }}</span>
+            <span class="tag">{{ item.usuarios.centro_custo || 'N/A' }}</span>
           </div>
         </div>
         <mat-icon class="card__menu-icon">more_horiz</mat-icon>
@@ -74,11 +79,11 @@
 
         <div class="group group--body">
           <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">badge</mat-icon>
+            <mat-icon class="icon icon--small icon--orange">date_range</mat-icon>
           </div>
           <div>
-            <h3 class="title title--light">CNPJ</h3>
-            <h3 class="title title--dark">{{ item.cnpj }}</h3>
+            <h3 class="title title--light">DATA DA CRIAÇÃO  </h3>
+            <h3 class="title title--dark">{{ item.created_at | date: 'dd/MM' }}</h3>
           </div>
         </div>
 
@@ -87,8 +92,8 @@
             <mat-icon class="icon icon--small icon--orange">date_range</mat-icon>
           </div>
           <div>
-            <h3 class="title title--light">PERIODO</h3>
-            <h3 class="title title--dark">{{ item.data_periodo }}</h3>
+            <h3 class="title title--light">ÚLTIMA ATUALIZAÇÃO</h3>
+            <h3 class="title title--dark">{{ item.updated_at | date: 'dd/MM/yyyy' }}</h3>
           </div>
         </div>
 
@@ -97,38 +102,18 @@
             <mat-icon class="icon icon--small icon--orange">date_range</mat-icon>
           </div>
           <div>
-            <h3 class="title title--light">VENCIMENTO</h3>
-            <h3 class="title title--dark">{{ item.data_vencimento }}</h3>
+            <h3 class="title title--light">MEDIÇÃO</h3>
+            <h3 class="title title--dark">{{ item.mes_medicao }}</h3>
           </div>
         </div>
 
         <div class="group group--body">
           <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">attach_money</mat-icon>
+            <mat-icon class="icon icon--small icon--orange">date_range</mat-icon>
           </div>
           <div>
-            <h3 class="title title--light">VALOR</h3>
-            <h3 class="title title--dark">{{ (item.valor / 100) | currency:'BRL' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body" (click)="copyContent(item.linha_digitavel)">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">receipt_long</mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">BOLETO</h3>
-            <h3 class="title title--dark">{{ item.linha_digitavel ? 'Clique aqui para copiar' : 'N/A' }}</h3>
-          </div>
-        </div>
-
-        <div class="group group--body" (click)="copyContent(item.pix_payload)">
-          <div class="group group--icon">
-            <mat-icon class="icon icon--small icon--orange">qr_code</mat-icon>
-          </div>
-          <div>
-            <h3 class="title title--light">PIX</h3>
-            <h3 class="title title--dark">{{ item.pix_payload ? 'Clique aqui para copiar' : 'N/A' }}</h3>
+            <h3 class="title title--light">DATA DE VENCIMENTO</h3>
+            <h3 class="title title--dark">{{ item.data_vencimento | date: 'dd/MM/yyyy' }}</h3>
           </div>
         </div>
 
@@ -151,7 +136,7 @@
     <div class="overlay" *ngIf="menuModalOpen" (click)="closeModals()">
       <div class="modal modal--sm" (click)="$event.stopPropagation()">
         <div class="modal__header">
-          <h2 class="modal__title">{{ currentItem.nome_completo }}</h2>
+          <h2 class="modal__title">{{ currentItem.usuarios.nome }}</h2>
           <button type="button" class="modal__close" (click)="closeModals()">
             <mat-icon>close</mat-icon>
           </button>
@@ -164,10 +149,6 @@
           <button type="button" class="action-btn" (click)="openUpdateModal()">
             <mat-icon>edit</mat-icon>
             <span>Atualizar</span>
-          </button>
-          <button type="button" class="action-btn action-btn--danger" (click)="delete()">
-            <mat-icon>delete</mat-icon>
-            <span>Deletar</span>
           </button>
         </div>
         <div class="modal__footer">
@@ -191,10 +172,9 @@
             <label class="form-field__label">Status *</label>
             <select class="form-field__select" formControlName="status">
               <option value="" disabled>Selecione uma opção</option>
-              <option value="ANDAMENTO">Em Andamento</option>
-              <option value="AVISO TRABALHADO">Aviso Trabalhado</option>
-              <option value="DEMITIDO">Demitido</option>
-              <option value="DESLIGADO">Desligado</option>
+              <option value="PENDENTE">Pendente</option>
+              <option value="PAGO">Pago</option>
+              <option value="CANCELADO">Cancelado</option>
             </select>
           </div>
 

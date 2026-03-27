@@ -13,6 +13,12 @@ export class EmployeeService {
     return this._httpClient.get<any>(`${this._url}/employee`);
   };
 
+  findByContract(contract: string) {
+    return this._httpClient.get<any>(`${this._url}/employee/contract`, {
+      params: { contract }
+    });
+  }
+
   findActiveCostCenters() {
     return this._httpClient.get<any>(`${this._url}/employee/cost-centers`);
   };

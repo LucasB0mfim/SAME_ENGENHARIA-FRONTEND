@@ -21,50 +21,30 @@
       aria-label="Formulário de cadastro de nota fiscal"
     >
 
-      <div class="invoice-form__field">
-        <label class="invoice-form__label" for="nome_completo">Nome Completo</label>
-        <input
-          class="invoice-form__input"
-          type="text"
-          id="nome_completo"
-          name="nome_completo"
-          formControlName="nome_completo"
-          autocomplete="name"
-          aria-required="true"
-          minlength="2"
-          maxlength="80"
-          placeholder="Insira seu nome completo"
-        />
-      </div>
-
-      <div class="invoice-form__field">
-        <label class="invoice-form__label" for="cnpj">CNPJ</label>
-        <input
-          class="invoice-form__input"
-          type="text"
-          id="cnpj"
-          name="cnpj"
-          autocomplete="cnpj"
-          aria-required="true"
-          minlength="18"
-          maxlength="18"
-          formControlName="cnpj"
-          placeholder="00.000.000/0000-00"
-          mask="00.000.000/0000-00"
-        />
-      </div>
-
       <div class="invoice-form__row">
         <div class="invoice-form__field">
-          <label class="invoice-form__label" for="data_periodo">Data do Período</label>
-          <input
-            class="invoice-form__input invoice-form__input--date"
-            type="month"
-            id="data_periodo"
-            name="data_periodo"
+          <label class="invoice-form__label" for="mes_medicao">Mês de medição</label>
+          <select
+            class="invoice-form__input"
+            id="mes_medicao"
+            name="mes_medicao"
+            formControlName="mes_medicao"
             aria-required="true"
-            formControlName="data_periodo"
-          />
+          >
+          <option value="" disabled selected>Selecione o mês</option>
+          <option value="JANEIRO">Janeiro</option>
+          <option value="FEVEREIRO">Feveiro</option>
+          <option value="MARÇO">Março</option>
+          <option value="ABRIL">Abril</option>
+          <option value="MAIO">Maio</option>
+          <option value="JUNHO">Junho</option>
+          <option value="JULHO">Julho</option>
+          <option value="AGOSTO">Agosto</option>
+          <option value="SETEMBRO">Setembro</option>
+          <option value="OUTUBRO">Outubro</option>
+          <option value="NOVEMBRO">Novembro</option>
+          <option value="DEZEMBRO">Dezembro</option>
+        </select>
         </div>
 
         <div class="invoice-form__field">
@@ -76,55 +56,6 @@
             name="data_vencimento"
             aria-required="true"
             formControlName="data_vencimento"
-          />
-        </div>
-      </div>
-
-      <div class="invoice-form__field">
-        <label class="invoice-form__label" for="valor">Valor (R$)</label>
-        <div class="invoice-form__input-wrapper">
-          <span class="invoice-form__input-prefix">R$</span>
-          <input
-            class="invoice-form__input"
-            type="text"
-            id="valor"
-            name="valor"
-            formControlName="valor"
-            aria-required="true"
-            [currencyMask]="{
-              prefix: '',
-              thousands: '.',
-              decimal: ','
-            }"
-          />
-        </div>
-      </div>
-
-      <div class="invoice-form__row">
-        <div class="invoice-form__field">
-          <label class="invoice-form__label" for="linha_digitavel">Boleto</label>
-          <input
-            class="invoice-form__input"
-            type="text"
-            id="linha_digitavel"
-            name="linha_digitavel"
-            formControlName="linha_digitavel"
-            aria-required="true"
-            placeholder="Código do boleto"
-            mask="000000000000 000000000000 000000000000 000000000000"
-          />
-        </div>
-
-        <div class="invoice-form__field">
-          <label class="invoice-form__label" for="pix_payload">Pix</label>
-          <input
-            class="invoice-form__input"
-            type="text"
-            id="pix_payload"
-            name="pix_payload"
-            formControlName="pix_payload"
-            aria-required="true"
-            placeholder="Código copia e cola"
           />
         </div>
       </div>

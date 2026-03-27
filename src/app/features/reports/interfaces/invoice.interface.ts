@@ -1,17 +1,17 @@
-export interface InvoiceItem {
+export interface InvoiceRawResponse {
   id: number;
-  nome_completo: string;
-  cnpj: string;
-  data_periodo: string;
+  mes_medicao: string;
   data_vencimento: string;
-  valor: number;
-  linha_digitavel: string;
-  pix_payload: string;
   arquivo_url: string;
   status: string;
   observacao: string;
   created_at: string;
   updated_at: string;
+  usuarios: {
+    nome: string;
+    funcao: string;
+    centro_custo: string;
+  };
 }
 
 export interface InvoiceCountStatus {

@@ -26,8 +26,4 @@ export class InvoiceService {
   update(request: any) {
     return this._httpClient.put<any>(`${this._url}/invoice`, request);
   }
-
-  delete(id: number) {
-    return this._httpClient.delete<any>(`${this._url}/invoice/${id}`);
-  }
 }
